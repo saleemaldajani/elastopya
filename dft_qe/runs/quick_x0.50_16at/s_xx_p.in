@@ -1,0 +1,44 @@
+&control
+  calculation = 'relax', prefix = 'sqs', outdir = './tmp', pseudo_dir = '/private/tmp/claude-501/-Users-saleem-MIT-research-Scripta/37f8fe43-8e5f-4d11-883b-ebb44fa03560/scratchpad/pseudo',
+  tstress = .true., tprnfor = .true., etot_conv_thr = 1e-5, forc_conv_thr = 1e-3, nstep = 60
+/
+&system
+  ibrav = 0, nat = 16, ntyp = 2, ecutwfc = 40.0, ecutrho = 320.0,
+  occupations = 'smearing', smearing = 'mv', degauss = 0.02, nspin = 2,
+  starting_magnetization(1) = 0.25
+  starting_magnetization(2) = 0.6
+/
+&electrons
+  conv_thr = 1e-8, mixing_beta = 0.2, mixing_mode = 'local-TF', electron_maxstep = 300
+/
+&ions
+/
+&cell
+  cell_dofree = 'xyz', press_conv_thr = 0.2
+/
+ATOMIC_SPECIES
+Cr 51.996 Cr.pbe-spn-kjpaw_psl.1.0.0.UPF
+Fe 55.845 Fe.pbe-spn-kjpaw_psl.0.2.1.UPF
+CELL_PARAMETERS angstrom
+5.4717290446 0.0000000000 0.0000000000
+0.0000000000 5.4683021390 0.0000000000
+0.0000000000 0.0000000000 5.4949880660
+ATOMIC_POSITIONS crystal
+Cr 0.0011495070 0.0019685357 -0.0009698729
+Cr 0.2435329871 0.2500000000 0.2500000000
+Cr 0.0011495070 0.0019685357 0.5009698729
+Cr 0.2487641314 0.2500000000 0.7500000000
+Cr 0.0011495070 0.4980314643 -0.0009698729
+Cr 0.0011495070 0.4980314643 0.5009698729
+Cr 0.7536452081 0.2500000000 0.2500000000
+Cr 0.7567592767 0.7500000000 0.7500000000
+Fe 0.2450139639 0.7500000000 0.2500000000
+Fe 0.2529790288 0.7500000000 0.7500000000
+Fe 0.4995393120 0.0005390070 0.0017349430
+Fe 0.4995393120 0.0005390070 0.4982650570
+Fe 0.7467640461 0.2500000000 0.7500000000
+Fe 0.4995393120 0.4994609930 0.0017349430
+Fe 0.7497860819 0.7500000000 0.2500000000
+Fe 0.4995393120 0.4994609930 0.4982650570
+K_POINTS automatic
+2 2 2 0 0 0

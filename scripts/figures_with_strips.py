@@ -62,8 +62,8 @@ def compose(main_png, panels, strip_title, stem, note=None):
                           left=0.03, right=0.97, top=0.995, bottom=0.06 if note else 0.01)
     top = fig.add_subplot(gs[0, :]); top.imshow(img); top.axis("off")
     tt = fig.add_subplot(gs[1, :]); tt.axis("off")
-    tt.text(0.5, 0.15, strip_title, ha="center", va="bottom", fontsize=7.5, fontweight="bold",
-            transform=tt.transAxes)
+    tt.text(0.0, 0.15, "(c)", ha="left", va="bottom", fontsize=9, fontweight="bold", transform=tt.transAxes)
+    tt.text(0.5, 0.15, strip_title, ha="center", va="bottom", fontsize=7.5, transform=tt.transAxes)
     off = (ncol - 2 * n) // 2
     for k, (lab, fn) in enumerate(panels):
         ax = fig.add_subplot(gs[2, off + 2 * k: off + 2 * k + 2])
@@ -84,7 +84,7 @@ def snap(path):
 def main():
     plt.rcParams.update({"font.family": "DejaVu Sans"})
     ser = series()
-    legend = "one atomic (001) plane of a 25$^3$ bcc MD cell: grey = Fe, blue = Cr"
+    legend = "one atomic (001) plane of a 25$^3$ bcc MD cell: red = Fe, blue = Cr"
 
     # Fig. 1: decomposed structures inside / outside the spinodal window
     xs = [x for x in (0.1, 0.2, 0.36, 0.5, 0.7, 0.95) if x in ser]
@@ -100,17 +100,17 @@ def main():
     for stem in ("fig2_elastic_mapping", "fig2_elastic_mapping_orientation_violin_bulk"):
         if (FIG / f"{stem}.png").exists():
             compose(FIG / f"{stem}.png", panels, title2, stem, "one atomic (001) plane of a random bcc alloy: "
-                    "grey = Fe, blue = Cr")
+                    "red = Fe, blue = Cr")
 
     # Fig. 3: Fe-36Cr partitioning (a) and the 50/50 conversion series (b)
-    for stem, x, title in (("fig3_fsaw", 0.36, "Fe$_{64}$Cr$_{36}$ decomposing: Fe-rich $\\alpha$ (grey) and "
+    for stem, x, title in (("fig3_fsaw", 0.36, "Fe$_{64}$Cr$_{36}$ decomposing: Fe-rich $\\alpha$ (red) and "
                                                 "Cr-rich $\\alpha'$ (blue) regions form as $\\phi$ goes 0.5 $\\to$ 1"),
                            ("fig3_fsaw_relative", 0.36, None), ("fig3_fsaw_mddecomp", 0.36, None),
                            ("fig3_fsaw_alpha", 0.36, None)):
         if x not in ser or not (FIG / f"{stem}.png").exists():
             continue
         panels = [(rf"$\phi$ = {float(f.stem[3:]):.1f}", snap(f)) for f in ser[x]]
-        compose(FIG / f"{stem}.png", panels, title or ("Fe$_{64}$Cr$_{36}$ decomposing: Fe-rich $\\alpha$ (grey) "
+        compose(FIG / f"{stem}.png", panels, title or ("Fe$_{64}$Cr$_{36}$ decomposing: Fe-rich $\\alpha$ (red) "
                 "and Cr-rich $\\alpha'$ (blue) regions form as $\\phi$ goes 0.5 $\\to$ 1"), stem, legend)
     print(sorted(p.name for p in OUT.glob("*.png")))
 
