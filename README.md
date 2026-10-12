@@ -86,10 +86,14 @@ If you use this repository, please cite:
 
 ## Contact
 
-This is collaborative work. Contacts: Saleem A. Al Dajani (sdajani@mit.edu) and Michael P. Short
-(hereiam@mit.edu), MIT Department of Nuclear Science and Engineering. The LAMMPS spinodal-generation
-package in `lammps/Spinodal_Generation_Care_Package/` was written by Lawrence Waldron as part of the
-joint work for Acta Mater. 246 (2023) 118552 (his contact is in its README).
+Saleem A. Al Dajani (sdajani@mit.edu)
+
+## Contributors
+
+- Saleem A. Al Dajani (MIT)
+- Michael P. Short (MIT)
+- Lawrence Waldron: LAMMPS spinodal-generation package in `lammps/Spinodal_Generation_Care_Package/`,
+  written for Acta Mater. 246 (2023) 118552
 
 ## License
 
