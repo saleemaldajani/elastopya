@@ -541,7 +541,7 @@ def fig2_orientation_bulk(lit, dft, mdd, mdr, kind="violin", with_decomp=False):
         handles.append(Patch(facecolor=col, alpha=0.35, edgecolor=col, label=lab))
 
     b.set(xlabel=r"$C_{11}$ (GPa)", ylabel=r"Frequency (GHz), $\lambda$ = 6.4 $\mu$m",
-          xlim=(225, 595), ylim=(0.34, 1.32))
+          xlim=(225, 595), ylim=(0.34, 1.42))
     b.legend(handles=handles, frameon=False, fontsize=6.0, loc="upper left", handlelength=1.4)
     b.text(590, 0.95, "bulk (quasi-longitudinal)\nwaves", ha="right", va="center", fontsize=6.3, color="0.35",
            style="italic")
