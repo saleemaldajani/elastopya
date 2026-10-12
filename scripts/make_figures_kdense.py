@@ -51,6 +51,7 @@ mf.PURPLE = "#D55E00"   # Fe-36Cr in Fig. 3b (vermillion, distinct from Fe-20Cr 
 mf.FIG = OUT
 AUDIT = {}
 STRIPS = {}   # stem -> (title, panels); filled in main()
+TRENDS = {}   # stem -> list of trend lanes for the _strip_trend versions
 
 
 def style(ax, label):
@@ -157,8 +158,12 @@ def save(fig, stem):
     fig.tight_layout(w_pad=1.4, pad=0.3)
     _export(fig, OUT / stem, stem)
     if stem in STRIPS:
-        add_strip(fig, *STRIPS[stem])
+        undo = add_strip(fig, *STRIPS[stem])
         _export(fig, OUT / "with_strips" / f"{stem}_strip", stem + "_strip")
+        if TRENDS.get(stem):   # same strip with trend lanes under the blocks (separate files)
+            undo()
+            add_strip(fig, *STRIPS[stem], lanes=TRENDS[stem])
+            _export(fig, OUT / "with_strips" / f"{stem}_strip_trend", stem + "_strip_trend")
     plt.close(fig)
 
 
@@ -174,29 +179,47 @@ def _grid_ax(ax, grid):
     ax._strip = True
 
 
-def add_strip(fig, title, panels):
-    """Append a row of atomic-plane snapshots as panel (c), keeping (a)/(b) at their size."""
+LANE_H, LABEL_W, GAP = 0.46, 0.80, 0.12   # inches: trend-lane height, lane-label column, block spacing
+
+
+def add_strip(fig, title, panels, lanes=()):
+    """Append a row of atomic-plane snapshots as panel (c), keeping (a)/(b) at their size.
+
+    lanes: optional trend rows drawn under the blocks, each
+      dict(label, values (one per block), fmt, mode='seq' | 'pairs', zero=False)
+    'seq' draws arrows between consecutive blocks; 'pairs' draws an arrow inside each (2i, 2i+1)
+    pair with its % change. Returns a function that removes everything added."""
     W, H = fig.get_size_inches()
     n = len(panels)
-    gap, side = 0.05 * W / 6, None
-    left = fig.axes[0].get_position().x0 * W
-    right = max(a.get_position().x1 for a in fig.axes) * W
-    cell = min(0.95, (right - left - (n - 1) * 0.12) / n)
-    head, lab, foot = 0.20, 0.14, 0.04
-    extra = head + lab + cell + foot
-    pos = [(a, a.get_position()) for a in fig.axes]
+    old_axes, old_texts, old_patches = list(fig.axes), list(fig.texts), list(fig.patches)
+    pos = [(ax, ax.get_position()) for ax in old_axes]
+    left = old_axes[0].get_position().x0 * W
+    right = max(ax.get_position().x1 for ax in old_axes) * W
+    lab_w = LABEL_W if lanes else 0.0
+    cell = min(0.95, (right - left - lab_w - (n - 1) * GAP) / n)
+    head, lab, foot = 0.20, 0.14, (0.12 if lanes else 0.04)
+    lanes_h = len(lanes) * LANE_H + (0.04 if lanes else 0.0)
+    extra = head + lab + cell + lanes_h + foot
     fig.set_size_inches(W, H + extra)
     Hn = H + extra
-    for a, p in pos:
-        a.set_position([p.x0, (p.y0 * H + extra) / Hn, p.width, p.height * H / Hn])
-    yrow = foot / Hn
-    total = n * cell + (n - 1) * 0.12
-    x0 = (left + (right - left - total) / 2) / W
+    for ax, q in pos:
+        ax.set_position([q.x0, (q.y0 * H + extra) / Hn, q.width, q.height * H / Hn])
+    total = n * cell + (n - 1) * GAP
+    x0_in = left + lab_w + (right - left - lab_w - total) / 2
+    yblock = foot + lanes_h
+    centers = [k * (cell + GAP) + cell / 2 for k in range(n)]
     for k, (label, draw) in enumerate(panels):
-        ax = fig.add_axes([x0 + k * (cell + 0.12) / W, yrow, cell / W, cell / Hn])
+        ax = fig.add_axes([(x0_in + k * (cell + GAP)) / W, yblock / Hn, cell / W, cell / Hn])
         draw(ax)
         ax.set_title(label, fontsize=MIN_PT, pad=1.5).set_gid("strip")
-    ytxt = (foot + cell + lab + 0.02) / Hn
+    for i, lane in enumerate(lanes):
+        y0 = foot + (len(lanes) - 1 - i) * LANE_H
+        ax = fig.add_axes([x0_in / W, y0 / Hn, total / W, (LANE_H - 0.04) / Hn])
+        ax._strip = True
+        _draw_lane(ax, lane, centers, total)
+        fig.text(left / W, (y0 + (LANE_H - 0.04) / 2) / Hn, lane["label"], fontsize=MIN_PT, fontfamily="Arial",
+                 va="center", ha="left", linespacing=1.1)
+    ytxt = (yblock + cell + lab + 0.02) / Hn
     fig.text(left / W, ytxt, "(c)", fontsize=9, fontweight="bold", fontfamily="Arial", va="bottom", ha="left")
     fig.text((left + 0.32) / W, ytxt + 0.012 / Hn, title, fontsize=MIN_PT, fontfamily="Arial", va="bottom", ha="left")
     # colour key at the right end of the title row
@@ -210,6 +233,46 @@ def add_strip(fig, title, panels):
             (bb.x0 / fig.dpi / W - (sq + 0.03) / W, ytxt + 0.025 / Hn), sq / W, sq / Hn,
             transform=fig.transFigure, facecolor=col, edgecolor="none", figure=fig))
         kx = bb.x0 / fig.dpi / W - (sq + 0.14) / W
+
+    def undo():
+        for ax in list(fig.axes):
+            if ax not in old_axes:
+                ax.remove()
+        for t in list(fig.texts):
+            if t not in old_texts:
+                t.remove()
+        fig.patches[:] = old_patches
+        fig.set_size_inches(W, H)
+        for ax, q in pos:
+            ax.set_position(q)
+    return undo
+
+
+def _draw_lane(ax, lane, centers, total):
+    """Values under each block, joined by trend arrows."""
+    v = np.asarray(lane["values"], float)
+    fmt, mode = lane["fmt"], lane.get("mode", "seq")
+    lo, hi = np.nanmin(v), np.nanmax(v)
+    if lane.get("zero"):
+        lo, hi = min(lo, 0.0), max(hi, 0.0)
+    pad = 0.45 * (hi - lo or abs(hi) or 1.0)
+    ax.set_xlim(0, total); ax.set_ylim(lo - pad, hi + pad)
+    ax.axis("off")
+    if lane.get("zero") and lo < 0 < hi:
+        ax.axhline(0, color="0.6", lw=0.5, ls=(0, (2, 2)), zorder=0)
+        ax.text(total, 0, " 0", fontsize=MIN_PT, color="0.45", va="center", ha="left")
+    ax.plot(centers, v, "o", color="0.15", ms=3.2, zorder=3, clip_on=False)
+    arrow = dict(arrowstyle="-|>", color="0.25", lw=0.9, mutation_scale=7, shrinkA=3.5, shrinkB=3.5)
+    pairs = [(k, k + 1) for k in range(len(v) - 1)] if mode == "seq" else [(k, k + 1) for k in range(0, len(v) - 1, 2)]
+    for i, j in pairs:
+        ax.annotate("", xy=(centers[j], v[j]), xytext=(centers[i], v[i]), arrowprops=arrow, zorder=2)
+        if mode == "pairs":
+            ax.text((centers[i] + centers[j]) / 2, max(v[i], v[j]) + 0.12 * pad, f"{100 * (v[j] / v[i] - 1):+.1f}%".replace("-", "\u2212"),
+                    fontsize=MIN_PT, fontweight="bold", ha="center", va="bottom", color="0.1")
+    for c, val in zip(centers, v):
+        below = mode == "pairs" or lane.get("below", False)
+        ax.annotate(fmt.format(val).replace("-", "\u2212"), (c, val), xytext=(0, -4.5 if below else 4.5), textcoords="offset points",
+                    ha="center", va="top" if below else "bottom", fontsize=MIN_PT, color="0.15")
 
 
 def random_grid(x, n=25, seed=7):
@@ -258,6 +321,40 @@ def strips():
                             r"$\alpha'$ domains form as $\phi$ goes 0.5 $\to$ 1", p36)
 
 
+def trends():
+    """Values shown in the trend lanes of the _strip_trend versions (same data as the figures)."""
+    lev = mf.read_csv("sheet_levesque_parameters.csv")
+    a0, b0, c0, d0 = (lev[k][0] for k in ("alpha", "beta", "gamma", "delta"))     # PWSCF-PAW, as Fig. 1b
+    dg_mix = lambda x: -1e3 * float(mf.levesque_model(np.array([x]), a0, b0, c0, d0)[0][0])   # meV/atom
+    xs1 = [float(lab.split("%")[0]) / 100 for lab, _ in STRIPS["fig1_free_energy"][1]]
+    TRENDS["fig1_free_energy"] = [dict(label="$\\Delta G_{\\rm mix}$\n(meV/atom)", values=[dg_mix(x) for x in xs1],
+                                       fmt="{:+.0f}", zero=True)]
+    mdr = mf.md_random()
+    rnd_x = (0.0, 0.2, 0.36, 0.5, 0.8, 1.0)
+    c11r = [float(np.interp(x, mdr["x"], mdr["c11"])) for x in rnd_x]
+    for stem, lam in (("fig2_elastic_mapping", 5.5), ("fig2_elastic_mapping_orientation_violin_bulk", 6.4)):
+        fr = [float(np.interp(x, mdr["x"], mdr["f"])) * 6.4 / lam for x in rnd_x]
+        TRENDS[stem] = [dict(label="MD $C_{11}$\n(GPa)", values=c11r, fmt="{:.0f}"),
+                        dict(label=f"MD $f_{{\\rm SAW}}$\n(GHz, {lam:g} µm)", values=fr, fmt="{:.3f}")]
+    dd = mf.read_csv("md_decomposition.csv")
+    dec = mf.md_decomposition()
+    c11p, fp = [], []
+    for x in (0.2, 0.36, 0.5):
+        for ph in (0.5, 1.0):
+            m = (np.abs(dd["x_cr"] - x) < 1e-9) & (np.abs(dd["phi"] - ph) < 1e-9)
+            c11p.append(float(dd["c11"][m][0]))
+            fp.append(float(np.interp(ph, dec[x]["phi"], dec[x]["f"])))
+    TRENDS["fig2_elastic_mapping_orientation_violin_bulk_mddecomp"] = [
+        dict(label="MD $C_{11}$\n(GPa)", values=c11p, fmt="{:.0f}", mode="pairs"),
+        dict(label="MD $f_{\\rm SAW}$\n(GHz, 6.4 µm)", values=fp, fmt="{:.3f}", mode="pairs")]
+    ph36, f36 = dec[0.36]["phi"], dec[0.36]["f"] * 6.4 / 5.5
+    rel36 = 100 * (f36 / f36[np.argmin(ph36)] - 1)
+    for stem in ("fig3_fsaw", "fig3_fsaw_mddecomp", "fig3_fsaw_alpha", "fig3_fsaw_crcolor"):
+        TRENDS[stem] = [dict(label="$f_{\\rm SAW}$\n(GHz, 5.5 µm)", values=list(f36), fmt="{:.3f}")]
+    for stem in ("fig3_fsaw_relative", "fig3_fsaw_relative_crcolor"):
+        TRENDS[stem] = [dict(label="$\\Delta f_{\\rm SAW}$\n(%)", values=list(rel36), fmt="{:+.1f}")]
+
+
 def main():
     apply_publication_style("scripta", palette_name="okabe_ito_on_white")
     import matplotlib as mpl
@@ -268,6 +365,7 @@ def main():
     plt.rcParams.update = lambda *a, **k: (orig_update(*a, **k), orig_update(
         {k2: keep[k2] for k2 in ("font.family", "font.sans-serif", "font.size", "axes.linewidth")}))
     strips()
+    trends()
     sys.argv = sys.argv[:1]
     mf.main()
     (OUT / "audit_summary.json").write_text(json.dumps(AUDIT, indent=1, ensure_ascii=False) + "\n")
