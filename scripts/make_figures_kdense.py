@@ -47,7 +47,7 @@ TIFF_STEMS = {"fig1_free_energy", "fig2_elastic_mapping", "fig3_fsaw"}   # manus
 
 # Okabe-Ito (Wong 2011) replacements, same hue family as the draft's Google-Sheets colours
 mf.BLUE, mf.RED, mf.YELLOW, mf.GREEN, mf.ORANGE = "#0072B2", "#D55E00", "#E69F00", "#009E73", "#CC79A7"
-mf.PURPLE = "#56B4E9"
+mf.PURPLE = "#D55E00"   # Fe-36Cr in Fig. 3b (vermillion, distinct from Fe-20Cr blue)
 mf.FIG = OUT
 AUDIT = {}
 STRIPS = {}   # stem -> (title, panels); filled in main()
@@ -66,6 +66,7 @@ def normalize_text(fig):
         ax.xaxis.label.set_fontsize(7.5); ax.yaxis.label.set_fontsize(7.5)
     for t in fig.findobj(Text):
         if t.get_text().strip():
+            t.set_text(t.get_text().replace(r"$\mu$m", "\u00b5m"))   # upright micro sign
             t.set_fontfamily("Arial")
             t.set_fontsize(max(MIN_PT, t.get_fontsize()))
 
@@ -100,7 +101,15 @@ def audit(fig):
     fig.canvas.draw()
     r = fig.canvas.get_renderer()
     mm = 25.4 / fig.dpi
-    texts = [t for t in fig.findobj(Text) if t.get_visible() and t.get_text().strip()
+    hidden = set()   # labels of ticks outside the view limits exist as Text objects but are not drawn
+    for ax in fig.axes:
+        for axis in (ax.xaxis, ax.yaxis):
+            lo, hi = sorted(axis.get_view_interval())
+            eps = 1e-9 * max(1.0, abs(hi - lo))
+            for tk in axis.get_major_ticks() + axis.get_minor_ticks():
+                if not lo - eps <= tk.get_loc() <= hi + eps:
+                    hidden.update((id(tk.label1), id(tk.label2)))
+    texts = [t for t in fig.findobj(Text) if t.get_visible() and t.get_text().strip() and id(t) not in hidden
              and t.get_window_extent(r).width > 0]
     boxes = [(t, t.get_window_extent(r).padded(-1.0)) for t in texts]
     found = []
