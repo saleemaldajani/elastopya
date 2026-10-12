@@ -11,6 +11,7 @@ Usage: elastic_sqs_qe.py <POSCAR> <x_cr> <kx> <ky> <kz> <ecut_Ry> <outdir> [--np
 """
 import argparse
 import json
+import sys
 import re
 import subprocess
 import time
@@ -111,6 +112,11 @@ def main():
         return
     write_input(d / "relax.in", cell, sym, frac, a.k, a.ecut, "vc-relax")
     cell, frac = final_structure(run(d, "relax", a.np), cell, frac)
+    # Guard: an under-converged cutoff makes vc-relax collapse the cell (16-atom test at 40 Ry: -12 %).
+    # PBE volumes are ~11.3 (Fe) to ~11.6 (Cr) A^3/atom; stop before the expensive strain steps.
+    v_at = abs(np.linalg.det(cell)) / len(sym)
+    if not 10.8 < v_at < 12.2:
+        sys.exit(f"relaxed volume {v_at:.2f} A^3/atom is unphysical; raise ecut (Fe PAW needs >= 60 Ry)")
     sig = {}
     for tag, E in {"xx": np.diag([a.strain, 0, 0]),
                    "yz": np.array([[0, 0, 0], [0, 0, a.strain / 2], [0, a.strain / 2, 0]])}.items():
