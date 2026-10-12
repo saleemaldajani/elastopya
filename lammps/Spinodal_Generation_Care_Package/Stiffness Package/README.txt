@@ -1,0 +1,5 @@
+The stiffness files have been modified from the ELASTIC scripts that are in the examples file in the Install_Lammps file.
+Install_Lammps/lammps-31Mar17/examples/ELASTIC.
+The init.mod file has been manipulated to input the different strucutures that need to be read in, and the script will have the components of the stiffness tensor listed at the bottom of the OUTPUT file. 
+This file also contains the pair potentials for the FeCr system, different systems will require different potential files and the potential.mod file will need to be changed to input these values. 
+When using this script it's a good idea to run it a few times and make sure the system has been relaxed properly, sometimes it will output a different value to the correct one because it has not fully correct. Check this by comparing the value shown in the "minimization stats" nearest the bottom of the page. 

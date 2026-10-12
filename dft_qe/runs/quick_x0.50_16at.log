@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/Users/saleem/MIT/research/Scripta/mike_final_touches/dft_qe/elastic_sqs_qe.py", line 134, in <module>
+    main()
+  File "/Users/saleem/MIT/research/Scripta/mike_final_touches/dft_qe/elastic_sqs_qe.py", line 113, in main
+    cell, frac = final_structure(run(d, "relax", a.np), cell, frac)
+                                 ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/saleem/MIT/research/Scripta/mike_final_touches/dft_qe/elastic_sqs_qe.py", line 70, in run
+    subprocess.run([str(MPIRUN), "-np", str(np_), str(PW), "-nk", str(min(np_, 4)), "-in", f"{name}.in"],
+  File "/opt/homebrew/Cellar/python@3.12/3.12.12_2/Frameworks/Python.framework/Versions/3.12/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/private/tmp/claude-501/-Users-saleem-MIT-research-Scripta/37f8fe43-8e5f-4d11-883b-ebb44fa03560/scratchpad/qebuild/bin/mpirun', '-np', '4', '/private/tmp/claude-501/-Users-saleem-MIT-research-Scripta/37f8fe43-8e5f-4d11-883b-ebb44fa03560/scratchpad/qesrc/q-e-qe-7.5/build/bin/pw.x', '-nk', '4', '-in', 'relax.in']' returned non-zero exit status 1.

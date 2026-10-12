@@ -1,0 +1,3 @@
+Submit the conversion script to run each conversion on your output.xyz file from the generatefinal script, make sure the file is in the same folder for it to input. 
+These scripts will change a given fraction of type A atoms to type B atoms and vice versa. The greater the fraction converted, the less effective spinodal decomposition has occured. So a 0% conversion will leave the structure in the decomposed state, whereas a 50% conversion will essentially turn the whole structure random again. 
+The seed number in the set type/fraction commands are different in each file, and can be found in the ExtraInformation file.  

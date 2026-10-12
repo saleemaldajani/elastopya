@@ -1,0 +1,196 @@
+%% Author: Saleem Al Dajani, MIT, KAUST. UCB-NE
+%% This is the manuscript draft for our paper about LWR MMLC
+% draft format
+%\documentclass[preprint,12pt]{elsarticle}
+
+% final submission format
+%\documentclass[preprint, review, 12pt]{elsarticle}
+
+%% Use the option review to obtain double line spacing
+%% \documentclass[preprint,review,12pt]{elsarticle}
+
+%% Use the options 1p,twocolumn; 3p; 3p,twocolumn; 5p; or 5p,twocolumn
+%% for a journal layout:
+%% \documentclass[final,1p,times]{elsarticle}
+%% \documentclass[final,1p,times,twocolumn]{elsarticle}
+\PassOptionsToPackage{numbers,sort&compress}{natbib}
+\documentclass[final,3p,times]{elsarticle}
+%\documentclass[final,3p,times,twocolumn]{elsarticle}
+%% \documentclass[final,5p,times]{elsarticle}
+%% \documentclass[final,5p,times,twocolumn]{elsarticle}
+\usepackage{natbib}
+%% The graphicx package provides the includegraphics command.
+\usepackage{graphicx}
+%% The amssymb package provides various useful mathematical symbols
+\usepackage{amssymb}
+\usepackage{amsmath}
+%% The amsthm package provides extended theorem environments
+%% \usepackage{amsthm}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{wrapfig}
+\usepackage{lscape}
+\usepackage{rotating}
+\usepackage{epstopdf}
+\usepackage{comment}
+\usepackage{xurl}
+\usepackage[figuresfirst,nomarkers,nolists,figuresonly,noheads]{endfloat}
+% Tell endfloat to handle sidewaysfigure the same as figure
+\DeclareDelayedFloatFlavor{sidewaysfigure}{figure}
+\makeatletter
+\def\NAT@def@citea{\def\@citea{\NAT@separator}}
+\makeatother
+\hypersetup{
+colorlinks,
+citecolor=blue,
+filecolor=blue,
+linkcolor=blue,
+urlcolor=blue
+}
+
+%% The lineno packages adds line numbers. Start line numbering with
+%% \begin{linenumbers}, end it with \end{linenumbers}. Or switch it on
+%% for the whole article with \linenumbers after \end{frontmatter}.
+\usepackage{lineno}
+
+%% natbib.sty is loaded by default. However, natbib options can be
+%% provided with \biboptions{...} command. Following options are
+%% valid:
+
+%%   round  -  round parentheses are used (default)
+%%   square -  square brackets are used   [option]
+%%   curly  -  curly braces are used      {option}
+%%   angle  -  angle brackets are used    <option>
+%%   semicolon  -  multiple citations separated by semi-colon
+%%   colon  - same as semicolon, an earlier confusion
+%%   comma  -  separated by comma
+%%   numbers-  selects numerical citations
+%%   super  -  numerical citations as superscripts
+%%   sort   -  sorts multiple citations according to order in ref. list
+%%   sort&compress   -  like sort, but also compresses numerical citations
+%%   compress - compresses without sorting
+%%
+%% \biboptions{comma,round}
+
+% \biboptions{}
+
+\journal{Scripta Materialia}
+
+
+\begin{document}
+
+\begin{frontmatter}
+
+%% Title, authors and addresses
+
+\title
+{
+\textbf
+{
+%Predicting picosecond ultrasonic surface acoustic wave peak splitting in bcc $\delta$--ferrite spinodal decomposition with \textit{ab initio} quantum elastodynamics, Predicting picosecond ultrasonic surface acoustic wave peak splitting to detect spinodal decomposition-induced stiffening towards embrittlement of bcc $\delta$--ferrite in cast austenitic stainless steels with \textit{ab initio} quantum elastodynamics 
+Predicting picosecond ultrasonic surface acoustic wave peak splitting to detect spinodal decomposition-induced stiffening towards embrittlement of bcc $\delta$--ferrite in cast austenitic stainless steels with quantum elastodynamics 
+}
+}
+\date
+{\today}
+\rhead{\today}
+%% use the tnoteref command within \title for footnotes;
+%% use the tnotetext command for the associated footnote;
+%% use the fnref command within \author or \address for footnotes;
+%% use the fntext command for the associated footnote;
+%% use the corref command within \author for corresponding author footnotes;
+%% use the cortext command for the associated footnote;
+%% use the ead command for the email address,
+%% and the form \ead[url] for the home page:
+%%
+%% \title{Title\tnoteref{label1}}
+%% \tnotetext[label1]{}
+%% \author{Name\corref{cor1}\fnref{label2}}
+%% \ead{email address}
+%% \ead[url]{home page}
+%% \fntext[label2]{}
+%% \cortext[cor1]{}
+%% \address{Address\fnref{label3}}
+%% \fntext[label3]{}
+
+
+%% use optional labels to link authors explicitly to addresses:
+%% \author[label1,label2]{<author name>}
+%% \address[label1]{<address>}
+%% \address[label2]{<address>}
+
+\author[1]{Saleem Abdulfattah Ahmed Al Dajani}
+%\author{Alex Al Orange}
+%\author{Ben R. Dacus}
+%\author{Cody A. Dennett}
+%\author{Samuel W. McAlpine}
+%\author{Peter Hosemann}
+%\author{Udo Schwingenschlogl}
+%\author{Michael P. Short}
+
+
+\address{
+Department of Nuclear Science and Engineering \\
+Massachusetts Institute of Technology\\
+77 Massachusetts Avenue \\
+Cambridge, MA 02139}
+
+\address[1]
+{
+Corresponding Author: \href{mailto:sdajani@mit.edu}{\texttt{sdajani@mit.edu}}
+}
+%\address[2]{\texttt{hereiam@mit.edu}}
+\begin{abstract}
+\input{Parts/abstract}
+\end{abstract}
+
+\begin{keyword}
+Stainless steel \sep 
+Binary alloy \sep
+Iron-chrome \sep
+Spinodal decomposition
+\sep
+Surface acoustic wave \sep 
+\emph{Ab initio} calculation
+\sep
+Stiffening
+\sep
+Embrittlement
+\sep
+Thermal diffusivity
+\sep
+$\delta$--ferrite
+\sep
+Quantum elastodynamics (QED)
+%% keywords here, in the form: keyword \sep keyword
+
+%% MSC codes here, in the form: \MSC code \sep code
+%% or \MSC[2008] code \sep code (2000 is the default)
+
+\end{keyword}
+
+\end{frontmatter}
+
+\input{Parts/highlights}
+
+\input{Parts/introduction}
+\input{Parts/methods}
+\input{Parts/results}
+\input{Parts/discussion}
+\input{Parts/conclusion}
+\input{Parts/acknowledgement}
+\input{Parts/DataAvailability}
+\input{Parts/CompetingInterest}
+%\section{Results}
+%\label{sec:results}
+%\input{Parts/results}
+
+%% New version of the num-names style
+\bibliographystyle{elsarticle-num-names}
+\bibliography{Parts/references.bib}
+%% Authors are advised to submit their bibtex database files. They are
+%% requested to list a bibtex style file in the manuscript if they do
+%% not want to use model1-num-names.bst.
+\end{document}

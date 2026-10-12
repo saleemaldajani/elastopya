@@ -1,0 +1,2 @@
+qsub the script in order to run generatefinal, which will generate a spinodal structure of set size and composition. To recreate previous structures, looks up the seed values in the ExtraInformation file, there will be one seed number for the set command, and one for the fix atom/swap command. 
+All the previously generated alloys are FeCr alloys with a 50%Fe 50%Cr composition, and are 50x50x50 structures.
