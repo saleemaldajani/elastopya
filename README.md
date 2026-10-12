@@ -21,6 +21,7 @@ ESPRESSO scratch/wavefunctions) are not stored.
 | `data/saw/` | Grain orientations, (P)SAW speeds and intensities for every tensor; validation run for SS304 |
 | `lammps/Spinodal_Generation_Care_Package/` | Original LAMMPS workflow of L. Waldron used for Al Dajani *et al.*, Acta Mater. 246 (2023) 118552 (Sec. 3.7) |
 | `lammps/random_alloys/` | Elastic constants of random bcc Fe–Cr alloys (same stiffness procedure), inputs and logs |
+| | Potential files are stored once, in `lammps/random_alloys/template/`; each run directory used a copy |
 | `lammps/decomposition/` | Spinodal-decomposition series at several compositions (25³ cells); inputs, logs, gzipped structures |
 | `dft_qe/` | Quantum ESPRESSO elastic-constant drivers, SQS cells, inputs/outputs, convergence study |
 | `visualizations/` | Snapshots of the decomposed structures and local-composition histograms |
