@@ -491,16 +491,24 @@ def fig2_orientation_bulk(lit, dft, mdd, mdr, kind="violin", with_decomp=False):
     if sys_path not in sys.path:
         sys.path.insert(0, sys_path)
     fig, (a, b) = plt.subplots(1, 2, figsize=(7.2, 3.2), gridspec_kw={"width_ratios": [1, 1.25]})
-    a.plot(lit["x"], lit["c11"], "-", color=BLUE, alpha=0.45, lw=0.8, zorder=1)
-    a.plot(lit["x"], lit["c11"], "o", color=BLUE, ms=3.8, ls="none", label="Razumovskiy et al. [8]", zorder=3)
+    # panel (a) uses the colours of panel (b) and of Fig. 3a: literature black, DFT red, MD green
+    a.plot(lit["x"], lit["c11"], "-", color="0.6", lw=0.8, zorder=1)
+    a.plot(lit["x"], lit["c11"], "o", color="0.15", ms=3.8, ls="none", label="Razumovskiy et al. [8]", zorder=3)
+    a.plot(dft["x_cr"], dft["c11_gpa"], "D", color=RED, mec="white", mew=0.5, ms=5.5, ls="none",
+           label="DFT (this work)", zorder=4)
     if mdr is not None:
-        a.plot(mdr["x"], mdr["c11"], "-", color=RED, alpha=0.45, lw=0.8, zorder=1)
-        a.errorbar(mdr["x"], mdr["c11"], yerr=mdr["c11_sd"], fmt="s", color=RED, ms=4.5, capsize=2,
+        a.plot(mdr["x"], mdr["c11"], "-", color=GREEN, alpha=0.5, lw=0.8, zorder=1)
+        a.errorbar(mdr["x"], mdr["c11"], yerr=mdr["c11_sd"], fmt="s", color=GREEN, ms=4.5, capsize=2,
                    ls="none", label="MD, random alloy", zorder=3)
-    a.plot(dft["x_cr"], dft["c11_gpa"], "D", color=YELLOW, mec="0.3", mew=0.5, ms=5.5, ls="none",
-           label="DFT (this work)")
+    if with_decomp:
+        dd = read_csv("md_decomposition.csv")
+        m = np.abs(dd["phi"] - 1.0) < 1e-9
+        a.plot(dd["x_cr"][m], dd["c11"][m], "s", mfc="white", mec="#0B5D3B", mew=1.2, ms=5.5, ls="none",
+               label=r"MD, fully decomposed ($\phi$ = 1)", zorder=4)
     a.set(xlabel=r"$x_{\rm Cr}$", ylabel=r"$C_{11}$ (GPa)", xlim=(-0.03, 1.03), ylim=(200, 600))
-    a.legend(frameon=False, fontsize=6.5, loc="upper left")
+    h, l = a.get_legend_handles_labels()
+    o = sorted(range(len(l)), key=lambda i: ("Razum" not in l[i], "DFT" not in l[i], "decomposed" in l[i]))
+    a.legend([h[i] for i in o], [l[i] for i in o], frameon=False, fontsize=6.5, loc="upper left")
     style(a, "(a)")
 
     tens = saw_tensors()
@@ -645,7 +653,7 @@ def fig3(lit, dft, mdd, mdr, lam=6.4, stem="fig3_fsaw", rel_b=False, crcolor=Fal
         b.plot(mdd["phi"], yb(mdd["phi"], mdd["f"]), "-", color="0.6", lw=0.8, zorder=1)
         b.plot(mdd["phi"], yb(mdd["phi"], mdd["f"]), "o", color="black", ms=5, ls="none", zorder=3,
                label=r"Fe$_{50}$Cr$_{50}$ (Acta, 50$^3$ cell)")
-        colors = {0.2: BLUE, 0.36: PURPLE, 0.95: ORANGE}   # compositions named in the caption
+        colors = {0.05: YELLOW, 0.2: BLUE, 0.36: PURPLE, 0.95: ORANGE}   # compositions named in the caption
         for x, ser in dec.items():
             if round(x, 2) not in colors and abs(x - 0.5) > 1e-9:
                 continue   # the other compositions are shown in the _crcolor variants
