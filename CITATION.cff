@@ -1,0 +1,45 @@
+cff-version: 1.2.0
+message: "If you use this repository, please cite the paper and the references below."
+title: "elastopya: Fe–Cr spinodal stiffening and surface acoustic waves"
+authors:
+  - family-names: "Al Dajani"
+    given-names: "Saleem A."
+  - family-names: "Short"
+    given-names: "Michael P."
+license: MIT
+repository-code: "https://github.com/saleemaldajani/elastopya"
+references:
+  - type: article
+    title: "Detecting thermally-induced spinodal decomposition with picosecond ultrasonics in cast austenitic stainless steels"
+    authors:
+      - family-names: "Al Dajani"
+        given-names: "Saleem Abdulfattah Ahmed"
+      - family-names: "Short"
+        given-names: "Michael Philip"
+    journal: "Acta Materialia"
+    volume: 246
+    start: 118552
+    year: 2023
+    doi: "10.1016/j.actamat.2022.118552"
+  - type: article
+    title: "Facile measurement of single-crystal elastic constants from polycrystalline samples"
+    authors:
+      - family-names: "Du"
+        given-names: "Xinpeng"
+      - family-names: "Zhao"
+        given-names: "Ji-Cheng"
+    journal: "npj Computational Materials"
+    volume: 3
+    start: 17
+    year: 2017
+  - type: article
+    title: "Iron chromium potential to model high-chromium ferritic alloys"
+    authors:
+      - family-names: "Bonny"
+        given-names: "Giovanni"
+    journal: "Philosophical Magazine"
+    volume: 91
+    start: 1724
+    end: 1746
+    year: 2011
+    doi: "10.1080/14786435.2010.545780"

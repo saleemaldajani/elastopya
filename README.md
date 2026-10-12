@@ -64,6 +64,28 @@ pseudopotential library; not stored here). Convergence study for bcc Fe in
 LAMMPS 22 Jul 2025 (conda-forge, Open MPI), Quantum ESPRESSO 7.5 (built from source), Python 3.12
 with NumPy/SciPy/Matplotlib, sqsgenerator 0.5.6, ASE 3.29.
 
+## Citing
+
+If you use this repository, please cite the paper above and the work it builds on:
+
+- S. A. A. Al Dajani, B. R. Dacus, C. A. Dennett, M. G. Burke, L. Waldron, T. S. Byun, J. J. Wall,
+  K. B.-D. Anglin, O. A. A. Al Dajani, K. J. Krakowiak, F.-J. Ulm, A. Schwartzmann, C. C. Tasan,
+  P. Hosemann, M. P. Short, *Detecting thermally-induced spinodal decomposition with picosecond
+  ultrasonics in cast austenitic stainless steels*, Acta Mater. 246 (2023) 118552.
+  https://doi.org/10.1016/j.actamat.2022.118552 — source of the MD decomposition workflow
+  (Sec. 3.7), the 6.4 µm TGS geometry and the elastodynamically unallowed band (Figs. 6 and 9).
+- X. Du, J.-C. Zhao, *Facile measurement of single-crystal elastic constants from polycrystalline
+  samples*, npj Comput. Mater. 3 (2017) 17 — (P)SAW Green's-function method ported in `saw_du.py`.
+- G. Bonny, R. C. Pasianot, D. Terentyev, L. Malerba, *Iron chromium potential to model
+  high-chromium ferritic alloys*, Philos. Mag. 91 (2011) 1724–1746.
+  https://doi.org/10.1080/14786435.2010.545780 — EAM potential.
+- V. I. Razumovskiy, A. V. Ruban, P. A. Korzhavyi, *First-principles study of elastic properties of
+  Cr- and Fe-rich Fe–Cr alloys*, Phys. Rev. B 84 (2011) 024106 — literature elastic constants.
+- M. Levesque *et al.*, *Simple concentration-dependent pair interaction model for large-scale
+  simulations of Fe–Cr alloys*, Phys. Rev. B 84 (2011) 184205 — thermodynamic model (Fig. 1).
+- M. Rae *et al.*, *Detecting the onset and progression of spinodal decomposition using transient
+  grating spectroscopy*, arXiv:2601.06659 (2026) — Fe–36Cr experiment.
+
 ## License
 
 MIT (see `LICENSE`). Third-party inputs (LAMMPS potential files, the Waldron workflow) remain

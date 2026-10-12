@@ -1,0 +1,468 @@
+LAMMPS (22 Jul 2025 - Update 6)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread.
+  using 1 OpenMP thread(s) per MPI task
+
+
+# Compute elastic constant tensor for a crystal
+#
+# Written by Aidan Thompson (Sandia, athomps@sandia.gov)
+#
+#  This script uses the following three include files.
+#
+#   init.mod      (must be modified for different crystal structures)
+# 	       	  Define units, deformation parameters and initial
+#		  configuration of the atoms and simulation cell.
+#
+#
+#   potential.mod    (must be modified for different pair styles)
+# 		     Define pair style and other attributes
+#		     not stored in restart file
+#
+#
+#   displace.mod    (displace.mod should not need to be modified)
+# 		    Perform positive and negative box displacements
+# 		    in direction ${dir} and size ${up}.
+# 		    It uses the resultant changes
+#		    in stress to compute one
+# 		    row of the elastic stiffness tensor
+#
+#		    Inputs variables:
+#		    	   dir = the Voigt deformation component
+#		    		    (1,2,3,4,5,6)
+#		    Global constants:
+#       	    	   up = the deformation magnitude (strain units)
+#       		   cfac = conversion from LAMMPS pressure units to
+#               	   output units for elastic constants
+#
+#
+#  To run this on a different system, it should only be necessary to
+#  modify the files init.mod and potential.mod. In order to calculate
+#  the elastic constants correctly, care must be taken to specify
+#  the correct units in init.mod (units, cfac and cunits). It is also
+#  important to verify that the minimization of energy w.r.t atom
+#  positions in the deformed cell is fully converged.
+#  One indication of this is that the elastic constants are insensitive
+#  to the choice of the variable ${up} in init.mod. Another is to check
+#  the final max and two-norm forces reported in the log file. If you know
+#  that minimization is not required, you can set maxiter = 0.0 in
+#  init.mod.
+#
+
+include init.mod
+# NOTE: This script can be modified for different atomic structures,
+# units, etc. See in.elastic for more info.
+#
+
+# Define the finite deformation size. Try several values of this
+# variable to verify that results do not depend on it.
+variable up equal 1.0e-6
+
+# Define the amount of random jiggle for atoms
+# This prevents atoms from staying on saddle points
+variable atomjiggle equal 1.0e-5
+
+# Uncomment one of these blocks, depending on what units
+# you are using in LAMMPS and for output
+
+# metal units, elastic constants in eV/A^3
+#units		metal
+#variable cfac equal 6.2414e-7
+#variable cunits string eV/A^3
+
+# metal units, elastic constants in GPa
+units		metal
+variable cfac equal 1.0e-4
+variable cunits string GPa
+
+# real units, elastic constants in GPa
+#units		real
+#variable cfac equal 1.01325e-4
+#variable cunits string GPa
+
+# Define minimization parameters
+variable etol equal 0.0
+variable ftol equal 1.0e-10
+variable maxiter equal 100
+variable maxeval equal 1000
+variable dmax equal 1.0e-2
+
+# generate the box and atom positions using a diamond lattice
+#variable a equal 5.43
+
+boundary	p p p
+
+read_data ../phi0.600.data
+Reading data file ...
+  triclinic box = (0 0 0) to (71.65 71.65 71.65) with tilt (0 0 0)
+  2 by 2 by 3 MPI processor grid
+  reading atoms ...
+  31250 atoms
+  reading velocities ...
+  31250 velocities
+  read_data CPU = 0.201 seconds
+include potential.mod
+# NOTE: This script can be modified for different pair styles
+# See in.elastic for more info.
+
+# Choose potential
+pair_style hybrid/overlay eam/alloy eam/fs
+pair_coeff * * eam/alloy FeCr_d.eam.alloy.txt Fe Cr
+pair_coeff * * eam/fs FeCr_s.eam.fs.txt Fe Cr
+
+# Setup neighbor style
+neighbor 1.0 nsq
+neigh_modify once no every 1 delay 0 check yes
+
+# Setup minimization style
+min_style	     cg
+min_modify	     dmax ${dmax} line quadratic
+min_modify	     dmax 0.01 line quadratic
+
+# Setup output
+thermo		1
+thermo_style custom step temp pe press pxx pyy pzz pxy pxz pyz lx ly lz vol
+thermo_modify norm no
+
+# Compute initial state
+fix 3 all box/relax  aniso 0.0
+minimize ${etol} ${ftol} ${maxiter} ${maxeval}
+minimize 0 ${ftol} ${maxiter} ${maxeval}
+minimize 0 1e-10 ${maxiter} ${maxeval}
+minimize 0 1e-10 100 ${maxeval}
+minimize 0 1e-10 100 1000
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 6.3
+  ghost atom cutoff = 6.3
+  2 neighbor lists, perpetual/occasional/extra = 2 0 0
+  (1) pair eam/alloy, perpetual
+      attributes: half, newton on
+      pair build: half/nsq/newton/tri
+      stencil: none
+      bin: none
+  (2) pair eam/fs, perpetual, copy from (1)
+      attributes: half, newton on
+      pair build: copy
+      stencil: none
+      bin: none
+WARNING: Energy due to 3 extra global DOFs will be included in minimizer energies
+ (src/min.cpp:224)
+Per MPI rank memory allocation (min/avg/max) = 5.99 | 5.996 | 6.01 Mbytes
+   Step          Temp          PotEng         Press           Pxx            Pyy            Pzz            Pxy            Pxz            Pyz             Lx             Ly             Lz           Volume    
+         0   0             -126391.23      25276.939      25184.299      25279.241      25367.277     -2.642503       38.786142      6.6790664      71.65          71.65          71.65          367831.22    
+         1   0             -126392.95      24655.351      24562.934      24657.713      24745.406     -2.3282611      38.658761      6.7159447      71.657113      71.65714       71.657165      367941.18    
+         2   0             -126394.62      24034.577      23942.389      24036.999      24124.342     -2.0157549      38.531688      6.7524886      71.664225      71.66428       71.66433       368051.17    
+         3   0             -126396.25      23414.618      23322.668      23417.1        23504.087     -1.7049881      38.404923      6.7887004      71.671336      71.671419      71.671495      368161.16    
+         4   0             -126397.83      22795.478      22703.772      22798.018      22884.643     -1.3959625      38.278466      6.8245719      71.678446      71.678557      71.67866       368271.16    
+         5   0             -126399.38      22177.156      22085.703      22179.754      22266.01      -1.0886723      38.152317      6.8601111      71.685555      71.685695      71.685825      368381.18    
+         6   0             -126400.88      21559.655      21468.463      21562.31       21648.191     -0.78312236     38.026477      6.8953168      71.692662      71.692832      71.69299       368491.21    
+         7   0             -126402.34      20942.976      20852.054      20945.688      21031.185     -0.47930739     37.900948      6.9301884      71.699767      71.699969      71.700155      368601.25    
+         8   0             -126403.76      20327.122      20236.48       20329.89       20414.996     -0.17723238     37.775727      6.9647214      71.706871      71.707105      71.70732       368711.3     
+         9   0             -126405.13      19712.096      19621.743      19714.919      19799.626      0.12310203     37.650818      6.9989251      71.713974      71.71424       71.714485      368821.37    
+        10   0             -126406.46      19097.9        19007.847      19100.778      19185.076      0.42169877     37.526218      7.0327892      71.721074      71.721374      71.72165       368931.44    
+        11   0             -126407.76      18484.539      18394.796      18487.47       18571.35       0.71855632     37.401931      7.0663233      71.728173      71.728508      71.728815      369041.51    
+        12   0             -126409.01      17872.014      17782.594      17874.998      17958.45       1.0136774      37.277955      7.0995209      71.73527       71.735641      71.73598       369151.6     
+        13   0             -126410.21      17260.331      17171.247      17263.367      17346.381      1.3070536      37.154291      7.1323876      71.742365      71.742772      71.743145      369261.69    
+        14   0             -126411.38      16649.495      16560.759      16652.581      16735.145      1.59869        37.030944      7.1649192      71.749458      71.749903      71.75031       369371.79    
+        15   0             -126412.5       16039.508      15951.135      16042.644      16124.746      1.8885829      36.907906      7.1971155      71.756548      71.757033      71.757475      369481.89    
+        16   0             -126413.58      15430.378      15342.382      15433.562      15515.189      2.176734       36.785185      7.2289744      71.763636      71.764161      71.76464       369592       
+        17   0             -126414.62      14822.111      14734.509      14825.343      14906.48       2.4631348      36.662781      7.2605031      71.770721      71.771289      71.771805      369702.11    
+        18   0             -126415.62      14214.714      14127.524      14217.992      14298.625      2.7477898      36.540696      7.2916947      71.777804      71.778415      71.77897       369812.21    
+        19   0             -126416.58      13608.194      13521.435      13611.517      13691.63       3.0306929      36.418932      7.3225535      71.784883      71.785539      71.786135      369922.32    
+        20   0             -126417.49      13002.562      12916.254      13005.929      13085.503      3.3118453      36.297488      7.3530758      71.791959      71.792663      71.7933        370032.43    
+        21   0             -126418.36      12397.826      12311.992      12401.235      12480.252      3.5912385      36.176367      7.383265       71.799032      71.799784      71.800465      370142.52    
+        22   0             -126419.19      11794          11708.663      11797.449      11875.887      3.8688676      36.055571      7.4131164      71.8061        71.806904      71.80763       370252.62    
+        23   0             -126419.98      11191.096      11106.284      11194.584      11272.42       4.144735       35.935102      7.442632       71.813164      71.814022      71.814795      370362.7     
+        24   0             -126420.73      10589.131      10504.872      10592.656      10669.864      4.4188284      35.814967      7.4718119      71.820224      71.821137      71.82196       370472.76    
+        25   0             -126421.44      9988.1231      9904.4498      9991.6828      10068.237      4.6911447      35.695163      7.500651       71.827278      71.82825       71.829125      370582.81    
+        26   0             -126422.1       9388.0951      9305.043       9391.6874      9467.5548      4.9616714      35.575702      7.5291531      71.834327      71.835361      71.83629       370692.84    
+        27   0             -126422.73      8789.072       8706.681       8792.6943      8867.8406      5.2304027      35.456582      7.5573165      71.841369      71.842469      71.843455      370802.85    
+        28   0             -126423.31      8191.084       8109.3989      8194.7337      8269.1195      5.4973249      35.337813      7.585142       71.848404      71.849573      71.85062       370912.82    
+        29   0             -126423.85      7594.1686      7513.2401      7597.8423      7671.4233      5.7624234      35.219404      7.6126214      71.855431      71.856674      71.857785      371022.75    
+        30   0             -126424.35      6998.371       6918.2572      7002.0654      7074.7906      6.0256784      35.101356      7.6397579      71.862449      71.86377       71.86495       371132.63    
+        31   0             -126424.81      6403.7485      6324.5163      6407.4593      6479.2699      6.2870686      34.983689      7.6665486      71.869455      71.870862      71.872115      371242.45    
+        32   0             -126425.23      5810.373       5732.1007      5814.0956      5884.9228      6.5465646      34.866411      7.6929866      71.876449      71.877947      71.87928       371352.2     
+        33   0             -126425.61      5218.3366      5141.1169      5222.0654      5291.8275      6.8041246      34.749545      7.7190711      71.883429      71.885026      71.886445      371461.86    
+        34   0             -126425.94      4627.7598      4551.7046      4631.4882      4700.0866      7.0597001      34.633111      7.7447892      71.89039       71.892097      71.89361       371571.4     
+        35   0             -126426.24      4038.8072      3964.0542      4042.527       4109.8405      7.3132226      34.51714       7.7701408      71.897329      71.899157      71.900775      371680.8     
+        36   0             -126426.5       3451.7107      3378.4337      3455.4117      3521.2869      7.5645879      34.401682      7.795113       71.90424       71.906205      71.90794       371790.01    
+        37   0             -126426.71      2866.8112      2795.2372      2870.48        2934.7165      7.8136579      34.2868        7.819685       71.911115      71.913236      71.915105      371898.97    
+        38   0             -126426.89      2284.6415      2215.0805      2288.26        2350.584       8.0601951      34.172606      7.8438257      71.91794       71.920245      71.92227       372007.57    
+        39   0             -126427.02      1706.1068      1639.0097      1709.6489      1769.6619      8.3038091      34.059271      7.8674955      71.924692      71.92722       71.929435      372115.65    
+        40   0             -126427.12      1132.9456      1069.0333      1136.3695      1193.4341      8.5437422      33.947141      7.8905957      71.931328      71.934142      71.9366        372222.87    
+        41   0             -126427.17      569.2411       509.868        572.46852      625.38678      8.7782129      33.837023      7.9129052      71.937747      71.940965      71.943765      372328.48    
+        42   0             -126427.19      29.380991     -21.86918       32.205625      77.806529      9.0009077      33.731764      7.9336479      71.943589      71.947524      71.95093       372429.75    
+        43   0             -126427.2      -194.35171     -188.68307     -194.73207     -199.63999      9.0830121      33.689224      7.9368493      71.941575      71.95049       71.958095      372471.76    
+        44   0             -126427.21     -91.465834     -14.333148     -95.890405     -164.17395      9.027369       33.710626      7.925751       71.93441       71.949571      71.962448      372452.44    
+        45   0             -126427.21      99.007902      152.72669      95.948735      48.348283      8.952947       33.747197      7.9206842      71.934049      71.947157      71.958315      372416.69    
+        46   0             -126427.22      56.339197      29.822335      58.006569      81.188688      8.9859376      33.736755      7.9310345      71.941214      71.947291      71.952562      372424.69    
+        47   0             -126427.22     -118.67513     -133.19957     -117.76441     -105.06139      9.0562463      33.702833      7.936841       71.942334      71.949469      71.955611      372457.55    
+        48   0             -126427.24     -94.341354     -25.945389     -98.778279     -158.30039      9.0314485      33.709089      7.9281215      71.935169      71.949608      71.961757      372452.99    
+        49   0             -126427.24      101.59826      150.59716      98.436931      55.760675      8.9539963      33.74676       7.9224333      71.934409      71.947135      71.957884      372416.2     
+        50   0             -126427.25      93.148247      56.925605      95.650635      126.8685       8.9737085      33.742564      7.9320375      71.941574      71.946778      71.95138       372417.79    
+        51   0             -126427.25     -84.255848     -112.47616     -82.310818     -57.980565      9.045757       33.708111      7.9383248      71.943054      71.948969      71.954143      372451.09    
+        52   0             -126427.27     -110.64936     -50.101635     -115.01485     -166.8316       9.0408867      33.704905      7.9309258      71.936017      71.949801      71.961308      372456.05    
+        53   0             -126427.27      122.78855      172.186        119.24428      76.935375      8.9464034      33.750039      7.9229462      71.934121      71.94691       71.957629      372412.23    
+        54   0             -126427.28      251.8261       228.29512      253.69978      273.4834       8.9069088      33.772624      7.9260391      71.938607      71.94491       71.950464      372388.02    
+        55   0             -126427.29     -129.52534     -183.94483     -125.35909     -79.272102      9.0709444      33.696999      7.9447974      71.945772      71.949336      71.952701      372459.59    
+        56   0             -126427.32     -392.66998     -495.18308     -385.38535     -297.44152      9.1903121      33.642967      7.9621792      71.952937      71.952268      71.952151      372509.03    
+        57   0             -126427.37      145.14726      34.452991      152.6773       248.31151      8.9708201      33.746678      7.9433543      71.947121      71.945741      71.944986      372408.03    
+        58   0             -126427.42      83.786343      56.655435      85.10864       109.59495      8.9830186      33.735338      7.9396356      71.940936      71.946988      71.952151      372419.57    
+        59   0             -126427.43     -80.661006     -100.04778     -79.712786     -62.222448      9.0496956      33.703333      7.9454253      71.942281      71.949008      71.954752      372450.44    
+        60   0             -126427.44     -63.573386      1.0134981     -66.862929     -124.87073      9.0274782      33.707776      7.9368608      71.935116      71.949142      71.961165      372447.24    
+        61   0             -126427.45      155.98463      192.22241      154.17521      121.55627      8.9420362      33.749937      7.9312401      71.934813      71.946367      71.956281      372406.02    
+        62   0             -126427.46      180.95312      129.9458       183.7331       229.18045      8.9485838      33.752582      7.9398613      71.941743      71.945695      71.949116      372401.33    
+        63   0             -126427.46     -74.456247     -123.64146     -71.784355     -27.942922      9.0541205      33.702673      7.9499149      71.944676      71.948794      71.952346      372449.28    
+        64   0             -126427.48     -162.56882     -133.83974     -164.3436      -189.52311      9.0764921      33.686785      7.9459584      71.939284      71.950219      71.959511      372465.83    
+        65   0             -126427.48      132.33545      170.55348      130.04036      96.41251       8.9528266      33.744426      7.9334792      71.934935      71.946694      71.956691      372410.47    
+        66   0             -126427.5       662.51918      702.72294      660.68955      624.14503      8.7336966      33.846539      7.9139282      71.928371      71.940247      71.950491      372311.04    
+        67   0             -126428.79      663.03511      616.94193      684.32619      687.8372       8.7982369      33.795214      7.9827696      71.935536      71.938338      71.945246      372311.1     
+        68   0             -126428.82      91.197556      50.799471      109.87309      112.9201       9.0347527      33.683979      8.0050242      71.941966      71.945468      71.952411      372418.36    
+        69   0             -126428.82     -75.441681     -105.09088     -61.738694     -59.495469      9.1024402      33.653146      8.0105743      71.943088      71.947895      71.954905      372449.65    
+        70   0             -126428.83     -56.981936     -2.8215363     -82.099496     -86.024777      9.0857179      33.671042      8.0018146      71.935923      71.950882      71.958416      372446.19    
+        71   0             -126428.84      141.77595      171.58393      127.97221      125.7717       9.0064599      33.705642      7.9965719      71.935539      71.947542      71.954931      372408.88    
+        72   0             -126428.85      153.36711      94.999737      180.54172      184.55988      9.0121853      33.692009      8.0057062      71.942704      71.944013      71.950873      372406.7     
+        73   0             -126428.85     -73.251863     -124.3457      -49.470888     -45.939002      9.105104       33.648799      8.0140079      71.944838      71.947035      71.953935      372449.24    
+        74   0             -126428.86     -134.22174     -89.917733     -154.96574     -157.78174      9.1199426      33.653252      8.0072336      71.937673      71.951455      71.958895      372460.7     
+        75   0             -126428.87      118.40814      165.69252      96.29338       93.238529      9.0153637      33.703201      7.9970861      71.934374      71.948512      71.955974      372413.27    
+        76   0             -126428.89      505.70049      496.20739      510.42198      510.4721       8.8625556      33.767971      7.9889647      71.934402      71.94161       71.948809      372340.61    
+        77   0             -126428.93      283.04175      219.51166      313.28582      316.32776      8.9622765      33.71352       8.004895       71.941567      71.942191      71.949132      372382.37    
+        78   0             -126428.93     -28.180831     -81.568056     -2.7626038     -0.21183235     9.0899125      33.654269      8.0162273      71.944485      71.946355      71.953336      372440.79    
+        79   0             -126428.94     -18.655972      13.067048     -33.838457     -35.196506      9.076774       33.671233      8.0074818      71.93732       71.949597      71.956916      372439.01    
+        80   0             -126428.95      340.37888      306.62537      356.63668      357.87459      8.9361431      33.72924       8.0006915      71.938409      71.942655      71.949751      372371.62    
+        81   0             -126428.97      317.66498      200.74739      373.85791      378.38962      8.9557352      33.708875      8.0112316      71.945574      71.939626      71.946436      372375.88    
+        82   0             -126428.98     -37.770993     -135.66718      9.2761846      13.078017      9.1006961      33.642587      8.0233935      71.948289      71.944682      71.951554      372442.59    
+        83   0             -126428.99     -22.274039     -35.932802     -15.787828     -15.101487      9.0851217      33.660827      8.0143311      71.941124      71.947849      71.954991      372439.69    
+        84   0             -126428.99      276.96447      290.11345      270.68358      270.09639      8.9587402      33.724051      8.0001591      71.935289      71.945286      71.95254       372383.53    
+        85   0             -126429.03      249.05868      352.76937      199.71013      194.69654      8.9616997      33.733575      7.9937742      71.928124      71.949186      71.95682       372388.77    
+        86   0             -126429.03     -43.06666       42.867562     -83.928568     -88.138973      9.0845156      33.672984      8.0072355      71.933126      71.952017      71.95958       372443.61    
+        87   0             -126429.04     -24.46791      -27.746848     -22.821286     -22.835595      9.0870357      33.660383      8.0158751      71.940291      71.948276      71.955478      372440.11    
+        88   0             -126429.05      255.40359      257.6341       254.26865      254.30802      8.9710424      33.716081      8.0045954      71.936455      71.945121      71.952322      372387.58    
+        89   0             -126429.2       248.58119      338.32421      203.46209      203.95728      8.9707532      33.726144      8.003105       71.92929       71.948843      71.956018      372388.89    
+        90   0             -126429.21     -47.34796       26.950318     -84.677967     -84.316232      9.0947887      33.665032      8.0164871      71.934144      71.951778      71.95896       372444.44    
+        91   0             -126429.21     -40.80737      -53.965436     -34.114964     -34.34171       9.1017044      33.64947       8.0254601      71.941309      71.948058      71.955276      372443.21    
+        92   0             -126429.22      158.65756      153.12651      161.44639      161.39977      9.0186212      33.689982      8.0169505      71.938268      71.945968      71.953173      372405.76    
+        93   0             -126429.26      193.88067      269.71507      155.15285      156.77409      8.9971698      33.711155      8.009211       71.931103      71.948977      71.956056      372399.16    
+        94   0             -126429.26     -94.145522     -31.580749     -126.0712      -124.78461      9.1176887      33.651914      8.022113       71.935683      71.951898      71.959001      372453.23    
+        95   0             -126429.27     -178.53582     -190.16363     -172.51683     -172.927        9.1607136      33.62069       8.0334659      71.942848      71.949781      71.957013      372469.08    
+        96   0             -126429.28      116.65555      84.862403      132.95525      132.149        9.0411528      33.674609      8.0240695      71.940952      71.945358      71.952623      372413.65    
+        97   0             -126429.3       488.46961      393.1091       537.02642      535.27331      8.8952476      33.73433       8.0173447      71.941731      71.938193      71.94553       372343.89    
+        98   0             -126429.34      230.39913      86.151518      303.7382       301.30768      9.008815       33.673049      8.0342942      71.948896      71.939264      71.946648      372392.3     
+        99   0             -126429.34     -63.807221     -181.23368     -4.1176727     -6.0703091      9.1275977      33.620419      8.0432085      71.950226      71.943953      71.951299      372447.53    
+       100   0             -126429.35     -37.928263     -72.629081     -20.363696     -20.792012      9.1082934      33.641305      8.0338602      71.943061      71.947124      71.954356      372442.68    
+Loop time of 8.89818 on 12 procs for 100 steps with 31250 atoms
+
+59.7% CPU use with 12 MPI tasks x 1 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = max iterations
+  Energy initial, next-to-last, final = 
+     -126391.233389754  -126429.344899356  -126429.350947313
+  Force two-norm initial, final = 10051.422 36.447736
+  Force max component initial, final = 5823.8755 16.814615
+  Final line search alpha, max atom move = 2.7001589e-06 4.5402132e-05
+  Iterations, force evaluations = 100 124
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 4.603      | 4.6485     | 4.6883     |   1.2 | 52.24
+Neigh   | 0.03134    | 0.040766   | 0.050362   |   2.8 |  0.46
+Comm    | 1.119      | 1.1804     | 1.3051     |   4.7 | 13.27
+Output  | 0.62842    | 0.66244    | 0.69176    |   2.1 |  7.44
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 2.366      |            |       | 26.59
+
+Nlocal:        2604.17 ave        2693 max        2556 min
+Histogram: 3 2 3 0 0 1 2 0 0 1
+Nghost:         4813.5 ave        4958 max        4532 min
+Histogram: 1 3 0 0 0 0 0 0 0 8
+Neighs:         114583 ave      118190 max      112475 min
+Histogram: 3 3 0 2 0 0 1 2 0 1
+
+Total # of neighbors = 1375000
+Ave neighs/atom = 44
+Neighbor list builds = 1
+Dangerous builds = 0
+
+
+variable tmp equal pxx
+variable pxx0 equal ${tmp}
+variable pxx0 equal -72.6290809465709
+variable tmp equal pyy
+variable pyy0 equal ${tmp}
+variable pyy0 equal -20.3636960493312
+variable tmp equal pzz
+variable pzz0 equal ${tmp}
+variable pzz0 equal -20.7920121511071
+variable tmp equal pyz
+variable pyz0 equal ${tmp}
+variable pyz0 equal 8.03386020392938
+variable tmp equal pxz
+variable pxz0 equal ${tmp}
+variable pxz0 equal 33.6413052531362
+variable tmp equal pxy
+variable pxy0 equal ${tmp}
+variable pxy0 equal 9.10829340093946
+
+variable tmp equal lx
+variable lx0 equal ${tmp}
+variable lx0 equal 71.9430612855331
+variable tmp equal ly
+variable ly0 equal ${tmp}
+variable ly0 equal 71.9471243544735
+variable tmp equal lz
+variable lz0 equal ${tmp}
+variable lz0 equal 71.954356397074
+print "RELAXED_BOX ${lx0} ${ly0} ${lz0}"   # added: record relaxed cell for density
+RELAXED_BOX 71.9430612855331 71.9471243544735 71.954356397074
+
+# These formulas define the derivatives w.r.t. strain components
+# Constants uses $, variables use v_
+variable d1 equal -(v_pxx1-${pxx0})/(v_delta/v_len0)*${cfac}
+variable d1 equal -(v_pxx1--72.6290809465709)/(v_delta/v_len0)*${cfac}
+variable d1 equal -(v_pxx1--72.6290809465709)/(v_delta/v_len0)*0.0001
+variable d2 equal -(v_pyy1-${pyy0})/(v_delta/v_len0)*${cfac}
+variable d2 equal -(v_pyy1--20.3636960493312)/(v_delta/v_len0)*${cfac}
+variable d2 equal -(v_pyy1--20.3636960493312)/(v_delta/v_len0)*0.0001
+variable d3 equal -(v_pzz1-${pzz0})/(v_delta/v_len0)*${cfac}
+variable d3 equal -(v_pzz1--20.7920121511071)/(v_delta/v_len0)*${cfac}
+variable d3 equal -(v_pzz1--20.7920121511071)/(v_delta/v_len0)*0.0001
+variable d4 equal -(v_pyz1-${pyz0})/(v_delta/v_len0)*${cfac}
+variable d4 equal -(v_pyz1-8.03386020392938)/(v_delta/v_len0)*${cfac}
+variable d4 equal -(v_pyz1-8.03386020392938)/(v_delta/v_len0)*0.0001
+variable d5 equal -(v_pxz1-${pxz0})/(v_delta/v_len0)*${cfac}
+variable d5 equal -(v_pxz1-33.6413052531362)/(v_delta/v_len0)*${cfac}
+variable d5 equal -(v_pxz1-33.6413052531362)/(v_delta/v_len0)*0.0001
+variable d6 equal -(v_pxy1-${pxy0})/(v_delta/v_len0)*${cfac}
+variable d6 equal -(v_pxy1-9.10829340093946)/(v_delta/v_len0)*${cfac}
+variable d6 equal -(v_pxy1-9.10829340093946)/(v_delta/v_len0)*0.0001
+
+displace_atoms all random ${atomjiggle} ${atomjiggle} ${atomjiggle} 87287 units box
+displace_atoms all random 1e-05 ${atomjiggle} ${atomjiggle} 87287 units box
+displace_atoms all random 1e-05 1e-05 ${atomjiggle} 87287 units box
+displace_atoms all random 1e-05 1e-05 1e-05 87287 units box
+Displacing atoms ...
+
+# Write restart
+unfix 3
+write_restart restart.equil
+System init for write_restart ...
+
+# uxx Perturbation
+
+variable dir equal 1
+include displace.mod
+# NOTE: This script should not need to be
+# modified. See in.elastic for more info.
+#
+# Find which reference length to use
+
+if "${dir} == 1" then    "variable len0 equal ${lx0}"
+variable len0 equal ${lx0}
+variable len0 equal 71.9430612855331
+if "${dir} == 2" then    "variable len0 equal ${ly0}"
+if "${dir} == 3" then    "variable len0 equal ${lz0}"
+if "${dir} == 4" then    "variable len0 equal ${lz0}"
+if "${dir} == 5" then    "variable len0 equal ${lz0}"
+if "${dir} == 6" then    "variable len0 equal ${ly0}"
+
+# Reset box and simulation parameters
+
+clear
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread.
+  using 1 OpenMP thread(s) per MPI task
+box tilt large
+
+The 'box' command has been removed and will be ignored
+
+read_restart restart.equil
+Reading restart file ...
+  restart file = 22 Jul 2025, LAMMPS = 22 Jul 2025
+  restoring atom style atomic from restart
+  triclinic box = (-0.14653064 -0.14856218 -0.1521782) to (71.796531 71.798562 71.802178) with tilt (0 0 0)
+  2 by 2 by 3 MPI processor grid
+  pair style hybrid/overlay stores no restart info
+  31250 atoms
+  read_restart CPU = 0.028 seconds
+include potential.mod
+# NOTE: This script can be modified for different pair styles
+# See in.elastic for more info.
+
+# Choose potential
+pair_style hybrid/overlay eam/alloy eam/fs
+pair_coeff * * eam/alloy FeCr_d.eam.alloy.txt Fe Cr
+pair_coeff * * eam/fs FeCr_s.eam.fs.txt Fe Cr
+
+# Setup neighbor style
+neighbor 1.0 nsq
+neigh_modify once no every 1 delay 0 check yes
+
+# Setup minimization style
+min_style	     cg
+min_modify	     dmax ${dmax} line quadratic
+min_modify	     dmax 0.01 line quadratic
+
+# Setup output
+thermo		1
+thermo_style custom step temp pe press pxx pyy pzz pxy pxz pyz lx ly lz vol
+thermo_modify norm no
+
+# Negative deformation
+
+variable delta equal -${up}*${len0}
+variable delta equal -1e-06*${len0}
+variable delta equal -1e-06*71.9430612855331
+variable deltaxy equal -${up}*xy
+variable deltaxy equal -1e-06*xy
+variable deltaxz equal -${up}*xz
+variable deltaxz equal -1e-06*xz
+variable deltayz equal -${up}*yz
+variable deltayz equal -1e-06*yz
+if "${dir} == 1" then    "change_box all x delta 0 ${delta} xy delta ${deltaxy} xz delta ${deltaxz} remap units box"
+change_box all x delta 0 ${delta} xy delta ${deltaxy} xz delta ${deltaxz} remap units box
+change_box all x delta 0 -7.19430612855331e-05 xy delta ${deltaxy} xz delta ${deltaxz} remap units box
+change_box all x delta 0 -7.19430612855331e-05 xy delta 0 xz delta ${deltaxz} remap units box
+change_box all x delta 0 -7.19430612855331e-05 xy delta 0 xz delta 0 remap units box
+Changing box ...
+  triclinic box = (-0.14653064 -0.14856218 -0.1521782) to (71.796459 71.798562 71.802178) with tilt (0 0 0)
+  triclinic box = (-0.14653064 -0.14856218 -0.1521782) to (71.796459 71.798562 71.802178) with tilt (0 0 0)
+  triclinic box = (-0.14653064 -0.14856218 -0.1521782) to (71.796459 71.798562 71.802178) with tilt (0 0 0)
+if "${dir} == 2" then    "change_box all y delta 0 ${delta} yz delta ${deltayz} remap units box"
+if "${dir} == 3" then    "change_box all z delta 0 ${delta} remap units box"
+if "${dir} == 4" then    "change_box all yz delta ${delta} remap units box"
+if "${dir} == 5" then    "change_box all xz delta ${delta} remap units box"
+if "${dir} == 6" then    "change_box all xy delta ${delta} remap units box"
+
+# Relax atoms positions
+
+minimize ${etol} ${ftol} ${maxiter} ${maxeval}
+minimize 0 ${ftol} ${maxiter} ${maxeval}
+minimize 0 1e-10 ${maxiter} ${maxeval}
+minimize 0 1e-10 100 ${maxeval}
+minimize 0 1e-10 100 1000
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 6.3
+  ghost atom cutoff = 6.3
+  2 neighbor lists, perpetual/occasional/extra = 2 0 0
+  (1) pair eam/alloy, perpetual
+      attributes: half, newton on
+      pair build: half/nsq/newton/tri
+      stencil: none
+      bin: none
+  (2) pair eam/fs, perpetual, copy from (1)
+      attributes: half, newton on
+      pair build: copy
+      stencil: none
+      bin: none
+Per MPI rank memory allocation (min/avg/max) = 5.979 | 5.99 | 6 Mbytes
+   Step          Temp          PotEng         Press           Pxx            Pyy            Pzz            Pxy            Pxz            Pyz             Lx             Ly             Lz           Volume    
+       100   0             -126429.35     -35.948037     -70.076699     -18.669164     -19.098248      9.1093111      33.639851      8.0336917      71.942989      71.947124      71.954356      372442.31    
+       101   0             -126448.71     -10.568682     -42.939599      5.6298757      5.603676       9.8893175      32.953389      8.9586664      71.942989      71.947124      71.954356      372442.31    
+       102   0             -126464.45      26.063162     -4.4718478      41.216887      41.444447      10.618793      32.279047      9.6637088      71.942989      71.947124      71.954356      372442.31    
+       103   0             -126477.25      66.762617      38.077519      80.942552      81.267781      11.305359      31.650492      10.164411      71.942989      71.947124      71.954356      372442.31    
+       104   0             -126487.61      106.96453      80.080813      120.24193      120.57085      11.950084      31.116289      10.474199      71.942989      71.947124      71.954356      372442.31    
+       105   0             -126495.83      144.34432      119.14759      156.77361      157.11177      12.531551      30.73815       10.597478
