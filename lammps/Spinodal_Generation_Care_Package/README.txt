@@ -1,0 +1,2 @@
+These are the files for generating spinodally decomposed structures in Lammps, and measuring their stiffness. Some important numbers can be found in the ExtraInformation file. There are README files in each folder which hopefully can give some insight into what is going on and there are comments on the code to explain each step.
+Any questions about the scripts, feel free to email me: lawrencebw@btinternet.com.

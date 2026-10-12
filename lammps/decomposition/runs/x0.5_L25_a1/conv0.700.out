@@ -1,0 +1,20 @@
+LAMMPS (22 Jul 2025 - Update 6)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread.
+  using 1 OpenMP thread(s) per MPI task
+Reading data file ...
+  triclinic box = (0 0 0) to (71.65 71.65 71.65) with tilt (0 0 0)
+  1 by 2 by 2 MPI processor grid
+  reading atoms ...
+  31250 atoms
+  reading velocities ...
+  31250 velocities
+  read_data CPU = 0.120 seconds
+15700 atoms in group G22
+15550 atoms in group G11
+Setting atom values ...
+  4827 settings made for type/fraction
+Setting atom values ...
+  4712 settings made for type/fraction
+System init for write_data ...
+WARNING: Communication cutoff is 0.0. No ghost atoms will be generated. Energies and forces may be wrong and atoms may get lost. (src/comm_brick.cpp:212)
+Total wall time: 0:00:00

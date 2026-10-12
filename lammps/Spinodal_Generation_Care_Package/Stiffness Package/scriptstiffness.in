@@ -1,0 +1,13 @@
+#!/bin/bash
+
+    #PBS -l walltime=999:00:00
+    #PBS -l nice=19
+    #PBS -q default
+    #PBS -l nodes=1:ppn=16
+    cd $PBS_O_WORKDIR
+
+LD_LIBRARY_PATH=/opt/intel/composer_xe_2011_sp1.9.293/compiler/lib/intel64:/opt/intel/composer_xe_2011_sp1.9.293/ipp/../compiler/lib/intel64:/opt/intel/composer_xe_2011_sp1.9.293/ipp/lib/intel64:/opt/intel/composer_xe_2011_sp1.9.293/compiler/lib/intel64:/opt/intel/composer_xe_2011_sp1.9.293/mkl/lib/intel64:/opt/intel/composer_xe_2011_sp1.9.293/tbb/lib/intel64//cc4.1.0_libc2.4_kernel2.6.16.21::/opt/openmpi-1.6.5/lib:/opt/intel/composer_xe_2011_sp1.9.293/debugger/lib/intel64:/opt/intel/composer_xe_2011_sp1.9.293/mpirt/lib/intel64
+
+mpirun /home/waldronl/Install_Lammps/lammps-31Mar17/src/lmp_mpi -in stiffness.in > OUTPUT
+
+echo "end"

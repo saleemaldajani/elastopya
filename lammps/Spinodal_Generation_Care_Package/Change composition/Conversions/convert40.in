@@ -1,0 +1,42 @@
+# ------------------------ INITIALIZATION ----------------------------
+
+units metal
+dimension 3
+boundary p p p
+atom_style full
+
+lattice bcc 2.866     #Fe lattice param
+variable L equal 50
+region SYSTEM block 0 ${L} 0 ${L} 0 ${L} units lattice
+create_box 2 SYSTEM
+#create_atoms 1 region SYSTEM
+read_dump output.xyz 40 x y z box no add yes format xyz     #this reads in the file produced by the generatefinal script, at the 40th timestep. Make sure the timestep is set to the final step
+                                                            #if that is the one you need to read in (otherwise it won't be the decomposed structure)
+
+
+mass 1 55.85 #Fe
+mass 2 51.996 #Cr
+
+#-------------------------Interatomic Potential------------------------------------
+#This needs to be set but is not relevant in this script
+pair_style lj/cut 1
+
+
+pair_coeff 1 1 1.0 1.0 2.5
+pair_coeff 2 2 1.0 1.0 2.5
+pair_coeff 1 2 1.0 1.0 2.5
+
+#--------------------------------Output-------------------------------------
+#This part converts a given fraction of each atom type to the other, so for example 10% of the Fe atoms become Cr and 10% of the Cr atoms become Fe, the more you convert,
+#the less effective spinodal decomposition has occured up to 50% where the structure is random.
+
+variable comp equal 0.4 #Change this variable to change the fraction of each atom type to convert.
+group G22 type 2
+group G11 type 1
+set group G22 type/fraction 1 ${comp} 15965553 #These seed numbers must be the same to produce the same structure again.
+set group G11 type/fraction 2 ${comp} 76192003
+
+dump 1 all xyz 1 output40.xyz
+
+timestep 1
+run 1
