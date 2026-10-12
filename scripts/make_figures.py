@@ -34,6 +34,7 @@ KB, T = 8.61733031e-5, 298.15
 
 # Google-Sheets palette of the original figures
 BLUE, RED, YELLOW, GREEN, ORANGE = "#4285F4", "#EA4335", "#F4B400", "#34A853", "#FF6D01"
+PURPLE = "#8E44AD"
 
 
 # ----------------------------------------------------------------------------- snapshot
@@ -644,8 +645,10 @@ def fig3(lit, dft, mdd, mdr, lam=6.4, stem="fig3_fsaw", rel_b=False, crcolor=Fal
         b.plot(mdd["phi"], yb(mdd["phi"], mdd["f"]), "-", color="0.6", lw=0.8, zorder=1)
         b.plot(mdd["phi"], yb(mdd["phi"], mdd["f"]), "o", color="black", ms=5, ls="none", zorder=3,
                label=r"Fe$_{50}$Cr$_{50}$ (Acta, 50$^3$ cell)")
-        colors = {0.2: BLUE, 0.36: "#8E44AD", 0.95: ORANGE}
+        colors = {0.2: BLUE, 0.36: PURPLE, 0.95: ORANGE}   # compositions named in the caption
         for x, ser in dec.items():
+            if round(x, 2) not in colors and abs(x - 0.5) > 1e-9:
+                continue   # the other compositions are shown in the _crcolor variants
             if abs(x - 0.5) < 1e-9:   # small-cell validation of the Acta series
                 b.plot(ser["phi"], yb(ser["phi"], ser["f"]), "o", mfc="none", mec="0.55", ms=6, ls="none", zorder=2,
                        label=r"Fe$_{50}$Cr$_{50}$, 25$^3$ cell (validation)")
