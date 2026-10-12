@@ -1,7 +1,7 @@
 %% Author: Saleem Al Dajani, MIT, KAUST. UCB-NE
 %DIF LATEXDIFF DIFFERENCE FILE
 %DIF DEL finalpaper_mike_reviewed.tex   Mon Oct 12 06:12:19 2026
-%DIF ADD finalpaper.tex                 Mon Oct 12 12:16:40 2026
+%DIF ADD finalpaper.tex                 Mon Oct 12 14:21:30 2026
 %% This is the manuscript draft for our paper about LWR MMLC
 % draft format
 %\documentclass[preprint,12pt]{elsarticle}
@@ -108,6 +108,47 @@ urlcolor=blue
 %DIF HYPERREF PREAMBLE %DIF PREAMBLE
 \providecommand{\DIFadd}[1]{\texorpdfstring{\DIFaddtex{#1}}{#1}} %DIF PREAMBLE
 \providecommand{\DIFdel}[1]{\texorpdfstring{\DIFdeltex{#1}}{}} %DIF PREAMBLE
+\providecommand{\DIFscaledelfig}{0.5}
+%DIF HIGHLIGHTGRAPHICS PREAMBLE %DIF PREAMBLE
+\RequirePackage{settobox} %DIF PREAMBLE
+\RequirePackage{letltxmacro} %DIF PREAMBLE
+\newsavebox{\DIFdelgraphicsbox} %DIF PREAMBLE
+\newlength{\DIFdelgraphicswidth} %DIF PREAMBLE
+\newlength{\DIFdelgraphicsheight} %DIF PREAMBLE
+% store original definition of \includegraphics %DIF PREAMBLE
+\LetLtxMacro{\DIFOincludegraphics}{\includegraphics} %DIF PREAMBLE
+\providecommand{\DIFaddincludegraphics}[2][]{{\color{blue}\fbox{\DIFOincludegraphics[#1]{#2}}}} %DIF PREAMBLE
+\providecommand{\DIFdelincludegraphics}[2][]{% %DIF PREAMBLE
+\sbox{\DIFdelgraphicsbox}{\DIFOincludegraphics[#1]{#2}}% %DIF PREAMBLE
+\settoboxwidth{\DIFdelgraphicswidth}{\DIFdelgraphicsbox} %DIF PREAMBLE
+\settoboxtotalheight{\DIFdelgraphicsheight}{\DIFdelgraphicsbox} %DIF PREAMBLE
+\scalebox{\DIFscaledelfig}{% %DIF PREAMBLE
+\parbox[b]{\DIFdelgraphicswidth}{\usebox{\DIFdelgraphicsbox}\\[-\baselineskip] \rule{\DIFdelgraphicswidth}{0em}}\llap{\resizebox{\DIFdelgraphicswidth}{\DIFdelgraphicsheight}{% %DIF PREAMBLE
+\setlength{\unitlength}{\DIFdelgraphicswidth}% %DIF PREAMBLE
+\begin{picture}(1,1)% %DIF PREAMBLE
+\thicklines\linethickness{2pt} %DIF PREAMBLE
+{\color[rgb]{1,0,0}\put(0,0){\framebox(1,1){}}}% %DIF PREAMBLE
+{\color[rgb]{1,0,0}\put(0,0){\line( 1,1){1}}}% %DIF PREAMBLE
+{\color[rgb]{1,0,0}\put(0,1){\line(1,-1){1}}}% %DIF PREAMBLE
+\end{picture}% %DIF PREAMBLE
+}\hspace*{3pt}}} %DIF PREAMBLE
+} %DIF PREAMBLE
+\LetLtxMacro{\DIFOaddbegin}{\DIFaddbegin} %DIF PREAMBLE
+\LetLtxMacro{\DIFOaddend}{\DIFaddend} %DIF PREAMBLE
+\LetLtxMacro{\DIFOdelbegin}{\DIFdelbegin} %DIF PREAMBLE
+\LetLtxMacro{\DIFOdelend}{\DIFdelend} %DIF PREAMBLE
+\DeclareRobustCommand{\DIFaddbegin}{\DIFOaddbegin \let\includegraphics\DIFaddincludegraphics} %DIF PREAMBLE
+\DeclareRobustCommand{\DIFaddend}{\DIFOaddend \let\includegraphics\DIFOincludegraphics} %DIF PREAMBLE
+\DeclareRobustCommand{\DIFdelbegin}{\DIFOdelbegin \let\includegraphics\DIFdelincludegraphics} %DIF PREAMBLE
+\DeclareRobustCommand{\DIFdelend}{\DIFOaddend \let\includegraphics\DIFOincludegraphics} %DIF PREAMBLE
+\LetLtxMacro{\DIFOaddbeginFL}{\DIFaddbeginFL} %DIF PREAMBLE
+\LetLtxMacro{\DIFOaddendFL}{\DIFaddendFL} %DIF PREAMBLE
+\LetLtxMacro{\DIFOdelbeginFL}{\DIFdelbeginFL} %DIF PREAMBLE
+\LetLtxMacro{\DIFOdelendFL}{\DIFdelendFL} %DIF PREAMBLE
+\DeclareRobustCommand{\DIFaddbeginFL}{\DIFOaddbeginFL \let\includegraphics\DIFaddincludegraphics} %DIF PREAMBLE
+\DeclareRobustCommand{\DIFaddendFL}{\DIFOaddendFL \let\includegraphics\DIFOincludegraphics} %DIF PREAMBLE
+\DeclareRobustCommand{\DIFdelbeginFL}{\DIFOdelbeginFL \let\includegraphics\DIFdelincludegraphics} %DIF PREAMBLE
+\DeclareRobustCommand{\DIFdelendFL}{\DIFOaddendFL \let\includegraphics\DIFOincludegraphics} %DIF PREAMBLE
 %DIF AMSMATHULEM PREAMBLE %DIF PREAMBLE
 \makeatletter %DIF PREAMBLE
 \let\sout@orig\sout %DIF PREAMBLE
@@ -251,14 +292,12 @@ Motivated by these links, we develop a thermodynamics-to-observable workflow for
 \DIFdelend \subsection{Elastodynamic Methods}
 \DIFdelbegin \DIFdel{In this work, materials are modeled as anisotropic unbounded media through which elastic waves propagate according to }\DIFdelend \DIFaddbegin \DIFadd{Elastic waves in each homogeneous alloy obey }\DIFaddend the elastodynamic wave equation \cite{du2017facile}:
 
-\DIFdelbegin \begin{displaymath}
-    \DIFdel{C_{ijkl} \frac{\partial U_l(\vec{r},t)}{\partial x_j\partial x_k}= \rho(\vec{r},t)\frac{\partial^2 U_l(\vec{r},t)}{\partial t^2}
-    %DIFDELCMD < \label{eqn:ewe}%%%
-}\end{displaymath}%DIFAUXCMD
-\DIFdelend \DIFaddbegin \begin{equation}
-    \DIFadd{\rho \frac{\partial^2 u_i}{\partial t^2} = C_{ijkl} \frac{\partial^2 u_k}{\partial x_j \partial x_l}
-    \label{eqn:ewe}
-}\end{equation}\DIFaddend 
+\begin{equation}
+    \DIFaddbegin \DIFadd{\rho \frac{\partial^2 u_i}{\partial t^2} = }\DIFaddend C_{ijkl} \DIFdelbegin \DIFdel{\frac{\partial U_l(\vec{r},t)}{\partial x_j\partial x_k}= \rho(}%DIFDELCMD < \vec{r}%%%
+\DIFdel{,t)\frac{\partial^2 U_l(\vec{r},t)}{\partial t^2}
+    }\DIFdelend \DIFaddbegin \DIFadd{\frac{\partial^2 u_k}{\partial x_j \partial x_l}
+    }\DIFaddend \label{eqn:ewe}
+\end{equation}
 
 where $C_{ijkl}$ are fourth-order stiffness tensor entries \DIFdelbegin \DIFdel{that are permutatively }\DIFdelend indexed by $i,j,k,l=1,2,3$, $\rho$ is density, and \DIFdelbegin \DIFdel{$U$ is the wave function. }\DIFdelend \DIFaddbegin \DIFadd{$u$ is the displacement field. On its own, Eq.~\ref{eqn:ewe} describes bulk waves in an unbounded medium. The SAW measured by transient grating spectroscopy (TGS), however, is a Rayleigh wave guided by the free surface. It is obtained from Eq.~\ref{eqn:ewe} for a half-space $x_3 \geq 0$ by requiring a traction-free surface, $\sigma_{i3} = C_{i3kl}\,\partial u_k/\partial x_l = 0$ at $x_3=0$, and displacements that decay with depth. Because crystal orientation is not resolved in the present calculations, we solve this surface problem for the isotropic Voigt--Reuss--Hill (VRH) average of each elastic tensor (Sec.~\ref{sec:analysis}). The Rayleigh velocity is then $v_R = v_s\sqrt{q}$, where $q$ is the root in $0<q<1$ of
 }\begin{equation}
@@ -478,10 +517,10 @@ The local stability of a binary solid solution is governed by the curvature of \
 %DIFDELCMD <     \includegraphics[width=\linewidth]{figures/ddGddx_fig0b.png}
 %DIFDELCMD < \end{subfigure}
 %DIFDELCMD < %%%
-\DIFdelendFL \DIFaddbeginFL \includegraphics[width=\linewidth]{figures/fig1_free_energy.pdf}
+\DIFdelendFL \DIFaddbeginFL \includegraphics[width=\linewidth]{figures/kdense_scripta/with_strips/fig1_free_energy_strip.pdf}
 \DIFaddendFL \caption{(a) Demixing free energy \DIFdelbeginFL \DIFdelFL{$\Delta G$ }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{$\Delta G_{\mathrm{demix}} = -\Delta G_{\mathrm{mix}}$ (Eq.~\ref{eqn:demix}) }\DIFaddendFL versus chromium composition $x_{\mathrm{Cr}}$\DIFaddbeginFL \DIFaddFL{: muffin-tin approximation, GGA (present VASP calculations), experiment, and the PWSCF--PAW and SIESTA--NC interaction models of Levesque }\textit{\DIFaddFL{et al.}} \DIFaddFL{\mbox{%DIFAUXCMD
 \cite{levesque2011simple} }\hskip0pt%DIFAUXCMD
-at 298.15 K}\DIFaddendFL . (b) Curvature \DIFdelbeginFL \DIFdelFL{$\partial^2 \Delta G/\partial x_{\mathrm{Cr}}^2$, identifying spinodally unstable }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{of the PWSCF--PAW demixing free energy. Solid line: exact analytic second derivative of the model. Filled circles: three-point second differences of its tabulated values on the non-uniform }\DIFaddendFL composition \DIFdelbeginFL \DIFdelFL{windows where }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{grid. Open circles: two-point second differences of }\DIFaddendFL the \DIFaddbeginFL \DIFaddFL{same values, with a quadratic least-squares fit (dashed). Shading marks positive demixing }\DIFaddendFL curvature\DIFdelbeginFL \DIFdelFL{becomes }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{, i.e., }\DIFaddendFL negative \DIFaddbeginFL \DIFaddFL{mixing curvature, which identifies spinodally unstable compositions}\DIFaddendFL .}
+at 298.15 K}\DIFaddendFL . (b) Curvature \DIFdelbeginFL \DIFdelFL{$\partial^2 \Delta G/\partial x_{\mathrm{Cr}}^2$, identifying spinodally unstable }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{of the PWSCF--PAW demixing free energy. Solid line: exact analytic second derivative of the model. Filled circles: three-point second differences of its tabulated values on the non-uniform }\DIFaddendFL composition \DIFdelbeginFL \DIFdelFL{windows where }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{grid. Open circles: two-point second differences of }\DIFaddendFL the \DIFaddbeginFL \DIFaddFL{same values, with a quadratic least-squares fit (dashed). Shading marks positive demixing }\DIFaddendFL curvature\DIFdelbeginFL \DIFdelFL{becomes }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{, i.e., }\DIFaddendFL negative \DIFaddbeginFL \DIFaddFL{mixing curvature, which identifies spinodally unstable compositions}\DIFaddendFL . \DIFaddbeginFL \DIFaddFL{(c) One (001) atomic plane of fully decomposed ($\phi=1$) MD structures ($25^3$ }\textit{\DIFaddFL{bcc}} \DIFaddFL{cells; Sec.~\ref{sec:md}) at the indicated Cr contents; red, Fe; blue, Cr. Inside the spinodal window the alloy separates into interpenetrating Fe-rich $\alpha$ and Cr-rich $\alpha'$ domains, whereas at the dilute ends the minority element forms only isolated clusters.}\DIFaddendFL }
 \label{fig:free_energy}
 \end{figure}
 
@@ -501,27 +540,31 @@ Figure~\ref{fig:free_energy}\DIFaddbegin \DIFadd{b }\DIFaddend shows that the \D
 %DIFDELCMD <     \includegraphics[width=\linewidth]{figures/Fe(1-x)Crx bcc cubic elastodynamics_fig2_ours.png}
 %DIFDELCMD < \end{subfigure}
 %DIFDELCMD < %%%
-\DIFdelendFL \DIFaddbeginFL \includegraphics[width=\linewidth]{figures/fig2_elastic_mapping.pdf}
-\DIFaddendFL \caption{(a) \DIFdelbeginFL \DIFdelFL{Composition dependence }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{$C_{11}$ }\DIFaddendFL of \DIFdelbeginFL \DIFdelFL{the bcc }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{homogeneous }\textit{\DIFaddFL{bcc}} \DIFaddendFL Fe$_{1-x}$Cr$_x$\DIFdelbeginFL \DIFdelFL{cubic elastic tensor}\DIFdelendFL \DIFaddbeginFL \DIFaddFL{: literature calculations of Razumovskiy }\textit{\DIFaddFL{et al.}} \DIFaddFL{\mbox{%DIFAUXCMD
+\DIFdelendFL \DIFaddbeginFL \includegraphics[width=\linewidth]{figures/kdense_scripta/with_strips/fig2_elastic_mapping_orientation_violin_bulk_mddecomp_strip.pdf}
+\DIFaddendFL \caption{(a) \DIFdelbeginFL \DIFdelFL{Composition dependence }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{$C_{11}$ }\DIFaddendFL of \DIFdelbeginFL \DIFdelFL{the bcc }\DIFdelendFL \DIFaddbeginFL \textit{\DIFaddFL{bcc}} \DIFaddendFL Fe$_{1-x}$Cr$_x$\DIFdelbeginFL \DIFdelFL{cubic elastic tensor}\DIFdelendFL \DIFaddbeginFL \DIFaddFL{: literature calculations of Razumovskiy }\textit{\DIFaddFL{et al.}} \DIFaddFL{\mbox{%DIFAUXCMD
 \cite{razumovskiy2011first} }\hskip0pt%DIFAUXCMD
-(blue circles; reconstructed from digitized $C'$}\DIFaddendFL , \DIFdelbeginFL \DIFdelFL{shown for }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{$C_{44}$, and $B$) and present DFT calculations on 40-atom SQS (yellow diamonds). Red squares: MD (EAM) random alloys (mean $\pm$ standard deviation of ten alloys at }\DIFaddendFL the \DIFdelbeginFL \DIFdelFL{longitudinal stiffness $C_{11}$}\DIFdelendFL \DIFaddbeginFL \DIFaddFL{DFT compositions and three elsewhere; Sec}\DIFaddendFL .\DIFaddbeginFL \DIFaddFL{~\ref{sec:md}). Open red squares: fully decomposed MD structures }\DIFaddendFL (\DIFdelbeginFL \DIFdelFL{b}\DIFdelendFL \DIFaddbeginFL \DIFaddFL{$\phi=1$}\DIFaddendFL )\DIFdelbeginFL \DIFdelFL{Elastodynamic mapping }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{, }\DIFaddendFL from \DIFdelbeginFL \DIFdelFL{elastic stiffness to }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{Ref.~\mbox{%DIFAUXCMD
-\cite{al2023detecting} }\hskip0pt%DIFAUXCMD
-at 50/50 and from the present $25^3$-cell calculations at $x_{\mathrm{Cr}}=0.20$, 0.36, and 0.95. (b) }\DIFaddendFL Rayleigh \DIFdelbeginFL \DIFdelFL{surface acoustic wave }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{SAW }\DIFaddendFL frequency \DIFdelbeginFL \DIFdelFL{$f_{\mathrm{SAW}}$}\DIFdelendFL \DIFaddbeginFL \DIFaddFL{versus $C_{11}$ for the literature (yellow) and DFT (green) data}\DIFaddendFL , \DIFdelbeginFL \DIFdelFL{indicating }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{at $\lambda=5.5\,\mu$m. The shaded region is the }\DIFaddendFL elastodynamically \DIFdelbeginFL \DIFdelFL{allowed and }\DIFdelendFL unallowed \DIFaddbeginFL \DIFaddFL{range of Ref.~\mbox{%DIFAUXCMD
-\cite{al2023detecting} }\hskip0pt%DIFAUXCMD
-(Fig.~9 therein), between the maximum pseudo-SAW }\DIFaddendFL frequency \DIFdelbeginFL \DIFdelFL{ranges }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{(0.627 GHz) and the bulk-wave frequency (0.833 GHz) calculated }\DIFaddendFL for \DIFdelbeginFL \DIFdelFL{a homogeneous solid solution}\DIFdelendFL \DIFaddbeginFL \DIFaddFL{pristine 304-type CASS}\DIFaddendFL .}
+(black circles; reconstructed from digitized $C'$}\DIFaddendFL , \DIFdelbeginFL \DIFdelFL{shown for }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{$C_{44}$, and $B$), present DFT calculations on 40-atom SQS (red diamonds), MD (EAM) random alloys (green squares; mean $\pm$ standard deviation of ten alloys at }\DIFaddendFL the \DIFdelbeginFL \DIFdelFL{longitudinal stiffness $C_{11}$}\DIFdelendFL \DIFaddbeginFL \DIFaddFL{DFT compositions and three elsewhere; Sec}\DIFaddendFL .\DIFaddbeginFL \DIFaddFL{~\ref{sec:md}), and fully decomposed MD structures }\DIFaddendFL (\DIFaddbeginFL \DIFaddFL{$\phi=1$, open squares; $25^3$ cells). (}\DIFaddendFL b) \DIFdelbeginFL \DIFdelFL{Elastodynamic mapping from elastic stiffness to Rayleigh surface }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{Orientation-resolved }\DIFaddendFL acoustic \DIFdelbeginFL \DIFdelFL{wave frequency $f_{\mathrm{SAW}}$}\DIFdelendFL \DIFaddbeginFL \DIFaddFL{frequencies at $\lambda=6.4\,\mu$m}\DIFaddendFL , \DIFdelbeginFL \DIFdelFL{indicating elastodynamically allowed }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{plotted at the $C_{11}$ of each tensor in (a). For each tensor, 10}{\DIFaddFL{,}}\DIFaddFL{000 random grain orientations were computed with the surface Green's-function method of Du }\DIFaddendFL and \DIFaddbeginFL \DIFaddFL{Zhao \mbox{%DIFAUXCMD
+\cite{du2017facile}}\hskip0pt%DIFAUXCMD
+, as in Ref.~\mbox{%DIFAUXCMD
+\cite{al2023detecting}}\hskip0pt%DIFAUXCMD
+. Lower violins: (pseudo-)SAW frequencies (pseudo-SAW retained when its intensity is at least $2\times10^{-3}$ of the SAW). Upper violins: quasi-longitudinal bulk waves along the same propagation directions. Boxes mark the interquartile range and median. The shaded band is the elastodynamically }\DIFaddendFL unallowed \DIFaddbeginFL \DIFaddFL{range of pristine 304-type CASS \mbox{%DIFAUXCMD
+\cite{al2023detecting}}\hskip0pt%DIFAUXCMD
+, from its maximum (pseudo-)SAW }\DIFaddendFL frequency \DIFdelbeginFL \DIFdelFL{ranges for a homogeneous solid solution}\DIFdelendFL \DIFaddbeginFL \DIFaddFL{(0.609 GHz, dashed) to its bulk-wave frequency (0.833 GHz, dotted)}\DIFaddendFL . \DIFaddbeginFL \DIFaddFL{(c) One (001) atomic plane of the MD cells behind the green tensors: random alloy and fully decomposed structure at $x_{\mathrm{Cr}}=0.20$, 0.36, and 0.50 (red, Fe; blue, Cr).}\DIFaddendFL }
 \label{fig:elastic_elastodynamics}
 \end{figure}
 
-To connect thermodynamic instability to experimentally measurable quantities, we compute the cubic elastic tensor across $x_{\mathrm{Cr}}$ and propagate these elastic inputs through \DIFdelbegin \DIFdel{elastodynamic constraints relevant to surface acoustic waves.In the present geometry, }\DIFdelend \DIFaddbegin \DIFadd{the surface boundary-value problem of Sec.~2.1. Although $f_{\mathrm{SAW}}$ depends on the full tensor through $B$ and $G$, we use }\DIFaddend the longitudinal stiffness \DIFdelbegin \DIFdel{component }\DIFdelend $C_{11}$ \DIFdelbegin \DIFdel{plays a dominant role in controlling the Rayleigh SAW frequency through the dispersion relation, making it a sensitive indicator }\DIFdelend \DIFaddbegin \DIFadd{as a compact index }\DIFaddend of composition-dependent stiffening \DIFdelbegin \DIFdel{. Small overpredictions in absolute frequency are attributed to finite-size SQS representations and the absence of magnetic and chemical short-range order beyond the supercell length scale. Importantly, relative stiffening trends and peak splitting remain robust, demonstrating that first-principles elasticity captures the essential physics governing SAW observables. }\DIFdelend \DIFaddbegin \DIFadd{(Fig.~\ref{fig:elastic_elastodynamics}a). The blue points are literature calculations by Razumovskiy }\textit{\DIFadd{et al.}} \DIFadd{\mbox{%DIFAUXCMD
+To connect thermodynamic instability to experimentally measurable quantities, we compute the cubic elastic tensor across $x_{\mathrm{Cr}}$ and propagate these elastic inputs through \DIFdelbegin \DIFdel{elastodynamic constraints relevant to surface acoustic waves.In the present geometry, }\DIFdelend \DIFaddbegin \DIFadd{the surface boundary-value problem of Sec.~2.1. Although $f_{\mathrm{SAW}}$ depends on the full tensor through $B$ and $G$, we use }\DIFaddend the longitudinal stiffness \DIFdelbegin \DIFdel{component }\DIFdelend $C_{11}$ \DIFdelbegin \DIFdel{plays a dominant role in controlling the Rayleigh SAW frequency through the dispersion relation, making it a sensitive indicator }\DIFdelend \DIFaddbegin \DIFadd{as a compact index }\DIFaddend of composition-dependent stiffening \DIFdelbegin \DIFdel{. Small overpredictions in absolute frequency are attributed to finite-size SQS representations and the absence of magnetic and chemical short-range order beyond the supercell length scale. Importantly, relative stiffening trends and peak splitting remain robust, demonstrating that first-principles elasticity captures the essential physics governing SAW observables. }\DIFdelend \DIFaddbegin \DIFadd{(Fig.~\ref{fig:elastic_elastodynamics}a). The black circles are literature calculations by Razumovskiy }\textit{\DIFadd{et al.}} \DIFadd{\mbox{%DIFAUXCMD
 \cite{razumovskiy2011first}}\hskip0pt%DIFAUXCMD
-, the yellow diamonds are ours, and the red squares are MD (EAM) random alloys computed here with the procedure of our earlier study \mbox{%DIFAUXCMD
+, the red diamonds are ours, and the green squares are MD (EAM) random alloys computed here with the procedure of our earlier study \mbox{%DIFAUXCMD
 \cite{al2023detecting}}\hskip0pt%DIFAUXCMD
 ; the open squares are the corresponding fully decomposed structures, which are stiffer than the random alloy at every composition, most strongly at intermediate compositions (e.g., 257.4 versus 247.3 GPa at $x_{\mathrm{Cr}}=0.36$). The present DFT tensors are systematically stiffer than the reference data (e.g., $C_{11}=324$ versus 260 GPa for }\textit{\DIFadd{bcc}} \DIFadd{Fe) and correspondingly predict higher frequencies. Possible contributors include the $\Gamma$-point-only $k$-point sampling, the finite SQS size, and the magnetic configuration. We therefore interpret relative trends rather than absolute frequencies.
 }\DIFaddend 
 
-As shown in Fig.~\ref{fig:elastic_elastodynamics}, $C_{11}$ \DIFdelbegin \DIFdel{exhibits a systematic dependence }\DIFdelend \DIFaddbegin \DIFadd{depends systematically }\DIFaddend on chromium concentration \DIFaddbegin \DIFadd{(non-monotonically in the literature and DFT data)}\DIFaddend , producing corresponding shifts in the \DIFdelbegin \DIFdel{elastodynamically allowed }\DIFdelend Rayleigh SAW frequency\DIFdelbegin \DIFdel{range. Importantly, this mapping provides a quantitative bridge between first-principles elasticity and experimentally observed SAW peak positions. }\DIFdelend \DIFaddbegin \DIFadd{. For a homogeneous solid solution, each composition corresponds to a single tensor and hence a single $f_{\mathrm{SAW}}$. In our earlier study, elastodynamic calculations for pristine CASS over randomly sampled grain orientations defined an ``unallowed'' frequency range, above the highest (pseudo-)SAW frequency and below the bulk-wave frequency, in which no surface mode of the pristine material exists; (P)SAW peaks observed there after aging were attributed to stiffened $\delta$-ferrite \mbox{%DIFAUXCMD
+As shown in Fig.~\ref{fig:elastic_elastodynamics}, $C_{11}$ \DIFdelbegin \DIFdel{exhibits a systematic dependence }\DIFdelend \DIFaddbegin \DIFadd{depends systematically }\DIFaddend on chromium concentration \DIFaddbegin \DIFadd{(non-monotonically in the literature and DFT data)}\DIFaddend , producing corresponding shifts in the \DIFdelbegin \DIFdel{elastodynamically allowed }\DIFdelend Rayleigh SAW frequency\DIFdelbegin \DIFdel{range. Importantly, this mapping provides a quantitative bridge between first-principles elasticity and experimentally observed SAW peak positions. }\DIFdelend \DIFaddbegin \DIFadd{. For a homogeneous solid solution, each composition corresponds to a single tensor, and hence to a single isotropic $f_{\mathrm{SAW}}$ but a distribution of (P)SAW frequencies over grain orientations. In our earlier study, elastodynamic calculations for pristine CASS over randomly sampled grain orientations defined an ``unallowed'' frequency range, above the highest (pseudo-)SAW frequency and below the bulk-wave frequency, in which no surface mode of the pristine material exists; (P)SAW peaks observed there after aging were attributed to stiffened $\delta$-ferrite \mbox{%DIFAUXCMD
 \cite{al2023detecting}}\hskip0pt%DIFAUXCMD
-. Figure~\ref{fig:elastic_elastodynamics}b places the homogeneous Fe--Cr frequencies relative to that range: alloys up to $x_{\mathrm{Cr}}\approx0.6$ lie below it, and only Cr-rich compositions approach or enter it. Frequencies in this range therefore indicate stiffness beyond that of a homogeneous solid solution of $\delta$-ferrite or Fe--36Cr composition, consistent with the stiffer Cr-rich $\alpha'$ regions formed by spinodal decomposition (Fig.~\ref{fig:fsaw_combined}a). }\DIFaddend Within the spinodally unstable composition window, elastic stiffening therefore translates \DIFdelbegin \DIFdel{directly }\DIFdelend into measurable acoustic signatures, enabling stiffness changes to be inferred non-destructively.
+. Figure~\ref{fig:elastic_elastodynamics}b repeats that calculation for every Fe--Cr tensor (10}{\DIFadd{,}}\DIFadd{000 grain orientations each, $\lambda=6.4\,\mu$m) \mbox{%DIFAUXCMD
+\cite{du2017facile}}\hskip0pt%DIFAUXCMD
+. The bulk waves of all tensors lie above the range ($\geq0.87$ GHz). In the (P)SAW branch, no literature tensor up to $x_{\mathrm{Cr}}=0.7$ and none of the MD tensors reaches it. Full decomposition raises the highest MD (P)SAW frequency, most at intermediate compositions (from 585 to 596 MHz at $x_{\mathrm{Cr}}=0.36$), but not into the range. Only the stiffest tensors enter it: Cr-rich literature alloys (9\% and 29\% of grains above 0.609 GHz at $x_{\mathrm{Cr}}=0.9$ and 1.0) and the present DFT tensors (30\% and 46\% at $x_{\mathrm{Cr}}=0.95$ and 1.0; their systematic overstiffening also places 6--8\% of grains of Fe and Fe$_{50}$Cr$_{50}$ in the range). Frequencies in this range therefore indicate stiffness beyond that of a homogeneous solid solution of $\delta$-ferrite or Fe--36Cr composition, consistent with the stiffer Cr-rich $\alpha'$ regions formed by spinodal decomposition (Fig.~\ref{fig:fsaw_combined}a). }\DIFaddend Within the spinodally unstable composition window, elastic stiffening therefore translates \DIFdelbegin \DIFdel{directly }\DIFdelend into measurable acoustic signatures, enabling stiffness changes to be inferred non-destructively.
 
 \subsection{Separating composition trends from spinodal conversion trends}
 
@@ -537,19 +580,19 @@ While elastic constants vary with chromium concentration even in a homogeneous s
 %DIFDELCMD <     \includegraphics[width=\linewidth]{figures/Rayleigh fSAW [GHz] vs. Spinodal Conversion Fraction only_fig4.png}
 %DIFDELCMD < \end{subfigure}
 %DIFDELCMD < %%%
-\DIFdelendFL \DIFaddbeginFL \includegraphics[width=\linewidth]{figures/fig3_fsaw.pdf}
-\DIFaddendFL \caption{(a) Rayleigh SAW frequency $f_{\mathrm{SAW}}$ \DIFdelbeginFL \DIFdelFL{as a function of }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{versus }\DIFaddendFL chromium composition $x_{\mathrm{Cr}}$ \DIFdelbeginFL \DIFdelFL{using DFT-derived elastic constants }\DIFdelendFL (\DIFdelbeginFL \DIFdelFL{solid-solution trend}\DIFdelendFL \DIFaddbeginFL \DIFaddFL{$\lambda=5.5\,\mu$m}\DIFaddendFL ) \DIFaddbeginFL \DIFaddFL{for the literature (black), present DFT (red), and MD random-alloy (green) data of Fig}\DIFaddendFL .\DIFaddbeginFL \DIFaddFL{~\ref{fig:elastic_elastodynamics}. Below the data, the star marks Fe--36Cr \mbox{%DIFAUXCMD
+\DIFdelendFL \DIFaddbeginFL \includegraphics[width=\linewidth]{figures/kdense_scripta/with_strips/fig3_fsaw_strip.pdf}
+\DIFaddendFL \caption{(a) Rayleigh SAW frequency $f_{\mathrm{SAW}}$ \DIFdelbeginFL \DIFdelFL{as a function of }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{versus }\DIFaddendFL chromium composition $x_{\mathrm{Cr}}$ \DIFdelbeginFL \DIFdelFL{using DFT-derived elastic constants }\DIFdelendFL (\DIFdelbeginFL \DIFdelFL{solid-solution trend}\DIFdelendFL \DIFaddbeginFL \DIFaddFL{$\lambda=5.5\,\mu$m}\DIFaddendFL ) \DIFaddbeginFL \DIFaddFL{for the literature (black), present DFT (vermillion), and MD random-alloy (green) data of Fig}\DIFaddendFL .\DIFaddbeginFL \DIFaddFL{~\ref{fig:elastic_elastodynamics}. Below the data, the star marks Fe--36Cr \mbox{%DIFAUXCMD
 \cite{rae2026tgs} }\hskip0pt%DIFAUXCMD
 and the arrows indicate schematically the partitioning toward Fe-rich $\alpha$ and Cr-rich $\alpha'$ during spinodal decomposition; dotted lines rise from each composition toward the data. Arrow endpoints are illustrative, not measured phase compositions. }\DIFaddendFL (b) \DIFdelbeginFL \DIFdelFL{Rayleigh SAW frequency as a function of }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{$f_{\mathrm{SAW}}$ versus }\DIFaddendFL spinodal conversion fraction $\phi$ from \DIFdelbeginFL \DIFdelFL{molecular dynamics, isolating microstructural evolution effects during }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{the MD (EAM) }\DIFaddendFL decomposition \DIFaddbeginFL \DIFaddFL{simulations (Sec}\DIFaddendFL .\DIFaddbeginFL \DIFaddFL{~\ref{sec:md}): equiatomic Fe$_{50}$Cr$_{50}$ from Ref.~\mbox{%DIFAUXCMD
 \cite{al2023detecting} }\hskip0pt%DIFAUXCMD
-(black, $50^3$ cell, fixed density 7535 kg m$^{-3}$), and Fe$_{80}$Cr$_{20}$, Fe$_{64}$Cr$_{36}$, and Fe$_{5}$Cr$_{95}$ from the present $25^3$-cell calculations (squares); open circles repeat Fe$_{50}$Cr$_{50}$ in the $25^3$ cell as a check. $\phi=0.5$ is the random alloy and $\phi=1$ the fully separated structure.}\DIFaddendFL }
+(black, $50^3$ cell, fixed density 7535 kg m$^{-3}$), and Fe$_{95}$Cr$_{5}$, Fe$_{80}$Cr$_{20}$, Fe$_{64}$Cr$_{36}$, and Fe$_{5}$Cr$_{95}$ from the present $25^3$-cell calculations (squares); open circles repeat Fe$_{50}$Cr$_{50}$ in the $25^3$ cell as a check. $\phi=0.5$ is the random alloy and $\phi=1$ the fully separated structure. (c) One (001) atomic plane of the $25^3$ MD cell of Fe$_{64}$Cr$_{36}$ from $\phi=0.5$ to 1.0 (red, Fe; blue, Cr): Fe-rich $\alpha$ and Cr-rich $\alpha'$ domains form and coarsen as $\phi$ increases; these are the structures whose frequencies are plotted in (b).}\DIFaddendFL }
 \label{fig:fsaw_combined}
 \end{figure}
 
 Figure~\ref{fig:fsaw_combined}\DIFdelbegin \DIFdel{demonstrates that while }\DIFdelend \DIFaddbegin \DIFadd{a shows how chromium partitioning produces stiffening. The Fe--36Cr composition lies near a local minimum of the homogeneous }\DIFaddend $f_{\mathrm{SAW}}(x_{\mathrm{Cr}})$ \DIFaddbegin \DIFadd{curve. Spinodal decomposition moves material toward Fe-rich $\alpha$ and Cr-rich $\alpha'$ compositions (arrows); in both directions the homogeneous-alloy frequency increases. The DFT set, with only five compositions, is consistent with this non-monotonic dependence but cannot resolve the minimum. The MD random alloys, an independent classical model, also show a frequency minimum, at $x_{\mathrm{Cr}}\approx0.36$--0.40, i.e.\ at the Fe--36Cr composition, even though their $C_{11}$ increases monotonically (Fig.~\ref{fig:elastic_elastodynamics}a): the minimum comes from the shear moduli, which control the Rayleigh velocity ($C_{44}$ decreases from 116 GPa for Fe to 106 GPa at $x_{\mathrm{Cr}}=0.5$). $C_{11}$ is therefore a convenient index of stiffening, but the SAW response is governed by shear stiffness. Figure~\ref{fig:fsaw_combined}a describes the properties of the constituents; the effective response of the two-phase microstructure additionally depends on phase fractions and on the domain size relative to the SAW wavelength.
 }
 
-\DIFadd{Figure~\ref{fig:fsaw_combined}b isolates the effect of decomposition at fixed overall composition (Fe$_{50}$Cr$_{50}$). In the MD (EAM) simulations, $f_{\mathrm{SAW}}$ increases monotonically from 0.545 GHz for the random alloy ($\phi=0.5$) to 0.570 GHz for the fully separated structure ($\phi=1$), an increase of about 4.6\% under the fixed-density assumption. The empirical-potential and first-principles results therefore agree in sign. Repeating the decomposition at other compositions (Sec.~\ref{sec:md}) gives frequency increases between the random and fully separated states of 2.6\%, 5.1\%, 5.5\%, and 0.5\% for $x_{\mathrm{Cr}}=0.20$, 0.36, 0.50, and 0.95, respectively. Stiffening on decomposition is therefore largest within the spinodally unstable window of Fig.~\ref{fig:free_energy}b, including the Fe--36Cr composition, and nearly vanishes for the dilute Cr-rich alloy. The fully separated state is an idealized limit, so these values bound the stiffening from above. At 50/50, the small-cell series lies about 2\% below the original series in absolute frequency because the original moduli used a different isotropic average; the relative changes agree to within one percentage point. Together, $f_{\mathrm{SAW}}(x_{\mathrm{Cr}})$ }\DIFaddend captures the baseline elastic response of a homogeneous alloy, \DIFdelbegin \DIFdel{the evolution of }\DIFdelend \DIFaddbegin \DIFadd{and }\DIFaddend $f_{\mathrm{SAW}}(\phi)$ reflects \DIFaddbegin \DIFadd{the }\DIFaddend additional stiffening associated with progressive spinodal conversion. This separation enables experimental SAW measurements to be interpreted in terms of both composition and decomposition state, providing a pathway to distinguish early-stage spinodal evolution from equilibrium compositional effects.
+\DIFadd{Figure~\ref{fig:fsaw_combined}b isolates the effect of decomposition at fixed overall composition (Fe$_{50}$Cr$_{50}$). In the MD (EAM) simulations, $f_{\mathrm{SAW}}$ increases monotonically from 0.545 GHz for the random alloy ($\phi=0.5$) to 0.570 GHz for the fully separated structure ($\phi=1$), an increase of about 4.6\% under the fixed-density assumption. The empirical-potential and first-principles results therefore agree in sign. Repeating the decomposition at twelve compositions from $x_{\mathrm{Cr}}=0.05$ to 0.95 (Sec.~\ref{sec:md}) gives frequency increases between the random and fully separated states that are nearly symmetric about the equiatomic composition: 0.5\%, 1.1\%, 2.6\%, 4.4\%, 5.1\%, 5.4\%, and 5.5\% for $x_{\mathrm{Cr}}=0.05$, 0.10, 0.20, 0.30, 0.36, 0.40, and 0.50, and 5.3\%, 4.1\%, 2.7\%, 1.1\%, and 0.5\% for $x_{\mathrm{Cr}}=0.60$, 0.70, 0.80, 0.90, and 0.95. Stiffening on decomposition is therefore largest within the spinodally unstable window of Fig.~\ref{fig:free_energy}b, including the Fe--36Cr composition, and nearly vanishes for the dilute alloys at either end. The fully separated state is an idealized limit, so these values bound the stiffening from above. At 50/50, the small-cell series lies about 2\% below the original series in absolute frequency because the original moduli used a different isotropic average; the relative changes agree to within one percentage point. Together, $f_{\mathrm{SAW}}(x_{\mathrm{Cr}})$ }\DIFaddend captures the baseline elastic response of a homogeneous alloy, \DIFdelbegin \DIFdel{the evolution of }\DIFdelend \DIFaddbegin \DIFadd{and }\DIFaddend $f_{\mathrm{SAW}}(\phi)$ reflects \DIFaddbegin \DIFadd{the }\DIFaddend additional stiffening associated with progressive spinodal conversion. This separation enables experimental SAW measurements to be interpreted in terms of both composition and decomposition state, providing a pathway to distinguish early-stage spinodal evolution from equilibrium compositional effects.
 
 
 \section{Discussion}
@@ -720,14 +763,14 @@ We presented a compact thermodynamics-to-elastodynamics workflow for bcc Fe--Cr 
         \label{fig4a}
     \end{subfigure}
     \begin{subfigure}{0.35\textwidth}
-        \DIFdelbegin %DIFDELCMD < \includegraphics[width=\textwidth]{Parts/Figures/fvsX_v3.png}
+        \DIFdelbegin %DIFDELCMD < \includegraphics[width=\textwidth, left]{Parts/Figures/fvsX_v3.png}
 %DIFDELCMD <         %%%
 \DIFdelend \DIFaddbegin \includegraphics[width=\textwidth]{Parts/Figures/fvsX_v3.png}
         \DIFaddend \caption{Calculated acoustic frequencies across different Cr compositions, illustrating the material's acoustic response variability with composition. This graph provides a quantitative measure of the material's mechanical behavior and its dependence on the microstructural characteristics induced by varying chromium content.}
         \label{fig4b}
     \end{subfigure}
     \begin{subfigure}{0.5\textwidth}
-        \DIFdelbegin %DIFDELCMD < \includegraphics[width=\textwidth]{Parts/Figures/experimental-moduli-hist.png}
+        \DIFdelbegin %DIFDELCMD < \includegraphics[width=\textwidth, right]{Parts/Figures/experimental-moduli-hist.png}
 %DIFDELCMD <         %%%
 \DIFdelend \DIFaddbegin \includegraphics[width=\textwidth]{Parts/Figures/experimental-moduli-hist.png}
         \DIFaddend \caption{Measured elastic moduli distribution from experimental data, highlighting the range and variability of material properties within stainless steel samples subjected to different thermal aging processes. The distribution underscores the significant impact of microstructural changes, such as spinodal decomposition, on the material's overall stiffness and mechanical integrity.}
