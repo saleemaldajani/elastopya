@@ -15,7 +15,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 RUNS = ROOT / "lammps" / "decomposition" / "runs"
 OUT = ROOT / "visualizations"
-FE, CR = "#C0C0C8", "#2E5E9E"   # light grey Fe, blue Cr
+FE, CR = "#F06060", "#6060F0"   # Acta Mater. 246 (2023) Fig. 7 / OVITO defaults: red Fe, blue Cr
 
 
 def read_data(path):
@@ -62,7 +62,7 @@ def main():
             draw(ax, types, xyz, box)
             ax.set_title(rf"$\phi$ = {float(f.stem[3:]):.1f}", fontsize=8)
         fig.suptitle(f"Fe$_{{{100 - round(100 * x)}}}$Cr$_{{{round(100 * x)}}}$: random (left) to fully "
-                     f"decomposed (right); one (001) plane of a 25$^3$ bcc cell (grey Fe, blue Cr)",
+                     f"decomposed (right); one (001) plane of a 25$^3$ bcc cell (red Fe, blue Cr)",
                      fontsize=8, y=1.02)
         fig.savefig(OUT / f"strip_x{x:.2f}.png", dpi=220, bbox_inches="tight")
         plt.close(fig)
@@ -75,7 +75,7 @@ def main():
                 if r == 0:
                     axs[r, c].set_title(rf"$\phi$ = {float(f.stem[3:]):.1f}", fontsize=8)
             axs[r, 0].set_ylabel(f"{round(100 * x)}% Cr", fontsize=8)
-        fig.suptitle("MD spinodal decomposition (Waldron/Acta workflow): grey Fe, blue Cr", fontsize=9, y=1.0)
+        fig.suptitle("MD spinodal decomposition (Waldron/Acta workflow): red Fe, blue Cr", fontsize=9, y=1.0)
         fig.savefig(OUT / "montage.png", dpi=200, bbox_inches="tight")
         plt.close(fig)
     print("compositions:", list(allser))
