@@ -86,6 +86,13 @@ If you use this repository, please cite the paper above and the work it builds o
 - M. Rae *et al.*, *Detecting the onset and progression of spinodal decomposition using transient
   grating spectroscopy*, arXiv:2601.06659 (2026) — Fe–36Cr experiment.
 
+## Contact
+
+This is collaborative work. Contacts: Saleem A. Al Dajani (sdajani@mit.edu) and Michael P. Short
+(hereiam@mit.edu), MIT Department of Nuclear Science and Engineering. The LAMMPS spinodal-generation
+package in `lammps/Spinodal_Generation_Care_Package/` was written by Lawrence Waldron as part of the
+joint work for Acta Mater. 246 (2023) 118552 (his contact is in its README).
+
 ## License
 
 MIT (see `LICENSE`). Third-party inputs (LAMMPS potential files, the Waldron workflow) remain
