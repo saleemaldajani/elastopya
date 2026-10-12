@@ -240,6 +240,16 @@ def strips():
     for stem in ("fig2_elastic_mapping", "fig2_elastic_mapping_orientation_violin_bulk"):
         STRIPS[stem] = ("Homogeneous (random) solid solutions, one (001) plane: each tensor in (a) and (b) "
                         "describes one of these", rnd)
+    # Fig. 2 with decomposed-MD tensors: the actual MD cells, random (phi = 0.5) next to decomposed (phi = 1)
+    pairs = []
+    for x in (0.2, 0.36, 0.5):
+        if x in ser:
+            pairs += [(f"{round(100 * x)}% Cr, random", snap(ser[x][0])),
+                      (rf"{round(100 * x)}% Cr, $\phi$ = 1", snap(ser[x][-1]))]
+    if pairs:
+        STRIPS["fig2_elastic_mapping_orientation_violin_bulk_mddecomp"] = (
+            "MD cells behind the green tensors in (b), one (001) plane: random alloy and fully decomposed "
+            "structure at three compositions", pairs)
     if 0.36 in ser:
         p36 = [(rf"$\phi$ = {float(f.stem[3:]):.1f}", snap(f)) for f in ser[0.36]]
         for stem in ("fig3_fsaw", "fig3_fsaw_relative", "fig3_fsaw_mddecomp", "fig3_fsaw_alpha",
