@@ -36,7 +36,7 @@ import make_figures as mf  # noqa: E402
 import figures_with_strips as fws  # noqa: E402
 from figure_export import check_figure_size, export_figure  # noqa: E402
 from style_presets import apply_publication_style, load_publisher_profiles  # noqa: E402
-from visualize_decomposition import CR, FE, series  # noqa: E402
+from visualize_decomposition import CR, FE, _cube_ax, md_grid3d, series  # noqa: E402
 
 OUT = mf.ROOT / "manuscript" / "figures" / "kdense_scripta"
 PROFILE = load_publisher_profiles()["profiles"]["scripta"]
@@ -297,49 +297,6 @@ def md_grid(path):
     i, j = np.round(rel[on, 0]).astype(int) % n, np.round(rel[on, 1]).astype(int) % n
     g = np.zeros((n, n), int); g[j, i] = (t[on] == 2).astype(int)
     return g
-
-
-def md_grid3d(path):
-    """Cr occupancy of the bcc corner sublattice of an MD cell, as an n x n x n array [ix, iy, iz]."""
-    t, p, box = fws.read_data(path)
-    L = box[:, 1] - box[:, 0]
-    n = round(L[0] / 2.866); a = L[0] / n
-    rel = (p - box[:, 0]) / a
-    on = np.all(np.abs(rel - np.round(rel)) < 0.1, axis=1)
-    ijk = np.round(rel[on]).astype(int) % n
-    g = np.zeros((n, n, n), int)
-    g[ijk[:, 0], ijk[:, 1], ijk[:, 2]] = (t[on] == 2).astype(int)
-    return g
-
-
-_C30, _S30 = np.cos(np.pi / 6), 0.5
-FACE_SHADE = {"top": 1.0, "right": 0.82, "left": 0.66}
-
-
-def _cube_ax(ax, g):
-    """Isometric view of the cell (u = (x - y) cos30, v = (x + y) sin30 + z): the visible faces are the
-    top (z = max), left (x = 0) and right (y = 0), meeting at the front corner (0, 0, 1)."""
-    from matplotlib.colors import to_rgb
-    from matplotlib.transforms import Affine2D
-    fe, cr = np.array(to_rgb(FE)), np.array(to_rgb(CR))
-    rgb = lambda face, shade: (np.where(face[..., None] == 1, cr, fe) * shade).clip(0, 1)
-    n = g.shape[0]
-    faces = {   # (image with rows = second coordinate, affine map of the unit square onto the face)
-        "top": (g[:, :, n - 1].T, [[_C30, -_C30, 0], [_S30, _S30, 1], [0, 0, 1]]),   # (x, y) at z = 1
-        "left": (g[0, :, :].T, [[-_C30, 0, 0], [_S30, 1, 0], [0, 0, 1]]),            # (y, z) at x = 0
-        "right": (g[:, 0, :].T, [[_C30, 0, 0], [_S30, 1, 0], [0, 0, 1]]),            # (x, z) at y = 0
-    }
-    for name, (img, m) in faces.items():
-        ax.imshow(rgb(img, FACE_SHADE[name]), extent=(0, 1, 0, 1), origin="lower", interpolation="nearest",
-                  transform=Affine2D(np.array(m, float)) + ax.transData)
-    P = lambda x, y, z: ((x - y) * _C30, (x + y) * _S30 + z)
-    hexagon = [P(0, 0, 0), P(1, 0, 0), P(1, 0, 1), P(1, 1, 1), P(0, 1, 1), P(0, 1, 0), P(0, 0, 0)]
-    ax.plot(*zip(*hexagon), color="0.15", lw=0.5)
-    for q in (P(1, 0, 1), P(0, 1, 1), P(0, 0, 0)):
-        ax.plot(*zip(P(0, 0, 1), q), color="0.15", lw=0.5)
-    ax.set_xlim(-_C30 - 0.02, _C30 + 0.02); ax.set_ylim(-0.02, 2.02)
-    ax.set_aspect("equal"); ax.axis("off")
-    ax._strip = True
 
 
 def strips():
