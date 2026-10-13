@@ -1,5 +1,5 @@
 
-     Program PWSCF v.7.5 starts on 13Oct2026 at  0:12:25 
+     Program PWSCF v.7.5 starts on 13Oct2026 at 11: 0:25 
 
      This program is part of the open-source Quantum ESPRESSO suite
      for quantum simulation of materials; please cite
@@ -13,7 +13,7 @@
      Parallel version (MPI), running on    64 processors
 
      MPI processes distributed on     1 nodes
-     190767 MiB available memory on the printing compute node when the environment starts
+     146468 MiB available memory on the printing compute node when the environment starts
 
      Reading input from bands.in
 
@@ -38,9 +38,9 @@
      Parallelization info
      --------------------
      sticks:   dense  smooth     PW     G-vecs:    dense   smooth      PW
-     Min        1093     546    167               135829    48026    8104
-     Max        1094     547    169               135840    48033    8107
-     Sum        4373    2185    673               543327   192115   32425
+     Min        1093     546    166               135829    48026    8052
+     Max        1094     547    167               135840    48033    8059
+     Sum        4373    2185    665               543327   192115   32217
 
      Using Slab Decomposition
 
@@ -161,7 +161,7 @@
         39        Fe     tau(  39) = (   0.0000000   0.5000000   0.0000000  )
         40        Fe     tau(  40) = (   0.7500000   0.7500000   2.2500000  )
 
-     number of k points=   510  Marzari-Vanderbilt smearing, width (Ry)=  0.0200
+     number of k points=   200  Marzari-Vanderbilt smearing, width (Ry)=  0.0200
 
      Number of k-points >= 100: set verbosity='high' to print them.
 
@@ -188,12 +188,3 @@
 
      Band Structure Calculation
      CG style diagonalization
-     c_bands:  1 eigenvalues not converged
-     c_bands:  2 eigenvalues not converged
-     c_bands:  3 eigenvalues not converged
-     c_bands:  1 eigenvalues not converged
-     c_bands:  5 eigenvalues not converged
-     c_bands:  1 eigenvalues not converged
-     c_bands:  1 eigenvalues not converged
-     c_bands:  1 eigenvalues not converged
-     c_bands:  1 eigenvalues not converged

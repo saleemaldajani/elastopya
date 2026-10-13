@@ -429,9 +429,129 @@ def main_v3():
     print("wrote fig5_embrittlement_v3")
 
 
+ETA_MISFIT = (2.8846 - 2.8665) / 2.8665      # (1/a) da/dx, Vegard, room temperature
+OMEGA_A3 = 11.8                               # atomic volume (A^3)
+
+
+def young_planar(K, G):
+    """Cahn's isotropic coherency modulus Y = E/(1 - nu) = 18 K G / (3K + 4G)."""
+    return 18 * K * G / (3 * K + 4 * G)
+
+
+def psi_split(ax, D):
+    """Energy stored per unit strain: volumetric (K/2 per unit dilatation^2) vs shear (G per unit shear^2), Fe-36Cr."""
+    a = D[0.36]
+    r, d = a[0], a[-1]
+    lever = 1.154                                   # electronic lever-rule G factor (2 x 7.7 %)
+    cats = ["$K/2$\n(volumetric)", "$G$\n(shear)", "$Y$\n(coherency)"]
+    rnd = [r[1] / 2, r[2], young_planar(r[1], r[2])]
+    dec = [d[1] / 2, d[2], young_planar(d[1], d[2])]
+    x = np.arange(3)
+    ax.bar(x - 0.2, rnd, 0.38, color="#009E73", label="random (MD)")
+    ax.bar(x + 0.2, dec, 0.38, color="#0B5D3B", label="decomposed (MD)")
+    for xi, a0, b0 in zip(x, rnd, dec):
+        ax.text(xi + 0.2, b0 + 6, f"{100 * (b0 / a0 - 1):+.1f}%", ha="center", fontsize=5.4, color="#C02F00")
+    ax.set_xticks(x); ax.set_xticklabels(cats, fontsize=5.6)
+    ax.set_ylabel("stiffness in $\\Psi$ (GPa)", fontsize=6)
+    ax.legend(fontsize=5, frameon=False, loc="upper left")
+    ax.set_ylim(0, 380)
+    ax.text(0.98, 0.97, "$\\Psi=\\frac{1}{2}K(\\mathrm{tr}\\,\\varepsilon)^2+G\\,\\varepsilon':\\varepsilon'$", transform=ax.transAxes,
+            ha="right", va="top", fontsize=6.0)
+
+
+def coherency(ax, T):
+    """Coherency strain energy 2 eta^2 Y Omega (meV/atom per unit (dx)^2) vs composition, against the chemical term."""
+    ev = 6.241509e18
+    for k, col, mk, lab in (("lit", "0.12", "o", "EMTO-CPA"), ("qe", "#8F3A00", "D", "QE"), ("md", "#009E73", "s", "MD")):
+        if k in T:
+            a = T[k]
+            y = young_planar(a[:, 1], a[:, 2]) * 1e9 * 2 * ETA_MISFIT ** 2 * OMEGA_A3 * 1e-30 * ev * 1e3
+            ax.plot(a[:, 0], y, mk + ("-" if k != "qe" else ""), color=col, mfc="white" if k == "qe" else col, ms=3, lw=0.7, label=lab)
+    ax.set(xlim=(0, 1), ylim=(0, 3.0), xlabel=r"$x_{\rm Cr}$", ylabel=r"$2\eta^2Y\Omega$ (meV/atom)")
+    ax.legend(fontsize=5, frameon=False, loc="lower right")
+    ax.text(0.03, 0.97, "chemical curvature $|\\partial^2\\Delta G/\\partial x^2|\\approx$ 1400 meV/atom\n"
+            f"$\\Rightarrow$ coherency shifts the spinodal by ~0.1% ($\\eta$ = {100 * ETA_MISFIT:.2f}%)",
+            transform=ax.transAxes, va="top", fontsize=5.0, color="0.15")
+
+
+def psi_hub(ax, D):
+    """How it comes together: Psi(K, G) and its five consequences, with Fe-36Cr numbers (MD, random -> decomposed)."""
+    a = D[0.36]; r, d = a[0], a[-1]
+    dec = mf.md_decomposition()[0.36]
+    df = float(dec["f"][np.argmax(dec["phi"])] / dec["f"][np.argmin(dec["phi"])]) - 1
+    dG = d[2] / r[2] - 1; dK = d[1] / r[1] - 1; dKG = (d[1] / d[2]) / (r[1] / r[2]) - 1
+    dY = young_planar(d[1], d[2]) / young_planar(r[1], r[2]) - 1
+    ax.set_xlim(-1.2, 1.2); ax.set_ylim(-1.05, 1.05); ax.set_aspect("equal"); ax.axis("off")
+    ax.add_patch(plt.Circle((0, 0), 0.30, fc="#FFF1D6", ec="#FF8C1A", lw=1.2, zorder=3))
+    ax.text(0, 0.03, "$\\Psi(K,G)$", ha="center", va="center", fontsize=8, fontweight="bold", zorder=4)
+    ax.text(0, -0.13, "Hookean energy", ha="center", va="center", fontsize=4.8, zorder=4)
+    spokes = [(90, "TGS / SAW", "$f=\\eta_R(\\nu)\\sqrt{G/\\rho}/\\lambda$", df),
+              (18, "slip", "$E_\\perp\\propto Gb^2$", dG),
+              (-54, "cleavage", "$\\sigma_F\\propto Ka$", dK),
+              (-126, "ductility", "$\\varepsilon_F\\propto(K/G)^2$", (1 + dKG) ** 2 - 1),
+              (162, "coherency", "$Y=\\frac{18KG}{3K+4G}$", dY)]
+    for ang, name, eq, v in spokes:
+        t = np.radians(ang); x, y = 0.78 * np.cos(t), 0.78 * np.sin(t)
+        ax.plot([0.30 * np.cos(t), 0.66 * np.cos(t)], [0.30 * np.sin(t), 0.66 * np.sin(t)], color="#FF8C1A", lw=1.0, zorder=1)
+        col = "#C02F00" if (name == "ductility") else "0.1"
+        ax.text(x, y, f"{name}\n{eq}\n{100 * v:+.1f}%", ha="center", va="center", fontsize=5.0, color=col, linespacing=1.2,
+                bbox=dict(boxstyle="round,pad=0.25", fc="white", ec="0.75", lw=0.5), zorder=2)
+
+
+def main_v4():
+    """v3 plus a fourth row: strain energy Psi(K, G) and how the chain comes together."""
+    sys.path.insert(0, str(HERE / "kdense_scripta" / "scripts"))
+    from style_presets import apply_publication_style
+    apply_publication_style("scripta"); plt.rcParams["svg.fonttype"] = "none"
+    T, D = tensors(), md_decomp()
+    W, H = 190 / 25.4, 9.4
+    sc = 7.2 / 9.4                                   # rows 1-3 keep their v3 size in inches
+    fig = plt.figure(figsize=(W, H))
+    off = 1 - sc                                     # rows 1-3 occupy the top sc of the figure
+    Y = lambda y: off + y * sc
+    g1 = fig.add_gridspec(1, 3, left=0.055, right=0.745, top=Y(0.955), bottom=Y(0.715), wspace=0.12, width_ratios=[1.05, 1, 1])
+    g3 = fig.add_gridspec(1, 4, left=0.085, right=0.995, top=Y(0.30), bottom=Y(0.06), wspace=0.42, width_ratios=[1, 1, 1.05, 0.95])
+    a = [fig.add_subplot(g1[0, i]) for i in range(3)]
+    atom_a(a[0]); atom_b(a[1]); atom_c(a[2])
+    for ax, t in zip(a, ("(a) bonds: Hookean vs breaking", "(b) dislocation: core vs far field", "(c) crack tip: cleave or emit")):
+        ax.set_title(t, fontsize=7, loc="left")
+    dft_cells(fig, [0.755, Y(0.70), 0.24, 0.27 * sc])
+    fig.text(0.757, Y(0.962), "(d) DFT cells: $\\alpha$-like vs $\\alpha'$-like", fontsize=7)
+    md_cubes(fig, [0.045, Y(0.375), 0.29, 0.27 * sc])
+    fig.text(0.05, Y(0.66), "(e) MD cells: Fe$-$36Cr before and after decomposition", fontsize=7)
+    pin = fig.add_axes([0.37, Y(0.38), 0.17, 0.25 * sc]); atom_d(pin)
+    fig.text(0.37, Y(0.66), "(f) $\\alpha'$ domains pin dislocations", fontsize=7)
+    mp = fig.add_axes([0.62, Y(0.40), 0.35, 0.22 * sc]); md_phi(mp)
+    fig.text(0.62, Y(0.66), "(g) MD: $G$ rises, $K$ flat, $K/G$ falls with $\\phi$", fontsize=7)
+    mp.tick_params(labelsize=5.5); mp.xaxis.label.set_size(6); mp.yaxis.label.set_size(6)
+    b = [fig.add_subplot(g3[0, i]) for i in range(4)]
+    panel_b(b[0], T, D); panel_c(b[1], T, D)
+    panel_d(b[2], D, legend_at=(1.0, 0.37), legend_loc="right"); tgs_summary(b[3])
+    for ax, t in zip(b, ("(h) bonding map", "(i) plastic range", "(j) TGS shift to fracture strain", "(k) what TGS sees")):
+        ax.set_title(t, fontsize=7, loc="left")
+        if t[1] != "k":
+            ax.tick_params(labelsize=5.5); ax.xaxis.label.set_size(6); ax.yaxis.label.set_size(6)
+    # row 4: strain energy
+    l = fig.add_axes([0.085, 0.04, 0.24, 0.155]); psi_split(l, D)
+    m = fig.add_axes([0.40, 0.04, 0.27, 0.155]); coherency(m, T)
+    n = fig.add_axes([0.70, 0.0, 0.30, 0.215]); psi_hub(n, D)
+    for ax, t in ((l, "(l) where $\\Psi$ stores energy (Fe$-$36Cr)"), (m, "(m) coherency strain energy"), (n, "(n) how it comes together")):
+        ax.set_title(t, fontsize=7, loc="left")
+    for ax in (l, m):
+        ax.tick_params(labelsize=5.5); ax.xaxis.label.set_size(6); ax.yaxis.label.set_size(6)
+    for y, lab in ((Y(0.84), "ATOMIC (DFT)"), (Y(0.52), "MOLECULAR (MD)"), (Y(0.18), "DATA & TGS"), (0.12, "STRAIN ENERGY")):
+        fig.text(0.006, y, lab, fontsize=7.5, fontweight="heavy", color="0.1", va="center", ha="left", rotation=90)
+    for y in (Y(0.695), Y(0.345), 0.238):
+        fig.add_artist(matplotlib.lines.Line2D([0.01, 0.99], [y, y], color="0.75", lw=0.6, ls=(0, (4, 3))))
+    out = ROOT / "manuscript" / "figures" / "kdense_scripta" / "fig5_embrittlement_v4"
+    fig.savefig(f"{out}.png", dpi=600); fig.savefig(f"{out}.pdf"); fig.savefig(f"{out}.svg")
+    print("wrote", out)
+
+
 
 if __name__ == "__main__":
     main()
     main_v1()
     main_v2()
     main_v3()
+    main_v4()
