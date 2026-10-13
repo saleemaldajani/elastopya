@@ -1,0 +1,10 @@
+&inputpp
+  prefix = 'dos', outdir = './tmp', filplot = 'drho.pp', plot_num = 9
+/
+&plot
+  nfile = 1, filepp(1) = 'drho.pp', weight(1) = 1.0, iflag = 2, output_format = 7,
+  fileout = 'drho_110.dat',
+  e1(1) = 1.000000, e1(2) = 0.997331, e1(3) = 0.000000,
+  e2(1) = 0.000000, e2(2) = 0.000000, e2(3) = 2.489138,
+  x0(1) = 0.0, x0(2) = 0.0, x0(3) = 0.0, nx = 240, ny = 480
+/
