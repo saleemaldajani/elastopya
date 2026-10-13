@@ -1,5 +1,5 @@
 
-     Program PWSCF v.7.5 starts on 13Oct2026 at  8:16:25 
+     Program PWSCF v.7.5 starts on 13Oct2026 at 11: 0:38 
 
      This program is part of the open-source Quantum ESPRESSO suite
      for quantum simulation of materials; please cite
@@ -13,7 +13,7 @@
      Parallel version (MPI), running on    60 processors
 
      MPI processes distributed on     1 nodes
-     92178 MiB available memory on the printing compute node when the environment starts
+     77461 MiB available memory on the printing compute node when the environment starts
 
      Reading input from relax.in
 Warning: card &CELL ignored
@@ -207,7 +207,7 @@ Warning: card   CELL_DOFREE = 'XYZ', PRESS_CONV_THR = 0.2 ignored
      Starting wfcs are  496 randomized atomic wfcs
      Checking if some PAW data can be deallocated... 
 
-     total cpu time spent up to now is       23.1 secs
+     total cpu time spent up to now is       25.0 secs
 
      per-process dynamical memory:   415.5 Mb
 
@@ -219,7 +219,7 @@ Warning: card   CELL_DOFREE = 'XYZ', PRESS_CONV_THR = 0.2 ignored
 
      negative rho (up, down):  0.000E+00 2.944E-01
 
-     total cpu time spent up to now is       62.7 secs
+     total cpu time spent up to now is       66.0 secs
 
      total energy              =  -12500.25697893 Ry
      estimated scf accuracy    <     103.24798413 Ry
@@ -233,7 +233,7 @@ Warning: card   CELL_DOFREE = 'XYZ', PRESS_CONV_THR = 0.2 ignored
 
      negative rho (up, down):  0.000E+00 1.948E-01
 
-     total cpu time spent up to now is       96.0 secs
+     total cpu time spent up to now is      101.5 secs
 
      total energy              =  -12509.77497152 Ry
      estimated scf accuracy    <      27.81814735 Ry
@@ -247,7 +247,7 @@ Warning: card   CELL_DOFREE = 'XYZ', PRESS_CONV_THR = 0.2 ignored
 
      negative rho (up, down):  0.000E+00 1.290E-01
 
-     total cpu time spent up to now is      126.3 secs
+     total cpu time spent up to now is      134.0 secs
 
      total energy              =  -12513.63005763 Ry
      estimated scf accuracy    <      17.95919166 Ry
@@ -261,7 +261,7 @@ Warning: card   CELL_DOFREE = 'XYZ', PRESS_CONV_THR = 0.2 ignored
 
      negative rho (up, down):  0.000E+00 1.278E-03
 
-     total cpu time spent up to now is      156.0 secs
+     total cpu time spent up to now is      165.7 secs
 
      total energy              =  -12519.71707436 Ry
      estimated scf accuracy    <      12.28321040 Ry
@@ -275,7 +275,7 @@ Warning: card   CELL_DOFREE = 'XYZ', PRESS_CONV_THR = 0.2 ignored
 
      negative rho (up, down):  0.000E+00 1.496E-03
 
-     total cpu time spent up to now is      193.9 secs
+     total cpu time spent up to now is      205.3 secs
 
      total energy              =  -12521.30308823 Ry
      estimated scf accuracy    <       3.99755906 Ry
@@ -289,7 +289,7 @@ Warning: card   CELL_DOFREE = 'XYZ', PRESS_CONV_THR = 0.2 ignored
 
      negative rho (up, down):  0.000E+00 1.406E-03
 
-     total cpu time spent up to now is      230.1 secs
+     total cpu time spent up to now is      241.7 secs
 
      total energy              =  -12521.70016953 Ry
      estimated scf accuracy    <       0.88818025 Ry
@@ -303,7 +303,7 @@ Warning: card   CELL_DOFREE = 'XYZ', PRESS_CONV_THR = 0.2 ignored
 
      negative rho (up, down):  0.000E+00 1.059E-03
 
-     total cpu time spent up to now is      273.9 secs
+     total cpu time spent up to now is      286.1 secs
 
      total energy              =  -12521.90723659 Ry
      estimated scf accuracy    <       0.54796577 Ry
@@ -317,7 +317,7 @@ Warning: card   CELL_DOFREE = 'XYZ', PRESS_CONV_THR = 0.2 ignored
 
      negative rho (up, down):  0.000E+00 7.479E-04
 
-     total cpu time spent up to now is      307.9 secs
+     total cpu time spent up to now is      321.5 secs
 
      total energy              =  -12521.96803232 Ry
      estimated scf accuracy    <       0.18246997 Ry
@@ -331,7 +331,7 @@ Warning: card   CELL_DOFREE = 'XYZ', PRESS_CONV_THR = 0.2 ignored
 
      negative rho (up, down):  0.000E+00 2.596E-04
 
-     total cpu time spent up to now is      349.9 secs
+     total cpu time spent up to now is      365.3 secs
 
      total energy              =  -12522.00732147 Ry
      estimated scf accuracy    <       0.10035837 Ry
@@ -345,7 +345,7 @@ Warning: card   CELL_DOFREE = 'XYZ', PRESS_CONV_THR = 0.2 ignored
 
      negative rho (up, down):  0.000E+00 1.924E-04
 
-     total cpu time spent up to now is      399.2 secs
+     total cpu time spent up to now is      416.8 secs
 
      total energy              =  -12522.05204318 Ry
      estimated scf accuracy    <       0.06638639 Ry
@@ -355,6 +355,3 @@ Warning: card   CELL_DOFREE = 'XYZ', PRESS_CONV_THR = 0.2 ignored
 
      iteration # 11     ecut=    60.00 Ry     beta= 0.20
      Davidson diagonalization with overlap
-     ethr =  1.06E-05,  avg # of iterations =  3.6
-
-     negative rho (up, down):  0.000E+00 1.753E-04
