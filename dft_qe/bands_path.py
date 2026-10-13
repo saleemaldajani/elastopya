@@ -45,7 +45,7 @@ def path_points(path):
 def pure_inputs(case, d):
     fs.write_inputs(case, d)                                   # scf.in (and a grid bands.in, replaced below)
     d = Path(d)
-    pts, dist, _ = path_points(PATH_SC if case == "Cr_afm" else PATH_BCC)
+    pts, dist, _ = path_points(PATH_SC if case.startswith("Cr_afm") else PATH_BCC)
     txt = (d / "bands.in").read_text().split("K_POINTS")[0]
     (d / "bands.in").write_text(txt + f"K_POINTS tpiba\n{len(pts)}\n"
                                 + "".join(f"{p[0]:.6f} {p[1]:.6f} {p[2]:.6f} 1\n" for p in pts))
@@ -67,7 +67,7 @@ def pure_plot(outfile, dirs):
         d = Path(d); case = d.name
         k, ev, ef = fs.read_xml(d / "bands_data.xml" if (d / "bands_data.xml").exists()
                                 else d / "tmp" / "fs.save" / "data-file-schema.xml")
-        pts, dist, ticks = path_points(PATH_SC if case == "Cr_afm" else PATH_BCC)
+        pts, dist, ticks = path_points(PATH_SC if case.startswith("Cr_afm") else PATH_BCC)
         for s, (col, ls) in enumerate((("#D55E00", "-"), ("#0072B2", "--"))[:ev.shape[0]]):
             for b in range(ev.shape[2]):
                 ax.plot(dist, ev[s, :, b] - ef, ls, color=col if ev.shape[0] == 2 else "0.15", lw=0.8)
@@ -76,7 +76,7 @@ def pure_plot(outfile, dirs):
         for t, _ in ticks[1:-1]:
             ax.axvline(t, color="0.8", lw=0.5)
         ax.set(xlim=(0, dist[-1]), ylim=(-8, 4), ylabel=r"$E - E_{\rm F}$ (eV)")
-        ax.set_title(titles.get(case, case), fontsize=8)
+        ax.set_title(titles.get(fs.base(case), case) + (" (exp. a)" if case.endswith("_aexp") else ""), fontsize=8)
     axs[0, 0].plot([], [], color="#D55E00", label="majority"); axs[0, 0].plot([], [], "--", color="#0072B2", label="minority")
     axs[0, 0].legend(loc="lower left", fontsize=7)
     fig.tight_layout()

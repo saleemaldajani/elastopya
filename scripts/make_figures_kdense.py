@@ -37,6 +37,7 @@ import figures_with_strips as fws  # noqa: E402
 from figure_export import check_figure_size, export_figure  # noqa: E402
 from style_presets import apply_publication_style, load_publisher_profiles  # noqa: E402
 from visualize_decomposition import CR, FE, _cube_ax, md_grid3d, series  # noqa: E402
+import visualize_sqs as VS  # noqa: E402
 
 OUT = mf.ROOT / "manuscript" / "figures" / "kdense_scripta"
 PROFILE = load_publisher_profiles()["profiles"]["scripta"]
@@ -54,6 +55,7 @@ AUDIT = {}
 STRIPS = {}   # stem -> (title, panels); filled in main()
 TRENDS = {}   # stem -> list of trend lanes for the _strip_trend versions
 CUBES = {}    # stem -> (title, panels) drawn as 3D cubes, for the _strip_cube versions
+DFTS = {}     # stem -> (title, panels, lanes): panel (d), DFT cells under the MD strip (_dft versions)
 
 
 def style(ax, label):
@@ -172,6 +174,14 @@ def save(fig, stem):
     for suffix, (title, panels), lanes in variants:
         undo = add_strip(fig, title, panels, lanes=lanes)
         _export(fig, OUT / "with_strips" / f"{stem}{suffix}", stem + suffix)
+        if stem in DFTS:       # same figure plus panel (d): the DFT cells (new files, *_dft[_trend])
+            dt, dp, dl = DFTS[stem]
+            trend = suffix.endswith("_trend")
+            undo_d = add_strip(fig, dt, dp, lanes=dl if trend else (), letter="(d)", aspect=VS.ASPECT,
+                               key=(("\u2191 moment", None), ("Cr", CR), ("Fe", FE)))
+            name = (stem + suffix[:-len("_trend")] + "_dft_trend") if trend else (stem + suffix + "_dft")
+            _export(fig, OUT / "with_strips" / name, name)
+            undo_d()
         undo()
     plt.close(fig)
 
@@ -191,8 +201,10 @@ def _grid_ax(ax, grid):
 LANE_H, LABEL_W, GAP = 0.46, 0.80, 0.12   # inches: trend-lane height, lane-label column, block spacing
 
 
-def add_strip(fig, title, panels, lanes=()):
+def add_strip(fig, title, panels, lanes=(), letter="(c)", aspect=1.0, key=None):
     """Append a row of atomic-plane snapshots as panel (c), keeping (a)/(b) at their size.
+    Called again, it appends a further row below (letter "(d)"); everything above moves up.
+    aspect: block height / width; key: colour-key entries (name, colour or None for text only), default Cr/Fe.
 
     lanes: optional trend rows drawn under the blocks, each
       dict(label, values (one per block), fmt, mode='seq' | 'pairs', zero=False)
@@ -202,23 +214,30 @@ def add_strip(fig, title, panels, lanes=()):
     n = len(panels)
     old_axes, old_texts, old_patches = list(fig.axes), list(fig.texts), list(fig.patches)
     pos = [(ax, ax.get_position()) for ax in old_axes]
+    tpos = [(t, t.get_position()) for t in old_texts]
+    ppos = [(r, r.get_xy(), r.get_height()) for r in old_patches]
     left = old_axes[0].get_position().x0 * W
     right = max(ax.get_position().x1 for ax in old_axes) * W
     lab_w = LABEL_W if lanes else 0.0
-    cell = min(0.95, (right - left - lab_w - (n - 1) * GAP) / n)
+    cell = min(0.95 / aspect ** 0.5, (right - left - lab_w - (n - 1) * GAP) / n)
+    ch = cell * aspect                                       # block height
     head, lab, foot = 0.20, 0.14, (0.12 if lanes else 0.04)
     lanes_h = len(lanes) * LANE_H + (0.04 if lanes else 0.0)
-    extra = head + lab + cell + lanes_h + foot
+    extra = head + lab + ch + lanes_h + foot
     fig.set_size_inches(W, H + extra)
     Hn = H + extra
     for ax, q in pos:
         ax.set_position([q.x0, (q.y0 * H + extra) / Hn, q.width, q.height * H / Hn])
+    for t, (tx, ty) in tpos:                                 # figure-level texts/patches of an earlier strip
+        t.set_position((tx, (ty * H + extra) / Hn))
+    for r, (rx, ry), rh in ppos:
+        r.set_xy((rx, (ry * H + extra) / Hn)); r.set_height(rh * H / Hn)
     total = n * cell + (n - 1) * GAP
     x0_in = left + lab_w + (right - left - lab_w - total) / 2
     yblock = foot + lanes_h
     centers = [k * (cell + GAP) + cell / 2 for k in range(n)]
     for k, (label, draw) in enumerate(panels):
-        ax = fig.add_axes([(x0_in + k * (cell + GAP)) / W, yblock / Hn, cell / W, cell / Hn])
+        ax = fig.add_axes([(x0_in + k * (cell + GAP)) / W, yblock / Hn, cell / W, ch / Hn])
         draw(ax)
         ax.set_title(label, fontsize=MIN_PT, pad=1.5).set_gid("strip")
     for i, lane in enumerate(lanes):
@@ -228,16 +247,19 @@ def add_strip(fig, title, panels, lanes=()):
         _draw_lane(ax, lane, centers, total)
         fig.text(left / W, (y0 + (LANE_H - 0.04) / 2) / Hn, lane["label"], fontsize=MIN_PT, fontfamily="Arial",
                  va="center", ha="left", linespacing=1.1)
-    ytxt = (yblock + cell + lab + 0.02) / Hn
-    fig.text(left / W, ytxt, "(c)", fontsize=9, fontweight="bold", fontfamily="Arial", va="bottom", ha="left")
+    ytxt = (yblock + ch + lab + 0.02) / Hn
+    fig.text(left / W, ytxt, letter, fontsize=9, fontweight="bold", fontfamily="Arial", va="bottom", ha="left")
     fig.text((left + 0.32) / W, ytxt + 0.012 / Hn, title, fontsize=MIN_PT, fontfamily="Arial", va="bottom", ha="left")
     # colour key at the right end of the title row
     kx = right / W
-    for name, col in (("Cr", CR), ("Fe", FE)):
+    for name, col in (key or (("Cr", CR), ("Fe", FE))):
         t = fig.text(kx, ytxt + 0.012 / Hn, name, fontsize=MIN_PT, fontfamily="Arial", va="bottom", ha="right")
         fig.canvas.draw()
         bb = t.get_window_extent(fig.canvas.get_renderer())
         sq = 0.075
+        if col is None:        # text-only entry (e.g. "\u2191 local moment")
+            kx = bb.x0 / fig.dpi / W - 0.14 / W
+            continue
         fig.patches.append(matplotlib.patches.Rectangle(
             (bb.x0 / fig.dpi / W - (sq + 0.03) / W, ytxt + 0.025 / Hn), sq / W, sq / Hn,
             transform=fig.transFigure, facecolor=col, edgecolor="none", figure=fig))
@@ -254,6 +276,10 @@ def add_strip(fig, title, panels, lanes=()):
         fig.set_size_inches(W, H)
         for ax, q in pos:
             ax.set_position(q)
+        for t, xy in tpos:
+            t.set_position(xy)
+        for r, xy, rh in ppos:
+            r.set_xy(xy); r.set_height(rh)
     return undo
 
 
@@ -272,13 +298,16 @@ def _draw_lane(ax, lane, centers, total):
         ax.text(total, 0, " 0", fontsize=MIN_PT, color="0.45", va="center", ha="left")
     ax.plot(centers, v, "o", color="0.15", ms=3.2, zorder=3, clip_on=False)
     arrow = dict(arrowstyle="-|>", color="0.25", lw=0.9, mutation_scale=7, shrinkA=3.5, shrinkB=3.5)
-    pairs = [(k, k + 1) for k in range(len(v) - 1)] if mode == "seq" else [(k, k + 1) for k in range(0, len(v) - 1, 2)]
+    ok = np.flatnonzero(np.isfinite(v))                     # blocks without a value (NaN) are skipped
+    pairs = list(zip(ok[:-1], ok[1:])) if mode == "seq" else [(k, k + 1) for k in range(0, len(v) - 1, 2)]
     for i, j in pairs:
         ax.annotate("", xy=(centers[j], v[j]), xytext=(centers[i], v[i]), arrowprops=arrow, zorder=2)
         if mode == "pairs":
             ax.text((centers[i] + centers[j]) / 2, max(v[i], v[j]) + 0.12 * pad, f"{100 * (v[j] / v[i] - 1):+.1f}%".replace("-", "\u2212"),
                     fontsize=MIN_PT, fontweight="bold", ha="center", va="bottom", color="0.1")
     for c, val in zip(centers, v):
+        if not np.isfinite(val):
+            continue
         below = mode == "pairs" or lane.get("below", False)
         ax.annotate(fmt.format(val).replace("-", "\u2212"), (c, val), xytext=(0, -4.5 if below else 4.5), textcoords="offset points",
                     ha="center", va="top" if below else "bottom", fontsize=MIN_PT, color="0.15")
@@ -349,6 +378,35 @@ def strips():
             CUBES[stem] = (cubify(STRIPS[stem][0]),
                            [(rf"$\phi$ = {float(f.stem[3:]):.1f}", cube(f)) for f in ser[0.36]])
 
+def dft_strips():
+    """Panel (d): the DFT cells behind the first-principles points (bcc unit cells, 40-atom SQS), QE-relaxed,
+    with local moments; the _dft_trend versions add lanes with the DFT values (VASP as plotted, and QE)."""
+    xs = [0.0, 0.2, 0.35, 0.5, 0.65, 0.95, 1.0]
+    lab = lambda x: ("bcc Fe" if x == 0 else "bcc Cr" if x == 1 else f"{round(100 * x)}% Cr, SQS")
+    panels = [(lab(x), (lambda x: lambda ax: VS.draw(ax, x))(x)) for x in xs]
+    nan = float("nan")
+    mom = {x: VS.mean_moments(x) for x in xs}
+    mfe = [mom[x][0] if mom[x][0] is not None else nan for x in xs]
+    mcr = [mom[x][1] if mom[x][1] is not None else nan for x in xs]
+    qe = {x: VS.qe_tensor(x) for x in xs}
+    dft = mf.read_csv("sheet_dft.csv")
+    vasp = lambda col: [float(dft[col][np.argmin(np.abs(dft["x_cr"] - x))]) if np.min(np.abs(dft["x_cr"] - x)) < 0.01
+                        else nan for x in xs]
+    head = "DFT cells relaxed in QE: bcc unit cells and 40-atom SQS (2$\\times$2$\\times$5)"
+    DFTS["fig1_free_energy"] = (
+        head + "; Cr moments vanish at 35$-$50% Cr", panels,
+        [dict(label="QE $\\langle m_{\\rm Fe}\\rangle$\n($\\mu_{\\rm B}$)", values=mfe, fmt="{:.2f}"),
+         dict(label="QE $\\langle m_{\\rm Cr}\\rangle$\n($\\mu_{\\rm B}$)", values=mcr, fmt="{:+.2f}", zero=True)])
+    DFTS["fig2_elastic_mapping_orientation_violin_bulk_mddecomp"] = (
+        head + ", compositions of the DFT tensors (VASP and QE)", panels,
+        [dict(label="VASP $C_{11}$\n(GPa)", values=vasp("c11_gpa"), fmt="{:.0f}"),
+         dict(label="QE $C_{11}$\n(GPa)", values=[qe[x][0] for x in xs], fmt="{:.0f}")])
+    DFTS["fig3_fsaw_mddecomp_6p4um"] = (
+        head + ", compositions of the DFT tensors (VASP and QE)", panels,
+        [dict(label="VASP $f_{\\rm SAW}$\n(GHz, 6.4 µm)", values=vasp("fsaw_6p4um_ghz"), fmt="{:.3f}"),
+         dict(label="QE $f_{\\rm SAW}$\n(GHz, 6.4 µm)", values=[VS.vrh_f(x, *qe[x]) for x in xs], fmt="{:.3f}")])
+
+
 def trends():
     """Values shown in the trend lanes of the _strip_trend versions (same data as the figures)."""
     lev = mf.read_csv("sheet_levesque_parameters.csv")
@@ -396,6 +454,7 @@ def main():
         {k2: keep[k2] for k2 in ("font.family", "font.sans-serif", "font.size", "axes.linewidth")}))
     strips()
     trends()
+    dft_strips()
     sys.argv = sys.argv[:1]
     mf.main()
     (OUT / "audit_summary.json").write_text(json.dumps(AUDIT, indent=1, ensure_ascii=False) + "\n")
