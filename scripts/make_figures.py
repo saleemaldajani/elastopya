@@ -449,11 +449,39 @@ def fig2_orientation_violin(lit, dft, mdd, mdr):
     save(fig, "fig2_elastic_mapping_orientation_violin")
 
 
+QE_COL = "#8F3A00"   # QE series (darker vermilion; VASP keeps RED)
+
+
+def qe_dft():
+    """PBE-relaxed QE 40-atom SQS tensors (dft_qe/engaging/runs/*/result.json) with the isotropic (VRH)
+    Rayleigh frequency at 6.4 um, computed as for the DFT points of the sheet; None if absent."""
+    import json
+    runs = ROOT / "dft_qe" / "engaging" / "runs"
+    rows = {}
+    for d in sorted(runs.glob("sqs40_x*_k442_e60")) + sorted(runs.glob("sqs40_x0.80_k442_e60_crafm")):
+        if (d / "result.json").exists():
+            r = json.loads((d / "result.json").read_text())
+            rows[round(r["x_cr"], 3)] = (r["C11"], r["C12"], r["C44"])
+    if not rows:
+        return None
+    x = np.array(sorted(rows))
+    c11, c12, c44 = (np.array([rows[v][i] for v in x]) for i in range(3))
+    b, cp = (c11 + 2 * c12) / 3, (c11 - c12) / 2
+    g = ((2 * cp + 3 * c44) / 5 + 5 * (2 * cp) * c44 / (4 * c44 + 3 * (2 * cp))) / 2
+    e = 9 * b * g / (3 * b + g)
+    f = rayleigh_f(b, e, x * RHO_CR + (1 - x) * RHO_FE)
+    return dict(x=x, c11=c11, c12=c12, c44=c44, f=f)
+
+
 def saw_tensors():
     """tag -> (x, C11, C12, C44) for every tensor in the orientation-resolved SAW runs."""
     tab = {"dft_x0.00": (0.0, 324.434353, 169.838953, 127.7242), "dft_x0.20": (0.2, 400.025537, 164.57738, 120.574293),
            "dft_x0.50": (0.5, 347.46247, 186.14903, 123.354977), "dft_x0.95": (0.95, 499.051533, 145.051597, 99.27015),
            "dft_x1.00": (1.0, 568.728963, 158.14884, 100.913353)}
+    qe = qe_dft()
+    if qe is not None:
+        for i, x in enumerate(qe["x"]):
+            tab[f"qe_x{x:.2f}"] = (float(x), float(qe["c11"][i]), float(qe["c12"][i]), float(qe["c44"][i]))
     for name in ("lit_tensors.csv", "lit_tensors_extra.csv", "md_tensors.csv", "mddec_tensors.csv"):
         path = DATA / "saw" / name
         if path.exists():
@@ -483,7 +511,7 @@ def bulk_longitudinal_ghz(x, c11, c12, c44, n=4000):
     return f
 
 
-def fig2_orientation_bulk(lit, dft, mdd, mdr, kind="violin", with_decomp=False):
+def fig2_orientation_bulk(lit, dft, mdd, mdr, kind="violin", with_decomp=False, qe=None):
     """Orientation-resolved (P)SAW (solid) and quasi-longitudinal bulk waves (hatched) vs C11."""
     import glob
     sys_path = str(ROOT / "scripts")
@@ -495,7 +523,10 @@ def fig2_orientation_bulk(lit, dft, mdd, mdr, kind="violin", with_decomp=False):
     a.plot(lit["x"], lit["c11"], "-", color="0.6", lw=0.8, zorder=1)
     a.plot(lit["x"], lit["c11"], "o", color="0.15", ms=3.8, ls="none", label="Razumovskiy et al. [8]", zorder=3)
     a.plot(dft["x_cr"], dft["c11_gpa"], "D", color=RED, mec="white", mew=0.5, ms=5.5, ls="none",
-           label="DFT (this work)", zorder=4)
+           label="DFT (VASP, this work)" if qe is not None else "DFT (this work)", zorder=4)
+    if qe is not None:   # QE: open diamonds (same convention as the SM figures)
+        a.plot(qe["x"], qe["c11"], "D", mfc="white", mec=QE_COL, mew=1.1, ms=5.5, ls="none",
+               label="DFT (QE, this work)", zorder=5)
     if mdr is not None:
         a.plot(mdr["x"], mdr["c11"], "-", color=GREEN, alpha=0.5, lw=0.8, zorder=1)
         a.errorbar(mdr["x"], mdr["c11"], yerr=mdr["c11_sd"], fmt="s", color=GREEN, ms=4.5, capsize=2,
@@ -517,14 +548,17 @@ def fig2_orientation_bulk(lit, dft, mdd, mdr, kind="violin", with_decomp=False):
     b.axhline(0.833, color="0.35", lw=0.9, ls=":", zorder=1)
     from matplotlib.patches import Patch
     handles = []
-    series = [("lit", "0.15", "Razumovskiy et al. [8]"), ("dft", RED, "DFT (this work)"),
-              ("md", GREEN, "MD, random alloy")]
+    series = [("lit", "0.15", "Razumovskiy et al. [8]"),
+              ("dft", RED, "DFT (VASP, this work)" if qe is not None else "DFT (this work)")]
+    if qe is not None:
+        series.append(("qe", QE_COL, "DFT (QE, this work)"))
+    series.append(("md", GREEN, "MD, random alloy"))
     if with_decomp:
         series.append(("mddec", "#0B5D3B", r"MD, fully decomposed ($\phi$ = 1)"))
     for prefix, col, lab in series:
         for path in sorted(glob.glob(str(DATA / "saw" / f"{prefix}_x*.csv"))):
             tag = Path(path).stem
-            if tag not in tens:
+            if prefix == "qe" and qe is None or tag not in tens:
                 continue
             x, c11, c12, c44 = tens[tag]
             d = np.loadtxt(path, delimiter=",", skiprows=1)
@@ -556,17 +590,21 @@ def fig2_orientation_bulk(lit, dft, mdd, mdr, kind="violin", with_decomp=False):
     b.text(272, 0.72, "unallowed for\npristine CASS [1]", ha="center", va="center", fontsize=6.0, color="0.35")
     b.text(590, 0.36, "(P)SAW", ha="right", va="bottom", fontsize=6.3, color="0.35", style="italic")
     style(b, "(b)")
-    save(fig, f"fig2_elastic_mapping_orientation_{kind}_bulk" + ("_mddecomp" if with_decomp else ""))
+    save(fig, f"fig2_elastic_mapping_orientation_{kind}_bulk" + ("_mddecomp" if with_decomp else "")
+         + ("_qe" if qe is not None else ""))
 
 
 def fig3(lit, dft, mdd, mdr, lam=6.4, stem="fig3_fsaw", rel_b=False, crcolor=False, md_decomp_a=False,
-         alpha_marks=False):
+         alpha_marks=False, qe=None):
     k = 6.4 / lam  # f scales as 1/lambda; layout scales with it
     fig, (a, b) = plt.subplots(1, 2, figsize=(7.2, 3.0))
     a.plot(lit["x"], lit["f"] * k, "-", color="0.6", lw=0.8, zorder=1)
     a.plot(lit["x"], lit["f"] * k, "o", color="black", ms=3.6, ls="none", label="Razumovskiy et al. [8]", zorder=3)
     a.plot(dft["x_cr"], dft["fsaw_6p4um_ghz"] * k, "o", color=RED, mec="white", mew=0.6, ms=6, ls="none",
-           label="DFT (this work)", zorder=4)
+           label="DFT (VASP, this work)" if qe is not None else "DFT (this work)", zorder=4)
+    if qe is not None:
+        a.plot(qe["x"], qe["f"] * k, "o", mfc="white", mec=QE_COL, mew=1.1, ms=6, ls="none",
+               label="DFT (QE, this work)", zorder=5)
     if mdr is not None:
         a.plot(mdr["x"], mdr["f"] * k, "-", color=GREEN, alpha=0.5, lw=0.8, zorder=1)
         a.plot(mdr["x"], mdr["f"] * k, "s", color=GREEN, mec="white", mew=0.6, ms=5.5, ls="none",
@@ -725,6 +763,11 @@ def main():
     fig3(lit, dft, mdd, mdr, lam=5.5, stem="fig3_fsaw_alpha", alpha_marks=True)          # (a) MD alpha/alpha' ends
     fig3(lit, dft, mdd, mdr, lam=6.4, stem="fig3_fsaw_mddecomp_6p4um", md_decomp_a=True)  # manuscript Fig. 3 (6.4 um)
     fig3(lit, dft, mdd, mdr, lam=6.4, stem="fig3_fsaw_mddecomp_relative_6p4um", md_decomp_a=True, rel_b=True)
+    qe = qe_dft()
+    if qe is not None:   # review versions with the QE series next to VASP (_qe)
+        fig2_orientation_bulk(lit, dft, mdd, mdr, kind="violin", with_decomp=True, qe=qe)
+        fig3(lit, dft, mdd, mdr, lam=6.4, stem="fig3_fsaw_mddecomp_6p4um_qe", md_decomp_a=True, qe=qe)
+        print("QE x, C11, f(6.4 um):", qe["x"], np.round(qe["c11"], 1), np.round(qe["f"], 4))
     if mdr is not None:
         print('MD random x, C11, f:', np.round(mdr['x'], 2), np.round(mdr['c11'], 1), np.round(mdr['f'], 4))
     print(f"max |sheet PWSCF-PAW - analytic model| = {resid:.2e} eV/atom")
