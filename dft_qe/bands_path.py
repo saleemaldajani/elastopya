@@ -55,7 +55,7 @@ def _style():
     import matplotlib.pyplot as plt
     sys.path.insert(0, str(HERE.parent / "scripts" / "kdense_scripta" / "scripts"))
     from style_presets import apply_publication_style
-    apply_publication_style("scripta")
+    apply_publication_style("scripta"); plt.rcParams["svg.fonttype"] = "none"
     return plt
 
 
@@ -80,7 +80,7 @@ def pure_plot(outfile, dirs):
     axs[0, 0].plot([], [], color="#D55E00", label="majority"); axs[0, 0].plot([], [], "--", color="#0072B2", label="minority")
     axs[0, 0].legend(loc="lower left", fontsize=7)
     fig.tight_layout()
-    fig.savefig(outfile, dpi=600); fig.savefig(Path(outfile).with_suffix(".pdf"))
+    fig.savefig(outfile, dpi=600); fig.savefig(Path(outfile).with_suffix(".pdf")); fig.savefig(Path(outfile).with_suffix(".svg"))
     print("wrote", outfile)
 
 
@@ -155,7 +155,7 @@ def sqs_plot(outfile, dirs, eta=0.06):
             ax.set_ylabel(r"$E - E_{\rm F}$ (eV)")
             ax.set_title(f"{round(100 * float(z['x_cr']))}% Cr, {lab}", fontsize=7)
     fig.tight_layout()
-    fig.savefig(outfile, dpi=600); fig.savefig(Path(outfile).with_suffix(".pdf"))
+    fig.savefig(outfile, dpi=600); fig.savefig(Path(outfile).with_suffix(".pdf")); fig.savefig(Path(outfile).with_suffix(".svg"))
     print("wrote", outfile)
 
 

@@ -55,7 +55,7 @@ def plot(outfile, dirs):
     from matplotlib.colors import TwoSlopeNorm
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts" / "kdense_scripta" / "scripts"))
     from style_presets import apply_publication_style
-    apply_publication_style("scripta")
+    apply_publication_style("scripta"); plt.rcParams["svg.fonttype"] = "none"
     n = len(dirs)
     fig, axs = plt.subplots(2, n, figsize=(1.45 * n + 0.6, 5.2), squeeze=False)
     lim = {k: max(np.percentile(np.abs(load(d, k)), 99.5) for d in dirs) for k in KINDS}
@@ -81,7 +81,7 @@ def plot(outfile, dirs):
     fig.text(0.01, 0.005, "circles: Fe (black), Cr (green) sites in the plane; [001] vertical, [110] horizontal",
              fontsize=6, color="0.3")
     fig.tight_layout(w_pad=0.3, h_pad=0.4, rect=(0, 0.02, 1, 1))
-    fig.savefig(outfile, dpi=600); fig.savefig(Path(outfile).with_suffix(".pdf"))
+    fig.savefig(outfile, dpi=600); fig.savefig(Path(outfile).with_suffix(".pdf")); fig.savefig(Path(outfile).with_suffix(".svg"))
     print("wrote", outfile)
 
 

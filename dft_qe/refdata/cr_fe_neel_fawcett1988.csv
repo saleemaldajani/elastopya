@@ -1,0 +1,26 @@
+# Neel temperature T_N and SDW wave vector Q (delta = 1 - Q) of dilute Cr(1-x)Fe(x) alloys
+# Source: E. Fawcett, "Spin-density-wave antiferromagnetism in chromium", Rev. Mod. Phys. 60, 209 (1988),
+#   Fig. 5 (p. 215; T_N vs atomic concentration, Fe = filled up-triangles) and Fig. 6 (p. 215; Q at T = 100 K vs concentration, Fe = filled up-triangles).
+#   Fawcett's figures are compilations "based on figures of Lebech and Mikke (1972) and Arajs et al. (1973)" with CrFe data from
+#   Burke and Rainford, J. Phys. F 8, L239 (1978); the caption says the original literature should be consulted for precise values.
+# Values are DIGITIZED from the scanned figures (marker centres; axes calibrated on tick marks, scan skew corrected).
+#   Estimated uncertainty: x_Fe +/-0.05 at.%; T_N +/-10 K (NB: the pure-Cr reference square in Fig. 5 reads ~319 K although the text gives
+#   T_N = 311 K for pure Cr, so a systematic offset of up to ~+8 K in the figure is possible); Q,delta +/-0.0005.
+# Pure-Cr rows: T_N = 311 K is the TEXT value (p. 210-211); delta = 0.048 at low T is the text value (p. 246) and agrees with Fig. 6 (0.0478 digitized).
+# Fig. 5 also shows (schematically, dotted line labelled CSDW) a transition to a commensurate SDW in CrFe starting at ~2.3 at.% Fe and T ~ 255 K
+#   running to lower T; Fig. 6 shows CrFe at ~2.3 at.% Fe with Q = 1.00 (commensurate) at 100 K. No moment-vs-Fe data are given in the review.
+# Columns: quantity (TN_K | Q_100K | delta_100K), x_Fe_at_pct, value, source (text | Fig5 | Fig6), note
+quantity,x_Fe_at_pct,value,source,note
+TN_K,0.0,311,text,pure Cr (incommensurate transverse SDW below T_N; first-order transition)
+TN_K,1.54,271,Fig5,digitized
+TN_K,1.81,268,Fig5,digitized
+TN_K,2.29,258,Fig5,digitized
+TN_K,3.28,251,Fig5,digitized
+TN_K,4.85,232,Fig5,digitized
+Q_100K,0.0,0.952,text/Fig6,pure Cr (delta = 0.048)
+Q_100K,0.50,0.9554,Fig6,digitized; incommensurate
+Q_100K,0.75,0.9585,Fig6,digitized; incommensurate (marker overlaps a Co down-triangle)
+Q_100K,0.92,0.9586,Fig6,digitized; incommensurate
+Q_100K,1.67,0.9636,Fig6,digitized; incommensurate (two points at this x)
+Q_100K,1.67,0.9600,Fig6,digitized; incommensurate
+Q_100K,2.27,1.000,Fig6,digitized; commensurate SDW (Q = 1.00)

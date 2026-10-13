@@ -44,7 +44,7 @@ def main(outfile, root):
     import matplotlib.pyplot as plt
     sys.path.insert(0, str(HERE.parent / "scripts" / "kdense_scripta" / "scripts"))
     from style_presets import apply_publication_style
-    apply_publication_style("scripta")
+    apply_publication_style("scripta"); plt.rcParams["svg.fonttype"] = "none"
     root = Path(root)
     fe, cr = npz(root, "Fe_ref"), npz(root, "Cr_ref")
     al = {x: npz(root, n) for x, n in ALLOYS.items()}
@@ -121,7 +121,7 @@ def main(outfile, root):
     for ax, l in zip((a, b, c), "abc"):
         ax.text(-0.18, 1.02, f"({l})", transform=ax.transAxes, fontweight="bold", fontsize=9)
     fig.tight_layout(w_pad=0.8)
-    fig.savefig(outfile, dpi=600); fig.savefig(Path(outfile).with_suffix(".pdf"))
+    fig.savefig(outfile, dpi=600); fig.savefig(Path(outfile).with_suffix(".pdf")); fig.savefig(Path(outfile).with_suffix(".svg"))
     print("wrote", outfile)
 
 

@@ -94,7 +94,7 @@ def plot(outfile, dirs):
     import matplotlib.pyplot as plt
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts" / "kdense_scripta" / "scripts"))
     from style_presets import apply_publication_style
-    apply_publication_style("scripta")
+    apply_publication_style("scripta"); plt.rcParams["svg.fonttype"] = "none"
     titles = {"Fe_fm": "bcc Fe (FM)", "Cr_nm": "bcc Cr (NM)", "Cr_afm": "Cr (AFM, folded zone)"}
     cols = {0: "#D55E00", 1: "#0072B2"}           # majority, minority
     fig, axs = plt.subplots(1, len(dirs), figsize=(2.5 * len(dirs), 2.6))
@@ -123,7 +123,7 @@ def plot(outfile, dirs):
     # the AFM panel (last) is empty at its centre; the Fe panel has contours everywhere
     axs[-1].legend(h, l, loc="center" if len(axs) > 1 else "lower left", fontsize=7)
     fig.tight_layout()
-    fig.savefig(outfile, dpi=600); fig.savefig(Path(outfile).with_suffix(".pdf"))
+    fig.savefig(outfile, dpi=600); fig.savefig(Path(outfile).with_suffix(".pdf")); fig.savefig(Path(outfile).with_suffix(".svg"))
     print("wrote", outfile)
 
 
@@ -157,7 +157,7 @@ def plot_korzhavyi(outfile, dirs):
     import matplotlib.pyplot as plt
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts" / "kdense_scripta" / "scripts"))
     from style_presets import apply_publication_style
-    apply_publication_style("scripta")
+    apply_publication_style("scripta"); plt.rcParams["svg.fonttype"] = "none"
     labels = {"Fe_fm": "Fe (this work, QE)"}
     fig, axs = plt.subplots(2, len(dirs), figsize=(2.2 * len(dirs), 4.4), squeeze=False)
     for j, d in enumerate(dirs):
@@ -174,7 +174,7 @@ def plot_korzhavyi(outfile, dirs):
             ax.text(0.03, 0.03, "Γ", fontsize=7)
             ax.set_title(f"{labels.get(d.name, d.name)}, {spin}", fontsize=7, pad=20)
     fig.tight_layout(h_pad=1.5)
-    fig.savefig(outfile, dpi=600); fig.savefig(Path(outfile).with_suffix(".pdf"))
+    fig.savefig(outfile, dpi=600); fig.savefig(Path(outfile).with_suffix(".pdf")); fig.savefig(Path(outfile).with_suffix(".svg"))
     print("wrote", outfile)
 
 
