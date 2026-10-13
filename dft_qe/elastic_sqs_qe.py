@@ -41,7 +41,7 @@ def write_input(path, cell, symbols, frac, k, ecut, calc):
     sp = sorted(set(symbols))
     mass = {"Fe": 55.845, "Cr": 51.996}
     upf = {"Fe": "Fe.pbe-spn-kjpaw_psl.0.2.1.UPF", "Cr": "Cr.pbe-spn-kjpaw_psl.1.0.0.UPF"}
-    mag = {"Fe": 0.6, "Cr": 0.25}
+    mag = {"Fe": 0.6, "Cr": float(os.environ.get("QE_MAG_CR", "0.25"))}   # QE_MAG_CR < 0: Cr antiparallel to Fe
     lines = [f"""&control
   calculation = '{calc}', prefix = 'sqs', outdir = './tmp', pseudo_dir = '{PSEUDO}',
   tstress = .true., tprnfor = .true., etot_conv_thr = 1e-5, forc_conv_thr = 1e-3, nstep = 60
