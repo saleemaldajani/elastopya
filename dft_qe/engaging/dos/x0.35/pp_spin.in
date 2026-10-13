@@ -1,0 +1,10 @@
+&inputpp
+  prefix = 'dos', outdir = './tmp', filplot = 'spin.pp', plot_num = 6
+/
+&plot
+  nfile = 1, filepp(1) = 'spin.pp', weight(1) = 1.0, iflag = 2, output_format = 7,
+  fileout = 'spin_110.dat',
+  e1(1) = 1.000000, e1(2) = 1.000611, e1(3) = 0.000000,
+  e2(1) = 0.000000, e2(2) = 0.000000, e2(3) = 2.504626,
+  x0(1) = 0.0, x0(2) = 0.0, x0(3) = 0.0, nx = 240, ny = 480
+/

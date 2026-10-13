@@ -25,7 +25,8 @@ SCR = Path("/private/tmp/claude-501/-Users-saleem-MIT-research-Scripta/37f8fe43-
 # k-point pools). With QE_MPIRUN set, the job's own environment (modules, Slurm) is passed to MPI.
 PW = Path(os.environ.get("QE_PW", SCR / "qesrc/q-e-qe-7.5/build/bin/pw.x"))
 MPIRUN = Path(os.environ.get("QE_MPIRUN", SCR / "qebuild/bin/mpirun"))
-PSEUDO = Path(os.environ.get("QE_PSEUDO", SCR / "pseudo"))
+_ENG = Path("/orcd/pool/004/sdajani/fecr_qe/pseudo")   # on Engaging, default to the cluster copy
+PSEUDO = Path(os.environ.get("QE_PSEUDO", _ENG if _ENG.exists() else SCR / "pseudo"))
 
 
 def read_poscar(path):
