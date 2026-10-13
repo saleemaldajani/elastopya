@@ -147,3 +147,63 @@
 
      Band Structure Calculation
      Davidson diagonalization with overlap
+
+     ethr =  3.57E-12,  avg # of iterations = 29.3
+
+     total cpu time spent up to now is      437.0 secs
+
+     End of band structure calculation
+
+     Number of k-points >= 100: set verbosity='high' to print the bands.
+
+     Writing all to output data dir ./tmp/fs.save/ :
+     XML data file, pseudopotentials, collected wavefunctions
+
+     init_run     :      0.79s CPU      0.84s WALL (       1 calls)
+     electrons    :    424.33s CPU    435.50s WALL (       1 calls)
+
+     Called by init_run:
+     wfcinit      :      0.00s CPU      0.00s WALL (       1 calls)
+     potinit      :      0.22s CPU      0.24s WALL (       1 calls)
+     hinit0       :      0.47s CPU      0.48s WALL (       1 calls)
+
+     Called by electrons:
+     c_bands      :    424.32s CPU    435.49s WALL (       1 calls)
+     v_of_rho     :      0.03s CPU      0.04s WALL (       1 calls)
+     newd         :      0.01s CPU      0.01s WALL (       1 calls)
+     PAW_pot      :      0.09s CPU      0.10s WALL (       1 calls)
+
+     Called by c_bands:
+     init_us_2    :      0.30s CPU      0.30s WALL (    1831 calls)
+     cegterg      :    286.24s CPU    294.71s WALL (    3702 calls)
+
+     Called by *egterg:
+     cdiaghg      :     31.91s CPU     32.66s WALL (   53167 calls)
+     h_psi        :    215.65s CPU    222.84s WALL (   56869 calls)
+     s_psi        :      4.34s CPU      4.51s WALL (   56869 calls)
+     g_psi        :      1.85s CPU      1.87s WALL (   51336 calls)
+
+     Called by h_psi:
+     h_psi:calbec :      5.36s CPU      5.56s WALL (   56869 calls)
+     vloc_psi     :    205.07s CPU    211.89s WALL (   56869 calls)
+                                        0.00s GPU  (   56869 calls)
+     add_vuspsi   :      4.45s CPU      4.62s WALL (   56869 calls)
+
+     General routines
+     calbec       :      5.25s CPU      5.46s WALL (   56869 calls)
+     fft          :      0.09s CPU      0.10s WALL (      23 calls)
+     ffts         :      0.03s CPU      0.03s WALL (       2 calls)
+     fftw         :    192.75s CPU    199.21s WALL ( 2242338 calls)
+     interpolate  :      0.03s CPU      0.04s WALL (       2 calls)
+     davcio       :      0.28s CPU      1.76s WALL (    3662 calls)
+
+     Parallel routines
+
+     PWSCF        :   7m 7.31s CPU   7m31.37s WALL
+
+
+   This run was terminated on:   8:19:57  13Oct2026            
+
+=------------------------------------------------------------------------------=
+   JOB DONE.
+=------------------------------------------------------------------------------=
