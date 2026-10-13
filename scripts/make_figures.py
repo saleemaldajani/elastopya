@@ -673,7 +673,7 @@ def fig3(lit, dft, mdd, mdr, lam=6.4, stem="fig3_fsaw", rel_b=False, crcolor=Fal
     if dec:
         allf = np.concatenate([yb(mdd["phi"], mdd["f"])] + [yb(v["phi"], v["f"]) for v in dec.values()])
         rng = allf.max() - allf.min()
-        b.set_ylim(allf.min() - 0.08 * rng, allf.max() + ((0.30 if rel_b else 0.45) if crcolor else 0.55) * rng)
+        b.set_ylim(allf.min() - 0.08 * rng, allf.max() + ((0.30 if rel_b else 0.45) if crcolor else 0.90) * rng)
         if crcolor:
             b.plot([], [], "s", color="0.5", mec="black", mew=0.4, ms=4.5, ls="none", label=r"25$^3$ cell")
             b.legend(frameon=False, fontsize=6.2, loc="upper left")
