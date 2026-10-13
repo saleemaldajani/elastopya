@@ -22,7 +22,9 @@ from pathlib import Path
 
 import numpy as np
 
-PSEUDO = os.environ.get("QE_PSEUDO", "/private/tmp/claude-501/-Users-saleem-MIT-research-Scripta/"
+_ENG = "/orcd/pool/004/sdajani/fecr_qe/pseudo"          # on Engaging, default to the cluster copy
+PSEUDO = os.environ.get("QE_PSEUDO", _ENG if os.path.isdir(_ENG) else
+                        "/private/tmp/claude-501/-Users-saleem-MIT-research-Scripta/"
                         "37f8fe43-8e5f-4d11-883b-ebb44fa03560/scratchpad/pseudo")
 HA_EV = 27.211386
 N_GRID = 121
