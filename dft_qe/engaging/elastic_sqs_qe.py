@@ -123,7 +123,14 @@ def main():
         txt = run(d, "bench", a.np)
         print(json.dumps({"wall_s": round(time.time() - t0), "scf_iter": len(re.findall("iteration #", txt))}))
         return
-    write_input(d / "relax.in", cell, sym, frac, a.k, a.ecut, "vc-relax")
+    # QE_FIXED_A=exp: no cell relaxation; cubic cell at the room-temperature experimental lattice parameter
+    # (Vegard between Fe 2.8665 and Cr 2.8846 A), ions relaxed -- the volume convention of EMTO-CPA work
+    # (Razumovskiy et al., PRB 84, 024106 (2011)). A number instead of "exp" fixes that a (A).
+    fixed = os.environ.get("QE_FIXED_A")
+    if fixed:
+        a_fix = 2.8665 * (1 - a.x) + 2.8846 * a.x if fixed == "exp" else float(fixed)
+        cell = cell / cell[0, 0] * 2 * a_fix
+    write_input(d / "relax.in", cell, sym, frac, a.k, a.ecut, "relax" if fixed else "vc-relax")
     cell, frac = final_structure(run(d, "relax", a.np), cell, frac)
     # Guard: an under-converged cutoff makes vc-relax collapse the cell (16-atom test at 40 Ry: -12 %).
     # PBE volumes are ~11.3 (Fe) to ~11.6 (Cr) A^3/atom; stop before the expensive strain steps.
@@ -143,6 +150,7 @@ def main():
     mags = re.findall(r"total magnetization\s+=\s+([-\d.]+)", (d / "relax.out").read_text())
     res = {"x_cr": a.x, "k": a.k, "ecut_Ry": a.ecut, "volume_A3": float(abs(np.linalg.det(cell))),
            "moment_muB_per_atom": float(mags[-1]) / len(sym) if mags else None,
+           "fixed_a": os.environ.get("QE_FIXED_A"),
            "C11": dxx[0, 0], "C12": 0.5 * (dxx[1, 1] + dxx[2, 2]), "C44": dyz[1, 2],
            "wall_s": time.time() - t0}
     (d / "result.json").write_text(json.dumps(res, indent=1))

@@ -38,6 +38,16 @@ CASES = {
                    mag=["starting_magnetization(1) = 0.5", "starting_magnetization(2) = -0.5"], nspin=2,
                    kscf=12, kmax=0.5, nbnd=28),
 }
+# Same cases at the room-temperature experimental lattice parameters (Fe 2.8665 A, Cr 2.8846 A), the volume
+# convention of the EMTO-CPA literature; NM Cr with k = 24^3 (16^3 under-samples its nested Fermi surface in DFPT).
+A_EXP = {"Fe_fm": 2.8665, "Cr_nm": 2.8846, "Cr_afm": 2.8846}
+for _c, _a in A_EXP.items():
+    CASES[_c + "_aexp"] = {**CASES[_c], "a": _a, **({"kscf": 24} if _c == "Cr_nm" else {})}
+
+
+def base(case):
+    """Fe_fm_aexp -> Fe_fm (structure, path and title do not depend on the lattice parameter)."""
+    return case.removesuffix("_aexp")
 
 
 def write_inputs(case, d):
@@ -105,7 +115,7 @@ def plot(outfile, dirs):
                 ax.text(x + 0.03, y + 0.03, lab, fontsize=7, color="0.3")
         ax.set(xlim=(-km, km), ylim=(-km, km), xlabel=r"$k_x$ ($2\pi/a$)", ylabel=r"$k_y$ ($2\pi/a$)")
         ax.set_aspect("equal")
-        ax.set_title(titles.get(case, case), fontsize=8)
+        ax.set_title(titles.get(base(case), case) + (" (exp. a)" if case.endswith("_aexp") else ""), fontsize=8)
     axs[0].plot([], [], color=cols[0], label="majority"); axs[0].plot([], [], "--", color=cols[1], label="minority")
     axs[0].legend(loc="lower left", fontsize=7)
     fig.tight_layout()
