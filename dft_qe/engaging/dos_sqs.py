@@ -24,7 +24,9 @@ def prepare(poscar, x, relax_dir, out):
     s = re.sub(r"&ions\s*/\s*", "", s)                     # relaxation namelists are not used here
     s = re.sub(r"&cell[^/]*/\s*", "", s)
     (out / "scf.in").write_text(s)
-    nbnd = int(sum(VAL[t] for t in sym) / 2 * 1.2) + 8
+    import os
+    # empty-band margin: 1.2x occupied reaches ~+1.8 eV above E_F; QE_NBND_FACTOR=1.6 extends the DOS further
+    nbnd = int(sum(VAL[t] for t in sym) / 2 * float(os.environ.get("QE_NBND_FACTOR", "1.2"))) + 8
     n = s.replace("calculation = 'scf'", "calculation = 'nscf'")
     n = n.replace("occupations = 'smearing', smearing = 'mv', degauss = 0.02",
                   f"occupations = 'tetrahedra_opt', nbnd = {nbnd}")
