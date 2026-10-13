@@ -209,14 +209,37 @@ def qe_mixing(T_K=298.15):
     return dict(x=x, dh=np.array([out[v][0] for v in x]), demix=np.array([out[v][1] for v in x]))
 
 
-def fig1(qe=None):
+def demix_from_enthalpy():
+    """CORRECTION 4 (entropy sign): the sheet's 'mixing free energy' columns add T*S_conf to dH_mix
+    (its entropy column is stored negative and then subtracted), so Fig. 1a plotted -dH - TS for the
+    muffin-tin, GGA and experimental series, whereas the Levesque series use -dH + TS (Eq. demix). Here
+    every series is -dH_mix + T S_conf (ideal configurational entropy, 298.15 K), from the raw dH columns
+    of 'Enthalpy of mixing' (all available compositions)."""
+    r = read_csv("sheet_mixing_enthalpy.csv")
+    xc = np.clip(r["x_cr"], 1e-12, 1 - 1e-12)
+    ts = -KB * T * (xc * np.log(xc) + (1 - xc) * np.log(1 - xc))
+    out = {}
+    for key in ("muffin_tin", "gga", "experimental"):
+        dh = r[f"{key}_dh"]
+        ok = ~np.isnan(dh)
+        out[key] = (r["x_cr"][ok], -dh[ok] + ts[ok])
+    return out
+
+
+def fig1(qe=None, entropy_fix=False):
     d = read_csv("sheet_demixing.csv")
     p = read_csv("sheet_levesque_parameters.csv")
     fig, (a, b) = plt.subplots(1, 2, figsize=(7.2, 3.0))
     m = dict(ms=3.6, ls="none")
-    a.plot(d["x_cr_a"], d["muffin_tin"], "o", color=BLUE, label="Muffin-tin approximation", **m)
-    a.plot(d["x_cr_a"], d["gga"], "o", color=RED, label="GGA (this work)", **m)
-    a.plot(d["x_cr_a"], d["experimental"], "o", color=YELLOW, label="Experimental", **m)
+    if entropy_fix:
+        fx = demix_from_enthalpy()
+        a.plot(*fx["muffin_tin"], "o", color=BLUE, label="Muffin-tin, EMTO-CPA (Korzhavyi et al.)", **m)
+        a.plot(*fx["gga"], "o", color=RED, label="GGA (VASP, this work)" if qe is not None else "GGA (this work)", **m)
+        a.plot(*fx["experimental"], "o", color=YELLOW, label="Experimental (Dench)", **m)
+    else:
+        a.plot(d["x_cr_a"], d["muffin_tin"], "o", color=BLUE, label="Muffin-tin approximation", **m)
+        a.plot(d["x_cr_a"], d["gga"], "o", color=RED, label="GGA (this work)", **m)
+        a.plot(d["x_cr_a"], d["experimental"], "o", color=YELLOW, label="Experimental", **m)
     a.plot(d["x_cr_b"], d["pwscf_paw"], "o", color=GREEN, label="PWSCF-PAW", **m)
     a.plot(d["x_cr_b"], d["siesta_nc"], "o", color=ORANGE, label="SIESTA-NC", **m)
     if qe is not None:
@@ -251,7 +274,7 @@ def fig1(qe=None):
     b.legend(frameon=False, fontsize=6.0, loc="lower right")
     b.text(0.03, 4.3, "unstable: curvature > 0 (shaded)", ha="left", va="top", fontsize=6.3)
     style(b, "(b)")
-    save(fig, "fig1_free_energy" + ("_qe" if qe is not None else ""))
+    save(fig, "fig1_free_energy" + ("_qe" if qe is not None else "") + ("_entropyfix" if entropy_fix else ""))
     return resid, dict(zip(np.round(xsel, 3), np.round(pts, 3)))
 
 
@@ -789,8 +812,10 @@ def main():
     fig3(lit, dft, mdd, mdr, lam=6.4, stem="fig3_fsaw_mddecomp_6p4um", md_decomp_a=True)  # manuscript Fig. 3 (6.4 um)
     fig3(lit, dft, mdd, mdr, lam=6.4, stem="fig3_fsaw_mddecomp_relative_6p4um", md_decomp_a=True, rel_b=True)
     qmix = qe_mixing()
+    fig1(entropy_fix=True)
     if qmix is not None:
         fig1(qe=qmix)
+        fig1(qe=qmix, entropy_fix=True)
         print("QE x, dH_mix, demix (eV/atom):", qmix["x"], np.round(qmix["dh"], 4), np.round(qmix["demix"], 4))
     qe = qe_dft()
     if qe is not None:   # review versions with the QE series next to VASP (_qe)

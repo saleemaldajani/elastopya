@@ -456,10 +456,13 @@ def main():
     strips()
     trends()
     dft_strips()
-    for base in ("fig1_free_energy", "fig2_elastic_mapping_orientation_violin_bulk_mddecomp", "fig3_fsaw_mddecomp_6p4um"):
-        for table in (STRIPS, TRENDS, CUBES, DFTS):   # _qe review versions: same panel (c) as their base figure
+    variants = {"fig1_free_energy": ("_qe", "_entropyfix", "_qe_entropyfix"),
+                "fig2_elastic_mapping_orientation_violin_bulk_mddecomp": ("_qe",), "fig3_fsaw_mddecomp_6p4um": ("_qe",)}
+    for base, sufs in variants.items():
+        for table in (STRIPS, TRENDS, CUBES, DFTS):   # review versions: same lower panels as their base figure
             if base in table:
-                table[base + "_qe"] = table[base]
+                for suf in sufs:
+                    table[base + suf] = table[base]
     sys.argv = sys.argv[:1]
     mf.main()
     (OUT / "audit_summary.json").write_text(json.dumps(AUDIT, indent=1, ensure_ascii=False) + "\n")

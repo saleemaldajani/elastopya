@@ -23,6 +23,13 @@ workbook is flagged to recalculate fully on open (Excel, Numbers, Google Sheets)
   6. New columns AF-AG: three-point second derivative of the PWSCF-PAW demixing free energy on
      the non-uniform grid (duplicate x = 0.65 skipped). The original columns O-Q (two-point,
      wrong spacing) are kept because Fig. 1b shows them for comparison.
+'Enthalpy of mixing'
+  7. Mixing free energies AP (muffin-tin), AQ (GGA), AR (experimental), which feed Fig. 1a through
+     'Enthalpy of demixing' G-J: pasted values computed as dH + T S (the entropy column AA is stored
+     negative and was subtracted; AE also used the experimental entropy, and the x = 0.35 experimental
+     value had no entropy). Now formulas dG_mix = dH - T S_conf with the ideal configurational entropy
+     (col J), T = 298.15 K, the convention of the Levesque series and of Eq. (demix). Columns AC-AE
+     are left as they were (not used downstream).
 """
 import re
 import shutil
@@ -32,7 +39,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "data" / "spreadsheet" / "FeCr_working_sheet_original.xlsx"
 DST = ROOT / "data" / "spreadsheet" / "FeCr_working_sheet_fixed.xlsx"
-ANALYZED, DEMIX = "xl/worksheets/sheet7.xml", "xl/worksheets/sheet9.xml"
+ANALYZED, MIXING, DEMIX = "xl/worksheets/sheet7.xml", "xl/worksheets/sheet8.xml", "xl/worksheets/sheet9.xml"
 
 
 def set_formula(xml, ref, formula):
@@ -91,12 +98,22 @@ def fix_demix(s):
     return s
 
 
+def fix_mixing(s):
+    src = {"AP": "B", "AQ": "C", "AR": "D"}      # muffin-tin, GGA, experimental mixing enthalpy
+    for col, h in src.items():
+        for r in sorted({int(m) for m in re.findall(r'<c r="%s(\d+)"[^>]*><v>' % col, s)}):
+            if 2 <= r <= 34:
+                s = set_formula(s, f"{col}{r}", f"{h}{r}-(25+273.15)*J{r}")
+    return s
+
+
 def main():
     shutil.copy2(SRC, DST)
     with zipfile.ZipFile(SRC) as zin:
         items = {n: zin.read(n) for n in zin.namelist()}
     items[ANALYZED] = fix_analyzed(items[ANALYZED].decode()).encode()
     items[DEMIX] = fix_demix(items[DEMIX].decode()).encode()
+    items[MIXING] = fix_mixing(items[MIXING].decode()).encode()
     wb = items["xl/workbook.xml"].decode()
     wb = re.sub(r"<calcPr[^>]*/>", '<calcPr fullCalcOnLoad="1"/>', wb)
     items["xl/workbook.xml"] = wb.encode()
