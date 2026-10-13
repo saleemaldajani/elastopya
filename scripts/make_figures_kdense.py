@@ -456,8 +456,8 @@ def main():
     strips()
     trends()
     dft_strips()
-    for base in ("fig2_elastic_mapping_orientation_violin_bulk_mddecomp", "fig3_fsaw_mddecomp_6p4um"):
-        for table in (STRIPS, TRENDS, CUBES):   # _qe review versions: same panel (c) as their base figure
+    for base in ("fig1_free_energy", "fig2_elastic_mapping_orientation_violin_bulk_mddecomp", "fig3_fsaw_mddecomp_6p4um"):
+        for table in (STRIPS, TRENDS, CUBES, DFTS):   # _qe review versions: same panel (c) as their base figure
             if base in table:
                 table[base + "_qe"] = table[base]
     sys.argv = sys.argv[:1]
