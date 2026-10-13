@@ -1,0 +1,6 @@
+phonons
+&inputph
+  prefix = 'fs', outdir = './tmp', fildyn = 'dyn',
+  tr2_ph = 1e-15, ldisp = .true., nq1 = 6, nq2 = 6, nq3 = 6,
+  amass(1) = 55.845
+/
