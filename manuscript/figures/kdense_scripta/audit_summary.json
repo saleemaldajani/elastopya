@@ -162,7 +162,8 @@
   "issues": [],
   "outputs": [
    "fig2_elastic_mapping_orientation_violin_bulk_mddecomp.pdf",
-   "fig2_elastic_mapping_orientation_violin_bulk_mddecomp.png"
+   "fig2_elastic_mapping_orientation_violin_bulk_mddecomp.png",
+   "fig2_elastic_mapping_orientation_violin_bulk_mddecomp.tiff"
   ]
  },
  "fig2_elastic_mapping_orientation_violin_bulk_mddecomp_strip": {
@@ -222,8 +223,7 @@
   "issues": [],
   "outputs": [
    "fig2_elastic_mapping.pdf",
-   "fig2_elastic_mapping.png",
-   "fig2_elastic_mapping.tiff"
+   "fig2_elastic_mapping.png"
   ]
  },
  "fig2_elastic_mapping_strip": {
@@ -298,8 +298,7 @@
   "issues": [],
   "outputs": [
    "fig3_fsaw.pdf",
-   "fig3_fsaw.png",
-   "fig3_fsaw.tiff"
+   "fig3_fsaw.png"
   ]
  },
  "fig3_fsaw_strip": {
@@ -570,6 +569,67 @@
   "outputs": [
    "fig3_fsaw_alpha_strip_trend.pdf",
    "fig3_fsaw_alpha_strip_trend.png"
+  ]
+ },
+ "fig3_fsaw_mddecomp_6p4um": {
+  "width_mm": 190.0,
+  "height_mm": 79.2,
+  "font_sizes_pt": [
+   7.0,
+   7.5,
+   9.0
+  ],
+  "min_font_pt": 7.0,
+  "issues": [],
+  "outputs": [
+   "fig3_fsaw_mddecomp_6p4um.pdf",
+   "fig3_fsaw_mddecomp_6p4um.png",
+   "fig3_fsaw_mddecomp_6p4um.tiff"
+  ]
+ },
+ "fig3_fsaw_mddecomp_6p4um_strip": {
+  "width_mm": 190.0,
+  "height_mm": 112.9,
+  "font_sizes_pt": [
+   7.0,
+   7.5,
+   9.0
+  ],
+  "min_font_pt": 7.0,
+  "issues": [],
+  "outputs": [
+   "fig3_fsaw_mddecomp_6p4um_strip.pdf",
+   "fig3_fsaw_mddecomp_6p4um_strip.png"
+  ]
+ },
+ "fig3_fsaw_mddecomp_6p4um_strip_trend": {
+  "width_mm": 190.0,
+  "height_mm": 127.2,
+  "font_sizes_pt": [
+   7.0,
+   7.5,
+   9.0
+  ],
+  "min_font_pt": 7.0,
+  "issues": [],
+  "outputs": [
+   "fig3_fsaw_mddecomp_6p4um_strip_trend.pdf",
+   "fig3_fsaw_mddecomp_6p4um_strip_trend.png"
+  ]
+ },
+ "fig3_fsaw_mddecomp_relative_6p4um": {
+  "width_mm": 190.0,
+  "height_mm": 79.2,
+  "font_sizes_pt": [
+   7.0,
+   7.5,
+   9.0
+  ],
+  "min_font_pt": 7.0,
+  "issues": [],
+  "outputs": [
+   "fig3_fsaw_mddecomp_relative_6p4um.pdf",
+   "fig3_fsaw_mddecomp_relative_6p4um.png"
   ]
  }
 }

@@ -12,12 +12,6 @@
       "kind": "raster",
       "path": "/Users/saleem/MIT/research/Scripta/mike_final_touches/manuscript/figures/kdense_scripta/fig3_fsaw.png",
       "size_bytes": 397766
-    },
-    {
-      "format": "tiff",
-      "kind": "raster",
-      "path": "/Users/saleem/MIT/research/Scripta/mike_final_touches/manuscript/figures/kdense_scripta/fig3_fsaw.tiff",
-      "size_bytes": 537592
     }
   ],
   "provenance": {
@@ -37,18 +31,15 @@
     "font_mode": "truetype",
     "formats": [
       "pdf",
-      "png",
-      "tiff"
+      "png"
     ],
     "pad_inches": 0.1,
-    "tiff_rgb": true,
+    "tiff_rgb": false,
     "transparent": false
   },
   "versions": {
     "matplotlib": "3.11.2",
     "pillow": "12.3.0"
   },
-  "warnings": [
-    "tiff: Matplotlib does not support savefig metadata for this format; metadata remains in the optional manifest."
-  ]
+  "warnings": []
 }

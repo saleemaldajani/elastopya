@@ -12,6 +12,12 @@
       "kind": "raster",
       "path": "/Users/saleem/MIT/research/Scripta/mike_final_touches/manuscript/figures/kdense_scripta/fig2_elastic_mapping_orientation_violin_bulk_mddecomp.png",
       "size_bytes": 521845
+    },
+    {
+      "format": "tiff",
+      "kind": "raster",
+      "path": "/Users/saleem/MIT/research/Scripta/mike_final_touches/manuscript/figures/kdense_scripta/fig2_elastic_mapping_orientation_violin_bulk_mddecomp.tiff",
+      "size_bytes": 827706
     }
   ],
   "provenance": {
@@ -31,15 +37,18 @@
     "font_mode": "truetype",
     "formats": [
       "pdf",
-      "png"
+      "png",
+      "tiff"
     ],
     "pad_inches": 0.1,
-    "tiff_rgb": false,
+    "tiff_rgb": true,
     "transparent": false
   },
   "versions": {
     "matplotlib": "3.11.2",
     "pillow": "12.3.0"
   },
-  "warnings": []
+  "warnings": [
+    "tiff: Matplotlib does not support savefig metadata for this format; metadata remains in the optional manifest."
+  ]
 }
