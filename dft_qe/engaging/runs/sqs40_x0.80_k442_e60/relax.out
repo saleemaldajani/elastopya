@@ -3799,3 +3799,154 @@
 
      iteration #298     ecut=    60.00 Ry     beta= 0.10
      Davidson diagonalization with overlap
+     ethr =  1.47E-10,  avg # of iterations =  8.8
+
+     total cpu time spent up to now is     9410.7 secs
+
+     total energy              =  -10576.90842218 Ry
+     estimated scf accuracy    <       0.00000113 Ry
+
+     total magnetization       =    15.17 Bohr mag/cell
+     absolute magnetization    =    18.60 Bohr mag/cell
+
+     iteration #299     ecut=    60.00 Ry     beta= 0.10
+     Davidson diagonalization with overlap
+     ethr =  1.47E-10,  avg # of iterations =  7.4
+
+     total cpu time spent up to now is     9458.7 secs
+
+     total energy              =  -10576.90842600 Ry
+     estimated scf accuracy    <       0.00000109 Ry
+
+     total magnetization       =    15.17 Bohr mag/cell
+     absolute magnetization    =    18.60 Bohr mag/cell
+
+     iteration #300     ecut=    60.00 Ry     beta= 0.10
+     Davidson diagonalization with overlap
+     ethr =  1.47E-10,  avg # of iterations =  1.0
+
+     total cpu time spent up to now is     9481.8 secs
+
+     total energy              =  -10576.90842579 Ry
+     estimated scf accuracy    <       0.00000111 Ry
+
+     total magnetization       =    15.17 Bohr mag/cell
+     absolute magnetization    =    18.60 Bohr mag/cell
+
+     End of self-consistent calculation
+
+     convergence NOT achieved after 300 iterations: stopping
+
+     Writing config to output data dir ./tmp/sqs.save/ :
+     XML data file, charge density
+
+     init_run     :     12.65s CPU     13.52s WALL (       1 calls)
+     electrons    :   9316.68s CPU   9465.61s WALL (       1 calls)
+
+     Called by init_run:
+     wfcinit      :      9.08s CPU      9.64s WALL (       1 calls)
+     potinit      :      1.91s CPU      2.09s WALL (       1 calls)
+     hinit0       :      1.03s CPU      1.12s WALL (       1 calls)
+
+     Called by electrons:
+     c_bands      :   7637.34s CPU   7768.39s WALL (     300 calls)
+     sum_band     :   1012.43s CPU   1021.96s WALL (     300 calls)
+     v_of_rho     :    289.75s CPU    293.23s WALL (     301 calls)
+     newd         :     64.83s CPU     65.32s WALL (     301 calls)
+     PAW_pot      :    203.62s CPU    204.76s WALL (     301 calls)
+     mix_rho      :     57.14s CPU     59.17s WALL (     300 calls)
+
+     Called by c_bands:
+     init_us_2    :    260.21s CPU    265.79s WALL (    1202 calls)
+     cegterg      :   6842.72s CPU   6966.10s WALL (     600 calls)
+
+     Called by *egterg:
+     cdiaghg      :    707.49s CPU    711.01s WALL (    2829 calls)
+     h_psi        :   3096.01s CPU   3139.61s WALL (    2831 calls)
+     s_psi        :    616.21s CPU    619.76s WALL (    2831 calls)
+     g_psi        :     16.14s CPU     16.31s WALL (    2229 calls)
+
+     Called by h_psi:
+     h_psi:calbec :    647.77s CPU    651.39s WALL (    2831 calls)
+     vloc_psi     :   1805.28s CPU   1819.03s WALL (    2831 calls)
+                                        0.00s GPU  (    2831 calls)
+     add_vuspsi   :    618.59s CPU    622.11s WALL (    2831 calls)
+
+     General routines
+     calbec       :    922.53s CPU    927.62s WALL (    3431 calls)
+     fft          :    169.82s CPU    172.12s WALL (    7523 calls)
+     ffts         :     27.12s CPU     27.60s WALL (    7444 calls)
+     fftw         :   2052.33s CPU   2067.95s WALL ( 1214696 calls)
+     interpolate  :     29.23s CPU     29.55s WALL (     602 calls)
+     davcio       :      0.00s CPU      0.14s WALL (      36 calls)
+
+     Parallel routines
+
+     PWSCF        :      2h35m CPU      2h38m WALL
+
+
+   This run was terminated on:   3:16:33  13Oct2026            
+
+=------------------------------------------------------------------------------=
+   JOB DONE.
+=------------------------------------------------------------------------------=
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
