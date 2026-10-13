@@ -563,6 +563,8 @@ def build_full_v4(out_name="fig4_mechanism_v4_full"):
     bg.axhline(0.425, xmin=0.01, xmax=0.99, color="0.75", lw=0.6, ls=(0, (4, 3)))
     top = [(0.005, "FRUSTRATE", "(a) atoms & moments"), (0.255, "NEST", "(b) Cr Fermi surface vs Fe content"),
            (0.505, "TOPOLOGY", "(c) Fe-rich ETT: spin $\\uparrow$ vs $\\downarrow$"), (0.755, "MODULATE", "(d) SDW/CDW soften the lattice")]
+    if _MOD_V6:
+        top[-1] = (0.755, "MODULATE", "(d) SDW softens $K$, not $G$")
     bot = [(0.005, "STIFFEN", "(e) electron $\\to$ lattice: decomposition"), (0.505, "PROPAGATE", "(f) Rayleigh wave in TGS"),
            (0.755, "DETECT", "(g) (P)SAW vs pristine CASS")]
     for row, y in ((top, 0.99), (bot, 0.41)):
@@ -591,9 +593,15 @@ def build_full_v4(out_name="fig4_mechanism_v4_full"):
              "(Korzhavyi 2009); unfolded SQS Fermi surfaces pending", fontsize=4.7, color="#8A5A00", va="top", linespacing=1.15)
     draw_nef(fig.add_axes([0.552, 0.465, 0.175, 0.088]))
     # (d)
-    cax = fig.add_axes([0.758, 0.665, 0.24, 0.235]); cdw_schematic(cax)
-    cax.text(N_CDW - 1, -0.62, "schematic", fontsize=4.6, color="0.5", ha="right", va="top", style="italic")
-    draw_kohn(fig.add_axes([0.80, 0.465, 0.185, 0.145]))
+    if _MOD_V6:
+        cax = fig.add_axes([0.758, 0.735, 0.24, 0.17]); cdw_schematic(cax)
+        cax.text(N_CDW - 1, -0.62, "schematic", fontsize=4.6, color="0.5", ha="right", va="top", style="italic")
+        draw_kohn_v6(fig.add_axes([0.795, 0.585, 0.19, 0.095]))
+        draw_af_vs_nm(fig.add_axes([0.83, 0.462, 0.155, 0.072]))
+    else:
+        cax = fig.add_axes([0.758, 0.665, 0.24, 0.235]); cdw_schematic(cax)
+        cax.text(N_CDW - 1, -0.62, "schematic", fontsize=4.6, color="0.5", ha="right", va="top", style="italic")
+        draw_kohn(fig.add_axes([0.80, 0.465, 0.185, 0.145]))
     # bottom row
     panel_c(fig, [0.03, 0.0, 0.46, 0.335], eq_at=(0.49, 0.355))
     sax = fig.add_axes([0.51, 0.148, 0.235, 0.205]); saw_schematic(sax)
@@ -652,6 +660,58 @@ def build_full_v5():
 
 
 _NEST_V5 = False
+
+
+_MOD_V6 = False
+
+
+def draw_kohn_v6(ax):
+    """As draw_kohn, but labelled for what it is: a dip of the zone-boundary L phonons near Q. Elastic constants are the
+    slopes at Gamma, which the dip does not touch; NM DFPT is steeper than the (AF) neutron data there."""
+    draw_kohn(ax)
+    for t in list(ax.texts):
+        if "Kohn softening" in t.get_text():
+            t.remove()
+    ax.legend_.remove()
+    ax.text(-0.2, 1.04, "Kohn dip near $\\mathbf{Q}$: zone-boundary L phonons only;\n"
+            "$C_{ij}$ = slopes at $\\Gamma$ (NM too steep vs AF neutron data)", transform=ax.transAxes, fontsize=4.6,
+            va="bottom", color="0.15", linespacing=1.1)
+    ax.legend(fontsize=4.0, loc="lower right", frameon=False, handlelength=1.0, labelspacing=0.15)
+    ax.set_xticks([0, 1]); ax.set_xticklabels(["Γ", "H"])
+
+
+def draw_af_vs_nm(ax):
+    """Pure Cr (QE, 2 atoms, k = 16^3): antiferromagnetic (commensurate SDW) vs non-magnetic. Magnetic order cuts the
+    bulk modulus (C12 collapses) and leaves the shear moduli unchanged."""
+    import json
+    t = {}
+    for tag in ("nm", "afm"):
+        r = json.loads((ENG / "runs" / f"Cr_{tag}_k16x16x16_e60" / "result.json").read_text())
+        c11, c12, c44 = r["C11"], r["C12"], r["C44"]
+        t[tag] = {"$K$": (c11 + 2 * c12) / 3, "$C'$": (c11 - c12) / 2, "$C_{44}$": c44}
+    labs = list(t["nm"]); y = np.arange(len(labs))[::-1]
+    ax.barh(y + 0.19, [t["nm"][l] for l in labs], height=0.36, color="0.75", label="NM")
+    ax.barh(y - 0.19, [t["afm"][l] for l in labs], height=0.36, color="#2A9DF4", label="AF (SDW)")
+    for yi, l in zip(y, labs):
+        d = t["afm"][l] / t["nm"][l] - 1
+        ax.text(max(t["nm"][l], t["afm"][l]) + 6, yi, f"{100 * d:+.0f}%", va="center", fontsize=4.8,
+                color="#C02F00" if abs(d) > 0.1 else "0.3", fontweight="bold" if abs(d) > 0.1 else "normal")
+    ax.set_yticks(y); ax.set_yticklabels(labs, fontsize=5.2)
+    ax.set_xlim(0, 330); ax.tick_params(axis="x", labelsize=4.8); ax.set_xlabel("Cr, QE (GPa)", fontsize=5.2, labelpad=1)
+    ax.legend(fontsize=4.2, loc="lower right", frameon=False, handlelength=0.9, borderaxespad=0.1)
+    dk = 100 * (t["afm"]["$K$"] / t["nm"]["$K$"] - 1)
+    ax.text(-0.42, 1.08, f"AF order: $K$ {dk:+.0f}%, shear unchanged".replace("-", "$-$"), transform=ax.transAxes, fontsize=4.8, color="0.15", va="bottom")
+
+
+def build_full_v6():
+    """v5 with an honest (d): the SDW softens the volume channel (K, via C12) and the zone-boundary L phonons (Kohn dip),
+    not the shear moduli that decomposition stiffens."""
+    global _NEST_V5, _MOD_V6
+    _NEST_V5 = _MOD_V6 = True
+    try:
+        build_full_v4(out_name="fig4_mechanism_v6_full")
+    finally:
+        _NEST_V5 = _MOD_V6 = False
 
 
 def main():
