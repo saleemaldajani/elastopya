@@ -20,7 +20,8 @@ def site_dos(d):
     d = Path(d)
     ef = float(re.findall(r"the Fermi energy is\s+([-\d.]+) ev", (d / "nscf.out").read_text())[-1])
     acc, atoms, e = {}, {}, None
-    prefix = "pdosT" if any(d.glob("pdosT.pdos_atm#*")) else "pdos"     # pdosT = tetrahedron projwfc (fixed)
+    # pdosW = wide window (1.6x bands), pdosT = tetrahedron projwfc (1.2x bands), pdos = first (Gaussian) attempt
+    prefix = next((p for p in ("pdosW", "pdosT", "pdos") if any(d.glob(f"{p}.pdos_atm#*"))), "pdos")
     for f in d.glob(f"{prefix}.pdos_atm#*"):
         m = re.match(rf"{prefix}\.pdos_atm#(\d+)\((\w+)\)_wfc#\d+\(\w\)", f.name)
         if not m:
@@ -40,7 +41,8 @@ def main(outfile, dirs):
     from style_presets import apply_publication_style
     apply_publication_style("scripta")
     fig, axs = plt.subplots(1, len(dirs), figsize=(2.0 * len(dirs) + 0.6, 3.0), squeeze=False, sharey=True)
-    EWIN = (-7, 1.5)    # upper limit below the top of the computed empty bands (~+1.8 eV)
+    wide = all(any(Path(d).glob("pdosW.pdos_atm#*")) for d in dirs)
+    EWIN = (-7, 4.0) if wide else (-7, 1.5)   # 1.2x bands end near +1.8 eV; 1.6x bands reach well above +4 eV
     ymax = 0.0
     for d in dirs:                                   # common y-range from the plotted energy window only
         e, dos = site_dos(d)
