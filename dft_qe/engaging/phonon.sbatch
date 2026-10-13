@@ -14,4 +14,4 @@ source ../../qe75_env.sh
 B=$(dirname $QE_PW)
 grep -q "JOB DONE" scf.out 2>/dev/null || $QE_MPIRUN -np 48 $QE_PW -nk 12 -in scf.in > scf.out
 grep -q "JOB DONE" ph.out 2>/dev/null || $QE_MPIRUN -np 48 $B/ph.x -nk 12 -in ph.in > ph.out
-$B/q2r.x -in q2r.in > q2r.out && $B/matdyn.x -in matdyn.in > matdyn.out && ls freq.gp && echo PHONON_OK
+$QE_MPIRUN -np 1 $B/q2r.x -in q2r.in > q2r.out && $QE_MPIRUN -np 1 $B/matdyn.x -in matdyn.in > matdyn.out && ls freq.gp && echo PHONON_OK
