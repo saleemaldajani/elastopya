@@ -57,7 +57,7 @@ def main(outfile, dirs):
                 ax.plot(e, -dw, color=COL[el], lw=0.9)
         ax.axhline(0, color="0.5", lw=0.5); ax.axvline(0, color="0.5", lw=0.6, ls=":")
         ax.set(xlim=EWIN, ylim=(-1.08 * ymax, 1.08 * ymax), xlabel=r"$E - E_{\rm F}$ (eV)")
-        x = float(Path(d).name[1:])
+        x = float(re.match(r"x([\d.]+)", Path(d).name).group(1))
         ax.set_title(f"{round(100 * x)}% Cr", fontsize=8)
         ax.text(0.03, 0.97, "spin up", transform=ax.transAxes, va="top", fontsize=7, color="0.35")
         ax.text(0.03, 0.03, "spin down", transform=ax.transAxes, va="bottom", fontsize=7, color="0.35")

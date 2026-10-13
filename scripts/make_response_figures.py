@@ -6,6 +6,7 @@ width (140 mm). Output: manuscript/figures/kdense_scripta/response/R*.{pdf,png,e
   R_convergence    QE convergence study for bcc Fe (k-mesh, cutoff), vs the present VASP tensor
   R_md_validation  25^3 small-cell procedure vs the Acta 50^3 series, and MD random alloys
   R_decomposition  stiffening on decomposition at all 12 compositions, and the band check
+  R_phonon_convergence  NM bcc Cr DFPT phonons: imaginary modes at k = 16^3 vanish with denser k / wider smearing
 """
 import json
 import sys
@@ -124,9 +125,47 @@ def decomposition():
     return finish(fig, "R_decomposition")
 
 
+def phonon_convergence():
+    sys.path.insert(0, str(mf.ROOT / "dft_qe"))
+    import bands_path as bp
+    ph = mf.ROOT / "dft_qe" / "engaging" / "phonon"
+    thz = lambda v: np.loadtxt(ph / v / "freq.gp")
+    fig, (a, b) = plt.subplots(1, 2, figsize=(5.5, 2.6), gridspec_kw={"width_ratios": [1.35, 1]})
+    for v, col, ls, lab in (("Cr_nm", mf.RED, "--", "$k$ = 16$^3$, 0.02 Ry"), ("Cr_nm_v5_k24", "0.1", "-", "$k$ = 24$^3$, 0.02 Ry")):
+        g = thz(v); x, w = g[:, 0], g[:, 1:] * 0.0299792458
+        for j in range(w.shape[1]):
+            a.plot(x, w[:, j], color=col, ls=ls, lw=0.9, label=lab if j == 0 else None)
+    _, _, ticks = bp.path_points(bp.PATH_BCC)
+    sc = x[-1] / ticks[-1][0]
+    a.set_xticks([t * sc for t, _ in ticks]); a.set_xticklabels([l for _, l in ticks]); a.xaxis.set_minor_locator(plt.NullLocator())
+    for t, _ in ticks[1:-1]:
+        a.axvline(t * sc, color="0.85", lw=0.5)
+    a.axhline(0, color="0.5", lw=0.6)
+    a.set(xlim=(0, x[-1]), ylim=(-5.5, 14.5), ylabel="Frequency (THz)")
+    a.legend(loc="upper center", ncol=2, columnspacing=0.8, handlelength=1.6)
+    mk.style(a, "(a)")
+    runs = [("Cr_nm", "16$^3$, default mixing"), ("Cr_nm_v2_mix", "16$^3$, gentler mixing"),
+            ("Cr_nm_v6_a2843", "16$^3$, $a$ − 0.4%"), ("Cr_nm_v4_deg04", "16$^3$, smearing 0.04 Ry"),
+            ("Cr_nm_v3_k20", "20$^3$"), ("Cr_nm_v5_k24", "24$^3$")][::-1]
+    lo = [float((thz(v)[:, 1:] * 0.0299792458).min()) for v, _ in runs]
+    cols = [mf.RED if m < -0.05 else ("0.1" if m > -0.01 else mf.ORANGE) for m in lo]
+    b.barh(range(len(runs)), lo, color=cols, height=0.6)
+    for i, m in enumerate(lo):
+        if m < -0.05:
+            b.text(m - 0.12, i, f"{m:.2f}", va="center", ha="right")
+        else:
+            b.plot([0], [i], "o", color="0.1", ms=4, zorder=4)
+            b.text(-0.25, i, "0.00, all real", va="center", ha="right")
+    b.axvline(0, color="0.5", lw=0.6)
+    b.set_yticks(range(len(runs))); b.set_yticklabels([l for _, l in runs]); b.yaxis.set_minor_locator(plt.NullLocator())
+    b.set(xlim=(-6.2, 1.2), xlabel="Lowest phonon frequency (THz)")
+    mk.style(b, "(b)")
+    return finish(fig, "R_phonon_convergence")
+
+
 def main():
     apply_publication_style("scripta", palette_name="okabe_ito_on_white")
-    for fn in (convergence, md_validation, decomposition):
+    for fn in (convergence, md_validation, decomposition, phonon_convergence):
         stem, found, mn = fn()
         print(stem, "min pt", mn, "issues", found)
 

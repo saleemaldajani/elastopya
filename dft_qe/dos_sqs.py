@@ -17,6 +17,9 @@ VAL = {"Fe": 16, "Cr": 14}
 def prepare(poscar, x, relax_dir, out):
     out = Path(out); out.mkdir(parents=True, exist_ok=True)
     cell0, sym, frac0 = e.read_poscar(poscar)
+    import numpy as np
+    rin = Path(relax_dir, "relax.in").read_text().split("CELL_PARAMETERS angstrom\n")[1].split("\n")[:3]
+    cell0 = np.array([[float(v) for v in r.split()] for r in rin])   # input cell (fixed-a 'relax' prints no cell)
     cell, frac = e.final_structure(Path(relax_dir, "relax.out").read_text(), cell0, frac0)
     e.write_input(out / "scf.in", cell, sym, frac, (4, 4, 2), 60.0, "scf")
     import re

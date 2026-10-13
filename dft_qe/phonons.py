@@ -31,7 +31,7 @@ def inputs(case, d, nq=6):
                              f"  tr2_ph = 1e-15, ldisp = .true., nq1 = {nq}, nq2 = {nq}, nq3 = {nq},\n"
                              f"  alpha_mix(1) = 0.2, nmix_ph = 12,\n{masses}/\n")   # gentler mixing: default 0.7 diverged for Cr
     (d / "q2r.in").write_text("&input\n  fildyn = 'dyn', zasr = 'crystal', flfrc = 'fc'\n/\n")
-    path = bp.PATH_SC if case == "Cr_afm" else bp.PATH_BCC
+    path = bp.PATH_SC if case.startswith("Cr_afm") else bp.PATH_BCC
     lines = "".join(f"{q[0]} {q[1]} {q[2]} {bp.NSEG}\n" for _, q in path[:-1]) + f"{path[-1][1][0]} {path[-1][1][1]} {path[-1][1][2]} 1\n"
     (d / "matdyn.in").write_text(f"&input\n  asr = 'crystal', flfrc = 'fc', flfrq = 'freq', q_in_band_form = .true.,\n"
                                  f"{masses}/\n{len(path)}\n{lines}")
@@ -41,7 +41,7 @@ NEG_TOL_THZ = -0.05   # numerical-noise tolerance near Gamma
 # Systems expected to be dynamically stable: imaginary modes there signal a numerical problem.
 # A deliberately unstable phase (e.g. a hypothetical structure) is plotted with --allow-imaginary,
 # and its imaginary branches are then a result, shown below zero.
-EXPECT_STABLE = {"Fe_fm", "Cr_nm", "Cr_afm"}
+EXPECT_STABLE = {"Fe_fm", "Cr_nm", "Cr_afm"}   # also their _aexp versions (fermi_slices.base)
 
 
 def check(d, allow_imaginary=False):
@@ -51,7 +51,7 @@ def check(d, allow_imaginary=False):
     wmin = float(w.min())
     name = Path(d).name
     print(f"{name}: lowest frequency {wmin:.3f} THz")
-    if wmin < NEG_TOL_THZ and name.split("_v")[0] in EXPECT_STABLE and not allow_imaginary:
+    if wmin < NEG_TOL_THZ and fs.base(name.split("_v")[0]) in EXPECT_STABLE and not allow_imaginary:
         raise SystemExit(f"{name}: imaginary modes down to {wmin:.2f} THz in a phase expected to be stable; "
                          "fix the calculation (or pass --allow-imaginary if instability is the result)")
     return wmin
@@ -69,14 +69,14 @@ def plot(outfile, dirs, allow_imaginary=False):
         x, w = gp[:, 0], gp[:, 1:] * CM1_THZ
         for b in range(w.shape[1]):
             ax.plot(x, w[:, b], color="0.15", lw=0.9)
-        _, _, ticks = bp.path_points(bp.PATH_SC if case == "Cr_afm" else bp.PATH_BCC)
+        _, _, ticks = bp.path_points(bp.PATH_SC if case.startswith("Cr_afm") else bp.PATH_BCC)
         scale = x[-1] / ticks[-1][0]
         ax.set_xticks([t * scale for t, _ in ticks]); ax.set_xticklabels([l for _, l in ticks]); ax.minorticks_off()
         for t, _ in ticks[1:-1]:
             ax.axvline(t * scale, color="0.8", lw=0.5)
         ax.axhline(0, color="0.6", lw=0.5)
         ax.set(xlim=(0, x[-1]), ylabel="Frequency (THz)")
-        ax.set_title(titles.get(case, case) + (f" {d.name[len(case) + 1:]}" if d.name != case else ""), fontsize=8)
+        ax.set_title(titles.get(fs.base(case), case) + (" (exp. a)" if case.endswith("_aexp") else "") + (f" {d.name[len(case) + 1:]}" if d.name != case else ""), fontsize=8)
     fig.tight_layout()
     fig.savefig(outfile, dpi=600); fig.savefig(Path(outfile).with_suffix(".pdf"))
     print("wrote", outfile)
