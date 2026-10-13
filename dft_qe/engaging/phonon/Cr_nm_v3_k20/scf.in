@@ -1,0 +1,17 @@
+&control
+  calculation = 'scf', prefix = 'fs', outdir = './tmp', pseudo_dir = '/orcd/pool/004/sdajani/fecr_qe/pseudo'
+/
+&system
+  ibrav = 3, celldm(1) = 5.385719, nat = 1, ntyp = 1,
+  ecutwfc = 60, ecutrho = 480, occupations = 'smearing', smearing = 'mv', degauss = 0.02,
+  nspin = 1, nbnd = 16
+/
+&electrons
+  conv_thr = 1e-12, mixing_beta = 0.3
+/
+ATOMIC_SPECIES
+Cr 51.996 Cr.pbe-spn-kjpaw_psl.1.0.0.UPF
+ATOMIC_POSITIONS alat
+Cr 0 0 0
+K_POINTS automatic
+20 20 20 0 0 0
