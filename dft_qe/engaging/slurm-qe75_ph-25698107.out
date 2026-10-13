@@ -1,0 +1,381 @@
+[  0%] Built target qe_ks_headers
+[  0%] Built target qe_lax_headers
+[  0%] Built target qe_xml
+[  0%] Built target qe_device_lapack
+[  0%] Built target qe_devxlib
+[  0%] Built target qe_libbeef
+[  2%] Built target qe_utilx_c
+[  4%] Built target qe_modules_c
+[  4%] Built target mbd
+[  4%] Built target qe_fftx_c
+[  6%] Built target qe_xclib
+[  8%] Built target qe_fftx
+[ 10%] Built target qe_utilx
+[ 12%] Built target qe_lax
+[ 18%] Built target qe_upflib
+[ 18%] Built target qe_kssolver_davidson
+[ 18%] Built target qe_kssolver_rmmdiis
+[ 20%] Built target qe_kssolver_dense
+[ 20%] Built target qe_kssolver_cg
+[ 20%] Built target qe_kssolver_paro
+[ 40%] Built target qe_modules
+[ 42%] Built target qe_dftd3
+[ 69%] Built target qe_pw
+[ 69%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/lrcom.f90.o
+[ 69%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/apply_dpot_mod.f90.o
+[ 69%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/dynmat_sub.f90.o
+[ 69%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/apply_dpot.f90.o
+[ 69%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/apply_trev.f90.o
+[ 69%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/non_scf_ph.f90.o
+[ 69%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/check_q_points_sym.f90.o
+[ 69%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/cg_psi.f90.o
+[ 69%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/addusldos.f90.o
+[ 69%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/sgam_lr.f90.o
+[ 71%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/set_dbecsum_nc.f90.o
+[ 71%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/compute_vsgga.f90.o
+[ 71%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/setqmod.f90.o
+[ 71%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/star_q.f90.o
+[ 71%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/mix_pot.f90.o
+[ 71%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/mode_group.f90.o
+[ 71%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/lanczos_pseudohermitian.f90.o
+[ 71%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/lanczos_nonhermitian.f90.o
+[ 71%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/lanczos_pseudohermitian_c.f90.o
+[ 71%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/lanczos_nonhermitian_c.f90.o
+[ 71%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/set_kplusq_nc.f90.o
+[ 73%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/ccg_psi.f90.o
+[ 73%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/lr_sym_mod.f90.o
+[ 73%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/lr_nc_mag.f90.o
+[ 73%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/dv_rVV10.f90.o
+[ 73%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/h_prec.f90.o
+[ 73%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/incdrhoscf_nc.f90.o
+[ 75%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/ch_psi_all.f90.o
+[ 75%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/cgsolve_all.f90.o
+[ 75%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/dv_vdW_DF.f90.o
+[ 75%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/incdrhoscf.f90.o
+[ 75%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/dgradcorr.f90.o
+[ 75%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/setup_nscf.f90.o
+[ 75%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/set_int3_nc.f90.o
+[ 75%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/newdq.f90.o
+[ 75%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/smallgq.f90.o
+[ 75%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/lr_sm1_psi.f90.o
+[ 75%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/lr_addusddens.f90.o
+[ 75%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/setup_dgc.f90.o
+[ 75%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/setup_dmuxc.f90.o
+[ 75%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/setup_nbnd_occ.f90.o
+[ 75%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/set_small_group_of_q.f90.o
+[ 75%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/lr_orthoUwfc.f90.o
+[ 75%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/qdipol_cryst.f90.o
+[ 75%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/lr_dot.f90.o
+[ 75%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/lr_dot_magnons.f90.o
+[ 75%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/psymdvscf.f90.o
+[ 75%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/sym_def.f90.o
+[ 75%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/symdvscf.f90.o
+[ 75%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/sym_dmag.f90.o
+[ 75%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/ccgsolve_all.f90.o
+[ 75%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/ch_psi_all_complex.f90.o
+[ 75%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/Coul_cut_2D_ph.f90.o
+[ 75%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/addusddenseq.f90.o
+[ 75%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/dfpt_tetra_mod.f90.o
+[ 75%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/adddvscf.f90.o
+[ 75%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/adddvhubscf.f90.o
+[ 75%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/addusdbec.f90.o
+[ 77%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/addusdbec_nc.f90.o
+[ 77%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/c_bands_ph.f90.o
+[ 77%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/adddvepsi_us.f90.o
+[ 77%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/cft_wave.f90.o
+[ 77%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/response_kernels.f90.o
+[ 77%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/dv_of_drho.f90.o
+[ 77%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/dnonloccorr.f90.o
+[ 77%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/lr_two_chem.f90.o
+[ 77%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/efermi_shift.f90.o
+[ 77%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/localdos.f90.o
+[ 77%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/setup_alpha_pv.f90.o
+[ 77%] Building Fortran object LR_Modules/CMakeFiles/qe_lr_modules.dir/orthogonalize.f90.o
+[ 77%] Linking Fortran static library ../lib/libqe_lr_modules.a
+[ 77%] Built target qe_lr_modules
+[ 77%] Building Fortran object PHonon/CMakeFiles/qe_phonon_fd.dir/FD/stop_pp.f90.o
+[ 77%] Building Fortran object PHonon/CMakeFiles/qe_phonon_phaux.dir/PH/write_eigenvectors.f90.o
+[ 77%] Linking Fortran static library ../lib/libqe_phonon_fd.a
+[ 77%] Building Fortran object PHonon/CMakeFiles/qe_phonon_gamma.dir/Gamma/cgcom.f90.o
+[ 77%] Building Fortran object PHonon/CMakeFiles/qe_phonon_gamma.dir/Gamma/cgsolve.f90.o
+[ 77%] Building Fortran object PHonon/CMakeFiles/qe_phonon_gamma.dir/Gamma/d2ion.f90.o
+[ 77%] Building Fortran object PHonon/CMakeFiles/qe_phonon_gamma.dir/Gamma/dgradcorr.f90.o
+[ 77%] Building Fortran object PHonon/CMakeFiles/qe_phonon_gamma.dir/Gamma/dvb_cc.f90.o
+[ 77%] Building Fortran object PHonon/CMakeFiles/qe_phonon_gamma.dir/Gamma/dyndiar.f90.o
+[ 77%] Building Fortran object PHonon/CMakeFiles/qe_phonon_gamma.dir/Gamma/find_equiv_sites.f90.o
+[ 77%] Building Fortran object PHonon/CMakeFiles/qe_phonon_gamma.dir/Gamma/generate_dynamical_matrix.f90.o
+[ 77%] Building Fortran object PHonon/CMakeFiles/qe_phonon_gamma.dir/Gamma/generate_effective_charges.f90.o
+[ 77%] Built target qe_phonon_fd
+[ 77%] Linking Fortran static library ../lib/libqe_phonon_phaux.a
+[ 77%] Built target qe_phonon_phaux
+[ 77%] Building Fortran object PHonon/CMakeFiles/qe_phonon_gamma.dir/Gamma/dvpsi_kb.f90.o
+[ 77%] Building Fortran object PHonon/CMakeFiles/qe_phonon_gamma.dir/Gamma/a_h.f90.o
+[ 77%] Building Fortran object PHonon/CMakeFiles/qe_phonon_gamma.dir/Gamma/cg_setup.f90.o
+[ 77%] Building Fortran object PHonon/CMakeFiles/qe_phonon_gamma.dir/Gamma/dielec.f90.o
+[ 77%] Building Fortran object PHonon/CMakeFiles/qe_phonon_gamma.dir/Gamma/cg_readin.f90.o
+[ 77%] Building Fortran object PHonon/CMakeFiles/qe_phonon_gamma.dir/Gamma/dvpsi_e.f90.o
+[ 77%] Building Fortran object PHonon/CMakeFiles/qe_phonon_gamma.dir/Gamma/dynmat_init.f90.o
+[ 77%] Building Fortran object PHonon/CMakeFiles/qe_phonon_gamma.dir/Gamma/drhodv.f90.o
+[ 77%] Building Fortran object PHonon/CMakeFiles/qe_phonon_gamma.dir/Gamma/dynmatcc.f90.o
+[ 77%] Building Fortran object PHonon/CMakeFiles/qe_phonon_gamma.dir/Gamma/h_h.f90.o
+[ 79%] Building Fortran object PHonon/CMakeFiles/qe_phonon_gamma.dir/Gamma/macro.f90.o
+[ 79%] Building Fortran object PHonon/CMakeFiles/qe_phonon_gamma.dir/Gamma/rhod2vkb.f90.o
+[ 79%] Building Fortran object PHonon/CMakeFiles/qe_phonon_gamma.dir/Gamma/solve_e.f90.o
+[ 79%] Building Fortran object PHonon/CMakeFiles/qe_phonon_gamma.dir/Gamma/writedyn.f90.o
+[ 79%] Building Fortran object PHonon/CMakeFiles/qe_phonon_gamma.dir/Gamma/solve_ph.f90.o
+[ 79%] Linking Fortran static library ../lib/libqe_phonon_gamma.a
+[ 79%] Built target qe_phonon_gamma
+[ 79%] Building Fortran object PHonon/CMakeFiles/qe_phonon_phcg_exe.dir/Gamma/phcg.f90.o
+[ 79%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/dfile_autoname.f90.o
+[ 79%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/phcom.f90.o
+[ 79%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/acfdtest.f90.o
+[ 79%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/elph.f90.o
+[ 79%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/ramanm.f90.o
+[ 79%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/io_dyn_mat.f90.o
+[ 79%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/io_dyn_mat_old.f90.o
+[ 79%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/rigid.f90.o
+[ 81%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/addusddense.f90.o
+[ 81%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/add_for_charges.f90.o
+[ 81%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/check_restart_recover.f90.o
+[ 81%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/clinear.f90.o
+[ 81%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/compute_becalp.f90.o
+[ 81%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/cch_psi_all.f90.o
+[ 81%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/compute_becsum_ph_cond.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/compute_drhous_nc.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/compute_weight.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/davcio_drho.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/dvqpsi_us.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/dwfc.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/delta_sphi.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/find_equiv_sites.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/find_mode_sym.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/el_ph_collect.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/generate_dynamical_matrix_c.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/generate_effective_charges_c.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/gmressolve_all.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/initialize_ph.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/prepare_sym_analysis.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/random_matrix.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/rotate_pattern_add.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/set_asr_c.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/rotate_and_add_dyn.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/set_drhoc.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/setlocq.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/symdyn_munu.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/symdynph_gq.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/symm.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/symmorphic_or_nzb.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/swfc.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/sym_dns.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/tra_write_matrix.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/trntnsc.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/twochem_postproc_dfpt.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/write_matrix.f90.o
+[ 83%] Linking Fortran executable ../bin/phcg.x
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/psyme2.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/pcgreen.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/d2mxc.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/dvscf_interpolate.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/elph_scdft_mod.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/write_hub.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/add_dkmds.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/add_zstar_ue.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/add_zstar_ue_us.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/addnlcc_zstar_eu_us.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/dynmat_nlcc.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/allocate_part.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/addusddens_cond.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/allocate_pert.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/addusddens.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/addusdynmat.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/allocate_phq.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/check_if_partial_dyn.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/compute_alphasum.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/compute_alphasum_cond.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/compute_becsum_ph.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/compute_drhous.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/compute_dvloc.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/compute_nldyn.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/deallocate_part.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/deallocate_phq.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/d2ionq.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/dnsq_bare.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/dnsq_scf.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/dnsq_orth_set_irr.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/drho.f90.o
+[ 83%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/drhodvloc.f90.o
+[ 85%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/drhodv.f90.o
+[ 85%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/drhodvnl.f90.o
+[ 85%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/drhodvus.f90.o
+[ 85%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/dvanqq.f90.o
+[ 85%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/dvkb3.f90.o
+[ 85%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/dvpsi_e.f90.o
+[ 85%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/dvqpsi_us_only.f90.o
+[ 85%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/dyndia.f90.o
+[ 85%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/dynmat_us.f90.o
+[ 85%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/dynmatcc.f90.o
+[ 85%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/dynmat_hub_scf.f90.o
+[ 85%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/dvqhub_barepsi_us.f90.o
+[ 85%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/dvqhub_barepsi_us2.f90.o
+[ 85%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/find_irrep.f90.o
+[ 85%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/incdrhous_nc.f90.o
+[ 85%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/incdrhous.f90.o
+[ 87%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/io_pattern.f90.o
+[ 87%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/ph_set_upert.f90.o
+[ 87%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/phq_init.f90.o
+[ 87%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/phq_summary.f90.o
+[ 87%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/psidspsi.f90.o
+[ 87%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/punch_plot_e.f90.o
+/orcd/pool/004/sdajani/fecr_qe/qe75/q-e-qe-7.5/PHonon/PH/punch_plot_e.f90:122:65:
+
+   83 |              aux1 (1,1,ipol), 1)
+      |             2                                                    
+......
+  122 |      IF (lsda) CALL daxpy (dfftp%nnr, 1.d0, aux1 (1,2, ipol), 2, raux, 1)
+      |                                                                 1
+Warning: Type mismatch between actual argument at (1) and actual argument at (2) (REAL(8)/COMPLEX(8)).
+[ 89%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/q2qstar_ph.f90.o
+[ 89%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/set_int12_nc.f90.o
+[ 89%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/set_irr.f90.o
+[ 89%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/set_irr_nosym.f90.o
+[ 89%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/set_irr_sym.f90.o
+[ 89%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/solve_e_fpol.f90.o
+[ 91%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/summarize.f90.o
+[ 91%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/sym_dns_wrapper.f90.o
+[ 91%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/transform_int_so.f90.o
+[ 91%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/transform_int_nc.f90.o
+[ 91%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/transform_alphasum_nc.f90.o
+[ 91%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/transform_alphasum_so.f90.o
+[ 91%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/write_epsilon_and_zeu.f90.o
+[ 91%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/write_qplot_data.f90.o
+[ 91%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/write_modes.f90.o
+[ 91%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/zstar_eu_us.f90.o
+[ 91%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/chi_test.f90.o
+[ 91%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/dielec_test.f90.o
+[ 91%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/dvpsi_e2.f90.o
+[ 91%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/hdiag.f90.o
+[ 91%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/syme2.f90.o
+[ 91%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/solve_e_nscf.f90.o
+[ 91%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/write_ramtns.f90.o
+[ 91%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/raman_mat.f90.o
+[ 93%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/dhdrhopsi.f90.o
+[ 93%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/ahc.f90.o
+[ 93%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/set_dvscf.f90.o
+[ 93%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/d2nsq_bare.f90.o
+[ 93%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/ph_restart.f90.o
+[ 93%] Built target qe_phonon_phcg_exe
+[ 93%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/dfile_star.f90.o
+[ 93%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/elph_tetra_mod.f90.o
+[ 93%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/save_ph_input.f90.o
+[ 93%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/yambo.f90.o
+[ 93%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/addcore.f90.o
+[ 93%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/do_q2r.f90.o
+[ 93%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/clean_pw_ph.f90.o
+[ 93%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/dump_drho.f90.o
+[ 93%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/d2ionq_disp.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/check_initial_status.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/dynmatrix.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/dielec.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/dynmat0.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/write_rec.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/phescf.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/phq_recover.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/init_representations.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/polariz.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/stop_ph.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/zstar_eu.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/sym_and_write_zue.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/el_opt.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/raman.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/ep_matrix_element_wannier.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/q_points_wannier.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/read_wfc_rspace_and_fwfft.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/obsolete.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/rotate_dvscf_star.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/phqscf.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/dfpt_kernels.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/solve_e2.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/print_clock_ph.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/openfilq.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/close_phq.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/prepare_q.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/run_nscf.f90.o
+/orcd/pool/004/sdajani/fecr_qe/qe75/q-e-qe-7.5/PHonon/PH/dfpt_kernels.f90:375:61:
+
+  375 |                   convt, dos_ef, ldos, ldoss, drhop, dbecsum)
+      |                                                             1
+Warning: Missing actual argument for argument '_formal_42' at (1)
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/solve_linter.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/solve_e.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/elphon.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/do_phonon.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/bcast_ph_input.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/phq_readin.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/q_points.f90.o
+[ 95%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/phq_setup.f90.o
+/orcd/pool/004/sdajani/fecr_qe/qe75/q-e-qe-7.5/PHonon/PH/elphon.f90:182:30:
+
+  182 |         CALL cdiagh (3 * nat, dyn, 3 * nat, w2, dyn)
+      |                              1
+......
+  303 |   CALL cdiagh (3 * nat, dynr, 3 * nat, w2, dyn)
+      |                        2      
+Warning: Type mismatch between actual argument at (1) and actual argument at (2) (COMPLEX(8)/REAL(8)).
+[ 97%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/dnsq_orth.f90.o
+[ 97%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/dpsi_orth.f90.o
+[ 97%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph.dir/PH/dynmat_hub_bare.f90.o
+[ 97%] Linking Fortran static library ../lib/libqe_phonon_ph.a
+[ 97%] Built target qe_phonon_ph
+[ 97%] Building Fortran object PHonon/CMakeFiles/qe_phonon_fd_exe.dir/FD/fd.f90.o
+[ 97%] Building Fortran object PHonon/CMakeFiles/qe_phonon_fdifc_exe.dir/FD/fd_ifc.f90.o
+[ 97%] Building Fortran object PHonon/CMakeFiles/qe_phonon_fdef_exe.dir/FD/fd_ef.f90.o
+[ 97%] Building Fortran object PHonon/CMakeFiles/qe_phonon_fqha_exe.dir/PH/fqha.f90.o
+[ 97%] Building Fortran object PHonon/CMakeFiles/qe_phonon_ph_exe.dir/PH/phonon.f90.o
+[ 97%] Building Fortran object PHonon/CMakeFiles/qe_phonon_alpha2f_exe.dir/PH/alpha2f.f90.o
+[ 97%] Building Fortran object PHonon/CMakeFiles/qe_phonon_q2qstar_exe.dir/PH/q2qstar.f90.o
+[ 97%] Building Fortran object PHonon/CMakeFiles/qe_phonon_lambda_exe.dir/PH/lambda.f90.o
+[ 97%] Building Fortran object PHonon/CMakeFiles/qe_phonon_dynmat_exe.dir/PH/dynmat.f90.o
+[ 97%] Building Fortran object PHonon/CMakeFiles/qe_phonon_q2r_exe.dir/PH/q2r.f90.o
+[ 97%] Building Fortran object PHonon/CMakeFiles/qe_phonon_epa_exe.dir/PH/epa.f90.o
+[ 97%] Building Fortran object PHonon/CMakeFiles/qe_phonon_postahc_exe.dir/PH/postahc.f90.o
+[ 97%] Building Fortran object PHonon/CMakeFiles/qe_phonon_matdyn_exe.dir/PH/matdyn.f90.o
+[ 97%] Building Fortran object PHonon/CMakeFiles/qe_phonon_dvscf_q2r_exe.dir/PH/dvscf_q2r.f90.o
+[ 97%] Linking Fortran executable ../bin/ph.x
+/orcd/pool/004/sdajani/fecr_qe/qe75/q-e-qe-7.5/PHonon/PH/postahc.f90:955:20:
+
+  955 |                   + (0.d0, 1.d0) * CONJG(ahc_gkk(pb, ib, imode, ik)) * ahc_p(pb, jb, idir, ik) &
+      |                    1
+Warning: Extension: Unary operator following arithmetic operator (use parentheses) at (1)
+[100%] Linking Fortran executable ../bin/q2r.x
+[100%] Linking Fortran executable ../bin/fqha.x
+[100%] Linking Fortran executable ../bin/lambda.x
+[100%] Linking Fortran executable ../bin/dynmat.x
+[100%] Built target qe_phonon_fqha_exe
+[100%] Linking Fortran executable ../bin/q2qstar.x
+[100%] Built target qe_phonon_q2r_exe
+[100%] Built target qe_phonon_lambda_exe
+[100%] Built target qe_phonon_dynmat_exe
+[100%] Built target qe_phonon_ph_exe
+[100%] Linking Fortran executable ../bin/alpha2f.x
+[100%] Built target qe_phonon_q2qstar_exe
+[100%] Linking Fortran executable ../bin/fd.x
+[100%] Built target qe_phonon_alpha2f_exe
+[100%] Linking Fortran executable ../bin/fd_ef.x
+[100%] Built target qe_phonon_fd_exe
+[100%] Built target qe_phonon_fdef_exe
+[100%] Linking Fortran executable ../bin/epa.x
+[100%] Built target qe_phonon_epa_exe
+[100%] Linking Fortran executable ../bin/fd_ifc.x
+[100%] Linking Fortran executable ../bin/dvscf_q2r.x
+[100%] Built target qe_phonon_fdifc_exe
+[100%] Built target qe_phonon_dvscf_q2r_exe
+[100%] Linking Fortran executable ../bin/postahc.x
+[100%] Built target qe_phonon_postahc_exe
+[100%] Linking Fortran executable ../bin/matdyn.x
+[100%] Built target qe_phonon_matdyn_exe
+[100%] phonon code, Gamma-only and third-order derivatives
+[100%] Built target ph
+bin/matdyn.x
+bin/ph.x
+bin/q2r.x
+PH_OK

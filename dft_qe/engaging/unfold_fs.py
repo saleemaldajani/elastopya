@@ -56,7 +56,7 @@ def qe_input(calc, cell, syms, frac, kblock, nbnd):
             + "".join(f"  starting_magnetization({i + 1}) = {mag[s]}\n" for i, s in enumerate(sp))
             + ("  nosym = .true., noinv = .true.\n" if calc == "bands" else "")
             + "/\n&electrons\n  conv_thr = 1e-8, mixing_beta = 0.2, mixing_mode = 'local-TF', electron_maxstep = 300"
-            + (", diago_full_acc = .true." if calc == "bands" else "") + "\n/\n"
+            + (", diago_full_acc = .true., diagonalization = 'cg'" if calc == "bands" else "") + "\n/\n"
             "ATOMIC_SPECIES\n" + "".join(f"{s} {MASS[s]} {UPF[s]}\n" for s in sp)
             + "CELL_PARAMETERS angstrom\n" + "".join(" ".join(f"{v:.10f}" for v in r) + "\n" for r in cell)
             + "ATOMIC_POSITIONS crystal\n"
@@ -91,7 +91,7 @@ def unfold(d):
     z = np.load(d / "kmap.npz", allow_pickle=True)
     uf = banduppy.Unfolding(supercell=M_SC, print_log="low")
     for spin in ("up", "dw"):
-        kpts, bands = uf.Unfold(PBZ_kpts_list_full=z["k_full"], SBZ_kpts_list=z["K_sc"],
+        bands, kpts = uf.Unfold(PBZ_kpts_list_full=z["k_full"], SBZ_kpts_list=z["K_sc"],
                                 SBZ_PBZ_kpts_map=z["kmap"][0], ab_initio_code="qe",
                                 qe_keywards={"output_file_dir": str(d / "tmp"), "save_file_prefix": "uf",
                                              "unfold_spin_channel": spin},
@@ -100,14 +100,23 @@ def unfold(d):
         print(spin, np.asarray(bands).shape)
 
 
+def fermi_energy(d):
+    """E_F (eV) of the SCF run in <d> (from scf.out)."""
+    import re
+    t = (Path(d) / "scf.out").read_text()
+    m = re.findall(r"the Fermi energy is\s+([-\d.]+) ev", t)
+    return float(m[-1])
+
+
 def spectral(d, spin, eta=0.08):
     """A(k, E_F) on the (p, q) grid from the unfolded weights: sum_n w_n (eta/pi)/((E_n - E_F)^2 + eta^2).
     BandUPpy returns energies relative to E_F (it reads the Fermi energy from the QE output)."""
     z = np.load(Path(d) / "kmap.npz", allow_pickle=True)
-    u = np.load(Path(d) / f"unfolded_{spin}.npz")["bands"]          # columns: k index, E - E_F (eV), weight
+    u = np.load(Path(d) / f"unfolded_{spin}.npz")["bands"]   # BandUPpy: k index, k on path, energy (eV), weight
     n = int(z["n"])
     A = np.zeros(n * n)
-    ik, e, w = u[:, 0].astype(int), u[:, 1], u[:, 2]
+    ik, e, w = u[:, 0].astype(int), u[:, 2], u[:, 3]
+    e = e - fermi_energy(d) if np.median(e) > 5 else e      # absolute energies -> relative to E_F
     np.add.at(A, ik, w * (eta / np.pi) / (e ** 2 + eta ** 2))
     return z["pq"], A.reshape(n, n), float(z["x_cr"])
 
