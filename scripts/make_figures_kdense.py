@@ -126,7 +126,8 @@ def audit(fig):
         if leg is not None:
             cands.append(("<legend>", leg.get_window_extent(r)))
         for name, bb in cands:
-            bb = bb.padded(-0.5)
+            # legends need a visible gap (2 pt) to the data; free text only must not cover it
+            bb = bb.padded(2 * fig.dpi / 72) if name == "<legend>" else bb.padded(-0.5)
             n = int(np.sum((pts[:, 0] > bb.x0) & (pts[:, 0] < bb.x1) & (pts[:, 1] > bb.y0) & (pts[:, 1] < bb.y1)))
             if n:
                 found.append(dict(kind="text_over_data", a=name, points=n,
