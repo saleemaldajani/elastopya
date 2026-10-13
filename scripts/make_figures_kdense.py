@@ -53,6 +53,7 @@ mf.FIG = OUT
 AUDIT = {}
 STRIPS = {}   # stem -> (title, panels); filled in main()
 TRENDS = {}   # stem -> list of trend lanes for the _strip_trend versions
+CUBES = {}    # stem -> (title, panels) drawn as 3D cubes, for the _strip_cube versions
 
 
 def style(ax, label):
@@ -159,13 +160,19 @@ def save(fig, stem):
     normalize_text(fig)
     fig.tight_layout(w_pad=1.4, pad=0.3)
     _export(fig, OUT / stem, stem)
+    variants = []
     if stem in STRIPS:
-        undo = add_strip(fig, *STRIPS[stem])
-        _export(fig, OUT / "with_strips" / f"{stem}_strip", stem + "_strip")
+        variants.append(("_strip", STRIPS[stem], ()))
         if TRENDS.get(stem):   # same strip with trend lanes under the blocks (separate files)
-            undo()
-            add_strip(fig, *STRIPS[stem], lanes=TRENDS[stem])
-            _export(fig, OUT / "with_strips" / f"{stem}_strip_trend", stem + "_strip_trend")
+            variants.append(("_strip_trend", STRIPS[stem], TRENDS[stem]))
+    if stem in CUBES:          # blocks drawn as 3D views of the whole MD cell (separate files)
+        variants.append(("_strip_cube", CUBES[stem], ()))
+        if TRENDS.get(stem):
+            variants.append(("_strip_cube_trend", CUBES[stem], TRENDS[stem]))
+    for suffix, (title, panels), lanes in variants:
+        undo = add_strip(fig, title, panels, lanes=lanes)
+        _export(fig, OUT / "with_strips" / f"{stem}{suffix}", stem + suffix)
+        undo()
     plt.close(fig)
 
 
@@ -292,6 +299,49 @@ def md_grid(path):
     return g
 
 
+def md_grid3d(path):
+    """Cr occupancy of the bcc corner sublattice of an MD cell, as an n x n x n array [ix, iy, iz]."""
+    t, p, box = fws.read_data(path)
+    L = box[:, 1] - box[:, 0]
+    n = round(L[0] / 2.866); a = L[0] / n
+    rel = (p - box[:, 0]) / a
+    on = np.all(np.abs(rel - np.round(rel)) < 0.1, axis=1)
+    ijk = np.round(rel[on]).astype(int) % n
+    g = np.zeros((n, n, n), int)
+    g[ijk[:, 0], ijk[:, 1], ijk[:, 2]] = (t[on] == 2).astype(int)
+    return g
+
+
+_C30, _S30 = np.cos(np.pi / 6), 0.5
+FACE_SHADE = {"top": 1.0, "right": 0.82, "left": 0.66}
+
+
+def _cube_ax(ax, g):
+    """Isometric view of the cell (u = (x - y) cos30, v = (x + y) sin30 + z): the visible faces are the
+    top (z = max), left (x = 0) and right (y = 0), meeting at the front corner (0, 0, 1)."""
+    from matplotlib.colors import to_rgb
+    from matplotlib.transforms import Affine2D
+    fe, cr = np.array(to_rgb(FE)), np.array(to_rgb(CR))
+    rgb = lambda face, shade: (np.where(face[..., None] == 1, cr, fe) * shade).clip(0, 1)
+    n = g.shape[0]
+    faces = {   # (image with rows = second coordinate, affine map of the unit square onto the face)
+        "top": (g[:, :, n - 1].T, [[_C30, -_C30, 0], [_S30, _S30, 1], [0, 0, 1]]),   # (x, y) at z = 1
+        "left": (g[0, :, :].T, [[-_C30, 0, 0], [_S30, 1, 0], [0, 0, 1]]),            # (y, z) at x = 0
+        "right": (g[:, 0, :].T, [[_C30, 0, 0], [_S30, 1, 0], [0, 0, 1]]),            # (x, z) at y = 0
+    }
+    for name, (img, m) in faces.items():
+        ax.imshow(rgb(img, FACE_SHADE[name]), extent=(0, 1, 0, 1), origin="lower", interpolation="nearest",
+                  transform=Affine2D(np.array(m, float)) + ax.transData)
+    P = lambda x, y, z: ((x - y) * _C30, (x + y) * _S30 + z)
+    hexagon = [P(0, 0, 0), P(1, 0, 0), P(1, 0, 1), P(1, 1, 1), P(0, 1, 1), P(0, 1, 0), P(0, 0, 0)]
+    ax.plot(*zip(*hexagon), color="0.15", lw=0.5)
+    for q in (P(1, 0, 1), P(0, 1, 1), P(0, 0, 0)):
+        ax.plot(*zip(P(0, 0, 1), q), color="0.15", lw=0.5)
+    ax.set_xlim(-_C30 - 0.02, _C30 + 0.02); ax.set_ylim(-0.02, 2.02)
+    ax.set_aspect("equal"); ax.axis("off")
+    ax._strip = True
+
+
 def strips():
     ser = series()
     snap = lambda f: (lambda ax: _grid_ax(ax, md_grid(f)))
@@ -322,6 +372,25 @@ def strips():
             STRIPS[stem] = (r"Fe$_{64}$Cr$_{36}$ decomposing (MD, one (001) plane): Fe-rich $\alpha$ and Cr-rich "
                             r"$\alpha'$ domains form as $\phi$ goes 0.5 $\to$ 1", p36)
 
+
+    # cube versions of the three manuscript strips (same structures, whole cell instead of one plane)
+    cube = lambda f: (lambda ax: _cube_ax(ax, md_grid3d(f)))
+    cubify = lambda title: (title.replace("one (001) plane of a 25$^3$ bcc cell", "25$^3$ bcc cells, outer faces")
+                                 .replace("one (001) plane", "25$^3$ cells, outer faces"))
+    CUBES["fig1_free_energy"] = (cubify(STRIPS["fig1_free_energy"][0]),
+                                 [(f"{round(100 * x)}% Cr", cube(ser[x][-1])) for x in xs])
+    if pairs:
+        key = "fig2_elastic_mapping_orientation_violin_bulk_mddecomp"
+        cp = []
+        for x in (0.2, 0.36, 0.5):
+            if x in ser:
+                cp += [(f"{round(100 * x)}% Cr, random", cube(ser[x][0])),
+                       (rf"{round(100 * x)}% Cr, $\phi$ = 1", cube(ser[x][-1]))]
+        CUBES[key] = (cubify(STRIPS[key][0]), cp)
+    if 0.36 in ser:
+        for stem in ("fig3_fsaw_mddecomp_6p4um",):
+            CUBES[stem] = (cubify(STRIPS[stem][0]),
+                           [(rf"$\phi$ = {float(f.stem[3:]):.1f}", cube(f)) for f in ser[0.36]])
 
 def trends():
     """Values shown in the trend lanes of the _strip_trend versions (same data as the figures)."""
