@@ -3,6 +3,8 @@
 
   fermi_slices.py inputs <case> <dir>     write scf.in and bands.in for one case
   fermi_slices.py plot <outfile> <dir>... plot the k_z = 0 cross-sections from the runs' XML files
+  fermi_slices.py korzhavyi <outfile> <dir>...  same data as a spectral function in the layout of
+                                          Korzhavyi et al., PRB 79, 054202 (2009), Fig. 6
 
 Cases
   Fe_fm   bcc Fe, 1-atom cell, ferromagnetic (a = 2.827 A, the converged QE lattice parameter)
@@ -87,7 +89,7 @@ def plot(outfile, dirs):
     axs = np.atleast_1d(axs)
     for ax, d in zip(axs, dirs):
         d = Path(d); case = d.name
-        k, ev, ef = read_xml(d / "tmp" / "fs.save" / "data-file-schema.xml")
+        k, ev, ef = read_xml(d / "fs_data.xml" if (d / "fs_data.xml").exists() else d / "tmp" / "fs.save" / "data-file-schema.xml")
         n = int(round(np.sqrt(len(k))))
         kx, ky = k[:, 0].reshape(n, n), k[:, 1].reshape(n, n)
         for s in range(ev.shape[0]):
@@ -111,8 +113,61 @@ def plot(outfile, dirs):
     print("wrote", outfile)
 
 
+def spectral_map(k, ev, ef, eta=0.08, n=241):
+    """Bloch spectral function at E_F, A(k) = sum_n (eta/pi) / ((E_n - E_F)^2 + eta^2) (eV), on the bcc
+    (001) zone section drawn as Korzhavyi et al., PRB 79, 054202 (2009), Fig. 6: square with H at the
+    corners, N at the edge midpoints, Gamma in the centre. Square coordinates (p, q) in [-1, 1] map to
+    k = p (1/2, -1/2, 0) + q (1/2, 1/2, 0) in units of 2 pi / a."""
+    from scipy.interpolate import RegularGridInterpolator
+    m = int(round(np.sqrt(len(k))))
+    g = k[:, 0].reshape(m, m)[:, 0]
+    pq = np.linspace(-1, 1, n)
+    P, Q = np.meshgrid(pq, pq, indexing="xy")
+    KX, KY = (P + Q) / 2, (Q - P) / 2
+    out = []
+    for s in range(ev.shape[0]):
+        A = np.zeros_like(P)
+        for b in range(ev.shape[2]):
+            e = ev[s, :, b].reshape(m, m) - ef
+            if e.min() > 3 or e.max() < -3:
+                continue
+            f = RegularGridInterpolator((g, g), e)
+            eb = f(np.stack([KX.ravel(), KY.ravel()], -1)).reshape(P.shape)
+            A += (eta / np.pi) / (eb ** 2 + eta ** 2)
+        out.append(A)
+    return pq, out
+
+
+def plot_korzhavyi(outfile, dirs):
+    """Spin-up (top) and spin-down (bottom) Fermi-surface sections, one column per run directory."""
+    import matplotlib.pyplot as plt
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts" / "kdense_scripta" / "scripts"))
+    from style_presets import apply_publication_style
+    apply_publication_style("scripta")
+    labels = {"Fe_fm": "Fe (this work, QE)"}
+    fig, axs = plt.subplots(2, len(dirs), figsize=(2.2 * len(dirs), 4.4), squeeze=False)
+    for j, d in enumerate(dirs):
+        d = Path(d)
+        k, ev, ef = read_xml(d / "fs_data.xml" if (d / "fs_data.xml").exists() else d / "tmp" / "fs.save" / "data-file-schema.xml")
+        pq, maps = spectral_map(k, ev, ef)
+        for i, (A, spin) in enumerate(zip(maps, ("spin up", "spin down"))):
+            ax = axs[i, j]
+            ax.imshow(A, extent=(-1, 1, -1, 1), origin="lower", cmap="Greys", vmin=0, vmax=np.percentile(A, 99.5))
+            ax.set_xticks([]); ax.set_yticks([]); ax.minorticks_off()
+            for (x, y, t) in ((-1, -1, "H"), (1, -1, "H"), (-1, 1, "H"), (1, 1, "H"),
+                              (0, -1, "N"), (0, 1, "N"), (-1, 0, "N"), (1, 0, "N")):
+                ax.text(x * 1.08, y * 1.08, t, ha="center", va="center", fontsize=7, clip_on=False)
+            ax.text(0.03, 0.03, "Γ", fontsize=7)
+            ax.set_title(f"{labels.get(d.name, d.name)}, {spin}", fontsize=7, pad=14)
+    fig.tight_layout(h_pad=1.5)
+    fig.savefig(outfile, dpi=600); fig.savefig(Path(outfile).with_suffix(".pdf"))
+    print("wrote", outfile)
+
+
 if __name__ == "__main__":
     if sys.argv[1] == "inputs":
         write_inputs(sys.argv[2], sys.argv[3])
+    elif sys.argv[1] == "korzhavyi":
+        plot_korzhavyi(sys.argv[2], sys.argv[3:])
     elif sys.argv[1] == "plot":
         plot(sys.argv[2], sys.argv[3:])

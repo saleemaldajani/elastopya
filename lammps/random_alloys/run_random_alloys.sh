@@ -8,6 +8,7 @@
 # structure. stiffness.in has one added line that prints the relaxed box.
 #
 # Usage: run_random_alloys.sh <lmp_mpi> <nproc> <x_cr> [seed ...]
+# On a cluster, set MPIRUN to the launcher (default: mpirun next to the LAMMPS binary).
 set -euo pipefail
 LMP=$1; NP=$2; X=$3; shift 3
 HERE=$(cd "$(dirname "$0")" && pwd)
@@ -27,7 +28,7 @@ mass 1 55.85 #Fe
 mass 2 51.996 #Cr
 EOF
   } > "$D/init.mod"
-  (cd "$D" && TMPDIR=/tmp "$(dirname "$LMP")/mpirun" -np "$NP" "$LMP" -in stiffness.in -log log.lammps > stdout.txt 2>&1)
+  (cd "$D" && TMPDIR=/tmp "${MPIRUN:-$(dirname "$LMP")/mpirun}" -np "$NP" "$LMP" -in stiffness.in -log log.lammps > stdout.txt 2>&1)
   # pure elements: the seed has no effect, one run is enough
   if [ "$X" = "0" ] || [ "$X" = "1" ] || [ "$X" = "0.0" ] || [ "$X" = "1.0" ]; then break; fi
 done
