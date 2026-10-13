@@ -187,7 +187,29 @@ def save(fig, stem):
     plt.close(fig)
 
 
-def fig1():
+def qe_mixing(T_K=298.15):
+    """QE demixing free energy -dG_mix = -dH_mix + T S_conf (eV/atom; Eq. demix convention, as the
+    Levesque series) of the relaxed 40-atom SQS. References: FM bcc Fe and AFM Cr, 2-atom cells with the
+    8x8x10 mesh (same k-point density as the SQS 4x4x2). Only runs with result.json (fully finished)."""
+    import re
+    runs = ROOT / "dft_qe" / "engaging" / "runs"
+    e_last = lambda d: float(re.findall(r"^!\s+total energy\s+=\s+([-\d.]+)", (d / "relax.out").read_text(), re.M)[-1])
+    ry = 13.605693123
+    fe, cr = e_last(runs / "Fe_fm_k8x8x10_e60") / 2, e_last(runs / "Cr_afm_k8x8x10_e60") / 2
+    out = {}
+    for d in sorted(runs.glob("sqs40_x*_k442_e60")) + sorted(runs.glob("sqs40_x0.80_k442_e60_crafm")):
+        if (d / "result.json").exists():
+            x = float(re.match(r"sqs40_x([\d.]+)_", d.name).group(1))
+            dh = (e_last(d) / 40 - (1 - x) * fe - x * cr) * ry
+            s = -KB * (x * np.log(x) + (1 - x) * np.log(1 - x))
+            out[x] = (dh, -dh + T_K * s)
+    if not out:
+        return None
+    x = np.array(sorted(out))
+    return dict(x=x, dh=np.array([out[v][0] for v in x]), demix=np.array([out[v][1] for v in x]))
+
+
+def fig1(qe=None):
     d = read_csv("sheet_demixing.csv")
     p = read_csv("sheet_levesque_parameters.csv")
     fig, (a, b) = plt.subplots(1, 2, figsize=(7.2, 3.0))
@@ -197,6 +219,9 @@ def fig1():
     a.plot(d["x_cr_a"], d["experimental"], "o", color=YELLOW, label="Experimental", **m)
     a.plot(d["x_cr_b"], d["pwscf_paw"], "o", color=GREEN, label="PWSCF-PAW", **m)
     a.plot(d["x_cr_b"], d["siesta_nc"], "o", color=ORANGE, label="SIESTA-NC", **m)
+    if qe is not None:
+        a.plot(qe["x"], qe["demix"], "o", mfc="white", mec=QE_COL, mew=1.1, ms=4.8, ls="none",
+               label="GGA (QE, this work)", zorder=5)
     a.axhline(0, color="0.5", lw=0.7)
     a.set(xlabel=r"$x_{\rm Cr}$", ylabel="Demixing free energy (eV/atom)", xlim=(0, 1), ylim=(-0.25, 0.05))
     a.legend(frameon=False, fontsize=6.5, loc="lower left", handletextpad=0.2)
@@ -226,7 +251,7 @@ def fig1():
     b.legend(frameon=False, fontsize=6.0, loc="lower right")
     b.text(0.03, 4.3, "unstable: curvature > 0 (shaded)", ha="left", va="top", fontsize=6.3)
     style(b, "(b)")
-    save(fig, "fig1_free_energy")
+    save(fig, "fig1_free_energy" + ("_qe" if qe is not None else ""))
     return resid, dict(zip(np.round(xsel, 3), np.round(pts, 3)))
 
 
@@ -763,6 +788,10 @@ def main():
     fig3(lit, dft, mdd, mdr, lam=5.5, stem="fig3_fsaw_alpha", alpha_marks=True)          # (a) MD alpha/alpha' ends
     fig3(lit, dft, mdd, mdr, lam=6.4, stem="fig3_fsaw_mddecomp_6p4um", md_decomp_a=True)  # manuscript Fig. 3 (6.4 um)
     fig3(lit, dft, mdd, mdr, lam=6.4, stem="fig3_fsaw_mddecomp_relative_6p4um", md_decomp_a=True, rel_b=True)
+    qmix = qe_mixing()
+    if qmix is not None:
+        fig1(qe=qmix)
+        print("QE x, dH_mix, demix (eV/atom):", qmix["x"], np.round(qmix["dh"], 4), np.round(qmix["demix"], 4))
     qe = qe_dft()
     if qe is not None:   # review versions with the QE series next to VASP (_qe)
         fig2_orientation_bulk(lit, dft, mdd, mdr, kind="violin", with_decomp=True, qe=qe)
