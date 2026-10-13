@@ -1,0 +1,6 @@
+&input
+  asr = 'crystal', flfrc = 'fc', dos = .true., fldos = 'dos.dat',
+  nk1 = 40, nk2 = 40, nk3 = 40, deltaE = 1.0,
+  amass(1) = 51.996
+  amass(2) = 51.996
+/

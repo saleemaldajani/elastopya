@@ -233,9 +233,15 @@ def fig1(qe=None, entropy_fix=False):
     m = dict(ms=3.6, ls="none")
     if entropy_fix:
         fx = demix_from_enthalpy()
-        a.plot(*fx["muffin_tin"], "o", color=BLUE, label="Muffin-tin, EMTO-CPA, FM (Korzhavyi et al.)", **m)
+        a.plot(*fx["muffin_tin"], "o", color=BLUE, label="Muffin-tin, EMTO-CPA, FM (Korzhavyi)", **m)
         a.plot(*fx["gga"], "o", color=RED, label="GGA (VASP, this work)" if qe is not None else "GGA (this work)", **m)
-        a.plot(*fx["experimental"], "o", color=YELLOW, label="Experimental, paramagnetic (Dench)", **m)
+        a.plot(*fx["experimental"], "o", color=YELLOW, label="Experiment, paramagnetic (Dench)", **m)
+        # CALPHAD bcc (Andersson & Sundman, CALPHAD 11 (1987) 83): G_ex = x(1-x)(20500 - 9.68 T) J/mol,
+        # non-magnetic part only; demixing free energy -G_ex + T S_conf at 298.15 K
+        xx = np.linspace(0.002, 0.998, 400)
+        g_ex = xx * (1 - xx) * (20500 - 9.68 * T) / 96485.33
+        a.plot(xx, -g_ex - KB * T * (xx * np.log(xx) + (1 - xx) * np.log(1 - xx)), "-", color="0.45", lw=0.9,
+               label="CALPHAD, non-magnetic (Andersson)", zorder=1)
     else:
         a.plot(d["x_cr_a"], d["muffin_tin"], "o", color=BLUE, label="Muffin-tin approximation", **m)
         a.plot(d["x_cr_a"], d["gga"], "o", color=RED, label="GGA (this work)", **m)

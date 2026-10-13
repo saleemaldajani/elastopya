@@ -4,6 +4,7 @@
   phonons.py inputs <case> <dir> [nq]     scf.in (conv 1e-12), ph.in (nq^3 grid), q2r.in, matdyn.in (path)
   phonons.py check <dir>... [--allow-imaginary]   expected-stable systems must have no imaginary mode
   phonons.py plot <outfile> <dir>... [--allow-imaginary]   (checks first) frequencies (THz) along Gamma-H-N-Gamma-P-H (Cr AFM: Gamma-X-M-Gamma-R-X)
+  phonons.py dos-input <dir> [nq]         matdyn_dos.in: phonon DOS on an nq^3 mesh (default 40) -> dos.dat
 Same pseudopotentials, cutoff and smearing as the elastic-constant runs (fermi_slices.CASES).
 """
 import sys
@@ -82,8 +83,18 @@ def plot(outfile, dirs, allow_imaginary=False):
     print("wrote", outfile)
 
 
+def dos_input(d, nq=40):
+    """matdyn input for the phonon DOS from the same force constants (fc) as the dispersion."""
+    d = Path(d)
+    masses = "".join(l + "\n" for l in (d / "matdyn.in").read_text().splitlines() if "amass" in l)
+    (d / "matdyn_dos.in").write_text(f"&input\n  asr = 'crystal', flfrc = 'fc', dos = .true., fldos = 'dos.dat',\n"
+                                     f"  nk1 = {nq}, nk2 = {nq}, nk3 = {nq}, deltaE = 1.0,\n{masses}/\n")
+
+
 if __name__ == "__main__":
-    if sys.argv[1] == "inputs":
+    if sys.argv[1] == "dos-input":
+        dos_input(sys.argv[2], int(sys.argv[3]) if len(sys.argv) > 3 else 40)
+    elif sys.argv[1] == "inputs":
         inputs(sys.argv[2], sys.argv[3], int(sys.argv[4]) if len(sys.argv) > 4 else 6)
     elif sys.argv[1] in ("check", "plot"):
         allow = "--allow-imaginary" in sys.argv
