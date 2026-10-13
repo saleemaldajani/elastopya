@@ -454,9 +454,9 @@ def psi_split(ax, D):
     ax.set_xticks(x); ax.set_xticklabels(cats, fontsize=5.6)
     ax.set_ylabel("stiffness in $\\Psi$ (GPa)", fontsize=6)
     ax.legend(fontsize=5, frameon=False, loc="upper left")
-    ax.set_ylim(0, 380)
-    ax.text(0.98, 0.97, "$\\Psi=\\frac{1}{2}K(\\mathrm{tr}\\,\\varepsilon)^2+G\\,\\varepsilon':\\varepsilon'$", transform=ax.transAxes,
-            ha="right", va="top", fontsize=6.0)
+    ax.set_ylim(0, 450)
+    ax.text(0.5, 0.80, "$\\Psi=\\frac{1}{2}K(\\mathrm{tr}\\,\\varepsilon)^2+G\\,\\varepsilon':\\varepsilon'$", transform=ax.transAxes,
+            ha="center", va="center", fontsize=6.0)
 
 
 def coherency(ax, T):
@@ -467,11 +467,11 @@ def coherency(ax, T):
             a = T[k]
             y = young_planar(a[:, 1], a[:, 2]) * 1e9 * 2 * ETA_MISFIT ** 2 * OMEGA_A3 * 1e-30 * ev * 1e3
             ax.plot(a[:, 0], y, mk + ("-" if k != "qe" else ""), color=col, mfc="white" if k == "qe" else col, ms=3, lw=0.7, label=lab)
-    ax.set(xlim=(0, 1), ylim=(0, 3.0), xlabel=r"$x_{\rm Cr}$", ylabel=r"$2\eta^2Y\Omega$ (meV/atom)")
+    ax.set(xlim=(0, 1), ylim=(0, 3.8), xlabel=r"$x_{\rm Cr}$", ylabel=r"$2\eta^2Y\Omega$ (meV/atom)")
     ax.legend(fontsize=5, frameon=False, loc="lower right")
     ax.text(0.03, 0.97, "chemical curvature $|\\partial^2\\Delta G/\\partial x^2|\\approx$ 1400 meV/atom\n"
-            f"$\\Rightarrow$ coherency shifts the spinodal by ~0.1% ($\\eta$ = {100 * ETA_MISFIT:.2f}%)",
-            transform=ax.transAxes, va="top", fontsize=5.0, color="0.15")
+            f"$\\Rightarrow$ coherency shifts the spinodal\n    by ~0.1% ($\\eta$ = {100 * ETA_MISFIT:.2f}%)",
+            transform=ax.transAxes, va="top", fontsize=4.6, color="0.15")
 
 
 def psi_hub(ax, D):
@@ -498,7 +498,64 @@ def psi_hub(ax, D):
                 bbox=dict(boxstyle="round,pad=0.25", fc="white", ec="0.75", lw=0.5), zorder=2)
 
 
-def main_v4(panel_h=None, name="fig5_embrittlement_v4"):
+def psi_flow(ax, D):
+    """(n) as a mechanism: decomposition -> which elastic channel of Psi changes (shear G vs volume K) -> what each
+    channel controls, with Fe-36Cr numbers (MD, random -> fully decomposed); the dashed path is the TGS inference."""
+    a = D[0.36]; r, d = a[0], a[-1]
+    dec = mf.md_decomposition()[0.36]
+    df = float(dec["f"][np.argmax(dec["phi"])] / dec["f"][np.argmin(dec["phi"])]) - 1
+    dG = d[2] / r[2] - 1; dK = d[1] / r[1] - 1; dKG = (d[1] / d[2]) / (r[1] / r[2]) - 1
+    dY = young_planar(d[1], d[2]) / young_planar(r[1], r[2]) - 1
+    deF = (1 + dKG) ** 2 - 1
+    SH, VO, BAD, INK = "#0B7A55", "#0072B2", "#C02F00", "0.15"
+    ax.set_xlim(0, 1); ax.set_ylim(0, 1); ax.axis("off")
+
+    def box(x, y, txt, col, w=None, fc="white", bold_first=True, fs=5.0):
+        t = ax.text(x, y, txt, ha="center", va="center", fontsize=fs, color=INK, linespacing=1.25, zorder=3,
+                    bbox=dict(boxstyle="round,pad=0.35", fc=fc, ec=col, lw=0.9))
+        return t
+
+    def arrow(src, dst, col, ls="-", rad=0.0, lab=None, lab_xy=None, lw=0.9):
+        ax.annotate("", xy=(0, 0.5), xycoords=dst, xytext=(1, 0.5), textcoords=src,
+                    arrowprops=dict(arrowstyle="-|>", color=col, lw=lw, ls=ls, mutation_scale=6,
+                                    shrinkA=1, shrinkB=1, connectionstyle=f"arc3,rad={rad}"), zorder=2)
+        if lab:
+            ax.text(*lab_xy, lab, fontsize=4.3, color=col, ha="center", va="center", style="italic")
+
+    # column headers
+    for x, h in ((0.11, "cause"), (0.40, "elastic channel of $\\Psi$"), (0.74, "what it controls")):
+        ax.text(x, 0.995, h, ha="center", va="top", fontsize=5.2, color="0.4", fontweight="bold")
+    # cause, and the (negligible) elastic feedback on it
+    c = box(0.11, 0.62, "spinodal\ndecomposition\nFe$-$36Cr\n$\\to\\alpha+\\alpha'$", "0.35", fc="#F2F2F2")
+    coh = box(0.11, 0.13, f"coherency\n$Y(K,G)$ {100 * dY:+.1f}%\n$\\approx$2 meV/atom\n$\\ll$ chemical", "0.45")
+    # channels, with K/G between them
+    g = box(0.40, 0.82, f"shear: $G\\,\\varepsilon':\\varepsilon'$\n$G$ {100 * dG:+.1f}%\n($\\alpha'$ stiffer in shear)", SH, fc="#E8F5EF")
+    kg = box(0.40, 0.50, f"$K/G$ {100 * dKG:+.1f}%", BAD, fc="#FBEAE5")
+    k = box(0.40, 0.18, f"volume: $\\frac{{1}}{{2}}K(\\mathrm{{tr}}\\,\\varepsilon)^2$\n$K$ {100 * dK:+.1f}%\n(mean $e/a$ unchanged)", VO, fc="#E7F1F9")
+    arrow(c, g, SH, rad=-0.2); arrow(c, k, VO, rad=0.2)
+    for src, col in ((g, SH), (k, VO)):
+        ax.annotate("", xy=(0.5, 1.0 if src is g else 0.0), xycoords=kg, xytext=(0.5, 0.0 if src is g else 1.0),
+                    textcoords=src, arrowprops=dict(arrowstyle="-|>", color=col, lw=0.9, mutation_scale=6, shrinkA=1, shrinkB=1))
+    ax.annotate("", xy=(1.0, 0.5), xycoords=coh, xytext=(0.0, 0.5), textcoords=k,      # Y(K, G); its feedback is tiny
+                arrowprops=dict(arrowstyle="-|>", color="0.45", lw=0.6, ls=(0, (2, 1.5)), mutation_scale=5, shrinkA=1, shrinkB=1))
+    ax.annotate("", xy=(0.5, 0.0), xycoords=c, xytext=(0.5, 1.0), textcoords=coh,
+                arrowprops=dict(arrowstyle="-|>", color="0.55", lw=0.6, ls=(0, (2, 1.5)), mutation_scale=5, shrinkA=1, shrinkB=1))
+    ax.text(0.095, 0.375, "no feedback (~0.1%)", fontsize=4.2, color="0.45", ha="right", va="center", style="italic", rotation=90)
+    # consequences
+    tgs = box(0.74, 0.93, f"TGS: $f\\propto\\sqrt{{G/\\rho}}$  {100 * df:+.1f}%", SH)
+    slip = box(0.74, 0.71, f"slip: $E_\\perp\\propto Gb^2$  {100 * dG:+.1f}%", SH)
+    duc = box(0.74, 0.50, f"ductility: $\\varepsilon_F\\propto(K/G)^2$\n{100 * deF:+.1f}% (embrittlement)", BAD, fc="#FBEAE5")
+    clv = box(0.74, 0.18, f"cleavage: $\\sigma_F\\propto Ka$  {100 * dK:+.1f}%", VO)
+    arrow(g, tgs, SH); arrow(g, slip, SH); arrow(kg, duc, BAD); arrow(k, clv, VO)
+    # the TGS inference: f measures the shear channel; with K fixed, d(K/G)/(K/G) = -2 df/f
+    ax.annotate("", xy=(1.0, 0.5), xycoords=duc, xytext=(1.0, 0.5), textcoords=tgs,
+                arrowprops=dict(arrowstyle="-|>", color=BAD, lw=0.8, ls=(0, (3, 2)), mutation_scale=6,
+                                connectionstyle="arc,angleA=0,angleB=0,armA=7,armB=7,rad=3"), zorder=2)
+    ax.text(0.985, 0.72, "TGS reads it: $\\Delta(K/G)/(K/G)\\approx-2\\,\\Delta f/f$", fontsize=4.3, color=BAD,
+            ha="center", va="center", rotation=-90)
+
+
+def main_v4(panel_h=None, name="fig5_embrittlement_v4", panel_n=None, row4=None):
     """v3 plus a fourth row: strain energy Psi(K, G) and how the chain comes together."""
     sys.path.insert(0, str(HERE / "kdense_scripta" / "scripts"))
     from style_presets import apply_publication_style
@@ -532,9 +589,10 @@ def main_v4(panel_h=None, name="fig5_embrittlement_v4"):
         if t[1] != "k":
             ax.tick_params(labelsize=5.5); ax.xaxis.label.set_size(6); ax.yaxis.label.set_size(6)
     # row 4: strain energy
-    l = fig.add_axes([0.085, 0.04, 0.24, 0.155]); psi_split(l, D)
-    m = fig.add_axes([0.40, 0.04, 0.27, 0.155]); coherency(m, T)
-    n = fig.add_axes([0.70, 0.0, 0.30, 0.215]); psi_hub(n, D)
+    rl, rm, rn = row4 or ([0.085, 0.04, 0.24, 0.155], [0.40, 0.04, 0.27, 0.155], [0.70, 0.0, 0.30, 0.215])
+    l = fig.add_axes(rl); psi_split(l, D)
+    m = fig.add_axes(rm); coherency(m, T)
+    n = fig.add_axes(rn); (panel_n or psi_hub)(n, D)
     for ax, t in ((l, "(l) where $\\Psi$ stores energy (Fe$-$36Cr)"), (m, "(m) coherency strain energy"), (n, "(n) how it comes together")):
         ax.set_title(t, fontsize=7, loc="left")
     for ax in (l, m):
@@ -586,6 +644,12 @@ def panel_h_v5(ax, T, D):
 def main_v5():
     """v4 with a readable bonding map (h): composition trajectories, criteria as lines, labelled decomposition paths."""
     main_v4(panel_h=panel_h_v5, name="fig5_embrittlement_v5")
+
+
+def main_v6():
+    """v5 with a mechanistic (n): decomposition -> shear vs volume channel of Psi -> consequences, TGS inference."""
+    main_v4(panel_h=panel_h_v5, name="fig5_embrittlement_v6", panel_n=psi_flow,
+            row4=([0.085, 0.04, 0.20, 0.155], [0.345, 0.04, 0.20, 0.155], [0.585, 0.0, 0.40, 0.212]))
 
 
 if __name__ == "__main__":
