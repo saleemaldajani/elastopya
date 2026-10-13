@@ -117,7 +117,9 @@ def plot(outfile, dirs):
         ax.set_aspect("equal")
         ax.set_title(titles.get(base(case), case) + (" (exp. a)" if case.endswith("_aexp") else ""), fontsize=8)
     axs[0].plot([], [], color=cols[0], label="majority"); axs[0].plot([], [], "--", color=cols[1], label="minority")
-    axs[0].legend(loc="lower left", fontsize=7)
+    h, l = axs[0].get_legend_handles_labels()
+    # the AFM panel (last) is empty at its centre; the Fe panel has contours everywhere
+    axs[-1].legend(h, l, loc="center" if len(axs) > 1 else "lower left", fontsize=7)
     fig.tight_layout()
     fig.savefig(outfile, dpi=600); fig.savefig(Path(outfile).with_suffix(".pdf"))
     print("wrote", outfile)
@@ -168,7 +170,7 @@ def plot_korzhavyi(outfile, dirs):
                               (0, -1, "N"), (0, 1, "N"), (-1, 0, "N"), (1, 0, "N")):
                 ax.text(x * 1.08, y * 1.08, t, ha="center", va="center", fontsize=7, clip_on=False)
             ax.text(0.03, 0.03, "Γ", fontsize=7)
-            ax.set_title(f"{labels.get(d.name, d.name)}, {spin}", fontsize=7, pad=14)
+            ax.set_title(f"{labels.get(d.name, d.name)}, {spin}", fontsize=7, pad=20)
     fig.tight_layout(h_pad=1.5)
     fig.savefig(outfile, dpi=600); fig.savefig(Path(outfile).with_suffix(".pdf"))
     print("wrote", outfile)

@@ -296,7 +296,7 @@ The spinodal criterion $\partial^2 \Delta G_{\mathrm{mix}}/\partial x_{\mathrm{C
 \begin{figure}[!h]
 \centering
 \includegraphics[width=\linewidth]{figures/kdense_scripta/with_strips/fig1_free_energy_strip_dft.pdf}
-\caption{(a) Demixing free energy $\Delta G_{\mathrm{demix}} = -\Delta G_{\mathrm{mix}}$ (Eq.~\ref{eqn:demix}) versus chromium composition $x_{\mathrm{Cr}}$: muffin-tin approximation, GGA (present VASP calculations), experiment, and the PWSCF--PAW and SIESTA--NC interaction models of Levesque \textit{et al.} \cite{levesque2011simple} at 298.15 K. (b) Curvature of the PWSCF--PAW demixing free energy. Solid line: exact analytic second derivative of the model. Filled circles: three-point second differences of its tabulated values on the non-uniform composition grid. Open circles: two-point second differences of the same values, with a quadratic least-squares fit (dashed). Shading marks positive demixing curvature, i.e., negative mixing curvature, which identifies spinodally unstable compositions. (c) One (001) atomic plane of fully decomposed ($\phi=1$) MD structures ($25^3$ \textit{bcc} cells; Sec.~\ref{sec:md}) at the indicated Cr contents; red, Fe; blue, Cr. Inside the spinodal window the alloy separates into interpenetrating Fe-rich $\alpha$ and Cr-rich $\alpha'$ domains, whereas at the dilute ends the minority element forms only isolated clusters. (d) The DFT cells: \textit{bcc} unit cells of Fe and Cr and 40-atom SQS ($2\times2\times5$ conventional cells), relaxed in Quantum ESPRESSO, with their local magnetic moments (arrows; red, Fe; blue, Cr). The Cr moments, antiparallel to Fe at 20\% Cr, vanish between 35 and 50\% Cr.}
+\caption{(a) Demixing free energy $\Delta G_{\mathrm{demix}} = -\Delta G_{\mathrm{mix}}$ (Eq.~\ref{eqn:demix}) versus chromium composition $x_{\mathrm{Cr}}$: muffin-tin approximation, GGA (present VASP calculations), experiment, and the PWSCF--PAW and SIESTA--NC interaction models of Levesque \textit{et al.} \cite{levesque2011simple} at 298.15 K. (b) Curvature of the PWSCF--PAW demixing free energy. Solid line: exact analytic second derivative of the model. Filled circles: three-point second differences of its tabulated values on the non-uniform composition grid. Open circles: two-point second differences of the same values, with a quadratic least-squares fit (dashed). Shading marks positive demixing curvature, i.e., negative mixing curvature, which identifies spinodally unstable compositions. (c) One (001) atomic plane of fully decomposed ($\phi=1$) MD structures ($25^3$ \textit{bcc} cells; Sec.~\ref{sec:md}) at the indicated Cr contents; red, Fe; blue, Cr. Inside the spinodal window the alloy separates into interpenetrating Fe-rich $\alpha$ and Cr-rich $\alpha'$ domains, whereas at the dilute ends the minority element forms only isolated clusters. (d) The DFT cells behind the first-principles tensors of Figs.~\ref{fig:elastic_elastodynamics} and~\ref{fig:fsaw_combined}: \textit{bcc} unit cells of Fe and Cr and 40-atom SQS ($2\times2\times5$ conventional cells), relaxed in Quantum ESPRESSO, with their local magnetic moments (arrows; red, Fe; blue, Cr). The Cr moments, antiparallel to Fe at 20\% Cr, vanish between 35 and 50\% Cr.}
 \label{fig:free_energy}
 \end{figure}
 
@@ -307,8 +307,8 @@ Figure~\ref{fig:free_energy}b shows that the homogeneous alloy is unstable for $
 % --- FIGURE: elasticity + elastodynamics ---
 \begin{figure}[!h]
 \centering
-\includegraphics[width=\linewidth]{figures/kdense_scripta/with_strips/fig2_elastic_mapping_orientation_violin_bulk_mddecomp_strip_dft.pdf}
-\caption{(a) $C_{11}$ of \textit{bcc} Fe$_{1-x}$Cr$_x$: literature calculations of Razumovskiy \textit{et al.} \cite{razumovskiy2011first} (black circles; reconstructed from digitized $C'$, $C_{44}$, and $B$), present DFT calculations on 40-atom SQS (red diamonds), MD (EAM) random alloys (green squares; mean $\pm$ standard deviation of ten alloys at the DFT compositions and three elsewhere; Sec.~\ref{sec:md}), and fully decomposed MD structures ($\phi=1$, open squares; $25^3$ cells). (b) Orientation-resolved acoustic frequencies at $\lambda=6.4\,\mu$m, plotted at the $C_{11}$ of each tensor in (a). For each tensor, 10{,}000 random grain orientations were computed with the surface Green's-function method of Du and Zhao \cite{du2017facile}, as in Ref.~\cite{al2023detecting}. Lower violins: (pseudo-)SAW frequencies (pseudo-SAW retained when its intensity is at least $2\times10^{-3}$ of the SAW). Upper violins: quasi-longitudinal bulk waves along the same propagation directions. Boxes mark the interquartile range and median. The shaded band is the elastodynamically unallowed range of pristine 304-type CASS \cite{al2023detecting}, from its maximum (pseudo-)SAW frequency (0.609 GHz, dashed) to its bulk-wave frequency (0.833 GHz, dotted). (c) One (001) atomic plane of the MD cells behind the green tensors: random alloy and fully decomposed structure at $x_{\mathrm{Cr}}=0.20$, 0.36, and 0.50 (red, Fe; blue, Cr). (d) The DFT cells: \textit{bcc} unit cells of Fe and Cr and 40-atom SQS ($2\times2\times5$ conventional cells), relaxed in Quantum ESPRESSO, with their local magnetic moments (arrows; red, Fe; blue, Cr).}
+\includegraphics[width=\linewidth]{figures/kdense_scripta/with_strips/fig2_elastic_mapping_orientation_violin_bulk_mddecomp_strip.pdf}
+\caption{(a) $C_{11}$ of \textit{bcc} Fe$_{1-x}$Cr$_x$: literature calculations of Razumovskiy \textit{et al.} \cite{razumovskiy2011first} (black circles; reconstructed from digitized $C'$, $C_{44}$, and $B$), present DFT calculations on 40-atom SQS (red diamonds), MD (EAM) random alloys (green squares; mean $\pm$ standard deviation of ten alloys at the DFT compositions and three elsewhere; Sec.~\ref{sec:md}), and fully decomposed MD structures ($\phi=1$, open squares; $25^3$ cells). (b) Orientation-resolved acoustic frequencies at $\lambda=6.4\,\mu$m, plotted at the $C_{11}$ of each tensor in (a). For each tensor, 10{,}000 random grain orientations were computed with the surface Green's-function method of Du and Zhao \cite{du2017facile}, as in Ref.~\cite{al2023detecting}. Lower violins: (pseudo-)SAW frequencies (pseudo-SAW retained when its intensity is at least $2\times10^{-3}$ of the SAW). Upper violins: quasi-longitudinal bulk waves along the same propagation directions. Boxes mark the interquartile range and median. The shaded band is the elastodynamically unallowed range of pristine 304-type CASS \cite{al2023detecting}, from its maximum (pseudo-)SAW frequency (0.609 GHz, dashed) to its bulk-wave frequency (0.833 GHz, dotted). (c) One (001) atomic plane of the MD cells behind the green tensors: random alloy and fully decomposed structure at $x_{\mathrm{Cr}}=0.20$, 0.36, and 0.50 (red, Fe; blue, Cr).}
 \label{fig:elastic_elastodynamics}
 \end{figure}
 
@@ -323,8 +323,8 @@ While elastic constants vary with chromium concentration even in a homogeneous s
 % --- FIGURE: fSAW vs xCr and vs phi ---
 \begin{figure}[!h]
 \centering
-\includegraphics[width=\linewidth]{figures/kdense_scripta/with_strips/fig3_fsaw_mddecomp_6p4um_strip_dft.pdf}
-\caption{(a) Rayleigh SAW frequency $f_{\mathrm{SAW}}$ versus chromium composition $x_{\mathrm{Cr}}$ ($\lambda=6.4\,\mu$m) for the literature (black), present DFT (red), and MD random-alloy (green) data of Fig.~\ref{fig:elastic_elastodynamics}. At each MD composition, small dots ($\phi=0.6$--0.9) and an open square ($\phi=1$) show the frequency of the decomposing structure, each series anchored to the random-alloy value at that composition, so the ladder height is the stiffening on decomposition (as in b). Below the data, the star marks Fe--36Cr \cite{rae2026tgs} and the arrows indicate schematically the partitioning toward Fe-rich $\alpha$ and Cr-rich $\alpha'$ during spinodal decomposition; dotted lines rise from each composition toward the data. Arrow endpoints are illustrative, not measured phase compositions. (b) $f_{\mathrm{SAW}}$ versus spinodal conversion fraction $\phi$ from the MD (EAM) decomposition simulations (Sec.~\ref{sec:md}): equiatomic Fe$_{50}$Cr$_{50}$ from Ref.~\cite{al2023detecting} (black, $50^3$ cell, fixed density 7535 kg m$^{-3}$), and Fe$_{95}$Cr$_{5}$, Fe$_{80}$Cr$_{20}$, Fe$_{64}$Cr$_{36}$, and Fe$_{5}$Cr$_{95}$ from the present $25^3$-cell calculations (squares); open circles repeat Fe$_{50}$Cr$_{50}$ in the $25^3$ cell as a check. $\phi=0.5$ is the random alloy and $\phi=1$ the fully separated structure. (c) One (001) atomic plane of the $25^3$ MD cell of Fe$_{64}$Cr$_{36}$ from $\phi=0.5$ to 1.0 (red, Fe; blue, Cr): Fe-rich $\alpha$ and Cr-rich $\alpha'$ domains form and coarsen as $\phi$ increases; these are the structures whose frequencies are plotted in (b). (d) The DFT cells: \textit{bcc} unit cells of Fe and Cr and 40-atom SQS ($2\times2\times5$ conventional cells), relaxed in Quantum ESPRESSO, with their local magnetic moments (arrows; red, Fe; blue, Cr).}
+\includegraphics[width=\linewidth]{figures/kdense_scripta/with_strips/fig3_fsaw_mddecomp_6p4um_strip.pdf}
+\caption{(a) Rayleigh SAW frequency $f_{\mathrm{SAW}}$ versus chromium composition $x_{\mathrm{Cr}}$ ($\lambda=6.4\,\mu$m) for the literature (black), present DFT (red), and MD random-alloy (green) data of Fig.~\ref{fig:elastic_elastodynamics}. At each MD composition, small dots ($\phi=0.6$--0.9) and an open square ($\phi=1$) show the frequency of the decomposing structure, each series anchored to the random-alloy value at that composition, so the ladder height is the stiffening on decomposition (as in b). Below the data, the star marks Fe--36Cr \cite{rae2026tgs} and the arrows indicate schematically the partitioning toward Fe-rich $\alpha$ and Cr-rich $\alpha'$ during spinodal decomposition; dotted lines rise from each composition toward the data. Arrow endpoints are illustrative, not measured phase compositions. (b) $f_{\mathrm{SAW}}$ versus spinodal conversion fraction $\phi$ from the MD (EAM) decomposition simulations (Sec.~\ref{sec:md}): equiatomic Fe$_{50}$Cr$_{50}$ from Ref.~\cite{al2023detecting} (black, $50^3$ cell, fixed density 7535 kg m$^{-3}$), and Fe$_{95}$Cr$_{5}$, Fe$_{80}$Cr$_{20}$, Fe$_{64}$Cr$_{36}$, and Fe$_{5}$Cr$_{95}$ from the present $25^3$-cell calculations (squares); open circles repeat Fe$_{50}$Cr$_{50}$ in the $25^3$ cell as a check. $\phi=0.5$ is the random alloy and $\phi=1$ the fully separated structure. (c) One (001) atomic plane of the $25^3$ MD cell of Fe$_{64}$Cr$_{36}$ from $\phi=0.5$ to 1.0 (red, Fe; blue, Cr): Fe-rich $\alpha$ and Cr-rich $\alpha'$ domains form and coarsen as $\phi$ increases; these are the structures whose frequencies are plotted in (b).}
 \label{fig:fsaw_combined}
 \end{figure}
 
@@ -376,7 +376,62 @@ Thermal properties in Fig.~\ref{fig5} are estimated with the Debye model, and a 
 \end{eqnarray}
 where $\kappa$ is thermal conductivity, $\Theta_D$ is the Debye temperature, $C_v$ is the heat capacity at constant volume, $v_m$ is the average acoustic velocity, $\Lambda$ is the phonon mean free path, $m$ is the number of atoms, $M$ is the mass, $\rho$ is the density, and $E$ is Young's modulus. The constants $A$ and $B_D$ arise from approximating $v_m$ as proportional to $\sqrt{E/\rho}$; we use $A=0.87$ following Clarke \cite{clarke2003materialsselection}. A temperature-dependent alternative is the Cahill--Watson--Pohl model, $\kappa_{min} (T) = (\frac{\pi}{6})^{\frac{1}{3}} k_B n^{\frac{2}{3}} \sum_{i} v_i (\frac{T}{\Theta_i})^2 \int_{0}^{\Theta_i/T} \frac{x^3 e^x}{(e^x -1)^2}\,dx$ with $\Theta_i = v_i (\hbar/k_B) (6\pi^2n)^{\frac{1}{3}}$ \cite{cahill1992lower}.
 
-\subsection*{S2. Additional figures}
+\subsection*{S2. First-principles calculations with Quantum ESPRESSO}
+
+\paragraph{Methods.} An independent set of first-principles calculations was performed with Quantum ESPRESSO 7.5 \cite{giannozzi2009quantum,giannozzi2017advanced} on the MIT Engaging cluster, using PBE \cite{pbe1996} and PAW potentials from pslibrary (Fe 3s3p3d4s, Cr 3s3p3d4s), cutoffs of 60/480 Ry (wavefunctions/density), and Marzari--Vanderbilt smearing of 0.02 Ry. The alloys are 40-atom SQS ($2\times2\times5$ conventional \textit{bcc} cells; pair correlations optimised over three neighbour shells) at $x_{\mathrm{Cr}}=0.20$, 0.35, 0.50, 0.65 and 0.95, sampled with a $4\times4\times2$ $k$-mesh. Starting moments are ferromagnetic, and each cell is fully relaxed (box lengths and ions). Elastic constants follow from the stress response to strains $\varepsilon_{xx}=\pm0.5\%$ and $\gamma_{yz}=\pm0.5\%$ with ions relaxed at each strain (central differences). Pure Fe (FM) and Cr (NM and commensurate AFM) use 2-atom cells with $16^3$ meshes. Convergence for \textit{bcc} Fe: $C_{ij}$ change by $\leq2$ GPa between 60 and 80 Ry and are converged by a $12^3$ mesh. Electronic structure: atom- and spin-projected DOS from a non-self-consistent $6\times6\times3$ run with the optimised tetrahedron method; Fermi-surface sections on the $k_z=0$ plane; band structures along $\Gamma$--H--N--$\Gamma$--P--H. Phonons: density-functional perturbation theory on a $6^3$ $q$-grid, Fourier-interpolated along the same path.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth]{figures/kdense_scripta/supplementary/S_fe_rich_elastic.pdf}
+\caption{Fe-rich elastic constants ($x_{\mathrm{Cr}}\leq0.2$): bulk modulus $B$, $C_{44}$ and $C'$ from EMTO-CPA \cite{razumovskiy2011first}, MD (EAM) random alloys on a 1\% composition grid, and the present VASP and Quantum ESPRESSO calculations. The shaded band (0.08--0.12) marks the composition range of the Fermi-surface topology change reported in Ref.~\cite{razumovskiy2011first}; the classical potential has no electronic structure and does not reproduce it.}
+\label{fig:S_fe_rich}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.42\textwidth]{figures/kdense_scripta/supplementary/S_fermi_Fe.pdf}
+\caption{Fermi surface of ferromagnetic \textit{bcc} Fe in the (001) plane through $\Gamma$ (square with H at the corners), spin up and spin down, shown as a broadened spectral function in the layout of Korzhavyi \textit{et al.}\ \cite{korzhavyi2009electronic} (their Fig.~6).}
+\label{fig:S_fermi_Fe}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth]{figures/kdense_scripta/supplementary/S_fermi_pure.pdf}
+\caption{Fermi-surface sections ($k_z=0$) of \textit{bcc} Fe (FM; solid, majority; dashed, minority), \textit{bcc} Cr (NM) and commensurate AFM Cr (folded simple-cubic zone; both spin channels coincide). The nested electron and hole sheets of Cr are responsible for its incommensurate spin-density wave.}
+\label{fig:S_fermi_pure}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth]{figures/kdense_scripta/supplementary/S_bands_pure.pdf}
+\caption{Electronic band structures of \textit{bcc} Fe (FM), \textit{bcc} Cr (NM) and AFM Cr (simple-cubic path), Quantum ESPRESSO.}
+\label{fig:S_bands_pure}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth]{figures/kdense_scripta/supplementary/S_dos_sqs.pdf}
+\caption{Fe- and Cr-projected densities of states per atom of the relaxed 40-atom SQS (spin up above, spin down below the axis), in the layout of Korzhavyi \textit{et al.}\ \cite{korzhavyi2009electronic} (their Fig.~4).}
+\label{fig:S_dos}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth]{figures/kdense_scripta/supplementary/S_phonons.pdf}
+\caption{Phonon dispersions (DFPT) of \textit{bcc} Fe (FM, $k=16^3$), \textit{bcc} Cr (NM, $k=24^3$) and AFM Cr ($k=12^3$, simple-cubic path). All frequencies are real.}
+\label{fig:S_phonons}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/kdense_scripta/response/R_phonon_convergence.pdf}
+\caption{Brillouin-zone sampling of the NM Cr phonons. (a) Dispersion at an electronic $k$-mesh of $16^3$ (imaginary branches plotted below zero) and $24^3$ (all real). (b) Lowest frequency along the path for each setting: SCF mixing and a 0.4\% change of the lattice parameter have no effect, whereas a denser mesh or wider smearing removes the imaginary modes. They are an artefact of under-sampling the nested Fermi surface of Cr, not a dynamical instability.}
+\label{fig:S_phonon_conv}
+\end{figure}
+
+\textit{To be added when the runs finish:} unfolded Fermi surfaces and band structures of Fe-rich SQS ($x_{\mathrm{Cr}}=0$, 0.05, 0.10); DOS at $x_{\mathrm{Cr}}=0.20$ and 0.80; Fe--80Cr elastic constants; and the full set repeated at the room-temperature experimental lattice parameter, including new SQS at $x_{\mathrm{Cr}}=0.30$, 0.40 and 0.45.
+
+\subsection*{S3. Additional figures}
 The following figures are retained from the original draft for completeness and traceability.
 
 
