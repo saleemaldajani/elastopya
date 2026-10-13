@@ -109,7 +109,7 @@ def panel_c(ax, T, D):
     ax.set(xlabel=r"$x_{\rm Cr}$", ylabel=r"Pugh ratio $K/G$", xlim=(0, 1), ylim=(1.4, 2.8))
 
 
-def panel_d(ax, D):
+def panel_d(ax, D, legend_at=(1.0, 0.47), legend_loc="center right"):
     a = D[0.36]
     r, d = a[0], a[-1]
     dG = d[2] / r[2] - 1; dK = d[1] / r[1] - 1; dKG = (d[1] / d[2]) / (r[1] / r[2]) - 1
@@ -131,8 +131,10 @@ def panel_d(ax, D):
     ax.axvline(0, color="0.5", lw=0.6)
     ax.set(xlim=(-45, 32), xlabel="change on full decomposition, Fe$-$36Cr (%)")
     from matplotlib.patches import Patch
-    ax.legend(handles=[Patch(color="#009E73", label="MD (computed tensors)"), Patch(color="0.15", label="electronic lever rule (estimate)")],
-              fontsize=4.8, loc="center right", bbox_to_anchor=(1.0, 0.47), frameon=False)
+    short = legend_loc != "center right"
+    ax.legend(handles=[Patch(color="#009E73", label="MD" if short else "MD (computed tensors)"),
+                       Patch(color="0.15", label="electronic (est.)" if short else "electronic lever rule (estimate)")],
+              fontsize=4.8, loc=legend_loc, bbox_to_anchor=legend_at, frameon=False, handlelength=1.0)
     ax.text(0.02, 0.97, r"$\Delta(K/G)/(K/G)\approx-2\,\Delta f/f$" "\n($K$ nearly unchanged)", transform=ax.transAxes, ha="left", va="top",
             fontsize=5.4, color="#C02F00")
 
@@ -406,8 +408,30 @@ def main_v2():
     print("wrote", out)
 
 
+def main_v3():
+    """v2 with the panel (j) legend moved clear of the bar labels (upper left, below the formula)."""
+    global panel_d
+    orig = panel_d
+    panel_d = lambda ax, D: orig(ax, D, legend_at=(1.0, 0.37), legend_loc="right")
+    try:
+        import types
+        src_out = ROOT / "manuscript" / "figures" / "kdense_scripta" / "fig5_embrittlement_v2"
+        main_v2.__globals__["panel_d"] = panel_d
+        main_v2()
+    finally:
+        panel_d = orig
+        main_v2.__globals__["panel_d"] = orig
+    for ext in ("png", "pdf", "svg"):
+        v2 = ROOT / "manuscript" / "figures" / "kdense_scripta" / f"fig5_embrittlement_v2.{ext}"
+        v3 = ROOT / "manuscript" / "figures" / "kdense_scripta" / f"fig5_embrittlement_v3.{ext}"
+        v2.replace(v3)
+    main_v2()                                   # restore v2 unchanged
+    print("wrote fig5_embrittlement_v3")
+
+
 
 if __name__ == "__main__":
     main()
     main_v1()
     main_v2()
+    main_v3()
