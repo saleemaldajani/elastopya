@@ -51,7 +51,8 @@ def write_input(path, cell, symbols, frac, k, ecut, calc):
   occupations = 'smearing', smearing = 'mv', degauss = 0.02, nspin = 2,
 """ + "".join(f"  starting_magnetization({i + 1}) = {mag[s]}\n" for i, s in enumerate(sp)) + """/
 &electrons
-  conv_thr = 1e-8, mixing_beta = 0.2, mixing_mode = 'local-TF', electron_maxstep = 300
+  conv_thr = 1e-8, mixing_beta = """ + os.environ.get("QE_MIXING_BETA", "0.2") + """, mixing_mode = 'local-TF', electron_maxstep = 300"""
+  + (", mixing_ndim = " + os.environ["QE_MIXING_NDIM"] if "QE_MIXING_NDIM" in os.environ else "") + """
 /
 &ions
 /
