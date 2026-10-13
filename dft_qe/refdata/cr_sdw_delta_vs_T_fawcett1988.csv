@@ -1,0 +1,37 @@
+# Temperature dependence of the SDW wave vector Q = (2pi/a)(1 - delta) in pure Cr
+# Source: E. Fawcett, Rev. Mod. Phys. 60, 209 (1988), Fig. 4(b) (p. 214), after Werner et al. (1967a), neutron diffraction.
+# Values are DIGITIZED (marker centres) from the scanned figure; Q and delta in units of a* = 2pi/a.
+#   Estimated uncertainty: T +/-3 K (the highest point reads 314 K, slightly above T_N = 311 K), Q/delta +/-0.0001 (a few markers that merge with neighbours: +/-0.0002).
+# Text (p. 214): Q and delta appear constant below ~80 K (Gibbs et al. 1987 later found dQ/dT -> 0 only below 40 K).
+#   Text (p. 246): delta = 0.037 near T_N and 0.048 at low temperature. T_N = 311 K, T_SF = 123 K (p. 211).
+# Columns: T_K, Q, delta
+T_K,Q,delta
+6.6,0.95162,0.04838
+23.7,0.95162,0.04838
+60.9,0.95160,0.04840
+77.7,0.95167,0.04833
+84.8,0.95171,0.04829
+88.6,0.95186,0.04814
+95.0,0.95196,0.04804
+100.1,0.95202,0.04798
+105.4,0.95216,0.04784
+111.5,0.95227,0.04773
+121.7,0.95255,0.04745
+127.1,0.95257,0.04743
+140.2,0.95304,0.04696
+149.0,0.95323,0.04677
+159.2,0.95358,0.04642
+167.7,0.95397,0.04603
+175.5,0.95428,0.04572
+180.7,0.95460,0.04540
+200.3,0.95561,0.04439
+204.8,0.95605,0.04395
+218.9,0.95694,0.04306
+226.0,0.95745,0.04255
+232.9,0.95782,0.04218
+243.6,0.95857,0.04143
+261.8,0.95964,0.04036
+277.4,0.96081,0.03919
+286.8,0.96161,0.03839
+307.2,0.96270,0.03730
+314.0,0.96304,0.03696

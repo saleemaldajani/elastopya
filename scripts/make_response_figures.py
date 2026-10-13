@@ -30,7 +30,7 @@ def finish(fig, stem, w_pad=1.2):
     fig.set_size_inches(W_IN, fig.get_size_inches()[1] * W_IN / fig.get_size_inches()[0])
     mk.normalize_text(fig)
     fig.tight_layout(w_pad=w_pad, pad=0.3)
-    mk.export_figure(fig, OUT / stem, formats=["pdf", "png"], dpi=mk.DPI, bbox_inches=None, overwrite=True,
+    mk.export_figure(fig, OUT / stem, formats=["pdf", "png", "svg"], dpi=mk.DPI, bbox_inches=None, overwrite=True,
                      mkdir=True, write_manifest=True, provenance={"source": "scripts/make_response_figures.py"})
     found, sizes = mk.audit(fig)
     (OUT / f"{stem}.audit.json").write_text(json.dumps(dict(issues=found, font_sizes_pt=sizes), indent=1) + "\n")
@@ -165,6 +165,7 @@ def phonon_convergence():
 
 def main():
     apply_publication_style("scripta", palette_name="okabe_ito_on_white")
+    plt.rcParams["svg.fonttype"] = "none"
     for fn in (convergence, md_validation, decomposition, phonon_convergence):
         stem, found, mn = fn()
         print(stem, "min pt", mn, "issues", found)

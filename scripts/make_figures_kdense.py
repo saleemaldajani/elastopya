@@ -141,10 +141,10 @@ def audit(fig):
 
 
 def _export(fig, base, stem):
-    fmts = ["pdf", "png"] + (["tiff"] if stem in TIFF_STEMS else [])
+    fmts = ["pdf", "png", "svg"] + (["tiff"] if stem in TIFF_STEMS else [])   # svg: editable text (svg.fonttype none)
     rep = export_figure(fig, base, formats=fmts, dpi=DPI, tiff_rgb="tiff" in fmts, bbox_inches=None,
                         overwrite=True, mkdir=True, write_manifest=True,
-                        metadata={"Title": stem, "Author": "S. A. Al Dajani"},
+                        metadata={"Title": stem, "Creator": "S. A. Al Dajani"},
                         provenance={"profile": "scripta", "profile_accessed": PROFILE["accessed"],
                                     "source": "scripts/make_figures_kdense.py"})
     found, sizes = audit(fig)
@@ -446,6 +446,7 @@ def trends():
 
 def main():
     apply_publication_style("scripta", palette_name="okabe_ito_on_white")
+    plt.rcParams["svg.fonttype"] = "none"          # keep text editable in the SVG copies
     import matplotlib as mpl
     keep = dict(mpl.rcParams)
     mf.style, mf.save = style, save

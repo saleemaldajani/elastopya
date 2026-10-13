@@ -1,0 +1,14 @@
+# Vibrational entropy of mixing and maximum configurational entropy of bcc Fe-Cr alloys
+# Source: B. Fultz, L. Anthony, J. L. Robertson, R. M. Nicklow, S. Spooner, M. Mostoller, Phys. Rev. B 52, 3280 (1995), Table II (p. 3282)
+# Values are TABULATED (transcribed). Units: k_B per atom.
+# Definitions (paper): Delta S_vibr = S_vibr(disordered bcc alloy) - [c_Cr*S_vibr(bcc Cr) + c_Fe*S_vibr(bcc Fe)] (unmixed Fe + Cr reference),
+#   from the BvK phonon DOS of Fig. 1 via Eqs. (1)-(2) (T = 150, 300 K) or the high-temperature limit Eq. (3) (T = infinity).
+#   Delta S_config = -c ln c - (1-c) ln(1-c) (ideal random-solution maximum; footnote a).
+# The paper (p. 3282) cautions that absolute errors in Delta S_vibr may be as large as ~0.05 k_B/atom; differences between alloys are more accurate.
+# The phonon DOS underlying these numbers derive from room-temperature force constants.
+# Columns: quantity, T_K (inf = high-temperature limit; NA for configurational), Fe70Cr30, Fe53Cr47, Fe30Cr70
+quantity,T_K,Fe70Cr30,Fe53Cr47,Fe30Cr70
+dS_vibr,150,0.098,0.142,0.148
+dS_vibr,300,0.128,0.184,0.194
+dS_vibr,inf,0.141,0.201,0.214
+dS_config,NA,0.611,0.691,0.611

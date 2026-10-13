@@ -39,7 +39,7 @@ def main(outfile, dirs):
     import matplotlib.pyplot as plt
     sys.path.insert(0, str(HERE.parent / "scripts" / "kdense_scripta" / "scripts"))
     from style_presets import apply_publication_style
-    apply_publication_style("scripta")
+    apply_publication_style("scripta"); plt.rcParams["svg.fonttype"] = "none"
     fig, axs = plt.subplots(1, len(dirs), figsize=(2.0 * len(dirs) + 0.6, 3.0), squeeze=False, sharey=True)
     wide = all(any(Path(d).glob("pdosW.pdos_atm#*")) for d in dirs)
     EWIN = (-7, 4.0) if wide else (-7, 1.5)   # 1.2x bands end near +1.8 eV; 1.6x bands reach well above +4 eV
@@ -64,7 +64,7 @@ def main(outfile, dirs):
     axs[0, 0].set_ylabel("DOS (states/eV/atom)")
     axs[0, -1].legend(loc="upper right", fontsize=7)
     fig.tight_layout(w_pad=0.6)
-    fig.savefig(outfile, dpi=600); fig.savefig(Path(outfile).with_suffix(".pdf"))
+    fig.savefig(outfile, dpi=600); fig.savefig(Path(outfile).with_suffix(".pdf")); fig.savefig(Path(outfile).with_suffix(".svg"))
     print("wrote", outfile)
 
 

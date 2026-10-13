@@ -75,7 +75,7 @@ def plot(outfile, d):
     import matplotlib.pyplot as plt
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts" / "kdense_scripta" / "scripts"))
     from style_presets import apply_publication_style
-    apply_publication_style("scripta")
+    apply_publication_style("scripta"); plt.rcParams["svg.fonttype"] = "none"
     d = Path(d)
     z = np.arange(NL) * A / 2
     fig, axs = plt.subplots(3, 1, figsize=(5.2, 5.0), sharex=True)
@@ -103,7 +103,7 @@ def plot(outfile, d):
     for ax in axs:
         ax.axhline(0, color="0.7", lw=0.5)
     fig.tight_layout(h_pad=0.4)
-    fig.savefig(outfile, dpi=600); fig.savefig(Path(outfile).with_suffix(".pdf"))
+    fig.savefig(outfile, dpi=600); fig.savefig(Path(outfile).with_suffix(".pdf")); fig.savefig(Path(outfile).with_suffix(".svg"))
     print("wrote", outfile)
 
 

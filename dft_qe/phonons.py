@@ -79,7 +79,7 @@ def plot(outfile, dirs, allow_imaginary=False):
         ax.set(xlim=(0, x[-1]), ylabel="Frequency (THz)")
         ax.set_title(titles.get(fs.base(case), case) + (" (exp. a)" if case.endswith("_aexp") else "") + (f" {d.name[len(case) + 1:]}" if d.name != case else ""), fontsize=8)
     fig.tight_layout()
-    fig.savefig(outfile, dpi=600); fig.savefig(Path(outfile).with_suffix(".pdf"))
+    fig.savefig(outfile, dpi=600); fig.savefig(Path(outfile).with_suffix(".pdf")); fig.savefig(Path(outfile).with_suffix(".svg"))
     print("wrote", outfile)
 
 

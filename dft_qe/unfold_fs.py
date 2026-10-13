@@ -125,7 +125,7 @@ def plot(outfile, dirs):
     import matplotlib.pyplot as plt
     sys.path.insert(0, str(HERE.parent / "scripts" / "kdense_scripta" / "scripts"))
     from style_presets import apply_publication_style
-    apply_publication_style("scripta")
+    apply_publication_style("scripta"); plt.rcParams["svg.fonttype"] = "none"
     fig, axs = plt.subplots(2, len(dirs), figsize=(2.2 * len(dirs), 4.4), squeeze=False)
     for j, d in enumerate(dirs):
         for i, (spin, lab) in enumerate((("up", "spin up"), ("dw", "spin down"))):
@@ -139,7 +139,7 @@ def plot(outfile, dirs):
             ax.text(0.03, 0.03, "Γ", fontsize=7)
             ax.set_title(f"{round(100 * x)}% Cr, {lab}", fontsize=7, pad=14)
     fig.tight_layout(h_pad=1.5)
-    fig.savefig(outfile, dpi=600); fig.savefig(Path(outfile).with_suffix(".pdf"))
+    fig.savefig(outfile, dpi=600); fig.savefig(Path(outfile).with_suffix(".pdf")); fig.savefig(Path(outfile).with_suffix(".svg"))
     print("wrote", outfile)
 
 

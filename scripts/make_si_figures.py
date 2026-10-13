@@ -74,7 +74,7 @@ def fe_rich_elastic():
     fig.set_size_inches(mk.WIDTH_IN, 2.9)
     mk.normalize_text(fig)
     fig.tight_layout(rect=(0, 0, 1, 0.9), w_pad=1.2)
-    mk.export_figure(fig, OUT / "S_fe_rich_elastic", formats=["pdf", "png"], dpi=mk.DPI, bbox_inches=None,
+    mk.export_figure(fig, OUT / "S_fe_rich_elastic", formats=["pdf", "png", "svg"], dpi=mk.DPI, bbox_inches=None,
                      overwrite=True, mkdir=True, write_manifest=True,
                      provenance={"source": "scripts/make_si_figures.py"})
     found, sizes = mk.audit(fig)
