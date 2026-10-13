@@ -463,6 +463,15 @@ def main():
             if base in table:
                 for suf in sufs:
                     table[base + suf] = table[base]
+    if "--only-fig1" in sys.argv:          # quick rebuild of the Fig. 1 versions only
+        plt.rcParams.update({"pdf.fonttype": 42})
+        qmix = mf.qe_mixing()
+        mf.fig1(); mf.fig1(entropy_fix=True)
+        if qmix is not None:
+            mf.fig1(qe=qmix); mf.fig1(qe=qmix, entropy_fix=True)
+            print("QE x, dH_mix, demix (eV/atom):", qmix["x"], np.round(qmix["dh"], 4), np.round(qmix["demix"], 4))
+        print({k: v["issues"] for k, v in AUDIT.items() if v["issues"]})
+        return
     sys.argv = sys.argv[:1]
     mf.main()
     (OUT / "audit_summary.json").write_text(json.dumps(AUDIT, indent=1, ensure_ascii=False) + "\n")
