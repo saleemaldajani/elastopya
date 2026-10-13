@@ -498,7 +498,7 @@ def psi_hub(ax, D):
                 bbox=dict(boxstyle="round,pad=0.25", fc="white", ec="0.75", lw=0.5), zorder=2)
 
 
-def main_v4():
+def main_v4(panel_h=None, name="fig5_embrittlement_v4"):
     """v3 plus a fourth row: strain energy Psi(K, G) and how the chain comes together."""
     sys.path.insert(0, str(HERE / "kdense_scripta" / "scripts"))
     from style_presets import apply_publication_style
@@ -525,7 +525,7 @@ def main_v4():
     fig.text(0.62, Y(0.66), "(g) MD: $G$ rises, $K$ flat, $K/G$ falls with $\\phi$", fontsize=7)
     mp.tick_params(labelsize=5.5); mp.xaxis.label.set_size(6); mp.yaxis.label.set_size(6)
     b = [fig.add_subplot(g3[0, i]) for i in range(4)]
-    panel_b(b[0], T, D); panel_c(b[1], T, D)
+    (panel_h or panel_b)(b[0], T, D); panel_c(b[1], T, D)
     panel_d(b[2], D, legend_at=(1.0, 0.37), legend_loc="right"); tgs_summary(b[3])
     for ax, t in zip(b, ("(h) bonding map", "(i) plastic range", "(j) TGS shift to fracture strain", "(k) what TGS sees")):
         ax.set_title(t, fontsize=7, loc="left")
@@ -543,10 +543,49 @@ def main_v4():
         fig.text(0.006, y, lab, fontsize=7.5, fontweight="heavy", color="0.1", va="center", ha="left", rotation=90)
     for y in (Y(0.695), Y(0.345), 0.238):
         fig.add_artist(matplotlib.lines.Line2D([0.01, 0.99], [y, y], color="0.75", lw=0.6, ls=(0, (4, 3))))
-    out = ROOT / "manuscript" / "figures" / "kdense_scripta" / "fig5_embrittlement_v4"
+    out = ROOT / "manuscript" / "figures" / "kdense_scripta" / name
     fig.savefig(f"{out}.png", dpi=600); fig.savefig(f"{out}.pdf"); fig.savefig(f"{out}.svg")
     print("wrote", out)
 
+
+def panel_h_v5(ax, T, D):
+    """Pettifor-Pugh map read as composition trajectories: each series joined Fe -> Cr, the two criteria drawn as
+    lines with the doubly brittle quadrant shaded, and the MD random -> decomposed paths labelled by at.% Cr."""
+    gk = 1 / 1.75
+    ax.fill_between([-20, 0], gk, 0.70, color="0.90", lw=0)
+    ax.axvline(0, color="0.45", lw=0.6, ls="--"); ax.axhline(gk, color="0.45", lw=0.6, ls="--")
+    ax.text(-19, 0.692, "brittle", fontsize=5.4, color="0.3", va="top", fontweight="bold")
+    ax.text(69, gk - 0.006, "ductile", fontsize=5.4, color="0.3", ha="right", va="top", fontweight="bold")
+    ax.text(-1.5, 0.345, "Pettifor: $C_{12}-C_{44}=0$", fontsize=4.4, color="0.4", ha="right", va="bottom", rotation=90)
+    ax.text(69, gk + 0.003, "Pugh: $K/G=1.75$", fontsize=4.4, color="0.4", ha="right", va="bottom")
+    # end labels (series that span the composition range); offsets in points
+    ends = {"lit": {0: ("Fe", (8, 0)), -1: ("Cr", (0, -7))}, "md": {0: ("Fe", (-7, 0)), -1: ("Cr", (7, 2))},
+            "qe": {0: ("20", (-7, 2)), -1: ("95", (2, 6))}}
+    for k, (col, mk, lab) in SER.items():
+        if k not in T:
+            continue
+        a = T[k]; cp, r = a[:, 3], a[:, 2] / a[:, 1]
+        ax.plot(cp, r, "-", color=col, lw=0.6, alpha=0.6)
+        ax.plot(cp, r, mk, color=col, mfc="white" if k == "qe" else col, mec=col, ms=3.2, ls="none", label=lab)
+        for i, (txt, off) in ends.get(k, {}).items():
+            ax.annotate(txt, (cp[i], r[i]), xytext=off, textcoords="offset points", fontsize=4.6, color=col,
+                        ha="center", va="center", fontweight="bold")
+    for x0, a in D.items():
+        cp, r = a[:, 3], a[:, 2] / a[:, 1]
+        ax.plot(cp, r, "-", color=DEC, lw=1.0)
+        ax.annotate("", xy=(cp[-1], r[-1]), xytext=(cp[-2], r[-2]),
+                    arrowprops=dict(arrowstyle="-|>", color=DEC, lw=1.0, mutation_scale=6))
+        ax.plot([cp[-1]], [r[-1]], "s", mfc="white", mec=DEC, ms=3.4, mew=0.9)
+        ax.annotate(f"{round(100 * x0)}", (cp[0], r[0]), xytext={0.2: (0, -6), 0.36: (-7, -4), 0.5: (3, -6)}[x0], textcoords="offset points", fontsize=4.4,
+                    color=DEC, ha="center", va="center")
+    ax.plot([], [], "s-", mfc="white", mec=DEC, color=DEC, ms=3.4, lw=1.0, label="MD random $\\to$ decomposed\n(20, 36, 50% Cr)")
+    ax.set(xlabel=r"Cauchy pressure $C_{12}-C_{44}$ (GPa)", ylabel=r"$G/K$", xlim=(-20, 70), ylim=(0.34, 0.70))
+    ax.legend(fontsize=4.4, loc="upper right", frameon=False, handlelength=1.4, borderaxespad=0.2, labelspacing=0.22)
+
+
+def main_v5():
+    """v4 with a readable bonding map (h): composition trajectories, criteria as lines, labelled decomposition paths."""
+    main_v4(panel_h=panel_h_v5, name="fig5_embrittlement_v5")
 
 
 if __name__ == "__main__":
