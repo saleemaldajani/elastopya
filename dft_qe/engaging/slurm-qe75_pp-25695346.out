@@ -1,0 +1,354 @@
+[  0%] Built target qe_ks_headers
+[  0%] Built target qe_lax_headers
+[  0%] Built target qe_device_lapack
+[  0%] Building Fortran object PP/CMakeFiles/qe_pp_sumpdos_exe.dir/src/sumpdos.f90.o
+[  0%] Built target qe_xml
+[  0%] Building Fortran object PP/CMakeFiles/qe_pp_st_ef_exe.dir/simple_transport/src/cryst_to_car.f90.o
+[  0%] Built target qe_libbeef
+[  0%] Building Fortran object PP/CMakeFiles/qe_pp_st_ef_exe.dir/simple_transport/src/lint.f90.o
+[  0%] Building Fortran object PP/CMakeFiles/qe_pp_st_ef_exe.dir/simple_transport/src/ef.f90.o
+[  0%] Building Fortran object PP/CMakeFiles/qe_pp_st_fermiint0_exe.dir/simple_transport/src/cryst_to_car.f90.o
+[  0%] Building Fortran object PP/CMakeFiles/qe_pp_st_fermiint0_exe.dir/simple_transport/src/lint.f90.o
+[  0%] Building Fortran object PP/CMakeFiles/qe_pp_st_dos_exe.dir/simple_transport/src/smearing_mod.f90.o
+[  0%] Building Fortran object PP/CMakeFiles/qe_pp_st_fermiint0_exe.dir/simple_transport/src/vband_ibz.f90.o
+[  0%] Building Fortran object PP/CMakeFiles/qe_pp_st_dos_exe.dir/simple_transport/src/cryst_to_car.f90.o
+[  0%] Building Fortran object PP/CMakeFiles/qe_pp_st_fermiint0_exe.dir/simple_transport/src/fermi_int_0.f90.o
+[  2%] Built target mbd
+[  2%] Built target qe_fftx_c
+[  2%] Building Fortran object PP/CMakeFiles/qe_pp_st_dos_exe.dir/simple_transport/src/lint.f90.o
+[  4%] Built target qe_modules_c
+[  4%] Built target qe_utilx_c
+[  4%] Built target qe_devxlib
+[  4%] Building Fortran object PP/CMakeFiles/qe_pp_st_dos_exe.dir/simple_transport/src/vband_ibz.f90.o
+[  4%] Building Fortran object PP/CMakeFiles/qe_pp_st_fermiint1_exe.dir/simple_transport/src/cryst_to_car.f90.o
+[  4%] Building Fortran object PP/CMakeFiles/qe_pp_st_fermiint1_exe.dir/simple_transport/src/reducegrid.f90.o
+[  4%] Building Fortran object PP/CMakeFiles/qe_pp_st_fermiint1_exe.dir/simple_transport/src/lint.f90.o
+[  4%] Building Fortran object PP/CMakeFiles/qe_pp_st_fermiint1_exe.dir/simple_transport/src/vband_ibz.f90.o
+[  4%] Building Fortran object PP/CMakeFiles/qe_pp_st_fermiint1_exe.dir/simple_transport/src/fermi_int_1.f90.o
+[  7%] Built target qe_utilx
+[  9%] Built target qe_xclib
+[ 12%] Built target qe_fftx
+[ 12%] Linking Fortran executable ../bin/ef.x
+[ 12%] Linking Fortran executable ../bin/sumpdos.x
+[ 12%] Building Fortran object PP/CMakeFiles/qe_pp_st_dos_exe.dir/simple_transport/src/dos.f90.o
+[ 12%] Built target qe_pp_st_ef_exe
+[ 14%] Built target qe_lax
+[ 21%] Built target qe_upflib
+[ 21%] Built target qe_pp_sumpdos_exe
+[ 21%] Built target qe_kssolver_davidson
+[ 21%] Built target qe_kssolver_cg
+[ 21%] Linking Fortran executable ../bin/fermi_int_1.x
+[ 21%] Built target qe_kssolver_rmmdiis
+[ 24%] Linking Fortran executable ../bin/fermi_int_0.x
+[ 24%] Built target qe_kssolver_dense
+[ 24%] Built target qe_pp_st_fermiint1_exe
+[ 24%] Built target qe_pp_st_fermiint0_exe
+[ 26%] Linking Fortran executable ../bin/dos_sp.x
+[ 26%] Built target qe_kssolver_paro
+[ 26%] Built target qe_pp_st_dos_exe
+[ 51%] Built target qe_modules
+[ 53%] Built target qe_dftd3
+[ 85%] Built target qe_pw
+[ 90%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/projwfc_box.f90.o
+[ 90%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/fermisurfer_common.f90.o
+[ 90%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/wannier_mod.f90.o
+[ 90%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/projections_mod.f90.o
+[ 90%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/read_proj.f90.o
+[ 90%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/paw_postproc.f90.o
+[ 90%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/fft_interpolation_mod.f90.o
+[ 90%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/adduscore.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/add_shift_cc.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/xc_vdW_scale_mod.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/add_shift_lc.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/vasp_read_chgcar_mod.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/chdens_bspline.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/addusdens1d.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/add_shift_us.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/chdens_bspline_sphere.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/compute_ppsi.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/compute_sigma_avg.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/cube.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/dosg.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/do_initial_state.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/do_shift_ew.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/d_matrix_nc.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/d_matrix_so.f90.o
+/orcd/pool/004/sdajani/fecr_qe/qe75/q-e-qe-7.5/PP/src/projections_mod.f90:656:40:
+
+  656 |                         v(1,ir), npwx2, w(1,ic), npwx2, 0.D0, work, nx )
+      |                                        1
+......
+  799 |                           swfc(1,ir), npwx2, ovr, nx, beta, wfc(1,ic), npwx2 )
+      |                                             2
+Warning: Type mismatch between actual argument at (1) and actual argument at (2) (COMPLEX(8)/REAL(8)).
+/orcd/pool/004/sdajani/fecr_qe/qe75/q-e-qe-7.5/PP/src/projections_mod.f90:656:62:
+
+  656 |                         v(1,ir), npwx2, w(1,ic), npwx2, 0.D0, work, nx )
+      |                                                              1
+......
+  799 |                           swfc(1,ir), npwx2, ovr, nx, beta, wfc(1,ic), npwx2 )
+      |                                                            2  
+Warning: Type mismatch between actual argument at (1) and actual argument at (2) (REAL(8)/COMPLEX(8)).
+/orcd/pool/004/sdajani/fecr_qe/qe75/q-e-qe-7.5/PP/src/projections_mod.f90:581:38:
+
+  581 |                         v(1,ir), ldv, w(1,ic), ldw, (0.0_dp,0.0_dp), work, nx )
+      |                                      1
+......
+  726 |                           swfc(1,ir), npwx, ovr, nx, beta, wfc(1,ic), npwx )
+      |                                            2
+Warning: Element of assumed-shape or pointer array as actual argument at (1) cannot correspond to actual argument at (2)
+/orcd/pool/004/sdajani/fecr_qe/qe75/q-e-qe-7.5/PP/src/projections_mod.f90:581:69:
+
+  581 |                         v(1,ir), ldv, w(1,ic), ldw, (0.0_dp,0.0_dp), work, nx )
+      |                                                                     1
+......
+  726 |                           swfc(1,ir), npwx, ovr, nx, beta, wfc(1,ic), npwx )
+      |                                                           2          
+Warning: Rank mismatch between actual argument at (1) and actual argument at (2) (scalar and rank-2)
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/elf.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/local_dos.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/local_dos_mag.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/local_dos1d.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/ggen1d.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/openfil_pp.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/stm.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/punch_rism.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/smallgk.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/stop_pp.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/sym_band.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/sum_band_kin.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/wannier_proj.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/work_function.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/wannier_enrg.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/write_p_avg.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/write_io_header.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/write_hamiltonians.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/vasp_xml_module.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/hubbard_projectors.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/chdens_module.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/punch_plot.f90.o
+/orcd/pool/004/sdajani/fecr_qe/qe75/q-e-qe-7.5/PP/src/vasp_xml_module.f90:829:64:
+
+  829 |         CALL errore ('vasp_init_xc', 'Zab_vdW not implemented', vasp_parameters%zab_vdw)
+      |                                                                1
+......
+  944 |        CALL errore ("vasp_readschema_dim", "noncollinear calculations not implemented", 1)
+      |                                                                                        2
+Warning: Type mismatch between actual argument at (1) and actual argument at (2) (REAL(8)/INTEGER(4)).
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/partialdos.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp.dir/src/solvdens.f90.o
+[ 92%] Linking Fortran static library ../lib/libqe_pp.a
+[ 92%] Built target qe_pp
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp_pw2critic_exe.dir/src/pw2critic.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp_dos_exe.dir/src/dos.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp_planavg_exe.dir/src/plan_avg.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp_plotproj_exe.dir/src/plotproj.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp_opengrid_exe.dir/src/open_grid.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp_wfck2r_exe.dir/src/wfck2r.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp_exe.dir/src/postproc.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp_bands_exe.dir/src/bands.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp_pawplot_exe.dir/src/pawplot.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp_plotrho_exe.dir/src/plotrho.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp_projwfc_exe.dir/src/projwfc.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp_average_exe.dir/src/average.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp_pmw_exe.dir/src/poormanwannier.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp_plotband_exe.dir/src/plotband.f90.o
+/orcd/pool/004/sdajani/fecr_qe/qe75/q-e-qe-7.5/PP/src/postproc.f90:248:24:
+
+  236 |         emin, degauss_ldos, kpoint, kband, spin_component, lsign)
+      |                            2
+......
+  248 |             emin, emax, ikpt, ibnd, ispin, lsign)
+      |                        1
+Warning: Rank mismatch between actual argument at (1) and actual argument at (2) (rank-1 and scalar)
+/orcd/pool/004/sdajani/fecr_qe/qe75/q-e-qe-7.5/PP/src/postproc.f90:248:30:
+
+  236 |         emin, degauss_ldos, kpoint, kband, spin_component, lsign)
+      |                                    2
+......
+  248 |             emin, emax, ikpt, ibnd, ispin, lsign)
+      |                              1
+Warning: Rank mismatch between actual argument at (1) and actual argument at (2) (rank-1 and scalar)
+/orcd/pool/004/sdajani/fecr_qe/qe75/q-e-qe-7.5/PP/src/postproc.f90:248:36:
+
+  236 |         emin, degauss_ldos, kpoint, kband, spin_component, lsign)
+      |                                           2
+......
+  248 |             emin, emax, ikpt, ibnd, ispin, lsign)
+      |                                    1
+Warning: Rank mismatch between actual argument at (1) and actual argument at (2) (rank-1 and scalar)
+/orcd/pool/004/sdajani/fecr_qe/qe75/q-e-qe-7.5/PP/src/postproc.f90:261:38:
+
+  236 |         emin, degauss_ldos, kpoint, kband, spin_component, lsign)
+      |                            2          
+......
+  261 |                           emin, emax, ikpt, ibnd, ispin, lsign )
+      |                                      1
+Warning: Rank mismatch between actual argument at (1) and actual argument at (2) (rank-1 and scalar)
+/orcd/pool/004/sdajani/fecr_qe/qe75/q-e-qe-7.5/PP/src/postproc.f90:261:44:
+
+  236 |         emin, degauss_ldos, kpoint, kband, spin_component, lsign)
+      |                                    2        
+......
+  261 |                           emin, emax, ikpt, ibnd, ispin, lsign )
+      |                                            1
+Warning: Rank mismatch between actual argument at (1) and actual argument at (2) (rank-1 and scalar)
+/orcd/pool/004/sdajani/fecr_qe/qe75/q-e-qe-7.5/PP/src/postproc.f90:261:50:
+
+  236 |         emin, degauss_ldos, kpoint, kband, spin_component, lsign)
+      |                                           2       
+......
+  261 |                           emin, emax, ikpt, ibnd, ispin, lsign )
+      |                                                  1
+Warning: Rank mismatch between actual argument at (1) and actual argument at (2) (rank-1 and scalar)
+/orcd/pool/004/sdajani/fecr_qe/qe75/q-e-qe-7.5/PP/src/postproc.f90:266:38:
+
+  236 |         emin, degauss_ldos, kpoint, kband, spin_component, lsign)
+      |                            2          
+......
+  266 |                           emin, emax, ikpt, ibnd, ispin, lsign )
+      |                                      1
+Warning: Rank mismatch between actual argument at (1) and actual argument at (2) (rank-1 and scalar)
+/orcd/pool/004/sdajani/fecr_qe/qe75/q-e-qe-7.5/PP/src/postproc.f90:266:44:
+
+  236 |         emin, degauss_ldos, kpoint, kband, spin_component, lsign)
+      |                                    2        
+......
+  266 |                           emin, emax, ikpt, ibnd, ispin, lsign )
+      |                                            1
+Warning: Rank mismatch between actual argument at (1) and actual argument at (2) (rank-1 and scalar)
+/orcd/pool/004/sdajani/fecr_qe/qe75/q-e-qe-7.5/PP/src/postproc.f90:266:50:
+
+  236 |         emin, degauss_ldos, kpoint, kband, spin_component, lsign)
+      |                                           2       
+......
+  266 |                           emin, emax, ikpt, ibnd, ispin, lsign )
+      |                                                  1
+Warning: Rank mismatch between actual argument at (1) and actual argument at (2) (rank-1 and scalar)
+/orcd/pool/004/sdajani/fecr_qe/qe75/q-e-qe-7.5/PP/src/postproc.f90:270:38:
+
+  236 |         emin, degauss_ldos, kpoint, kband, spin_component, lsign)
+      |                            2          
+......
+  270 |                           emin, emax, ikpt, ibnd, spin_component, lsign )
+      |                                      1
+Warning: Rank mismatch between actual argument at (1) and actual argument at (2) (rank-1 and scalar)
+/orcd/pool/004/sdajani/fecr_qe/qe75/q-e-qe-7.5/PP/src/postproc.f90:270:44:
+
+  236 |         emin, degauss_ldos, kpoint, kband, spin_component, lsign)
+      |                                    2        
+......
+  270 |                           emin, emax, ikpt, ibnd, spin_component, lsign )
+      |                                            1
+Warning: Rank mismatch between actual argument at (1) and actual argument at (2) (rank-1 and scalar)
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp_initial_state_exe.dir/src/initial_state.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp_pw2wannier90_exe.dir/src/pw2wannier90.f90.o
+[ 92%] Linking Fortran executable ../bin/pw2critic.x
+[ 92%] Linking Fortran executable ../bin/initial_state.x
+[ 92%] Linking Fortran executable ../bin/dos.x
+[ 92%] Linking Fortran executable ../bin/plotproj.x
+/orcd/pool/004/sdajani/fecr_qe/qe75/q-e-qe-7.5/PP/src/projwfc.f90:1157:20:
+
+ 1099 |   CALL poolrecover (et,       nbnd, nkstot, nks)
+      |                    2
+......
+ 1157 |   CALL poolrecover (proj_aux, 2 * nbnd * natomwfc, nkstot, nks)
+      |                    1
+Warning: Type mismatch between actual argument at (1) and actual argument at (2) (COMPLEX(8)/REAL(8)).
+[ 92%] Linking Fortran executable ../bin/plan_avg.x
+[ 92%] Linking Fortran executable ../bin/wfck2r.x
+[ 92%] Linking Fortran executable ../bin/pmw.x
+[ 92%] Linking Fortran executable ../bin/average.x
+[ 92%] Linking Fortran executable ../bin/open_grid.x
+[ 92%] Linking Fortran executable ../bin/bands.x
+[ 92%] Linking Fortran executable ../bin/pawplot.x
+[ 92%] Linking Fortran executable ../bin/pp.x
+[ 92%] Linking Fortran executable ../bin/plotrho.x
+/orcd/pool/004/sdajani/fecr_qe/qe75/q-e-qe-7.5/PP/src/pw2wannier90.f90:2460:38:
+
+ 2460 |       CALL ylmr2(lmaxq*lmaxq, 1, dxk, qg, ylm)
+      |                                      1
+......
+ 2807 |          CALL ylmr2 (lmaxq*lmaxq, nnb, dxk(:, :, ik), qg, ylm)
+      |                                                      2
+Warning: Rank mismatch between actual argument at (1) and actual argument at (2) (rank-1 and scalar)
+/orcd/pool/004/sdajani/fecr_qe/qe75/q-e-qe-7.5/PP/src/pw2wannier90.f90:2468:44:
+
+ 2468 |                   CALL qvan2(1, ih, jh, nt, qg, qgm, ylm)
+      |                                            1
+......
+ 2814 |                      CALL qvan2 (nnb, ih, jh, nt, qg, qgm, ylm)
+      |                                                  2
+Warning: Rank mismatch between actual argument at (1) and actual argument at (2) (rank-1 and scalar)
+/orcd/pool/004/sdajani/fecr_qe/qe75/q-e-qe-7.5/PP/src/pw2wannier90.f90:2468:48:
+
+ 2468 |                   CALL qvan2(1, ih, jh, nt, qg, qgm, ylm)
+      |                                                1
+......
+ 2814 |                      CALL qvan2 (nnb, ih, jh, nt, qg, qgm, ylm)
+      |                                                      2
+Warning: Rank mismatch between actual argument at (1) and actual argument at (2) (rank-1 and scalar)
+[ 92%] Built target qe_pp_plotproj_exe
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp_projwfc_exe.dir/src/write_proj.f90.o
+[ 92%] Linking Fortran executable ../bin/plotband.x
+[ 92%] Built target qe_pp_plotrho_exe
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp_pw2gw_exe.dir/src/pw2gw.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp_pw2gt_exe.dir/src/pw2gt.f90.o
+[ 92%] Built target qe_pp_plotband_exe
+[ 92%] Built target qe_pp_average_exe
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp_epsilon_exe.dir/src/epsilon.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp_d3hess_exe.dir/src/d3hess.f90.o
+[ 92%] Built target qe_pp_opengrid_exe
+[ 92%] Linking Fortran executable ../bin/d3hess.x
+[ 92%] Built target qe_pp_pawplot_exe
+[ 92%] Built target qe_pp_planavg_exe
+[ 92%] Built target qe_pp_bands_exe
+[ 92%] Built target qe_pp_dos_exe
+[ 92%] Built target qe_pp_wfck2r_exe
+[ 92%] Built target qe_pp_exe
+[ 92%] Built target qe_pp_pw2critic_exe
+[ 92%] Built target qe_pp_initial_state_exe
+[ 92%] Built target qe_pp_pmw_exe
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp_fermivelocity_exe.dir/src/fermi_velocity.f90.o
+[ 92%] Building Fortran object PP/CMakeFiles/qe_pp_molecularpdos_exe.dir/src/molecularpdos.f90.o
+[ 95%] Building Fortran object PP/CMakeFiles/qe_pp_wannierham_exe.dir/src/wannier_ham.f90.o
+[ 95%] Building Fortran object PP/CMakeFiles/qe_pp_wannierplot_exe.dir/src/wannier_plot.f90.o
+[ 95%] Building Fortran object PP/CMakeFiles/qe_pp_fermisurface_exe.dir/src/fermisurface.f90.o
+[ 95%] Building Fortran object PP/CMakeFiles/qe_pp_fermiproj_exe.dir/src/fermi_proj.f90.o
+[ 95%] Building Fortran object PP/CMakeFiles/qe_pp_ppacf_exe.dir/src/ppacf.f90.o
+[ 95%] Building Fortran object PP/CMakeFiles/qe_pp_pw2bgw_exe.dir/src/pw2bgw.f90.o
+[ 95%] Building Fortran object PP/CMakeFiles/qe_pp_rism_exe.dir/src/postrism.f90.o
+[ 95%] Built target qe_pp_d3hess_exe
+[ 95%] Linking Fortran executable ../bin/pprism.x
+[ 97%] Linking Fortran executable ../bin/fermi_velocity.x
+[ 97%] Linking Fortran executable ../bin/fs.x
+[ 97%] Linking Fortran executable ../bin/wannier_plot.x
+[ 97%] Linking Fortran executable ../bin/fermi_proj.x
+[ 97%] Linking Fortran executable ../bin/molecularpdos.x
+[ 97%] Linking Fortran executable ../bin/wannier_ham.x
+[ 97%] Linking Fortran executable ../bin/projwfc.x
+[ 97%] Built target qe_pp_rism_exe
+[ 97%] Linking Fortran executable ../bin/pw2gt.x
+[ 97%] Built target qe_pp_molecularpdos_exe
+[ 97%] Built target qe_pp_fermisurface_exe
+[ 97%] Built target qe_pp_wannierplot_exe
+[ 97%] Built target qe_pp_fermivelocity_exe
+[ 97%] Linking Fortran executable ../bin/epsilon.x
+[ 97%] Built target qe_pp_fermiproj_exe
+[ 97%] Built target qe_pp_wannierham_exe
+[ 97%] Built target qe_pp_projwfc_exe
+[ 97%] Built target qe_pp_pw2gt_exe
+[ 97%] Built target qe_pp_epsilon_exe
+[ 97%] Linking Fortran executable ../bin/pw2gw.x
+[ 97%] Built target qe_pp_pw2gw_exe
+[100%] Linking Fortran executable ../bin/ppacf.x
+[100%] Built target qe_pp_ppacf_exe
+[100%] Linking Fortran executable ../bin/pw2bgw.x
+[100%] Built target qe_pp_pw2bgw_exe
+[100%] Linking Fortran executable ../bin/pw2wannier90.x
+[100%] Built target qe_pp_pw2wannier90_exe
+[100%] post-processing applications for analysis and property calculations
+[100%] Built target pp
+bin/dos.x
+bin/projwfc.x
+PP_OK
