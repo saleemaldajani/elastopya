@@ -16,8 +16,8 @@ for c in $(ssh engaging "cd $REMOTE/fermi 2>/dev/null && ls -d */ 2>/dev/null" |
 done
 ssh engaging "cd $REMOTE && tar czf - --exclude='*/tmp' fermi fermi.sbatch 2>/dev/null" | tar xzf - -C engaging
 # Small result files of the electronic-structure and phonon jobs (no wavefunctions / scratch)
-ssh engaging "cd $REMOTE && find unfold bandpath phonon dos \( -path '*/tmp' -prune \) -o -type f -size -60M \
-  \( -name '*.in' -o -name '*.out' -o -name '*.npz' -o -name '*.txt' -o -name 'bands_data.xml' -o -name 'freq*' \
+ssh engaging "cd $REMOTE && find unfold bandpath phonon dos saw \( -path '*/tmp' -prune -o -name 'angles_10k.csv' -prune \) -o -type f -size -60M \
+  \( -name '*.in' -o -name '*.out' -o -name 'qe_x*.csv' -o -name '*.npz' -o -name '*.txt' -o -name 'bands_data.xml' -o -name 'freq*' \
      -o -name 'pdos*' -o -name 'dyn*' -o -name 'fc' -o -name '*.log' \) -print 2>/dev/null | tar czf - -T - *.sbatch 2>/dev/null" \
   | tar xzf - -C engaging
 rm -f engaging/pseudo/*.UPF; rmdir engaging/pseudo 2>/dev/null || true   # pseudopotentials are not redistributed
