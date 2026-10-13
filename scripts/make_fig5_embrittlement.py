@@ -23,6 +23,7 @@ import make_figures as mf  # noqa: E402
 import matplotlib  # noqa: E402
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
+import matplotlib.lines  # noqa: E402,F401
 
 ROOT = HERE.parent
 SER = {"lit": ("0.12", "o", "EMTO-CPA (Razumovskiy)"), "dft": ("#D55E00", "D", "VASP (this work)"),
@@ -221,7 +222,7 @@ def atom_c(ax):
     ax.annotate("", xy=(2.4, 3.2), xytext=(0.3, 0.5), arrowprops=dict(arrowstyle="-|>", color="#1B6FB5", lw=1.0))
     ax.plot([0.3, 3.0], [0.5, 4.0], color="#1B6FB5", lw=0.5, ls="--")
     ax.text(2.5, 4.1, "emit $\\perp$ ($\\propto Gb$)", fontsize=4.8, color="#1B6FB5", va="bottom", bbox=BB)
-    ax.text(3.0, -6.4, "$\\alpha'$ stiffer ($G\\uparrow$, $K/G\\downarrow$): emission harder,\ncleavage favoured", fontsize=4.8,
+    ax.text(3.0, -6.4, "$\\alpha'$ stiffer in shear ($G\\uparrow$): emission harder,\ncleavage favoured", fontsize=4.8,
             color="0.15", va="top", ha="center")
     ax.set_xlim(-4.3, 10.3); ax.set_ylim(-8.0, 6.2); ax.set_aspect("equal"); ax.axis("off")
 
@@ -326,7 +327,87 @@ def main_v1():
     fig.savefig(f"{out}.png", dpi=600); fig.savefig(f"{out}.pdf"); fig.savefig(f"{out}.svg")
     print("wrote", out, "dG alpha'-alpha =", round(dg, 1))
 
+def dft_cells(fig, rect):
+    """Atomic (DFT) view: the relaxed 40-atom QE SQS of an alpha-like and an alpha'-like composition with their QE
+    moments, and their computed shear modulus and Pugh ratio."""
+    import visualize_sqs as VS
+    T = tensors()
+    qe = {round(float(r[0]), 2): r for r in T["qe"]}
+    w = rect[2] / 2 - 0.004
+    for i, x in enumerate((0.20, 0.95)):
+        ax = fig.add_axes([rect[0] + i * (w + 0.008), rect[1] + rect[3] * 0.30, w, rect[3] * 0.55])
+        VS.draw(ax, x); ax.set_aspect("equal", adjustable="datalim")
+        r = qe[x]
+        ax.text(0.5, -0.12, f"{round(100 * x)}% Cr SQS (QE)\n$G$ = {r[2]:.0f} GPa, $K/G$ = {r[1] / r[2]:.2f}", transform=ax.transAxes,
+                ha="center", va="top", fontsize=5.0)
+    fig.text(rect[0], rect[1] + rect[3] * 0.92, "40 atoms; arrows: QE local moments", fontsize=5.0, color="0.35")
+
+
+def md_cubes(fig, rect):
+    """Molecular (MD) view: the 25^3 Fe-36Cr cells, random (phi = 0.5) and fully decomposed (phi = 1)."""
+    from visualize_decomposition import _cube_ax, md_grid3d, series
+    ser = series()[0.36]
+    w = rect[2] / 2 - 0.004
+    for i, (f, lab) in enumerate(((ser[0], "random ($\\phi$ = 0.5)"), (ser[-1], "decomposed ($\\phi$ = 1)"))):
+        ax = fig.add_axes([rect[0] + i * (w + 0.008), rect[1] + rect[3] * 0.18, w, rect[3] * 0.70])
+        _cube_ax(ax, md_grid3d(f))
+        ax.text(0.5, -0.04, lab, transform=ax.transAxes, ha="center", va="top", fontsize=5.0)
+    fig.text(rect[0], rect[1] + rect[3] * 0.92, "microstructure: 31,250 atoms (25$^3$ bcc), EAM", fontsize=5.0, color="0.35")
+
+
+def md_phi(ax):
+    """MD Fe-36Cr: G, K (VRH) and K/G versus conversion fraction phi."""
+    a = md_decomp()[0.36]
+    ph, K, G = a[:, 0], a[:, 1], a[:, 2]
+    ax.plot(ph, 100 * (G / G[0] - 1), "-s", color="#0B5D3B", ms=3, lw=0.9, label="$G$")
+    ax.plot(ph, 100 * (K / K[0] - 1), "-o", color="0.45", ms=3, lw=0.9, label="$K$")
+    ax.plot(ph, 100 * ((K / G) / (K[0] / G[0]) - 1), "-^", color="#C02F00", ms=3, lw=0.9, label="$K/G$")
+    ax.axhline(0, color="0.6", lw=0.5)
+    ax.set(xlabel="spinodal conversion $\\phi$", ylabel="change vs random (%)", xlim=(0.48, 1.02))
+    ax.legend(fontsize=5, frameon=False, loc="center left")
+
+
+def main_v2():
+    """v1 plus an explicit atomic (DFT) row and molecular (MD) row."""
+    sys.path.insert(0, str(HERE / "kdense_scripta" / "scripts"))
+    from style_presets import apply_publication_style
+    apply_publication_style("scripta"); plt.rcParams["svg.fonttype"] = "none"
+    T, D = tensors(), md_decomp()
+    W, H = 190 / 25.4, 7.2
+    fig = plt.figure(figsize=(W, H))
+    g1 = fig.add_gridspec(1, 3, left=0.055, right=0.745, top=0.955, bottom=0.715, wspace=0.12, width_ratios=[1.05, 1, 1])
+    g3 = fig.add_gridspec(1, 4, left=0.085, right=0.995, top=0.30, bottom=0.06, wspace=0.42, width_ratios=[1, 1, 1.05, 0.95])
+    a = [fig.add_subplot(g1[0, i]) for i in range(3)]
+    atom_a(a[0]); atom_b(a[1]); atom_c(a[2])
+    for ax, t in zip(a, ("(a) bonds: Hookean vs breaking", "(b) dislocation: core vs far field", "(c) crack tip: cleave or emit")):
+        ax.set_title(t, fontsize=7, loc="left")
+    dft_cells(fig, [0.755, 0.70, 0.24, 0.27])
+    fig.text(0.757, 0.962, "(d) DFT cells: $\\alpha$-like vs $\\alpha'$-like", fontsize=7)
+    # molecular row
+    md_cubes(fig, [0.045, 0.375, 0.29, 0.27])
+    fig.text(0.05, 0.66, "(e) MD cells: Fe$-$36Cr before and after decomposition", fontsize=7)
+    pin = fig.add_axes([0.37, 0.38, 0.17, 0.25]); dg = atom_d(pin)
+    fig.text(0.37, 0.66, "(f) $\\alpha'$ domains pin dislocations", fontsize=7)
+    mp = fig.add_axes([0.62, 0.40, 0.35, 0.22]); md_phi(mp)
+    fig.text(0.62, 0.66, "(g) MD: $G$ rises, $K$ flat, $K/G$ falls with $\\phi$", fontsize=7)
+    mp.tick_params(labelsize=5.5); mp.xaxis.label.set_size(6); mp.yaxis.label.set_size(6)
+    for y, lab in ((0.84, "ATOMIC (DFT)"), (0.52, "MOLECULAR (MD)"), (0.18, "DATA & TGS")):
+        fig.text(0.006, y, lab, fontsize=7.5, fontweight="heavy", color="0.1", va="center", ha="left", rotation=90)
+    for y in (0.695, 0.345):
+        fig.add_artist(matplotlib.lines.Line2D([0.01, 0.99], [y, y], color="0.75", lw=0.6, ls=(0, (4, 3))))
+    b = [fig.add_subplot(g3[0, i]) for i in range(4)]
+    panel_b(b[0], T, D); panel_c(b[1], T, D); panel_d(b[2], D); tgs_summary(b[3])
+    for ax, t in zip(b, ("(h) bonding map", "(i) plastic range", "(j) TGS shift to fracture strain", "(k) what TGS sees")):
+        ax.set_title(t, fontsize=7, loc="left")
+        if t[1] != "k":
+            ax.tick_params(labelsize=5.5); ax.xaxis.label.set_size(6); ax.yaxis.label.set_size(6)
+    out = ROOT / "manuscript" / "figures" / "kdense_scripta" / "fig5_embrittlement_v2"
+    fig.savefig(f"{out}.png", dpi=600); fig.savefig(f"{out}.pdf"); fig.savefig(f"{out}.svg")
+    print("wrote", out)
+
+
 
 if __name__ == "__main__":
     main()
     main_v1()
+    main_v2()

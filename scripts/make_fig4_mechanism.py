@@ -461,9 +461,95 @@ def build_full_v2():
     print("wrote", out)
 
 
+def draw_fs_spin(ax_up, ax_dn):
+    """Fe (FM, QE) Fermi-surface sections by spin. Majority: a band level at H lies 0.15 eV above E_F, where the
+    H pockets connect (the critical point of the ETT Korzhavyi et al. find at 5-10 % Cr); minority: no critical
+    point within +-0.3 eV. Rigid-band filling moves E_F down, away from it, so the ETT is driven by the Cr-induced
+    shift of the majority states (magnetism), not by band filling."""
+    import fermi_slices as fs
+    k, ev, ef = fs.read_xml(ENG / "fermi" / "Fe_fm" / "fs_data.xml")
+    n = int(round(np.sqrt(len(k)))); kx, ky = k[:, 0].reshape(n, n), k[:, 1].reshape(n, n)
+    crit = None
+    for s, ax, col in ((0, ax_up, "#FF8C1A"), (1, ax_dn, "#7FDBFF")):
+        ax.add_patch(plt.Rectangle((-1, -1), 2, 2, fc="#0B1026", ec="none", zorder=0))
+        for b in range(ev.shape[2]):
+            e = ev[s, :, b].reshape(n, n) - ef
+            if e.min() < 0 < e.max():
+                cs = ax.contour(kx, ky, e, levels=[0], colors=col, linewidths=0.8, zorder=3)
+                for seg in cs.allsegs[0]:
+                    ax.plot(seg[:, 0], seg[:, 1], color=col, lw=2.6, alpha=0.2, zorder=2)
+        ax.plot([1, 0, -1, 0, 1], [0, 1, 0, -1, 0], color="0.55", lw=0.4, zorder=1)
+        ax.set_xlim(-1, 1); ax.set_ylim(-1, 1); ax.set_aspect("equal"); ax.axis("off")
+    # majority critical level at H (degenerate band level just above E_F)
+    iH = np.argmin((k[:, 0] - 1) ** 2 + k[:, 1] ** 2)
+    lv = ev[0, iH, :] - ef
+    crit = float(lv[(lv > 0) & (lv < 0.5)].min())
+    for b in range(ev.shape[2]):
+        e = ev[0, :, b].reshape(n, n) - ef
+        if e.min() < crit - 0.005 < e.max():
+            ax_up.contour(kx, ky, e, levels=[crit - 0.005], colors="white", linewidths=0.7, linestyles=":", zorder=4)
+    for (x, y) in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        ax_up.add_patch(plt.Circle((x, y), 0.13, fill=False, ec="#FFD400", lw=0.9, zorder=5))
+    ax_up.text(0, 1.04, "spin $\\uparrow$ (majority)", ha="center", va="bottom", fontsize=5.6, color="#C25E00")
+    ax_dn.text(0, 1.04, "spin $\\downarrow$ (minority)", ha="center", va="bottom", fontsize=5.6, color="#1B6FB5")
+    ax_up.text(0, -1.05, f"H level {crit:+.2f} eV: pockets\nconnect (critical point)", ha="center", va="top", fontsize=4.8, color="0.15")
+    ax_dn.text(0, -1.05, "no critical point\nwithin $\\pm$0.3 eV", ha="center", va="top", fontsize=4.8, color="0.15")
+    return crit
+
+
+def build_full_v3():
+    """v2 with panel (c) showing the spin-resolved Fe Fermi surface behind the ETT (majority vs minority)."""
+    sys.path.insert(0, str(HERE / "kdense_scripta" / "scripts"))
+    from style_presets import apply_publication_style
+    apply_publication_style("scripta"); plt.rcParams["svg.fonttype"] = "none"
+    W, H = 190 / 25.4, 6.1
+    fig = plt.figure(figsize=(W, H))
+    bg = fig.add_axes([0, 0, 1, 1], zorder=-5); bg.axis("off")
+    cmap = LinearSegmentedColormap.from_list("fecr", [(*to_rgb(FE), 1), (1, 1, 1, 1), (*to_rgb(CR), 1)])
+    bg.imshow(np.linspace(0, 1, 512)[None, :], aspect="auto", cmap=cmap, alpha=0.10, extent=(0, 1, 0, 1))
+    bg.axhline(0.505, xmin=0.01, xmax=0.99, color="0.75", lw=0.6, ls=(0, (4, 3)))
+    top = [(0.005, "FRUSTRATE", "(a) atoms & moments"), (0.255, "NEST", "(b) Cr Fermi surface vs Fe content"),
+           (0.505, "TOPOLOGY", "(c) Fe-rich ETT: spin $\\uparrow$ vs $\\downarrow$"), (0.755, "MODULATE", "(d) SDW/CDW soften the lattice")]
+    bot = [(0.005, "STIFFEN", "(e) electron $\\to$ lattice: decomposition"), (0.505, "PROPAGATE", "(f) Rayleigh wave in TGS"),
+           (0.755, "DETECT", "(g) (P)SAW vs pristine CASS")]
+    for row, y in ((top, 0.985), (bot, 0.49)):
+        for i, (x, verb, sub) in enumerate(row):
+            fig.text(x + 0.012, y, verb, fontsize=10.5, fontweight="heavy", color="0.08", va="top")
+            fig.text(x + 0.012, y - 0.035, sub, fontsize=6.6, color="0.3", va="top")
+            nxt = row[i + 1][0] if i + 1 < len(row) else None
+            if nxt is not None:
+                fig.patches.append(matplotlib.patches.FancyArrow(nxt - 0.045, y - 0.016, 0.03, 0, width=0.006, head_width=0.018,
+                                                                 head_length=0.010, color="#FF3B00", transform=fig.transFigure, figure=fig))
+    fig.patches.append(matplotlib.patches.FancyArrow(0.97, 0.53, 0, -0.035, width=0.004, head_width=0.012, head_length=0.012,
+                                                     color="#FF3B00", transform=fig.transFigure, figure=fig))
+    panel_a(fig, [0.005, 0.505, 0.245, 0.42])
+    draw_fs_change(fig.add_axes([0.268, 0.535, 0.22, 0.30]))
+    ett_strip(fig, 0.515, 0.80, 0.06, note_below=False)
+    wsq = 0.105; hsq = wsq * W / H
+    crit = draw_fs_spin(fig.add_axes([0.515, 0.585, wsq, hsq]), fig.add_axes([0.632, 0.585, wsq, hsq]))
+    fig.text(0.515, 0.548, "Cr shifts the majority states (band filling alone moves\n$E_{\\rm F}$ away) $\\Rightarrow$ ETT at 5$-$10% Cr in spin $\\uparrow$ only\n"
+             "(Korzhavyi 2009); unfolded SQS Fermi surfaces pending",
+             fontsize=4.7, color="#8A5A00", va="top", linespacing=1.15)
+    cax = fig.add_axes([0.758, 0.70, 0.24, 0.215]); cdw_schematic(cax)
+    cax.text(N_CDW - 1, -0.2, "schematic", fontsize=4.6, color="0.5", ha="right", style="italic")
+    draw_kohn(fig.add_axes([0.80, 0.555, 0.185, 0.115]))
+    panel_c(fig, [0.03, 0.0, 0.46, 0.425], eq_at=(0.49, 0.432))
+    sax = fig.add_axes([0.51, 0.17, 0.235, 0.24]); saw_schematic(sax)
+    dec = mf.md_decomposition()[X0]
+    f0, f1 = float(dec["f"][np.argmin(dec["phi"])]) * 1e3, float(dec["f"][np.argmax(dec["phi"])]) * 1e3
+    fig.text(0.515, 0.115, r"$C_{ij}\!\uparrow\Rightarrow G\!\uparrow\Rightarrow v_R=\eta(\nu)\sqrt{G/\rho}\!\uparrow\Rightarrow f=v_R/\lambda\!\uparrow$" "\n"
+             f"Fe$-$36Cr, MD: {f0:.0f} $\\to$ {f1:.0f} MHz (+{100 * (f1 / f0 - 1):.1f}%)\nelectronic lever rule: +7.7%",
+             fontsize=5.6, va="top", color="0.1", linespacing=1.4)
+    panel_d(fig, [0.755, 0.0, 0.245, 0.43])
+    out = ROOT / "manuscript" / "figures" / "kdense_scripta" / "fig4_mechanism_v3_full"
+    fig.savefig(f"{out}.png", dpi=600); fig.savefig(f"{out}.pdf"); fig.savefig(f"{out}.svg")
+    print("wrote", out, "majority critical level at H:", round(crit, 3), "eV")
+
+
 def main():
     build_full()
     build_full_v2()
+    build_full_v3()
     for cdw, saw, tag in ((False, False, ""), (True, False, "_cdw"), (False, True, "_saw"), (True, True, "_cdw_saw")):
         build(cdw, saw, tag)
 
