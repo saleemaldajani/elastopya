@@ -72,13 +72,19 @@ ATOMIC_SPECIES
 def run(d, name, np_):
     out = d / f"{name}.out"
     if out.exists() and "JOB DONE" in out.read_text():
-        return out.read_text()
+        text = out.read_text()
+        if "convergence NOT achieved" in text:
+            sys.exit(f"{name}: earlier run did not converge (see {out}); stopping")
+        return text
     nk = int(os.environ.get("QE_NK", min(np_, 4)))
     env = ({**os.environ, "OMP_NUM_THREADS": "1"} if "QE_MPIRUN" in os.environ else
            {"TMPDIR": "/tmp", "HOME": str(Path.home()), "PATH": "/usr/bin:/bin", "OMP_NUM_THREADS": "1"})
     subprocess.run([str(MPIRUN), "-np", str(np_), str(PW), "-nk", str(nk), "-in", f"{name}.in"],
                    cwd=d, stdout=open(out, "w"), stderr=subprocess.STDOUT, check=True, env=env)
-    return out.read_text()
+    text = out.read_text()
+    if "convergence NOT achieved" in text:      # QE prints JOB DONE even then; never build on such a step
+        sys.exit(f"{name}: SCF did not converge (see {out}); stopping")
+    return text
 
 
 def final_structure(text, cell0, frac0):
