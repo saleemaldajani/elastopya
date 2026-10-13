@@ -25,6 +25,7 @@ ESPRESSO scratch/wavefunctions) are not stored.
 | `scripts/make_figures.py` | Regenerates every figure from `data/` (`python scripts/make_figures.py`) |
 | `scripts/make_figures_kdense.py`, `scripts/kdense_scripta/` | Scripta Materialia figure set (190 mm, 7 pt Arial, colour-blind-safe, collision-checked) in `manuscript/figures/kdense_scripta/`, using K-Dense helpers (MIT) adapted for Scripta |
 | `scripts/figures_with_strips.py` | Figure versions with a panel (c) of atomic snapshots (`manuscript/figures/with_strips/`) |
+| `data/spreadsheet/` | Working Google Sheet: original export and a corrected copy (`scripts/fix_spreadsheet.py`; changes in `CHANGES.md`) |
 | `data/sheet_*.csv` | Bounded snapshots of the working spreadsheet used for Figs. 1–3 (literature tensors, author DFT tensors, Acta MD moduli, thermodynamic model, band edges) |
 | `scripts/saw_du.py` | Python port of the Du & Zhao (2017) surface Green's-function (P)SAW solver |
 | `scripts/saw_random_orientations.py`, `scripts/run_saw_*.sh` | Orientation-resolved (P)SAW spectra over 10,000 random grains |
