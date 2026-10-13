@@ -1,0 +1,1 @@
+Third relaxation SCF reached the 300-iteration limit (last accuracy ~3e-8 Ry, target 1e-8) with Cr antiparallel start, beta 0.1, ndim 16; the pre-guard driver then ran strains on an unconverged structure. Do not use. A restart from this point with electron_maxstep 500 would very likely converge.

@@ -68,7 +68,7 @@ def panel_a(fig, rect):
     ax.text(1.0, 1.04, "schematic", fontsize=4.6, color="0.5", ha="right", style="italic")
     motif(ax, 0.74, 0.62, dec, "decomposed\n$\\alpha$ FM | $\\alpha'$ AF")
     # inset: QE moments and demixing free energy
-    ins = fig.add_axes([rect[0] + 0.04, rect[1] + 0.09, rect[2] * 0.62, rect[3] * 0.34])
+    ins = fig.add_axes([rect[0] + 0.055, rect[1] + 0.09, rect[2] * 0.58, rect[3] * 0.34])
     qm = {}
     import visualize_sqs as VS
     for x in (0.2, 0.35, 0.5, 0.65, 0.95):
@@ -266,14 +266,14 @@ def saw_schematic(ax):
     for x0 in (0.25, 0.75, 1.25, 1.75):                       # retrograde elliptical particle orbits decaying with depth
         for dz, sc in ((0.0, 1.0), (-0.3, 0.55), (-0.6, 0.25)):
             ax.add_patch(matplotlib.patches.Ellipse((x0, dz), 0.10 * sc, 0.16 * sc, fill=False, ec="white", lw=0.7, zorder=4))
-    for xb in (0.15, 1.85):                                   # pump beams
-        ax.annotate("", xy=(1.0, 0.1), xytext=(xb, 0.95), arrowprops=dict(arrowstyle="-", lw=2.5, color="#FFB000", alpha=0.6))
+    for xb in (0.30, 1.70):                                   # pump beams
+        ax.annotate("", xy=(1.0, 0.1), xytext=(xb, 0.80), arrowprops=dict(arrowstyle="-", lw=2.5, color="#FFB000", alpha=0.6))
     for xg in np.arange(0, 2.01, lam / 2):
         ax.plot([xg, xg], [0.12, 0.42], color="#FFB000", lw=1.0, alpha=0.5)
     ax.annotate("", xy=(1.5, 0.48), xytext=(0.5, 0.48), arrowprops=dict(arrowstyle="<->", lw=0.6, color="0.2"))
     ax.text(1.0, 0.5, r"$\lambda$ = 6.4 $\mu$m grating", ha="center", va="bottom", fontsize=5.6)
     ax.text(0.5, -1.12, "random", ha="center", va="top", fontsize=5.8); ax.text(1.5, -1.12, "decomposed", ha="center", va="top", fontsize=5.8)
-    ax.text(2.02, 0.95, "schematic (MD planes real)", fontsize=4.6, color="0.5", ha="right", va="top", style="italic")
+    ax.text(-0.02, 0.97, "schematic (MD planes real)", fontsize=4.6, color="0.5", ha="left", va="top", style="italic")
     ax.set_xlim(-0.02, 2.02); ax.set_ylim(-1.3, 1.0); ax.axis("off")
 
 
@@ -305,9 +305,10 @@ def panel_d(fig, rect, saw=False):
         v = ax.violinplot(f, positions=[pos], widths=0.75, showextrema=False, bw_method=0.12)
         for b in v["bodies"]:
             b.set_facecolor(col); b.set_edgecolor(col); b.set_alpha(0.55)
-        ax.text(pos, 345, lab, ha="center", va="bottom", fontsize=5.4, linespacing=1.0)
         ax.plot([pos - 0.22, pos + 0.22], [f.max()] * 2, color="#FF3B00", lw=1.1)
-    ax.set(xlim=(-0.6, 2.6), ylim=(330, 860), xticks=[]); ax.tick_params(labelsize=5.5)
+    ax.set(xlim=(-0.6, 2.6), ylim=(330, 860)); ax.tick_params(labelsize=5.5)
+    ax.set_xticks([0, 1, 2]); ax.set_xticklabels(["MD\nrandom", "MD\ndecomposed", "DFT (QE)\nrandom"], fontsize=5.2, linespacing=1.0)
+    ax.tick_params(axis="x", length=0)
     ax.set_ylabel("(P)SAW (MHz)" if saw else "(P)SAW frequency (MHz), Fe$-$36Cr", fontsize=6)
     ax.text(0.99, 1.01, r"$10^4$ grains, $\lambda$ = 6.4 $\mu$m; QE at 35% Cr", transform=ax.transAxes, ha="right", va="bottom", fontsize=4.8, color="0.4")
     if saw:
@@ -365,7 +366,7 @@ def build_full():
 N_EF_CR = 0.70     # states/eV/atom, NM bcc Cr (Moruzzi, Janak & Williams 1978, p. 76) -> rigid-band shift
 
 
-def draw_fs_change(ax, y_fe=0.10):
+def draw_fs_change(ax, y_fe=0.10, legend_below=False):
     """Cr Fermi-surface section at E_F (pure Cr) and at the rigid-band E_F with y_fe Fe (2 extra electrons per Fe):
     the electron jack (Gamma) and hole octahedron (H) change size in opposite senses, so Q no longer nests both."""
     import fermi_slices as fs
@@ -388,7 +389,10 @@ def draw_fs_change(ax, y_fe=0.10):
         ax.text(x + 0.03, y + 0.05, lab, fontsize=6.5, color="white", zorder=6)
     ax.plot([], [], "-", color="#7FDBFF", label="pure Cr: jack and octahedron nest")
     ax.plot([], [], "--", color="#FF8C1A", label=f"+{round(100 * y_fe)}% Fe (rigid band, $\\Delta E_F$ = +{de:.2f} eV):\nsheets resize oppositely $\\Rightarrow$ nesting lost")
-    ax.legend(loc="upper center", bbox_to_anchor=(0.5, 1.22), fontsize=5.2, frameon=False, handlelength=1.8)
+    if legend_below:
+        ax.legend(loc="upper center", bbox_to_anchor=(0.5, 0.0), fontsize=5.2, frameon=False, handlelength=1.8)
+    else:
+        ax.legend(loc="upper center", bbox_to_anchor=(0.5, 1.22), fontsize=5.2, frameon=False, handlelength=1.8)
     ax.set_xlim(-1.02, 1.02); ax.set_ylim(-1.02, 1.02); ax.set_aspect("equal"); ax.axis("off")
 
 
@@ -412,8 +416,8 @@ def draw_kohn(ax):
     ax.set_xticks([0, 0.5, 1]); ax.set_xticklabels(["Γ", "", "H"])
     ax.set_ylabel(r"$\nu$ (THz)", fontsize=6, labelpad=1)
     ax.legend(fontsize=4.6, loc="lower right", frameon=False, handlelength=1.2)
-    ax.text(0.0, 1.03, "Kohn softening at Q: lattice imprint of the SDW/CDW", transform=ax.transAxes, fontsize=5.2,
-            va="bottom", color="0.15")
+    ax.text(-0.2, 1.03, "Kohn softening at $\\mathbf{Q}$:\nlattice imprint of the SDW/CDW", transform=ax.transAxes, fontsize=5.2,
+            va="bottom", color="0.15", linespacing=1.1)
 
 
 def build_full_v2():
@@ -546,10 +550,116 @@ def build_full_v3():
     print("wrote", out, "majority critical level at H:", round(crit, 3), "eV")
 
 
+def build_full_v4(out_name="fig4_mechanism_v4_full"):
+    """Everything in one figure: v3 plus the Fermi-level DOS back in panel (c); taller top row, no overlaps."""
+    sys.path.insert(0, str(HERE / "kdense_scripta" / "scripts"))
+    from style_presets import apply_publication_style
+    apply_publication_style("scripta"); plt.rcParams["svg.fonttype"] = "none"
+    W, H = 190 / 25.4, 7.0
+    fig = plt.figure(figsize=(W, H))
+    bg = fig.add_axes([0, 0, 1, 1], zorder=-5); bg.axis("off")
+    cmap = LinearSegmentedColormap.from_list("fecr", [(*to_rgb(FE), 1), (1, 1, 1, 1), (*to_rgb(CR), 1)])
+    bg.imshow(np.linspace(0, 1, 512)[None, :], aspect="auto", cmap=cmap, alpha=0.10, extent=(0, 1, 0, 1))
+    bg.axhline(0.425, xmin=0.01, xmax=0.99, color="0.75", lw=0.6, ls=(0, (4, 3)))
+    top = [(0.005, "FRUSTRATE", "(a) atoms & moments"), (0.255, "NEST", "(b) Cr Fermi surface vs Fe content"),
+           (0.505, "TOPOLOGY", "(c) Fe-rich ETT: spin $\\uparrow$ vs $\\downarrow$"), (0.755, "MODULATE", "(d) SDW/CDW soften the lattice")]
+    bot = [(0.005, "STIFFEN", "(e) electron $\\to$ lattice: decomposition"), (0.505, "PROPAGATE", "(f) Rayleigh wave in TGS"),
+           (0.755, "DETECT", "(g) (P)SAW vs pristine CASS")]
+    for row, y in ((top, 0.99), (bot, 0.41)):
+        for i, (x, verb, sub) in enumerate(row):
+            fig.text(x + 0.012, y, verb, fontsize=10.5, fontweight="heavy", color="0.08", va="top")
+            fig.text(x + 0.012, y - 0.031, sub, fontsize=6.6, color="0.3", va="top")
+            nxt = row[i + 1][0] if i + 1 < len(row) else None
+            if nxt is not None:
+                fig.patches.append(matplotlib.patches.FancyArrow(nxt - 0.045, y - 0.014, 0.03, 0, width=0.005, head_width=0.016,
+                                                                 head_length=0.010, color="#FF3B00", transform=fig.transFigure, figure=fig))
+    fig.patches.append(matplotlib.patches.FancyArrow(0.97, 0.445, 0, -0.03, width=0.004, head_width=0.012, head_length=0.010,
+                                                     color="#FF3B00", transform=fig.transFigure, figure=fig))
+    # (a)
+    panel_a(fig, [0.005, 0.445, 0.245, 0.49])
+    # (b)
+    if _NEST_V5:
+        draw_bands_gh(fig.add_axes([0.30, 0.812, 0.185, 0.09]))
+        draw_fs_change(fig.add_axes([0.268, 0.50, 0.22, 0.30]), legend_below=True)
+    else:
+        draw_fs_change(fig.add_axes([0.268, 0.47, 0.22, 0.34]))
+    # (c): ETT sequence, spin-resolved Fe Fermi surfaces, note, Fermi-level DOS
+    ett_strip(fig, 0.515, 0.845, 0.048, note_below=False)
+    wsq = 0.105; hsq = wsq * W / H
+    crit = draw_fs_spin(fig.add_axes([0.515, 0.665, wsq, hsq]), fig.add_axes([0.632, 0.665, wsq, hsq]))
+    fig.text(0.515, 0.622, "Cr shifts the majority states (band filling alone moves\n$E_{\\rm F}$ away) $\\Rightarrow$ ETT at 5$-$10% Cr in spin $\\uparrow$ only\n"
+             "(Korzhavyi 2009); unfolded SQS Fermi surfaces pending", fontsize=4.7, color="#8A5A00", va="top", linespacing=1.15)
+    draw_nef(fig.add_axes([0.552, 0.465, 0.175, 0.088]))
+    # (d)
+    cax = fig.add_axes([0.758, 0.665, 0.24, 0.235]); cdw_schematic(cax)
+    cax.text(N_CDW - 1, -0.2, "schematic", fontsize=4.6, color="0.5", ha="right", style="italic")
+    draw_kohn(fig.add_axes([0.80, 0.465, 0.185, 0.145]))
+    # bottom row
+    panel_c(fig, [0.03, 0.0, 0.46, 0.335], eq_at=(0.49, 0.355))
+    sax = fig.add_axes([0.51, 0.148, 0.235, 0.205]); saw_schematic(sax)
+    dec = mf.md_decomposition()[X0]
+    f0, f1 = float(dec["f"][np.argmin(dec["phi"])]) * 1e3, float(dec["f"][np.argmax(dec["phi"])]) * 1e3
+    fig.text(0.515, 0.10, r"$C_{ij}\!\uparrow\Rightarrow G\!\uparrow\Rightarrow v_R=\eta(\nu)\sqrt{G/\rho}\!\uparrow\Rightarrow f=v_R/\lambda\!\uparrow$" "\n"
+             f"Fe$-$36Cr, MD: {f0:.0f} $\\to$ {f1:.0f} MHz (+{100 * (f1 / f0 - 1):.1f}%)\nelectronic lever rule: +7.7%",
+             fontsize=5.6, va="top", color="0.1", linespacing=1.4)
+    panel_d(fig, [0.755, 0.0, 0.245, 0.37])
+    out = ROOT / "manuscript" / "figures" / "kdense_scripta" / out_name
+    fig.savefig(f"{out}.png", dpi=600); fig.savefig(f"{out}.pdf"); fig.savefig(f"{out}.svg")
+    print("wrote", out)
+
+
+def draw_bands_gh(ax, y_fe=0.10):
+    """NM Cr bands along Gamma-H near E_F (QE): the d band that bounds the electron jack (Gamma side) and the hole
+    octahedron (H side) crosses E_F at k_F; with y_fe Fe (rigid band) the crossing moves, resizing both sheets."""
+    import fermi_slices as fs
+    k, ev, ef = fs.read_xml(ENG / "bandpath" / "Cr_nm" / "bands_data.xml")
+    d = np.r_[0, np.cumsum(np.linalg.norm(np.diff(k, axis=0), axis=1))]
+    m = d <= 1 + 1e-6
+    kk, E = d[m], ev[0][m] - ef
+    de = 2 * y_fe / N_EF_CR
+    for b in range(E.shape[1]):
+        if E[:, b].min() < 1.2 and E[:, b].max() > -1.5:
+            ax.plot(kk, E[:, b], color="0.2", lw=0.8)
+    ax.axhline(0, color="#7FDBFF", lw=1.0); ax.axhline(de, color="#FF8C1A", lw=1.0, ls="--")
+    kf = {}
+    for lev, col in ((0.0, "#2A9DF4"), (de, "#FF8C1A")):
+        for b in range(E.shape[1]):
+            e = E[:, b] - lev; s = np.where(np.sign(e[:-1]) != np.sign(e[1:]))[0]
+            for i in s:
+                x = kk[i] - e[i] * (kk[i + 1] - kk[i]) / (e[i + 1] - e[i])
+                if 0.5 < x < 0.75:
+                    ax.plot([x], [lev], "o", color=col, ms=3, zorder=5); kf[lev] = x
+    ax.set(xlim=(0, 1), ylim=(-1.2, 1.0)); ax.tick_params(labelsize=5)
+    ax.set_xticks([0, 1]); ax.set_xticklabels(["Γ", "H"]); ax.set_ylabel("$E-E_F$ (eV)", fontsize=5.5, labelpad=1)
+    if 0.0 in kf and de in kf:
+        ax.text(0.0, 1.03, f"Γ$-$H bands: $k_F$ {kf[0.0]:.2f} $\\to$ {kf[de]:.2f} $2\\pi/a$ with +{round(100 * y_fe)}% Fe", transform=ax.transAxes,
+                fontsize=4.9, va="bottom", color="0.15")
+    ax.text(0.13, 0.43, "jack (e)", transform=ax.transAxes, fontsize=4.8, color="#1B6FB5", ha="center")
+    ax.text(0.97, 0.05, "octahedron (h)", transform=ax.transAxes, fontsize=4.8, color="#1B6FB5", ha="right")
+
+
+def build_full_v5():
+    """v4 with the NEST column filled: Gamma-H bands near E_F on top, the Fermi-surface section below."""
+    import types
+    src = build_full_v4.__code__
+    # reuse v4 by monkey-patching the two NEST calls through a flag
+    global _NEST_V5
+    _NEST_V5 = True
+    try:
+        build_full_v4(out_name="fig4_mechanism_v5_full")
+    finally:
+        _NEST_V5 = False
+
+
+_NEST_V5 = False
+
+
 def main():
     build_full()
     build_full_v2()
     build_full_v3()
+    build_full_v4()
+    build_full_v5()
     for cdw, saw, tag in ((False, False, ""), (True, False, "_cdw"), (False, True, "_saw"), (True, True, "_cdw_saw")):
         build(cdw, saw, tag)
 
