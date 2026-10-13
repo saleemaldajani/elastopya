@@ -43,7 +43,8 @@ PROFILE = load_publisher_profiles()["profiles"]["scripta"]
 WIDTH_IN = PROFILE["widths_mm"]["full"] / 25.4
 MIN_PT = PROFILE["lettering_pt"]["normal"]
 DPI = 600
-TIFF_STEMS = {"fig1_free_energy", "fig2_elastic_mapping", "fig3_fsaw"}   # manuscript figures
+TIFF_STEMS = {"fig1_free_energy", "fig2_elastic_mapping_orientation_violin_bulk_mddecomp",
+              "fig3_fsaw_mddecomp_6p4um"}   # manuscript figures
 
 # Okabe-Ito (Wong 2011) replacements, same hue family as the draft's Google-Sheets colours
 mf.BLUE, mf.RED, mf.YELLOW, mf.GREEN, mf.ORANGE = "#0072B2", "#D55E00", "#E69F00", "#009E73", "#CC79A7"
@@ -317,7 +318,7 @@ def strips():
     if 0.36 in ser:
         p36 = [(rf"$\phi$ = {float(f.stem[3:]):.1f}", snap(f)) for f in ser[0.36]]
         for stem in ("fig3_fsaw", "fig3_fsaw_relative", "fig3_fsaw_mddecomp", "fig3_fsaw_alpha",
-                     "fig3_fsaw_crcolor", "fig3_fsaw_relative_crcolor"):
+                     "fig3_fsaw_crcolor", "fig3_fsaw_relative_crcolor", "fig3_fsaw_mddecomp_6p4um"):
             STRIPS[stem] = (r"Fe$_{64}$Cr$_{36}$ decomposing (MD, one (001) plane): Fe-rich $\alpha$ and Cr-rich "
                             r"$\alpha'$ domains form as $\phi$ goes 0.5 $\to$ 1", p36)
 
@@ -352,6 +353,8 @@ def trends():
     rel36 = 100 * (f36 / f36[np.argmin(ph36)] - 1)
     for stem in ("fig3_fsaw", "fig3_fsaw_mddecomp", "fig3_fsaw_alpha", "fig3_fsaw_crcolor"):
         TRENDS[stem] = [dict(label="$f_{\\rm SAW}$\n(GHz, 5.5 µm)", values=list(f36), fmt="{:.3f}")]
+    TRENDS["fig3_fsaw_mddecomp_6p4um"] = [dict(label="$f_{\\rm SAW}$\n(GHz, 6.4 µm)", values=list(dec[0.36]["f"]),
+                                               fmt="{:.3f}")]
     for stem in ("fig3_fsaw_relative", "fig3_fsaw_relative_crcolor"):
         TRENDS[stem] = [dict(label="$\\Delta f_{\\rm SAW}$\n(%)", values=list(rel36), fmt="{:+.1f}")]
 
