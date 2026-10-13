@@ -116,14 +116,14 @@ def cdw_schematic(ax):
     glow(ax, zz, 1.05 + 0.32 * rho, "#2A9DF4", lw=0.8)
     u = 0.28 * np.sin(4 * np.pi * (n + 0.5) / P)
     for k in n:
-        ax.plot([z[k], z[k]], [0.0, 0.3], color="0.7", lw=0.4)
-    ax.scatter(z + u, np.full(N, 0.15), s=7, color=CR, edgecolor="0.15", linewidth=0.3, zorder=3)
+        ax.plot([z[k], z[k]], [-0.45, -0.15], color="0.7", lw=0.4)
+    ax.scatter(z + u, np.full(N, -0.30), s=7, color=CR, edgecolor="0.15", linewidth=0.3, zorder=3)
     for y, lab in ((2.35, r"SDW  $m\propto\cos\mathbf{Q}\!\cdot\!\mathbf{r}$"), (1.05, r"CDW  $\Delta\rho\propto\cos 2\mathbf{Q}\!\cdot\!\mathbf{r}$"),
-                   (0.15, r"strain wave at $2\mathbf{Q}$")):
+                   (-0.30, r"strain wave at $2\mathbf{Q}$")):
         ax.text(-1.2, y + 0.48, lab, fontsize=5.6, va="bottom", ha="left", color="0.1")
     ax.annotate("", xy=(P - 0.5, 3.2), xytext=(-0.5, 3.2), arrowprops=dict(arrowstyle="<->", lw=0.6, color="0.3"))
     ax.text(P / 2 - 0.5, 3.25, r"$\lambda_{\rm SDW}=a/\delta$ ($\approx 20a$; $\delta$ exaggerated)", ha="center", va="bottom", fontsize=5.3, color="0.3")
-    ax.set_xlim(-1.5, N - 0.3); ax.set_ylim(-0.25, 3.8); ax.axis("off")
+    ax.set_xlim(-1.5, N - 0.3); ax.set_ylim(-0.6, 3.8); ax.axis("off")
 
 
 def ett_strip(fig, x0, y0, h, note_below=False):
@@ -592,7 +592,7 @@ def build_full_v4(out_name="fig4_mechanism_v4_full"):
     draw_nef(fig.add_axes([0.552, 0.465, 0.175, 0.088]))
     # (d)
     cax = fig.add_axes([0.758, 0.665, 0.24, 0.235]); cdw_schematic(cax)
-    cax.text(N_CDW - 1, -0.2, "schematic", fontsize=4.6, color="0.5", ha="right", style="italic")
+    cax.text(N_CDW - 1, -0.62, "schematic", fontsize=4.6, color="0.5", ha="right", va="top", style="italic")
     draw_kohn(fig.add_axes([0.80, 0.465, 0.185, 0.145]))
     # bottom row
     panel_c(fig, [0.03, 0.0, 0.46, 0.335], eq_at=(0.49, 0.355))

@@ -197,7 +197,7 @@ def qe_mixing(T_K=298.15):
     ry = 13.605693123
     fe, cr = e_last(runs / "Fe_fm_k8x8x10_e60") / 2, e_last(runs / "Cr_afm_k8x8x10_e60") / 2
     out = {}
-    for d in sorted(runs.glob("sqs40_x*_k442_e60")) + sorted(runs.glob("sqs40_x0.80_k442_e60_crafm")):
+    for d in sorted(runs.glob("sqs40_x*_k442_e60")) + sorted(runs.glob("sqs40_x0.80_k442_e60_crafm2")):
         if (d / "result.json").exists():
             x = float(re.match(r"sqs40_x([\d.]+)_", d.name).group(1))
             dh = (e_last(d) / 40 - (1 - x) * fe - x * cr) * ry
@@ -512,7 +512,7 @@ def qe_dft():
     import json
     runs = ROOT / "dft_qe" / "engaging" / "runs"
     rows = {}
-    for d in sorted(runs.glob("sqs40_x*_k442_e60")) + sorted(runs.glob("sqs40_x0.80_k442_e60_crafm")):
+    for d in sorted(runs.glob("sqs40_x*_k442_e60")) + sorted(runs.glob("sqs40_x0.80_k442_e60_crafm2")):
         if (d / "result.json").exists():
             r = json.loads((d / "result.json").read_text())
             rows[round(r["x_cr"], 3)] = (r["C11"], r["C12"], r["C44"])
