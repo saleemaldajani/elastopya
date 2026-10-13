@@ -101,6 +101,7 @@ def sqs_prepare(unfold_dir, d):
     txt = (src / "bands.in").read_text().split("K_POINTS")[0]
     (d / "bands.in").write_text(txt + f"K_POINTS crystal\n{len(K_sc)}\n"
                                 + "".join(f"{k[0]:.10f} {k[1]:.10f} {k[2]:.10f} 1\n" for k in K_sc))
+    (d / "scf_source.txt").write_text(str(src.resolve()))
     z = np.load(src / "kmap.npz", allow_pickle=True)
     np.savez(d / "pathmap.npz", k_full=np.asarray(k_full), K_sc=K_sc, kmap=np.array([kmap], dtype=object),
              dist=dist, ticks=np.array([t for t, _ in ticks]), labels=np.array([l for _, l in ticks]),
@@ -115,11 +116,21 @@ def sqs_unfold(d):
     z = np.load(d / "pathmap.npz", allow_pickle=True)
     u = banduppy.Unfolding(supercell=uf.M_SC, print_log="low")
     for spin in ("up", "dw"):
-        kpts, bands = u.Unfold(PBZ_kpts_list_full=z["k_full"], SBZ_kpts_list=z["K_sc"], SBZ_PBZ_kpts_map=z["kmap"][0],
+        bands, kpts = u.Unfold(PBZ_kpts_list_full=z["k_full"], SBZ_kpts_list=z["K_sc"], SBZ_PBZ_kpts_map=z["kmap"][0],
                                ab_initio_code="qe", qe_keywards={"output_file_dir": str(d / "tmp"),
                                "save_file_prefix": "uf", "unfold_spin_channel": spin},
                                unfold_kpts_in_batch=True, kpt_batch_size=20)
         np.savez(d / f"ebs_{spin}.npz", kpts=np.asarray(kpts), bands=np.asarray(bands))
+
+
+def uf_fermi(d):
+    """E_F (eV) of the SCF this run reuses (the source unfold directory's scf.out), if known."""
+    import re
+    src = Path(d) / "scf_source.txt"
+    if not src.exists():
+        return None
+    t = Path(src.read_text().strip(), "scf.out").read_text()
+    return float(re.findall(r"the Fermi energy is\s+([-\d.]+) ev", t)[-1])
 
 
 def sqs_plot(outfile, dirs, eta=0.06):
@@ -130,9 +141,11 @@ def sqs_plot(outfile, dirs, eta=0.06):
         z = np.load(Path(d) / "pathmap.npz", allow_pickle=True)
         dist = z["dist"]
         for i, (spin, lab) in enumerate((("up", "spin up"), ("dw", "spin down"))):
-            u = np.load(Path(d) / f"ebs_{spin}.npz")["bands"]       # columns: k index, E - E_F (eV), weight
+            u = np.load(Path(d) / f"ebs_{spin}.npz")["bands"]   # BandUPpy: k index, k on path, energy (eV), weight
+            ef = uf_fermi(d)
             A = np.zeros((len(egrid), len(dist)))
-            for ik, e, w in u[:, :3]:
+            for ik, _, e, w in u[:, :4]:
+                e = e - ef if ef is not None else e
                 A[:, int(ik)] += w * (eta / np.pi) / ((egrid - e) ** 2 + eta ** 2)
             ax = axs[i, j]
             ax.imshow(A, extent=(0, dist[-1], egrid[0], egrid[-1]), origin="lower", aspect="auto", cmap="Greys",
