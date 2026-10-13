@@ -2,7 +2,8 @@
 """Phonon dispersions of bcc Fe (FM) and Cr (NM, commensurate AFM) from DFPT (QE ph.x, q2r.x, matdyn.x).
 
   phonons.py inputs <case> <dir> [nq]     scf.in (conv 1e-12), ph.in (nq^3 grid), q2r.in, matdyn.in (path)
-  phonons.py plot <outfile> <dir>...      frequencies (THz) along Gamma-H-N-Gamma-P-H (Cr AFM: Gamma-X-M-Gamma-R-X)
+  phonons.py check <dir>... [--allow-imaginary]   expected-stable systems must have no imaginary mode
+  phonons.py plot <outfile> <dir>... [--allow-imaginary]   (checks first) frequencies (THz) along Gamma-H-N-Gamma-P-H (Cr AFM: Gamma-X-M-Gamma-R-X)
 Same pseudopotentials, cutoff and smearing as the elastic-constant runs (fermi_slices.CASES).
 """
 import sys
@@ -27,7 +28,8 @@ def inputs(case, d, nq=6):
     c = fs.CASES[case]
     masses = "".join(f"  amass({i + 1}) = {m}\n" for i, (_, m, _) in enumerate(c["species"]))
     (d / "ph.in").write_text(f"phonons\n&inputph\n  prefix = 'fs', outdir = './tmp', fildyn = 'dyn',\n"
-                             f"  tr2_ph = 1e-15, ldisp = .true., nq1 = {nq}, nq2 = {nq}, nq3 = {nq},\n{masses}/\n")
+                             f"  tr2_ph = 1e-15, ldisp = .true., nq1 = {nq}, nq2 = {nq}, nq3 = {nq},\n"
+                             f"  alpha_mix(1) = 0.2, nmix_ph = 12,\n{masses}/\n")   # gentler mixing: default 0.7 diverged for Cr
     (d / "q2r.in").write_text("&input\n  fildyn = 'dyn', zasr = 'crystal', flfrc = 'fc'\n/\n")
     path = bp.PATH_SC if case == "Cr_afm" else bp.PATH_BCC
     lines = "".join(f"{q[0]} {q[1]} {q[2]} {bp.NSEG}\n" for _, q in path[:-1]) + f"{path[-1][1][0]} {path[-1][1][1]} {path[-1][1][2]} 1\n"
@@ -35,12 +37,34 @@ def inputs(case, d, nq=6):
                                  f"{masses}/\n{len(path)}\n{lines}")
 
 
-def plot(outfile, dirs):
+NEG_TOL_THZ = -0.05   # numerical-noise tolerance near Gamma
+# Systems expected to be dynamically stable: imaginary modes there signal a numerical problem.
+# A deliberately unstable phase (e.g. a hypothetical structure) is plotted with --allow-imaginary,
+# and its imaginary branches are then a result, shown below zero.
+EXPECT_STABLE = {"Fe_fm", "Cr_nm", "Cr_afm"}
+
+
+def check(d, allow_imaginary=False):
+    """Lowest frequency (THz) along the path. For an expected-stable system, imaginary modes beyond
+    NEG_TOL_THZ stop the plot unless allow_imaginary is set."""
+    w = np.loadtxt(Path(d) / "freq.gp")[:, 1:] * CM1_THZ
+    wmin = float(w.min())
+    name = Path(d).name
+    print(f"{name}: lowest frequency {wmin:.3f} THz")
+    if wmin < NEG_TOL_THZ and name.split("_v")[0] in EXPECT_STABLE and not allow_imaginary:
+        raise SystemExit(f"{name}: imaginary modes down to {wmin:.2f} THz in a phase expected to be stable; "
+                         "fix the calculation (or pass --allow-imaginary if instability is the result)")
+    return wmin
+
+
+def plot(outfile, dirs, allow_imaginary=False):
+    for d in dirs:
+        check(d, allow_imaginary)
     plt = bp._style()
     titles = {"Fe_fm": "bcc Fe (FM)", "Cr_nm": "bcc Cr (NM)", "Cr_afm": "Cr (AFM)"}
     fig, axs = plt.subplots(1, len(dirs), figsize=(2.4 * len(dirs), 2.6), squeeze=False)
     for ax, d in zip(axs[0], dirs):
-        d = Path(d); case = d.name
+        d = Path(d); case = d.name.split("_v")[0]
         gp = np.loadtxt(d / "freq.gp")
         x, w = gp[:, 0], gp[:, 1:] * CM1_THZ
         for b in range(w.shape[1]):
@@ -52,7 +76,7 @@ def plot(outfile, dirs):
             ax.axvline(t * scale, color="0.8", lw=0.5)
         ax.axhline(0, color="0.6", lw=0.5)
         ax.set(xlim=(0, x[-1]), ylabel="Frequency (THz)")
-        ax.set_title(titles.get(case, case), fontsize=8)
+        ax.set_title(titles.get(case, case) + (f" {d.name[len(case) + 1:]}" if d.name != case else ""), fontsize=8)
     fig.tight_layout()
     fig.savefig(outfile, dpi=600); fig.savefig(Path(outfile).with_suffix(".pdf"))
     print("wrote", outfile)
@@ -61,5 +85,11 @@ def plot(outfile, dirs):
 if __name__ == "__main__":
     if sys.argv[1] == "inputs":
         inputs(sys.argv[2], sys.argv[3], int(sys.argv[4]) if len(sys.argv) > 4 else 6)
-    elif sys.argv[1] == "plot":
-        plot(sys.argv[2], sys.argv[3:])
+    elif sys.argv[1] in ("check", "plot"):
+        allow = "--allow-imaginary" in sys.argv
+        args = [a for a in sys.argv[2:] if a != "--allow-imaginary"]
+        if sys.argv[1] == "check":
+            for d in args:
+                check(d, allow)
+        else:
+            plot(args[0], args[1:], allow)
