@@ -29,9 +29,11 @@ def prepare(poscar, x, relax_dir, out):
     n = n.replace("occupations = 'smearing', smearing = 'mv', degauss = 0.02",
                   f"occupations = 'tetrahedra_opt', nbnd = {nbnd}")
     n = n.replace("K_POINTS automatic\n4 4 2 0 0 0", "K_POINTS automatic\n6 6 3 0 0 0")
+    n = n.replace("electron_maxstep = 300", "electron_maxstep = 300, diagonalization = 'cg'")   # Davidson failed (Fe-20Cr)
     (out / "nscf.in").write_text(n)
-    (out / "projwfc.in").write_text("&projwfc\n  prefix = 'dos', outdir = './tmp', filpdos = 'pdos',\n"
-                                    "  DeltaE = 0.01, degauss = 0.005, ngauss = 0\n/\n")
+    # tetrahedron DOS from the nscf run (an explicit degauss here gave all-zero PDOS with tetrahedra_opt)
+    (out / "projwfc.in").write_text("&projwfc\n  prefix = 'dos', outdir = './tmp', filpdos = 'pdosT',\n"
+                                    "  DeltaE = 0.01\n/\n")
     print(out, "nbnd", nbnd)
 
 

@@ -18,5 +18,6 @@ PROJ=$(dirname $QE_PW)/projwfc.x
 cd $D
 grep -q "JOB DONE" scf.out 2>/dev/null || $QE_MPIRUN -np 60 $QE_PW -nk 20 -in scf.in > scf.out
 grep -q "JOB DONE" nscf.out 2>/dev/null || $QE_MPIRUN -np 60 $QE_PW -nk 20 -in nscf.in > nscf.out
-grep -q "JOB DONE" projwfc.out 2>/dev/null || $QE_MPIRUN -np 60 $PROJ -nk 20 -in projwfc.in > projwfc.out
-ls pdos.pdos_tot && echo DOS_OK
+grep -q "JOB DONE" nscf.out || { echo NSCF_FAILED; exit 1; }
+grep -q "JOB DONE" projwfc.out 2>/dev/null || $QE_MPIRUN -np 16 $PROJ -nk 1 -in projwfc.in > projwfc.out
+ls pdosT.pdos_tot && echo DOS_OK

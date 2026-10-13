@@ -20,8 +20,9 @@ def site_dos(d):
     d = Path(d)
     ef = float(re.findall(r"the Fermi energy is\s+([-\d.]+) ev", (d / "nscf.out").read_text())[-1])
     acc, atoms, e = {}, {}, None
-    for f in d.glob("pdos.pdos_atm#*"):
-        m = re.match(r"pdos\.pdos_atm#(\d+)\((\w+)\)_wfc#\d+\(\w\)", f.name)
+    prefix = "pdosT" if any(d.glob("pdosT.pdos_atm#*")) else "pdos"     # pdosT = tetrahedron projwfc (fixed)
+    for f in d.glob(f"{prefix}.pdos_atm#*"):
+        m = re.match(rf"{prefix}\.pdos_atm#(\d+)\((\w+)\)_wfc#\d+\(\w\)", f.name)
         if not m:
             continue
         idx, el = int(m.group(1)), m.group(2)
@@ -39,6 +40,12 @@ def main(outfile, dirs):
     from style_presets import apply_publication_style
     apply_publication_style("scripta")
     fig, axs = plt.subplots(1, len(dirs), figsize=(2.0 * len(dirs) + 0.6, 3.0), squeeze=False, sharey=True)
+    EWIN = (-7, 1.5)    # upper limit below the top of the computed empty bands (~+1.8 eV)
+    ymax = 0.0
+    for d in dirs:                                   # common y-range from the plotted energy window only
+        e, dos = site_dos(d)
+        w = (e >= EWIN[0]) & (e <= EWIN[1])
+        ymax = max([ymax] + [float(max(u[w].max(), dw[w].max())) for u, dw in dos.values()])
     for ax, d in zip(axs[0], dirs):
         e, dos = site_dos(d)
         for el in ("Fe", "Cr"):
@@ -47,7 +54,7 @@ def main(outfile, dirs):
                 ax.plot(e, up, color=COL[el], lw=0.9, label=el)
                 ax.plot(e, -dw, color=COL[el], lw=0.9)
         ax.axhline(0, color="0.5", lw=0.5); ax.axvline(0, color="0.5", lw=0.6, ls=":")
-        ax.set(xlim=(-7, 3), xlabel=r"$E - E_{\rm F}$ (eV)")
+        ax.set(xlim=EWIN, ylim=(-1.08 * ymax, 1.08 * ymax), xlabel=r"$E - E_{\rm F}$ (eV)")
         x = float(Path(d).name[1:])
         ax.set_title(f"{round(100 * x)}% Cr", fontsize=8)
         ax.text(0.03, 0.97, "spin up", transform=ax.transAxes, va="top", fontsize=7, color="0.35")
