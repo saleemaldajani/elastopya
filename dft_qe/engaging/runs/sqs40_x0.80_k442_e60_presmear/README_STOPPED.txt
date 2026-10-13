@@ -1,0 +1,1 @@
+Two-stage start (0.05 Ry pre-SCF) stalled near 1e-4 Ry after 149 iterations; cancelled. The Fe-80Cr result comes from runs/sqs40_x0.80_k442_e60_crafm (Cr starting moments antiparallel to Fe), which converges.
