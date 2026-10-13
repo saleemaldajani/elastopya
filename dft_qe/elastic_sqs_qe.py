@@ -11,6 +11,7 @@ Usage: elastic_sqs_qe.py <POSCAR> <x_cr> <kx> <ky> <kz> <ecut_Ry> <outdir> [--np
 """
 import argparse
 import json
+import os
 import sys
 import re
 import subprocess
@@ -20,9 +21,11 @@ from pathlib import Path
 import numpy as np
 
 SCR = Path("/private/tmp/claude-501/-Users-saleem-MIT-research-Scripta/37f8fe43-8e5f-4d11-883b-ebb44fa03560/scratchpad")
-PW = SCR / "qesrc/q-e-qe-7.5/build/bin/pw.x"
-MPIRUN = SCR / "qebuild/bin/mpirun"
-PSEUDO = SCR / "pseudo"
+# Local defaults; on a cluster set QE_PW, QE_MPIRUN, QE_PSEUDO (and optionally QE_NK, the number of
+# k-point pools). With QE_MPIRUN set, the job's own environment (modules, Slurm) is passed to MPI.
+PW = Path(os.environ.get("QE_PW", SCR / "qesrc/q-e-qe-7.5/build/bin/pw.x"))
+MPIRUN = Path(os.environ.get("QE_MPIRUN", SCR / "qebuild/bin/mpirun"))
+PSEUDO = Path(os.environ.get("QE_PSEUDO", SCR / "pseudo"))
 
 
 def read_poscar(path):
@@ -68,9 +71,11 @@ def run(d, name, np_):
     out = d / f"{name}.out"
     if out.exists() and "JOB DONE" in out.read_text():
         return out.read_text()
-    subprocess.run([str(MPIRUN), "-np", str(np_), str(PW), "-nk", str(min(np_, 4)), "-in", f"{name}.in"],
-                   cwd=d, stdout=open(out, "w"), stderr=subprocess.STDOUT, check=True,
-                   env={"TMPDIR": "/tmp", "HOME": str(Path.home()), "PATH": "/usr/bin:/bin", "OMP_NUM_THREADS": "1"})
+    nk = int(os.environ.get("QE_NK", min(np_, 4)))
+    env = ({**os.environ, "OMP_NUM_THREADS": "1"} if "QE_MPIRUN" in os.environ else
+           {"TMPDIR": "/tmp", "HOME": str(Path.home()), "PATH": "/usr/bin:/bin", "OMP_NUM_THREADS": "1"})
+    subprocess.run([str(MPIRUN), "-np", str(np_), str(PW), "-nk", str(nk), "-in", f"{name}.in"],
+                   cwd=d, stdout=open(out, "w"), stderr=subprocess.STDOUT, check=True, env=env)
     return out.read_text()
 
 
