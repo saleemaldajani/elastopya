@@ -233,9 +233,9 @@ def fig1(qe=None, entropy_fix=False):
     m = dict(ms=3.6, ls="none")
     if entropy_fix:
         fx = demix_from_enthalpy()
-        a.plot(*fx["muffin_tin"], "o", color=BLUE, label="Muffin-tin, EMTO-CPA (Korzhavyi et al.)", **m)
+        a.plot(*fx["muffin_tin"], "o", color=BLUE, label="Muffin-tin, EMTO-CPA, FM (Korzhavyi et al.)", **m)
         a.plot(*fx["gga"], "o", color=RED, label="GGA (VASP, this work)" if qe is not None else "GGA (this work)", **m)
-        a.plot(*fx["experimental"], "o", color=YELLOW, label="Experimental (Dench)", **m)
+        a.plot(*fx["experimental"], "o", color=YELLOW, label="Experimental, paramagnetic (Dench)", **m)
     else:
         a.plot(d["x_cr_a"], d["muffin_tin"], "o", color=BLUE, label="Muffin-tin approximation", **m)
         a.plot(d["x_cr_a"], d["gga"], "o", color=RED, label="GGA (this work)", **m)
