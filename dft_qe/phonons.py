@@ -77,7 +77,9 @@ def plot(outfile, dirs, allow_imaginary=False):
             ax.axvline(t * scale, color="0.8", lw=0.5)
         ax.axhline(0, color="0.6", lw=0.5)
         ax.set(xlim=(0, x[-1]), ylabel="Frequency (THz)")
-        ax.set_title(titles.get(fs.base(case), case) + (" (exp. a)" if case.endswith("_aexp") else "") + (f" {d.name[len(case) + 1:]}" if d.name != case else ""), fontsize=8)
+        suffix = d.name[len(case) + 1:] if d.name != case else ""
+        suffix = {"v5_k24": "($k=24^3$)", "v3_k20": "($k=20^3$)", "v4_deg04": "(smearing 0.04 Ry)"}.get(suffix, suffix)
+        ax.set_title(titles.get(fs.base(case), case) + (" (exp. a)" if case.endswith("_aexp") else "") + (f" {suffix}" if suffix else ""), fontsize=8)
     fig.tight_layout()
     fig.savefig(outfile, dpi=600); fig.savefig(Path(outfile).with_suffix(".pdf")); fig.savefig(Path(outfile).with_suffix(".svg"))
     print("wrote", outfile)
