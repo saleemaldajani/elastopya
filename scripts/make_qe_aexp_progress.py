@@ -11,7 +11,7 @@ import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt
 R = Path("../dft_qe/engaging/runs"); lit = mf.literature()
 def series(suf):
     out = []
-    for d in sorted(R.glob(f"sqs40_x*_k442_e60{suf}")):
+    for d in sorted(R.glob(f"sqs40_x*_k442_e60{suf}")) + (sorted(R.glob("sqs40_x0.80_k442_e60_aexp_crafm")) if suf == "_aexp" else []):
         if suf == "" and d.name.split("e60")[1]: continue
         j = d / "result.json"
         if j.exists():
