@@ -108,7 +108,7 @@ def deviation(segs, pts):
 
 def plot_dispersion(plt, out, title, refname, reflabel, variants):
     pts = exp_points(refname)
-    fig, ax = plt.subplots(figsize=(6.4, 3.4))
+    fig, ax = plt.subplots(figsize=(6.4, 4.2))
     for case, getter, col, ls, lab in variants:
         if not (ENG / "phonon" / case / "freq.gp").exists():
             continue
@@ -125,7 +125,7 @@ def plot_dispersion(plt, out, title, refname, reflabel, variants):
         ax.axvline(v, color="0.85", lw=0.5)
     ax.set_xticks(list(XB.values())); ax.set_xticklabels(["Γ", "H", "N", "Γ", "P", "H"]); ax.minorticks_off()
     ax.set(xlim=(0, XB["H2"]), ylim=(0, 12), ylabel="frequency (THz)", title=title)
-    ax.legend(fontsize=5.6, loc="upper center", ncol=1, framealpha=0.92)
+    ax.legend(fontsize=5.6, loc="upper center", bbox_to_anchor=(0.5, -0.09), ncol=2, frameon=False)
     fig.tight_layout(); fig.savefig(OUT / f"{out}.png", dpi=300); plt.close(fig)
     print("wrote", out)
 
@@ -226,7 +226,7 @@ def vrh_k(c11, c12):
 
 def plot_moments(plt):
     kz = rows("korzhavyi2009_fig8_moments.csv"); kl = rows("klaver2006_fig4_moments.csv")
-    fig, ax = plt.subplots(figsize=(4.8, 3.4))
+    fig, ax = plt.subplots(figsize=(6.6, 3.4))
     cols = {"Fe": "#D55E00", "Cr": "#0072B2"}
     for el in ("Fe", "Cr"):
         d = np.array(sorted((float(r["c_Cr_at_pct"]) / 100, float(r["moment_muB"])) for r in kz if r["series"] == f"M_{el} FM"))
@@ -248,7 +248,7 @@ def plot_moments(plt):
                 note("site moments", f"QE {lab} {el} x={x:.3f}", "korzhavyi2009_fig8 FM", "QE - EMTO (muB)", float(dv))
     ax.axhline(0, color="0.7", lw=0.5)
     ax.set(xlim=(0, 1), ylim=(-1.8, 2.6), xlabel="$x_{Cr}$", ylabel="site moment (μB)", title="Fe and Cr moments")
-    ax.legend(fontsize=4.6, loc="center right", bbox_to_anchor=(1.0, 0.42), ncol=1, framealpha=0.92)
+    ax.legend(fontsize=5.2, loc="center left", bbox_to_anchor=(1.01, 0.5), frameon=False)
     fig.tight_layout(); fig.savefig(OUT / "V_moments.png", dpi=300); plt.close(fig); print("wrote V_moments")
 
 
@@ -304,7 +304,7 @@ def sqs_nef(dos_root):
 
 def plot_nef(plt):
     kz = rows("korzhavyi2009_fig3d_nef.csv")
-    fig, ax = plt.subplots(figsize=(4.4, 3.0))
+    fig, ax = plt.subplots(figsize=(6.2, 3.0))
     for s, ls in (("Total FM", "-"), ("Spin down FM", "-."), ("Total DLM", "--")):
         d = np.array(sorted((float(r["c_Cr_at_pct"]) / 100, float(r["NEF_states_per_Ry"]) / RY_EV) for r in kz if r["series"] == s))
         ax.plot(d[:, 0], d[:, 1], ls, color="0.15" if "FM" in s else "#C00000", lw=1.0, label=f"EMTO-CPA {s} (Korzhavyi 2009)")
@@ -318,7 +318,7 @@ def plot_nef(plt):
             note("N(E_F)", f"QE relaxed x={x:.2f}", "korzhavyi2009_fig3d Total FM", "QE/EMTO - 1 (%)",
                  100 * (n / float(np.interp(x, tot[:, 0], tot[:, 1])) - 1))
     ax.set(xlim=(0, 1), ylim=(0, 1.8), xlabel="$x_{Cr}$", ylabel="$N(E_F)$ (states/eV/atom)", title="Fermi-level DOS")
-    ax.legend(fontsize=4.8, loc="upper right", framealpha=0.92)
+    ax.legend(fontsize=5.2, loc="center left", bbox_to_anchor=(1.01, 0.5), frameon=False)
     fig.tight_layout(); fig.savefig(OUT / "V_nef.png", dpi=300); plt.close(fig); print("wrote V_nef")
 
 
@@ -327,7 +327,7 @@ def plot_bands_fe(plt):
     import fermi_slices as fs
     import bands_path as bp
     kz = rows("korzhavyi2009_fig7_bands_fe.csv")
-    fig, axs = plt.subplots(1, 2, figsize=(5.6, 3.0), sharey=True)
+    fig, axs = plt.subplots(1, 2, figsize=(5.6, 3.6), sharey=True)
     _, dist, _ = bp.path_points(bp.PATH_BCC)
     m = dist <= 1.0 + 1e-9                                               # Gamma-H = first segment, |k| = dist
     for ax, (panel, spin, s) in zip(axs, (("a", "up", 0), ("d", "down", 1))):
@@ -347,7 +347,7 @@ def plot_bands_fe(plt):
         ax.axhline(0, color="0.6", lw=0.5, ls=":")
         ax.set(xlim=(0, 1), ylim=(-0.2 * RY_EV, 0.2 * RY_EV), title=f"Fe Γ–H, spin {spin}")
         ax.set_xticks([0, 1]); ax.set_xticklabels(["Γ", "H"])
-        ax.legend(fontsize=4.6, loc="lower left", framealpha=0.92)
+        ax.legend(fontsize=4.8, loc="upper center", bbox_to_anchor=(0.5, -0.1), frameon=False)
     axs[0].set_ylabel("$E-E_F$ (eV)")
     fig.tight_layout(); fig.savefig(OUT / "V_bands_Fe.png", dpi=300); plt.close(fig); print("wrote V_bands_Fe")
 

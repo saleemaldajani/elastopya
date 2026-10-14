@@ -77,9 +77,9 @@ def pure_plot(outfile, dirs):
             ax.axvline(t, color="0.8", lw=0.5)
         ax.set(xlim=(0, dist[-1]), ylim=(-8, 4), ylabel=r"$E - E_{\rm F}$ (eV)")
         ax.set_title(titles.get(fs.base(case), case) + (" (exp. a)" if case.endswith("_aexp") else ""), fontsize=8)
-    axs[0, 0].plot([], [], color="#D55E00", label="majority"); axs[0, 0].plot([], [], "--", color="#0072B2", label="minority")
-    axs[0, 0].legend(loc="lower left", fontsize=7)
-    fig.tight_layout()
+    h = [axs[0, 0].plot([], [], color="#D55E00", label="majority")[0], axs[0, 0].plot([], [], "--", color="#0072B2", label="minority")[0]]
+    fig.tight_layout(rect=(0, 0.07, 1, 1))
+    fig.legend(handles=h, loc="lower center", ncol=2, fontsize=7, frameon=False)   # below the panels, clear of the bands
     fig.savefig(outfile, dpi=600); fig.savefig(Path(outfile).with_suffix(".pdf")); fig.savefig(Path(outfile).with_suffix(".svg"))
     print("wrote", outfile)
 
