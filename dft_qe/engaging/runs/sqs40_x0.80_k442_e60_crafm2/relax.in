@@ -12,6 +12,7 @@
   conv_thr = 1e-8, mixing_beta = 0.1, mixing_mode = 'local-TF', electron_maxstep = 600, mixing_ndim = 16
 /
 &ions
+  upscale = 1
 /
 &cell
   cell_dofree = 'xyz', press_conv_thr = 0.2

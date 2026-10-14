@@ -67,9 +67,15 @@ def exp_points(name):
     return np.array([p for p in pts if p[0] is not None])
 
 
+def ph_dir(case):
+    """DFPT runs in engaging/phonon/<case>; finite-displacement runs (phonopy_cubic.py) in phonopy_derived/<case>."""
+    d = HERE / "phonopy_derived" / case
+    return d if d.exists() else ENG / "phonon" / case
+
+
 def bcc_branches(case):
-    """(x on the bcc path, branches in THz) for a 1-atom bcc DFPT run."""
-    gp = np.loadtxt(ENG / "phonon" / case / "freq.gp")
+    """(x on the bcc path, branches in THz) for a 1-atom bcc run (same matdyn-style freq.gp for both methods)."""
+    gp = np.loadtxt(ph_dir(case) / "freq.gp")
     return [(gp[:, 0], gp[:, 1:] * CM1_THZ)]
 
 
@@ -110,7 +116,7 @@ def plot_dispersion(plt, out, title, refname, reflabel, variants):
     pts = exp_points(refname)
     fig, ax = plt.subplots(figsize=(6.4, 4.2))
     for case, getter, col, ls, lab in variants:
-        if not (ENG / "phonon" / case / "freq.gp").exists():
+        if not (ph_dir(case) / "freq.gp").exists():
             continue
         segs = getter(case)
         rms, mean, n = deviation(segs, pts)
@@ -131,7 +137,7 @@ def plot_dispersion(plt, out, title, refname, reflabel, variants):
 
 
 def dfpt_dos(case, sigma=0.15):
-    a = np.loadtxt(ENG / "phonon" / case / "dos.dat")
+    a = np.loadtxt(ph_dir(case) / "dos.dat")
     f, g = a[:, 0] * CM1_THZ, a[:, 1]
     grid = np.linspace(0, 12, 1201)
     gi = np.interp(grid, f, g, left=0, right=0)
@@ -152,7 +158,7 @@ def plot_phdos(plt, out, title, refs, variants):
         ax.plot(f, g, ls, color=col, lw=1.0, label=f"{lab}: <ν> {mf:.2f}, peak {pk:.2f} THz")
     rmean = moments_of(*refs[0][1])[0]
     for case, col, ls, lab in variants:
-        if not (ENG / "phonon" / case / "dos.dat").exists():
+        if not (ph_dir(case) / "dos.dat").exists():
             continue
         f, g = dfpt_dos(case)
         mf, pk = moments_of(f, g)
@@ -170,7 +176,9 @@ def phonons():
     plot_dispersion(plt, "V_phonon_disp_Fe", "bcc Fe phonons vs neutron scattering (295 K)", "fe_phonon_minkiewicz1967.csv",
                     "neutron, 295 K (Minkiewicz 1967, tabulated)",
                     [("Fe_fm", bcc_branches, "#2A9DF4", "-", "QE DFPT FM, relaxed a"),
-                     ("Fe_fm_aexp", bcc_branches, "#D55E00", "--", "QE DFPT FM, experimental a")])
+                     ("Fe_fm_aexp", bcc_branches, "#D55E00", "--", "QE DFPT FM, experimental a"),
+                     ("Fe_cub", bcc_branches, "#009E73", "-", "QE finite displacement (3x3x3), relaxed a"),
+                     ("Fe_cub_aexp", bcc_branches, "#CC79A7", "-", "QE finite displacement (3x3x3), experimental a")])
     plot_dispersion(plt, "V_phonon_disp_Cr", "bcc Cr phonons vs neutron scattering (300 K, AFM)", "cr_phonon_shaw1971.csv",
                     "neutron, 300 K (Shaw & Muhlestein 1971, digitized)",
                     [("Cr_nm_v5_k24", bcc_branches, "#2A9DF4", "-", "QE DFPT NM ($k=24^3$), relaxed a"),
@@ -187,7 +195,8 @@ def phonons():
         refs_fe.append((f"NRIXS {T} K (Mauger 2014)", norm(d[:, 0], d[:, 1]), "0.05", ls))
     refs_fe.append(("BvK from neutron (Fultz 1995)", norm(fd[:, 0], fd[:, 1]), "0.5", ":"))
     plot_phdos(plt, "V_phonon_dos_Fe", "Fe phonon DOS", refs_fe,
-               [("Fe_fm", "#2A9DF4", "-", "QE FM, relaxed a"), ("Fe_fm_aexp", "#D55E00", "--", "QE FM, experimental a")])
+               [("Fe_fm", "#2A9DF4", "-", "QE DFPT, relaxed a"), ("Fe_fm_aexp", "#D55E00", "--", "QE DFPT, experimental a"),
+                ("Fe_cub", "#009E73", "-", "QE finite displ., relaxed a"), ("Fe_cub_aexp", "#CC79A7", "-", "QE finite displ., experimental a")])
     plot_phdos(plt, "V_phonon_dos_Cr", "Cr phonon DOS", [("BvK from neutron (Fultz 1995)", norm(fd[:, 0], fd[:, 2]), "0.05", "-")],
                [("Cr_nm_v5_k24", "#2A9DF4", "-", "QE NM, relaxed a"), ("Cr_nm_aexp", "#D55E00", "--", "QE NM, experimental a"),
                 ("Cr_afm", "#009E73", "-", "QE AFM, relaxed a"), ("Cr_afm_aexp", "#CC79A7", "--", "QE AFM, experimental a")])
