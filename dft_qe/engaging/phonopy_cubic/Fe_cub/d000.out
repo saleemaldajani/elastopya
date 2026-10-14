@@ -3154,3 +3154,63 @@ Warning: card   CELL_DOFREE = 'XYZ', PRESS_CONV_THR = 0.2 ignored
 
 
      negative rho (up, down):  0.000E+00 4.847E-03
+          total   stress  (Ry/bohr**3)                   (kbar)     P=        0.26
+   0.00000176   0.00000000   0.00000000            0.26        0.00        0.00
+   0.00000000   0.00000176   0.00000000            0.00        0.26        0.00
+   0.00000000   0.00000000   0.00000176            0.00        0.00        0.26
+
+
+     Writing all to output data dir ./tmp/sqs.save/ :
+     XML data file, charge density, pseudopotentials, collected wavefunctions
+
+     init_run     :     28.61s CPU     29.56s WALL (       1 calls)
+     electrons    :   2174.50s CPU   2192.09s WALL (       1 calls)
+     forces       :     11.50s CPU     11.66s WALL (       1 calls)
+     stress       :     35.10s CPU     35.33s WALL (       1 calls)
+
+     Called by init_run:
+     wfcinit      :     25.08s CPU     25.41s WALL (       1 calls)
+     potinit      :      1.17s CPU      1.45s WALL (       1 calls)
+     hinit0       :      0.52s CPU      0.70s WALL (       1 calls)
+
+     Called by electrons:
+     c_bands      :   2013.37s CPU   2028.74s WALL (      26 calls)
+     sum_band     :    133.95s CPU    135.37s WALL (      26 calls)
+     v_of_rho     :      8.54s CPU      9.15s WALL (      27 calls)
+     newd         :      2.16s CPU      2.22s WALL (      27 calls)
+     PAW_pot      :     14.77s CPU     14.86s WALL (      27 calls)
+     mix_rho      :      1.52s CPU      1.59s WALL (      26 calls)
+
+     Called by c_bands:
+     init_us_2    :      3.70s CPU      3.75s WALL (     275 calls)
+     cegterg      :   1708.07s CPU   1721.87s WALL (     130 calls)
+
+     Called by *egterg:
+     cdiaghg      :    346.41s CPU    348.43s WALL (     529 calls)
+     h_psi        :    584.83s CPU    590.37s WALL (     534 calls)
+     s_psi        :    101.99s CPU    102.50s WALL (     534 calls)
+     g_psi        :      1.36s CPU      1.37s WALL (     399 calls)
+
+     Called by h_psi:
+     h_psi:calbec :    159.07s CPU    159.90s WALL (     534 calls)
+     vloc_psi     :    323.12s CPU    326.23s WALL (     534 calls)
+                                        0.00s GPU  (     534 calls)
+     add_vuspsi   :    101.65s CPU    102.15s WALL (     534 calls)
+
+     General routines
+     calbec       :    260.55s CPU    261.85s WALL (     749 calls)
+     fft          :      5.02s CPU      6.00s WALL (     713 calls)
+     ffts         :      0.97s CPU      1.07s WALL (     605 calls)
+     fftw         :    363.41s CPU    366.86s WALL (  438768 calls)
+     interpolate  :      0.56s CPU      0.70s WALL (      54 calls)
+
+     Parallel routines
+
+     PWSCF        :  37m31.08s CPU  37m54.03s WALL
+
+
+   This run was terminated on:  18:17:37  14Oct2026            
+
+=------------------------------------------------------------------------------=
+   JOB DONE.
+=------------------------------------------------------------------------------=
