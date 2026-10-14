@@ -32,6 +32,20 @@ ASPECT = (YLIM[1] - YLIM[0]) / (XLIM[1] - XLIM[0])      # block height / width, 
 # (axes use set_aspect('auto'): with this block shape the data aspect is 1 to within a few %)
 # Pure elements: QE 2-atom conventional cells (Fe FM; Cr as in the DFT row of the figures, no moment drawn)
 PURE = {0.0: ("Fe", "Fe_fm_k16x16x16_e60"), 1.0: ("Cr", None)}
+STRIP_XS = [0.0, 0.2, 0.35, 0.5, 0.65, 0.95, 1.0]                # compositions of the panel-(d) row
+XLIM_PURE = (-0.3, 1 + K_DEPTH * np.cos(ANG) + 0.3)             # tight u-range of a unit cube, same margins
+
+
+def xlim(x):
+    """u-range of the block for composition x: the full 5a supercell, or a narrow block around a unit cell, so the
+    row spends its width on the cells (same drawing scale everywhere)."""
+    return XLIM_PURE if x in PURE else XLIM
+
+
+def width_ratio(x):
+    """Block width relative to a supercell block at the common scale."""
+    lo, hi = xlim(x)
+    return (hi - lo) / (XLIM[1] - XLIM[0])
 
 
 def proj(p):
@@ -87,7 +101,7 @@ def draw(ax, x, moments=True):
             ax.annotate("", xy=(uv[i, 0], uv[i, 1] + dv / 2), xytext=(uv[i, 0], uv[i, 1] - dv / 2),
                         arrowprops=dict(arrowstyle="-|>", lw=0.7, color="black", mutation_scale=4, shrinkA=0, shrinkB=0),
                         zorder=11 + 2 * z)
-    ax.set_xlim(*XLIM); ax.set_ylim(*YLIM)
+    ax.set_xlim(*xlim(x)); ax.set_ylim(*YLIM)
     ax.set_aspect("auto"); ax.axis("off")
     ax._strip = True
 
