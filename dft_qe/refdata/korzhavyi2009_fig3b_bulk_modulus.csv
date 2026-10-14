@@ -1,0 +1,75 @@
+# Bulk modulus B of bcc Fe-Cr vs Cr content: experimental markers + EMTO-CPA theory points, DIGITIZED from Fig. 3(b) (p. 054202-4)
+# Source: P. A. Korzhavyi, A. V. Ruban, J. Odqvist, J.-O. Nilsson, B. Johansson, Phys. Rev. B 79, 054202 (2009),
+#   "Electronic structure and effective chemical and magnetic exchange interactions in bcc Fe-Cr alloys"
+# Calculations (Sec. II A): EMTO method + single-site CPA for random bcc Fe-Cr; paramagnetic state modelled by DLM within CPA;
+#   total energies in GGA (PW91, Ref. 39) evaluated on LDA (Perdew-Wang 1992) self-consistent densities (gradient corrections off in the SCF potential).
+# Text (p. 054202-4): theory B 'obtained from the calculated equations of state for FM alloys on a static lattice (i.e., without phonon
+#   contributions)' i.e. each alloy at its own calculated equilibrium volume (static, 0 K); DLM curve = paramagnetic (DLM) state, same method.
+#   Paper: FM B has 'a sharp minimum at 6 at % Cr'; DLM B is monotonous.
+# Experimental data as plotted (Refs. 49-52 of the paper; legend shapes): Expt. RT FM = filled black triangles (room temperature, ferromagnetic; Ref. 49 = Speich, Schwoeble, Leslie, Metall. Trans. 3, 2031 (1972));
+#   Expt. LT FM = open triangles (77 K, ferromagnetic, Ref. 49); Expt. RT AFM = filled diamond and Expt. LT AFM = open diamond (pure Cr; Ref. 51 Lahteenkorva & Lenkkeri J. Phys. F 11, 767 (1981); Ref. 52 Bolef & de Klerk PR 129, 1063 (1963));
+#   Expt. RT PM = filled red squares (RT paramagnetic Cr-rich alloys; Ref. 50 = Lenkkeri, J. Phys. F 10, 611 (1980); the c=100 square is the 'experimental estimate of the RT bulk modulus
+#   of paramagnetic Cr', Refs. 50,51). No error bars are plotted.
+# Theory: 'Theory FM' = black open circles joined by solid line (legend of panel a); 'Theory DLM' = red open circles joined by dashed line.
+#   The plotted lines are straight segments between the circles, so the circle centres define the curves.
+#   For c ~ 4-9 at.% the FM circles overlap into an unresolvable chain (and overlap the RT-FM triangles); there the FM curve is given as
+#   'envelope estimate' = top edge of the circle chain + ring outer radius (10.5 px), uncertainty ~ +/-3 GPa. Individual FM points between
+#   c=3 and c=13 (the paper's minimum near 6 at.%) could not be resolved; the c=50 and c=75 FM circles are half-covered by DLM circles.
+# Digitization: embedded raster image (700x1363 px JPEG, ~300 dpi; whole Fig. 3) extracted at native resolution with PyMuPDF.
+#   Calibration (pixel x,y in that image): x: c=0 -> x=99, 20->215, 40->331, 60->446, 80->562, 100->678 (major ticks; linear, max resid <0.5 px).
+#   y (panel b): B=250 -> y=369, 200 -> 451, 150 -> 532, 100 -> 614 (major ticks; linear fit, resid <0.2 px); 1 px = 0.613 GPa, 0.173 at.%.
+#   Markers: centre of symbol bounding box (Grace-style symbols are bbox-centred), read from pixel maps; theory circles: centre of white core.
+# Uncertainty: isolated markers +/-1 GPa, +/-0.3 at.%; overlapping markers near c=0-2 and c~10.7 +/-2 GPa, +/-0.5 at.% (assignment of hidden
+#   triangles is a best reading); theory circle centres +/-1 GPa (+/-2 GPa for 'partial core' rows); envelope rows +/-3 GPa.
+#   Marker counts may be incomplete where symbols are fully hidden (c=0-2 cluster contains at least 2 filled + 1 open triangle).
+# Units: c_Cr in at.% Cr; B_GPa in GPa. x_px,y_px = pixel position used (for audit).
+# Columns: series, symbol, c_Cr_at_pct, B_GPa, kind, x_px, y_px, note
+series,symbol,c_Cr_at_pct,B_GPa,kind,x_px,y_px,note
+Expt. RT FM,filled triangle,0.00,168.0,marker,99.0,503.0,"partly overlapped by open triangle; base row 513 x88-110"
+Expt. RT FM,filled triangle,1.64,169.8,marker,108.5,500.0,"partly hidden; base row 510 right edge x120"
+Expt. RT FM,filled triangle,5.53,163.7,marker,131.0,510.0,"apex merged with theory circles; base row 520 x120-142"
+Expt. RT FM,filled triangle,6.82,149.3,marker,138.5,533.5,"isolated; apex row 524 base row 543 x127-150"
+Expt. RT FM,filled triangle,10.71,159.1,marker,161.0,517.5,"upper part hidden by open triangle; base row 527 x150-172"
+Expt. LT FM,open triangle,0.00,170.4,marker,99.0,499.0,"interior visible rows 500-505 either side of frame line; base ~509"
+Expt. LT FM,open triangle,10.79,164.6,marker,161.5,508.5,"apex ~499 base 518; interior rows 507-514"
+Expt. RT AFM,filled diamond,100.00,165.5,marker,678.0,507.0,"at c=100 on right frame; vertices rows 497-517"
+Expt. LT AFM,open diamond,100.00,190.6,marker,678.0,466.0,"at c=100 on right frame; vertices rows 459-473"
+Expt. RT PM,filled red square,77.81,186.6,marker,549.5,472.5,"red bbox x540-559 y464-481"
+Expt. RT PM,filled red square,89.12,193.4,marker,615.0,461.5,"red bbox x606-624 y452-471"
+Expt. RT PM,filled red square,100.00,200.7,marker,678.0,449.5,"red bbox x669-687 y440-459 (split by frame line); "paramagnetic Cr" estimate"
+Theory FM,open circle (calc. point),0.00,182.0,circle,99.0,480.0,"circle c=0; core split by frame line"
+Theory FM,open circle (calc. point),2.94,179.9,circle,116.0,483.5,"full white core"
+Theory FM,open circle (calc. point),12.95,184.8,circle,174.0,475.5,"full white core"
+Theory FM,open circle (calc. point),14.85,187.3,circle,185.0,471.5,"full white core"
+Theory FM,open circle (calc. point),16.84,188.8,circle,196.5,469.0,"full white core"
+Theory FM,open circle (calc. point),18.83,190.9,circle,208.0,465.5,"partial core"
+Theory FM,open circle (calc. point),20.90,192.8,circle,220.0,462.5,"partial core"
+Theory FM,open circle (calc. point),22.97,193.7,circle,232.0,461.0,"full white core"
+Theory FM,open circle (calc. point),50.00,213.8,circle,388.5,428.2,"ring top edge row 417.5 +10.5 (lower half under DLM circle)"
+Theory FM,open circle (calc. point),59.93,222.5,circle,446.0,414.0,"full white core"
+Theory FM,open circle (calc. point),74.96,234.1,circle,533.0,395.0,"ring top edge row 384.5 +10.5 (lower half under DLM circle)"
+Theory FM,open circle (calc. point),79.97,236.3,circle,562.0,391.5,"full white core"
+Theory FM,open circle (calc. point),89.93,242.7,circle,619.7,381.0,"core split in two pieces"
+Theory FM,open circle (calc. point),100.00,249.9,circle,678.0,369.3,"core cut by frame; coincides with DLM"
+Theory DLM,open red circle (calc. point),0.09,171.6,circle,99.5,497.0,"mostly hidden by triangles; from visible red arc (+/-3 px)"
+Theory DLM,open red circle (calc. point),10.02,178.7,circle,157.0,485.5,"full white core"
+Theory DLM,open red circle (calc. point),19.95,187.3,circle,214.5,471.5,"full white core"
+Theory DLM,open red circle (calc. point),29.97,195.8,circle,272.5,457.5,"full white core"
+Theory DLM,open red circle (calc. point),50.00,211.8,circle,388.5,431.5,"full white core"
+Theory DLM,open red circle (calc. point),74.87,230.1,circle,532.5,401.5,"full white core"
+Theory DLM,open red circle (calc. point),100.00,249.9,circle,678.0,369.3,"coincides with FM circle at c=100"
+Theory FM,envelope estimate (dense overlapping circles),4.15,176.8,envelope,123.0,488.5,"top edge of overlapping-circle chain + ring radius; +/-3 GPa"
+Theory FM,envelope estimate (dense overlapping circles),4.49,175.0,envelope,125.0,491.5,"top edge of overlapping-circle chain + ring radius; +/-3 GPa"
+Theory FM,envelope estimate (dense overlapping circles),4.84,175.6,envelope,127.0,490.5,"top edge of overlapping-circle chain + ring radius; +/-3 GPa"
+Theory FM,envelope estimate (dense overlapping circles),5.18,175.0,envelope,129.0,491.5,"top edge of overlapping-circle chain + ring radius; +/-3 GPa"
+Theory FM,envelope estimate (dense overlapping circles),5.53,175.0,envelope,131.0,491.5,"top edge of overlapping-circle chain + ring radius; +/-3 GPa"
+Theory FM,envelope estimate (dense overlapping circles),5.87,174.4,envelope,133.0,492.5,"top edge of overlapping-circle chain + ring radius; +/-3 GPa"
+Theory FM,envelope estimate (dense overlapping circles),6.22,174.4,envelope,135.0,492.5,"top edge of overlapping-circle chain + ring radius; +/-3 GPa"
+Theory FM,envelope estimate (dense overlapping circles),6.56,175.0,envelope,137.0,491.5,"top edge of overlapping-circle chain + ring radius; +/-3 GPa"
+Theory FM,envelope estimate (dense overlapping circles),6.91,175.0,envelope,139.0,491.5,"top edge of overlapping-circle chain + ring radius; +/-3 GPa"
+Theory FM,envelope estimate (dense overlapping circles),7.25,175.6,envelope,141.0,490.5,"top edge of overlapping-circle chain + ring radius; +/-3 GPa"
+Theory FM,envelope estimate (dense overlapping circles),7.60,176.2,envelope,143.0,489.5,"top edge of overlapping-circle chain + ring radius; +/-3 GPa"
+Theory FM,envelope estimate (dense overlapping circles),7.94,176.2,envelope,145.0,489.5,"top edge of overlapping-circle chain + ring radius; +/-3 GPa"
+Theory FM,envelope estimate (dense overlapping circles),8.29,176.8,envelope,147.0,488.5,"top edge of overlapping-circle chain + ring radius; +/-3 GPa"
+Theory FM,envelope estimate (dense overlapping circles),8.64,176.8,envelope,149.0,488.5,"top edge of overlapping-circle chain + ring radius; +/-3 GPa"
+Theory FM,envelope estimate (dense overlapping circles),8.98,176.8,envelope,151.0,488.5,"top edge of overlapping-circle chain + ring radius; +/-3 GPa"

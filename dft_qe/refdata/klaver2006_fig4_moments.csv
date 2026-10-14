@@ -1,0 +1,120 @@
+# Magnitude of local magnetic moments on Fe atoms, Cr atoms and the average, vs Cr concentration, DIGITIZED from Fig. 4 (p. 094435-5)
+# Source: T. P. C. Klaver, R. Drautz, M. W. Finnis, Phys. Rev. B 74, 094435 (2006), 'Magnetism and thermodynamics of defect-free Fe-Cr alloys'
+# Caption: 'The magnitude of magnetic moments on atoms in FeCr as a function of concentration. The circles, diamonds, and squares indicate the
+#   moments on Fe atoms, Cr atoms, and the average, respectively. The large variation in the magnitude of the Cr moments appears because systems
+#   with both clustered and monatomically dispersed Cr atoms are represented. ...' In-plot labels: 'Fe', 'Cr', 'average' (no legend box).
+#   Despite 'magnitude', the plotted values are SIGNED (Cr moments mostly negative = antiparallel to Fe).
+# Method (Sec. II): VASP, PAW, GGA-PBE, 400 eV cutoff, Monkhorst-Pack k-points; supercells (2-atom B2 ... 3x3x3 and 4x4x4 bcc cells) with atomic
+#   positions, cell shape AND volume fully relaxed, collinear magnetic ground state (several initial moment configurations tried).
+#   Moments = spin moment integrated in spheres of radius 1.4 A around each site (Fe and Cr); text notes Cr moments are sensitive to this radius
+#   and larger than with standard VASP radii. Each marker = one structure (per-structure Fe-site / Cr-site / all-atom average; the paper does not
+#   say whether Fe/Cr values are averages over inequivalent sites). Ordered/SQS-like supercells, not random-alloy CPA.
+# Units: c_Cr = Cr atomic fraction (0-1, as on the axis); moment_muB in mu_B.
+# Digitization: embedded 1-bit raster (800x637 px, ~300 dpi) at native resolution. Calibration (pixel x,y): x: c=0 -> 98 (left frame),
+#   c=0.2 -> 237.9, c=1 -> 797.4 (frame; ticks every 0.05 = 34.97 px, checked at 0.2..1.0); y: 3 -> 11.5 (top frame), 0 -> 334.5 (zero line),
+#   -2 -> 549.8 (bottom frame); ticks every 0.2 mu_B = 21.5 px. 1 px = 0.00143 in c, 0.0093 mu_B.
+#   Marker centres by binary template matching (templates cut from isolated circle/square/diamond markers), score = mean(+-1 agreement);
+#   'auto' = score >= 0.45 peak; 'manual' = centre estimated by eye from a partly visible symbol interior in a crowded cluster.
+# Completeness: c >= 0.24 markers are essentially complete (stacks at the same c resolved where interiors are visible). For c < 0.2 the Fe
+#   circles, average squares and Cr diamonds overlap into dense clusters; many symbols there are fully hidden and NOT recovered. Treat c<0.2 as a
+#   representative subset only.
+# Uncertainty: 'clear' +/-0.01 mu_B, +/-0.002 in c; 'partial' +/-0.03 mu_B (+/-0.06 for manual cluster points), +/-0.004 in c.
+# Columns: series, symbol, c_Cr, moment_muB, x_px, y_px, match_score, source, quality
+series,symbol,c_Cr,moment_muB,x_px,y_px,match_score,source,quality
+Fe,circle,0.0180,2.252,110.6,92.0,0.39,manual,partial
+Fe,circle,0.0277,2.198,117.4,97.9,0.31,manual,partial
+Fe,circle,0.0443,2.289,129.0,88.0,0.15,manual,partial
+Fe,circle,0.0636,2.289,142.5,88.0,0.08,manual,partial
+Fe,circle,0.0828,2.343,155.9,82.2,0.36,manual,partial
+Fe,circle,0.0927,2.301,162.8,86.8,0.40,manual,partial
+Fe,circle,0.1115,2.321,176.0,84.6,0.41,manual,partial
+Fe,circle,0.1298,2.302,188.8,86.7,0.38,manual,partial
+Fe,circle,0.1484,2.299,201.8,87.0,0.53,auto,partial
+Fe,circle,0.1661,2.302,214.2,86.7,0.43,manual,partial
+Fe,circle,0.1661,2.217,214.2,95.8,0.26,manual,partial
+Fe,circle,0.1876,2.263,229.2,90.8,0.54,auto,partial
+Fe,circle,0.1877,2.186,229.3,99.1,0.39,manual,partial
+Fe,circle,0.2505,2.222,273.2,95.3,0.67,auto,clear
+Fe,circle,0.2505,2.159,273.2,102.0,0.24,manual,partial
+Fe,circle,0.2505,2.093,273.2,109.2,0.45,manual,partial
+Fe,circle,0.3331,2.159,331.0,102.0,1.00,auto,clear
+Fe,circle,0.3748,2.158,360.1,102.2,0.63,auto,clear
+Fe,circle,0.3749,2.262,360.2,91.0,0.76,auto,clear
+Fe,circle,0.4288,2.292,397.9,87.7,0.87,auto,clear
+Fe,circle,0.4995,1.947,447.4,124.9,0.49,auto,partial
+Fe,circle,0.5001,1.419,447.8,181.8,0.86,auto,clear
+Fe,circle,0.5002,2.070,447.8,111.6,0.71,auto,clear
+Fe,circle,0.6251,1.982,535.2,121.2,0.85,auto,clear
+Fe,circle,0.7144,2.226,597.6,94.9,0.83,auto,clear
+Fe,circle,0.7501,2.112,622.6,107.1,0.88,auto,clear
+Fe,circle,0.7502,1.368,622.7,187.2,0.84,auto,clear
+Fe,circle,0.7503,1.670,622.7,154.7,0.82,auto,clear
+Fe,circle,0.8335,1.756,680.9,145.4,0.83,auto,clear
+Fe,circle,0.8749,0.806,709.9,247.8,0.89,auto,clear
+Cr,diamond,0.0176,-1.769,110.3,525.0,0.62,auto,clear
+Cr,diamond,0.0270,-1.797,116.9,527.9,0.46,auto,partial
+Cr,diamond,0.0362,-1.489,123.3,494.8,0.76,auto,clear
+Cr,diamond,0.0540,-1.748,135.8,522.7,0.49,auto,partial
+Cr,diamond,0.0547,-1.294,136.3,473.8,0.88,auto,clear
+Cr,diamond,0.0549,-1.493,136.4,495.2,0.69,auto,clear
+Cr,diamond,0.0565,-1.918,137.5,541.0,-0.17,manual,partial
+Cr,diamond,0.0731,-1.125,149.1,455.7,0.76,auto,clear
+Cr,diamond,0.0826,-1.628,155.8,509.7,0.81,auto,clear
+Cr,diamond,0.0826,-1.311,155.8,475.7,0.90,auto,clear
+Cr,diamond,0.0851,-1.923,157.5,541.5,-0.09,manual,partial
+Cr,diamond,0.0918,-1.098,162.2,452.7,0.59,auto,partial
+Cr,diamond,0.1105,-1.647,175.3,511.8,0.63,auto,clear
+Cr,diamond,0.1238,-1.868,184.6,535.7,0.92,auto,clear
+Cr,diamond,0.1240,-1.128,184.7,456.0,0.32,manual,partial
+Cr,diamond,0.1288,-1.576,188.1,504.2,0.37,manual,partial
+Cr,diamond,0.1291,-1.071,188.3,449.8,0.53,auto,partial
+Cr,diamond,0.1472,-0.093,200.9,344.5,0.56,auto,partial
+Cr,diamond,0.1476,-1.406,201.2,485.8,0.92,auto,clear
+Cr,diamond,0.1663,-0.775,214.3,418.0,0.86,auto,clear
+Cr,diamond,0.1867,-0.968,228.6,438.8,0.86,auto,clear
+Cr,diamond,0.1868,-1.288,228.6,473.2,0.88,auto,clear
+Cr,diamond,0.1870,-0.645,228.8,403.9,0.69,auto,clear
+Cr,diamond,0.2491,-0.375,272.2,374.9,0.47,auto,partial
+Cr,diamond,0.2492,-0.501,272.3,388.4,0.51,auto,partial
+Cr,diamond,0.2493,-0.630,272.4,402.3,0.60,auto,partial
+Cr,diamond,0.2494,-1.238,272.4,467.8,0.90,auto,clear
+Cr,diamond,0.2496,-0.315,272.6,368.4,0.59,auto,partial
+Cr,diamond,0.3323,-0.562,330.4,395.0,0.88,auto,clear
+Cr,diamond,0.3746,-0.291,360.0,365.8,0.77,auto,clear
+Cr,diamond,0.4279,-0.284,397.3,365.0,0.93,auto,clear
+Cr,diamond,0.4990,0.497,447.0,281.0,1.00,auto,clear
+Cr,diamond,0.4992,0.013,447.1,333.0,0.56,auto,partial
+Cr,diamond,0.4993,-0.073,447.2,342.4,0.43,manual,partial
+Cr,diamond,0.6237,-0.029,534.2,337.7,0.74,auto,clear
+Cr,diamond,0.7133,-0.147,596.9,350.4,0.89,auto,clear
+Cr,diamond,0.7491,-0.046,621.9,339.4,0.57,auto,partial
+Cr,diamond,0.7493,0.096,622.1,324.1,0.57,auto,partial
+Cr,diamond,0.7495,0.222,622.2,310.6,0.74,auto,clear
+Cr,diamond,0.8324,0.038,680.2,330.4,0.77,auto,clear
+Cr,diamond,0.8742,0.154,709.4,317.9,0.57,auto,partial
+average,square,0.0926,1.976,162.8,121.8,0.56,auto,partial
+average,square,0.1111,1.928,175.7,126.9,0.55,auto,partial
+average,square,0.1298,1.862,188.8,134.1,0.52,auto,partial
+average,square,0.1476,1.815,201.3,139.1,0.61,auto,clear
+average,square,0.1660,1.715,214.1,149.8,0.31,manual,partial
+average,square,0.1660,1.781,214.1,142.8,0.61,auto,clear
+average,square,0.1863,1.529,228.3,169.9,0.76,auto,clear
+average,square,0.1867,1.593,228.6,163.0,0.44,manual,partial
+average,square,0.1869,1.650,228.7,156.9,0.40,manual,partial
+average,square,0.1869,1.714,228.7,149.9,0.63,auto,clear
+average,square,0.2502,1.575,273.0,165.0,0.82,auto,clear
+average,square,0.2502,1.461,273.0,177.1,0.52,auto,partial
+average,square,0.2502,1.372,273.0,186.7,0.46,auto,partial
+average,square,0.2502,1.268,273.0,198.0,0.85,auto,clear
+average,square,0.3331,1.250,331.0,199.9,0.95,auto,clear
+average,square,0.3736,1.241,359.3,200.9,0.56,auto,partial
+average,square,0.3742,1.306,359.7,193.9,0.79,auto,clear
+average,square,0.4279,1.176,397.3,207.9,0.85,auto,clear
+average,square,0.4994,0.950,447.3,232.2,0.46,auto,partial
+average,square,0.4995,0.999,447.3,226.9,0.70,auto,clear
+average,square,0.6248,0.720,535.0,257.0,1.00,auto,clear
+average,square,0.7135,0.535,597.0,276.9,0.93,auto,clear
+average,square,0.7496,0.393,622.3,292.1,0.59,auto,partial
+average,square,0.7497,0.507,622.3,279.9,0.71,auto,clear
+average,square,0.8326,0.321,680.3,299.9,0.85,auto,clear
+average,square,0.8745,0.228,709.6,309.9,0.59,auto,partial
