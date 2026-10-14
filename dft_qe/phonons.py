@@ -62,7 +62,8 @@ def plot(outfile, dirs, allow_imaginary=False):
     for d in dirs:
         check(d, allow_imaginary)
     plt = bp._style()
-    titles = {"Fe_fm": "bcc Fe (FM)", "Cr_nm": "bcc Cr (NM)", "Cr_afm": "Cr (AFM)"}
+    titles = {"Fe_fm": "bcc Fe (FM)", "Cr_nm": "bcc Cr (NM)", "Cr_afm": "Cr (AFM)",
+              "Fe_cub": "bcc Fe (FM, finite displ.)"}   # Fe_cub: phonopy_cubic.py (DFPT is too stiff for FM Fe)
     fig, axs = plt.subplots(1, len(dirs), figsize=(2.4 * len(dirs), 2.6), squeeze=False)
     for ax, d in zip(axs[0], dirs):
         d = Path(d); case = d.name.split("_v")[0]

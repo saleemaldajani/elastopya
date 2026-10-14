@@ -124,3 +124,34 @@ Settings (all runs):
 ## 3. Conventions
 - **Never overwrite** a result or figure. New settings go in new directories (`_aexp`, `_crafm2`, `_v2`, …) and new figure versions (`_v2`, `fig5_embrittlement_v6`, …). Superseded files are kept in `v_before_*` or `v1_backup` folders.
 - **Numbers in the manuscript** come from the files mirrored here (`engaging/runs/*/result.json`, `refdata/`, `validation_summary.csv`), read by the plotting scripts. None are typed in by hand.
+
+## 4. Why the analysis is set up this way
+
+- **Two DFT codes (VASP and QE).** VASP gave the original tensors. The VASP archive could not be recovered to extend or check it, so QE (open source, run on MIT Engaging) gave an independent, fully documented set at more compositions. Both are kept in the figures. A VASP cross-check of the QE tensors is planned once a licence is available.
+- **40-atom SQS.** Large enough for pair correlations close to random over three neighbour shells and for composition steps of 2.5 at.%, small enough for stress–strain runs with ionic relaxation at many compositions.
+- **Stress–strain at ±0.5% with ionic relaxation.** Central differences cancel the residual stress of the relaxed cell. Ionic relaxation is required in an SQS because internal strain lowers C44 and C′.
+- **Two lattice-parameter conventions.** The main text keeps the PBE-relaxed series, the self-consistent choice for a DFT paper. The supplement adds the room-temperature experimental lattice parameter. That is the convention of the EMTO-CPA reference data, and it brings the bulk modulus within 1–7% of experiment against about 30% at the PBE volume (Fig. S17). Mixing free energies barely depend on the choice (≤ 10 meV/atom), so both appear in Fig. 1(a).
+- **Validation before interpretation.** Every quantity in the supplement was replotted on published data it should reproduce, with the deviation stated in the caption (Section S3.1). Where a method failed that test (Fe DFPT), it was replaced, not explained away.
+- **Finite displacements for Fe, DFPT for Cr.** DFPT reproduces neutron data for Cr (non-magnetic and AFM) but is about 60% too stiff for ferromagnetic Fe with these settings. Finite displacements in a cubic supercell reproduce the Fe neutron and NRIXS data. Each element therefore uses the method that passes validation.
+- **Never overwrite.** Superseded results stay on disk (renamed `_INVALID_*`, `v1_backup`, `v_before_*`), so every number in an earlier draft can still be traced.
+
+## 5. Changelog of script changes (with reasons)
+
+| Date | Script | Change | Why |
+|---|---|---|---|
+| 2026-10-12 | `elastic_sqs_qe.py` | Mixing options; stop on "convergence NOT achieved" | Difficult SCFs; QE prints JOB DONE even when unconverged |
+| 2026-10-12 | `phonons.py` | Gentle DFPT mixing; refuse imaginary modes in stable phases | NM Cr imaginary modes (later traced to k-point sampling) |
+| 2026-10-12 | `dos_sqs.py` | Tetrahedra projwfc (`-nk 1`); `QE_NBND_FACTOR` | All-zero PDOS with Gaussian broadening; window cut at +1.8 eV |
+| 2026-10-13 | `elastic_sqs_qe.py` | `QE_MAG_CR`; `QE_FIXED_A` (other session) | Fe–80Cr needs Cr antiparallel; experimental-lattice series |
+| 2026-10-13 | `validation_overlays.py` | New | Overlay every variant on literature and experiment, with deviations |
+| 2026-10-13 | `unfold2.sbatch` | Two nodes, 2-day limit, fast solver with CG fallback | Unfolding band step timed out at 24 h |
+| 2026-10-14 | `unfold2.sbatch` | PPCG → ParO | PPCG was removed from QE 7.5 |
+| 2026-10-14 | `elastic_sqs_qe.py` | `QE_UPSCALE` | Relaxation SCF stalled at a 10⁻⁹ Ry noise floor after QE tightened its threshold |
+| 2026-10-14 | `elastic_qe.py`, `bcc2_variant.sbatch` | `QE_FIXED_A` for pure elements | End points and mixing references at the experimental lattice parameter |
+| 2026-10-14 | `phonopy_cubic.py`, `phcubic.sbatch`, `phonopy_bcc_bands.py` | New | Fe phonons by finite displacements (DFPT too stiff; 2×2×5 cell inconsistent) |
+| 2026-10-14 | `phonons.py`, `phonon_ref_plot.py --fe-fd` | Read finite-displacement Fe (`phonopy_derived/`) | Supplementary phonon figures use the validated Fe phonons (`S_phonons_v2`, `S_phonons_vs_exp_v2`) |
+| 2026-10-14 | `validation_overlays.py` | `ph_dir()`; pure-element bulk moduli | Finite-displacement Fe; the measured end points test the volume convention |
+| 2026-10-14 | `../scripts/make_figures.py` | `qe_mixing(aexp=True)`; experimental-lattice ΔG as diamonds in Fig. 1(a) | Complete the QE ΔG set; the two conventions agree to 10 meV/atom |
+| 2026-10-14 | `../scripts/make_figures_kdense.py`, `../scripts/visualize_sqs.py` | Per-block widths in `add_strip`; tight unit-cell blocks | Larger DFT cells in Fig. 1(d) at one common scale |
+| 2026-10-14 | `pull_engaging.sh` | Pull every script (subfolders included) and `phonopy_cubic/` | Some job scripts existed only on Engaging |
+| 2026-10-14 | `watch_connection.sh`, `wait_key.sh` | New | Keep the Duo-authenticated connection alive; catch results, failures and a full disk |

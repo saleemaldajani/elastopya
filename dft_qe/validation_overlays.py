@@ -10,6 +10,12 @@ to keep; they are not themselves manuscript figures.
 
 Output: manuscript/figures/kdense_scripta/supplementary/validation/*.png and validation_summary.csv (one row per
 comparison: what, variant, reference, metric, value).
+
+Phonon variants are read from engaging/phonon/<case> (DFPT) or phonopy_derived/<case> (finite displacements,
+phonopy_cubic.py); see ph_dir(). The Fe finite-displacement cases (Fe_cub, Fe_cub_aexp) were added on 2026-10-14
+after DFPT proved ~60% too stiff for FM Fe. The bulk-modulus plot also shows the pure elements (2-atom cells) at both
+lattice parameters, since the measured end points (Fe 168, AFM Cr 165.5 GPa) are the cleanest test of the volume
+convention.
 """
 import csv
 import json
@@ -286,6 +292,17 @@ def plot_bulk(plt):
             if 0.95 in runs or any(abs(x - 0.95) < 1e-6 for x in runs):
                 v = float(p[np.argmin(abs(p[:, 0] - 0.95)), 1])
                 note("bulk modulus", lab, "Expt. RT PM interpolated to x=0.95", "K(QE)/K(exp) - 1 (%)", 100 * (v / ref95 - 1))
+    # pure elements (2-atom cells, 16^3; Fe FM, Cr AFM) at both lattice parameters, against RT FM Fe and RT AFM Cr
+    for suf, col, mfc, lab in (("", "#D55E00", "white", "QE pure, relaxed a"), ("_aexp", "#0072B2", "#0072B2", "QE pure, experimental a")):
+        pts = []
+        for el, mag, x, ref, rlab in (("Fe", "fm", 0.0, 168.0, "Expt. RT FM Fe 168 GPa"), ("Cr", "afm", 1.0, 165.5, "Expt. RT AFM Cr 165.5 GPa")):
+            j = ENG / "runs" / f"{el}_{mag}_k16x16x16_e60{suf}" / "result.json"
+            if j.exists():
+                r = json.loads(j.read_text()); k = vrh_k(r["C11"], r["C12"]); pts.append((x, k))
+                note("bulk modulus", f"QE pure {el} {mag}{suf or ' relaxed'}", rlab, "K/K_exp - 1 (%)", 100 * (k / ref - 1))
+        if pts:
+            p_ = np.array(pts)
+            ax.plot(p_[:, 0], p_[:, 1], "s", color=col, mfc=mfc, ms=5, ls="none", label=lab)
     vt = mf.saw_tensors()
     v = np.array([(x, vrh_k(c11, c12)) for t, (x, c11, c12, c44) in vt.items() if t.startswith("dft_")])
     ax.plot(v[:, 0], v[:, 1], "o", color="#009E73", ms=4, label="VASP (this work)")
