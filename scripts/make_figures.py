@@ -187,7 +187,7 @@ def save(fig, stem):
     plt.close(fig)
 
 
-def qe_mixing(T_K=298.15):
+def qe_mixing(T_K=298.15, aexp=False):
     """QE demixing free energy -dG_mix = -dH_mix + T S_conf (eV/atom; Eq. demix convention, as the
     Levesque series) of the relaxed 40-atom SQS. References: FM bcc Fe and AFM Cr, 2-atom cells with the
     8x8x10 mesh (same k-point density as the SQS 4x4x2). Only runs with result.json (fully finished)."""
@@ -195,9 +195,16 @@ def qe_mixing(T_K=298.15):
     runs = ROOT / "dft_qe" / "engaging" / "runs"
     e_last = lambda d: float(re.findall(r"^!\s+total energy\s+=\s+([-\d.]+)", (d / "relax.out").read_text(), re.M)[-1])
     ry = 13.605693123
-    fe, cr = e_last(runs / "Fe_fm_k8x8x10_e60") / 2, e_last(runs / "Cr_afm_k8x8x10_e60") / 2
+    # aexp=True: the series at the room-temperature experimental lattice parameter, with the pure references at
+    # theirs (same k-point density); the result of the default call carries it under "aexp" when it exists.
+    suf = "_aexp" if aexp else ""
+    if aexp and not (runs / "Fe_fm_k8x8x10_e60_aexp" / "relax.out").exists():
+        return None
+    fe, cr = e_last(runs / f"Fe_fm_k8x8x10_e60{suf}") / 2, e_last(runs / f"Cr_afm_k8x8x10_e60{suf}") / 2
     out = {}
-    for d in sorted(runs.glob("sqs40_x*_k442_e60")) + sorted(runs.glob("sqs40_x0.80_k442_e60_crafm2")):
+    dirs = (sorted(runs.glob("sqs40_x*_k442_e60_aexp")) if aexp else
+            sorted(runs.glob("sqs40_x*_k442_e60")) + sorted(runs.glob("sqs40_x0.80_k442_e60_crafm2")))
+    for d in dirs:
         if (d / "result.json").exists():
             x = float(re.match(r"sqs40_x([\d.]+)_", d.name).group(1))
             dh = (e_last(d) / 40 - (1 - x) * fe - x * cr) * ry
@@ -206,7 +213,10 @@ def qe_mixing(T_K=298.15):
     if not out:
         return None
     x = np.array(sorted(out))
-    return dict(x=x, dh=np.array([out[v][0] for v in x]), demix=np.array([out[v][1] for v in x]))
+    res = dict(x=x, dh=np.array([out[v][0] for v in x]), demix=np.array([out[v][1] for v in x]))
+    if not aexp:
+        res["aexp"] = qe_mixing(T_K, aexp=True)
+    return res
 
 
 def demix_from_enthalpy():
@@ -249,8 +259,13 @@ def fig1(qe=None, entropy_fix=False):
     a.plot(d["x_cr_b"], d["pwscf_paw"], "o", color=GREEN, label="PWSCF-PAW", **m)
     a.plot(d["x_cr_b"], d["siesta_nc"], "o", color=ORANGE, label="SIESTA-NC", **m)
     if qe is not None:
+        two = qe.get("aexp") is not None
         a.plot(qe["x"], qe["demix"], "o", mfc="white", mec=QE_COL, mew=1.1, ms=4.8, ls="none",
-               label="GGA (QE, this work)", zorder=5)
+               label="GGA (QE, this work)" + (", relaxed $a$" if two else ""), zorder=5)
+        if two:
+            q2 = qe["aexp"]
+            a.plot(q2["x"], q2["demix"], "D", mfc="white", mec=QE_COL, mew=1.0, ms=3.8, ls="none",
+                   label="GGA (QE, this work), experimental $a$", zorder=5)
     a.axhline(0, color="0.5", lw=0.7)
     a.set(xlabel=r"$x_{\rm Cr}$", ylabel="Demixing free energy (eV/atom)", xlim=(0, 1), ylim=(-0.25, 0.05))
     a.legend(frameon=False, fontsize=6.5, loc="lower left", handletextpad=0.2)
