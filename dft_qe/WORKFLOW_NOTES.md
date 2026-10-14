@@ -108,7 +108,7 @@ Settings (all runs):
 
   The PAW dataset, cutoff and magnetism are therefore fine; ph.x is what fails for ferromagnetic Fe here. Cr DFPT, including AFM Cr, agrees with neutron data to 0.35–0.41 THz.
 - Fix: Fe phonons come from finite displacements.
-- The first finite-displacement reference used the 2×2×5 SQS-shaped cell. Its tetragonal image pattern made the symmetrised force constants inconsistent (on-site constants 10.0 vs 11.9 eV/Å² along x and z) and gave a spurious imaginary branch. Fix: a cubic 3×3×3 supercell (`phonopy_cubic.py`).
+- The first finite-displacement reference used the 2×2×5 SQS-shaped cell. Its tetragonal image pattern made the symmetrised force constants inconsistent (on-site constants 10.0 vs 11.9 eV/Å² along x and z) and gave a spurious imaginary branch. Fix: a cubic 3×3×3 supercell (`phonopy_cubic.py`). Result at the experimental lattice parameter: RMS 0.23 THz against neutron scattering (DFPT: 1.1–1.4 THz), and a mean phonon frequency of 6.50 THz against 6.51 THz from NRIXS (DFPT: +19% to +27%).
 
 **Mixing-energy references.** Pure Fe and Cr references for ΔH_mix use the same k-point density as the SQS: 8×8×10 for the 2-atom cell, against 4×4×2 for the 2×2×5 SQS. A 16³ reference would differ by a few meV/atom, comparable to the Fe-rich ΔH.
 

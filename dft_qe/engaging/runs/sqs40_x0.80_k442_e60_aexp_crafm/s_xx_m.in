@@ -9,9 +9,10 @@
   starting_magnetization(2) = 0.6
 /
 &electrons
-  conv_thr = 1e-8, mixing_beta = 0.05, mixing_mode = 'local-TF', electron_maxstep = 600, mixing_ndim = 20
+  conv_thr = 1e-8, mixing_beta = 0.2, mixing_mode = 'local-TF', electron_maxstep = 600, mixing_ndim = 8
 /
 &ions
+  upscale = 1
 /
 &cell
   cell_dofree = 'xyz', press_conv_thr = 0.2
