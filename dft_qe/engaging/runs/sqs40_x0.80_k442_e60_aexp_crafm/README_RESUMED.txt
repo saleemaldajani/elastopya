@@ -1,0 +1,1 @@
+s_yz_p SCF oscillated at 2-3e-5 Ry for 300 iterations (beta 0.1, ndim 16; job ended Tue Oct 13 23:04:34 EDT 2026); resumed with beta 0.05, ndim 20, maxstep 600; relax, s_xx_p, s_xx_m reused
