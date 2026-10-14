@@ -13,14 +13,21 @@ bcc Fe phonons vs neutron scattering (295 K),Fe_fm_aexp,fe_phonon_minkiewicz1967
 "bcc Cr phonons vs neutron scattering (300 K, AFM)",Cr_afm_aexp,cr_phonon_shaw1971.csv,mean deviation calc-exp (THz),-0.01113
 Fe phonon DOS,Fe_fm,NRIXS 300 K (Mauger 2014),mean frequency (THz),8.25
 Fe phonon DOS,Fe_fm,NRIXS 300 K (Mauger 2014),mean frequency vs first reference (%),26.8
+Fe phonon DOS,Fe_fm_aexp,NRIXS 300 K (Mauger 2014),mean frequency (THz),7.755
+Fe phonon DOS,Fe_fm_aexp,NRIXS 300 K (Mauger 2014),mean frequency vs first reference (%),19.2
 Cr phonon DOS,Cr_nm_v5_k24,BvK from neutron (Fultz 1995),mean frequency (THz),7.696
 Cr phonon DOS,Cr_nm_v5_k24,BvK from neutron (Fultz 1995),mean frequency vs first reference (%),5.667
+Cr phonon DOS,Cr_nm_aexp,BvK from neutron (Fultz 1995),mean frequency (THz),7.255
+Cr phonon DOS,Cr_nm_aexp,BvK from neutron (Fultz 1995),mean frequency vs first reference (%),-0.392
 Cr phonon DOS,Cr_afm,BvK from neutron (Fultz 1995),mean frequency (THz),7.506
 Cr phonon DOS,Cr_afm,BvK from neutron (Fultz 1995),mean frequency vs first reference (%),3.06
-site moments,QE relaxed a Fe,korzhavyi2009_fig8 FM,mean |QE - EMTO| (muB),0.07685
+Cr phonon DOS,Cr_afm_aexp,BvK from neutron (Fultz 1995),mean frequency (THz),7.358
+Cr phonon DOS,Cr_afm_aexp,BvK from neutron (Fultz 1995),mean frequency vs first reference (%),1.026
+site moments,QE relaxed a Fe,korzhavyi2009_fig8 FM,mean |QE - EMTO| (muB),0.07785
 site moments,QE relaxed a Fe x=0.200,korzhavyi2009_fig8 FM,QE - EMTO (muB),0.06798
 site moments,QE relaxed a Fe x=0.300,korzhavyi2009_fig8 FM,QE - EMTO (muB),0.08394
 site moments,QE relaxed a Fe x=0.350,korzhavyi2009_fig8 FM,QE - EMTO (muB),0.08048
+site moments,QE relaxed a Fe x=0.400,korzhavyi2009_fig8 FM,QE - EMTO (muB),0.08488
 site moments,QE relaxed a Fe x=0.475,korzhavyi2009_fig8 FM,QE - EMTO (muB),0.0745
 site moments,QE relaxed a Fe x=0.500,korzhavyi2009_fig8 FM,QE - EMTO (muB),0.08076
 site moments,QE relaxed a Fe x=0.650,korzhavyi2009_fig8 FM,QE - EMTO (muB),0.0078
@@ -31,10 +38,11 @@ site moments,QE experimental a Fe x=0.400,korzhavyi2009_fig8 FM,QE - EMTO (muB),
 site moments,QE experimental a Fe x=0.450,korzhavyi2009_fig8 FM,QE - EMTO (muB),0.1863
 site moments,QE experimental a Fe x=0.500,korzhavyi2009_fig8 FM,QE - EMTO (muB),0.2058
 site moments,QE experimental a Fe x=0.950,korzhavyi2009_fig8 FM,QE - EMTO (muB),0.1229
-site moments,QE relaxed a Cr,korzhavyi2009_fig8 FM,mean |QE - EMTO| (muB),0.07016
+site moments,QE relaxed a Cr,korzhavyi2009_fig8 FM,mean |QE - EMTO| (muB),0.06646
 site moments,QE relaxed a Cr x=0.200,korzhavyi2009_fig8 FM,QE - EMTO (muB),-0.0851
 site moments,QE relaxed a Cr x=0.300,korzhavyi2009_fig8 FM,QE - EMTO (muB),0.0848
 site moments,QE relaxed a Cr x=0.350,korzhavyi2009_fig8 FM,QE - EMTO (muB),0.02954
+site moments,QE relaxed a Cr x=0.400,korzhavyi2009_fig8 FM,QE - EMTO (muB),0.04061
 site moments,QE relaxed a Cr x=0.475,korzhavyi2009_fig8 FM,QE - EMTO (muB),0.05952
 site moments,QE relaxed a Cr x=0.500,korzhavyi2009_fig8 FM,QE - EMTO (muB),0.09436
 site moments,QE relaxed a Cr x=0.650,korzhavyi2009_fig8 FM,QE - EMTO (muB),0.1002
