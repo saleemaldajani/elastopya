@@ -1,5 +1,5 @@
 
-     Program PWSCF v.7.5 starts on 13Oct2026 at  0:12:16 
+     Program PWSCF v.7.5 starts on 14Oct2026 at  3:17:26 
 
      This program is part of the open-source Quantum ESPRESSO suite
      for quantum simulation of materials; please cite
@@ -10,12 +10,12 @@
      in publications or presentations arising from this work. More details at
      http://www.quantum-espresso.org/quote
 
-     Parallel version (MPI), running on    64 processors
+     Parallel version (MPI), running on   128 processors
 
-     MPI processes distributed on     1 nodes
-     173740 MiB available memory on the printing compute node when the environment starts
+     MPI processes distributed on     2 nodes
+     168067 MiB available memory on the printing compute node when the environment starts
 
-     Reading input from bands.in
+     Reading input from bands_cg.in
 
      Current dimensions of program PWSCF are:
      Max number of different atomic species (ntypx) = 10
@@ -29,7 +29,7 @@
      Found identity + (  0.2500  0.2500  0.1000) symmetry
      This is a supercell, fractional translations are disabled
 
-     K-points division:     npool     =      16
+     K-points division:     npool     =      32
      R & G space division:  proc/nbgrp/npool/nimage =       4
      Subspace diagonalization in iterative solution of the eigenvalue problem:
      one sub-group per band group will be used
@@ -154,7 +154,7 @@
 
      Estimated max dynamical RAM per process >     230.43 MB
 
-     Estimated total dynamical RAM >      14.40 GB
+     Estimated total dynamical RAM >      28.80 GB
 
      Check: negative core charge=   -0.000094
      Generating pointlists ...
@@ -170,14 +170,7 @@
 
      Band Structure Calculation
      CG style diagonalization
-     c_bands:  1 eigenvalues not converged
-     c_bands:  1 eigenvalues not converged
-     c_bands:  1 eigenvalues not converged
-     c_bands:  1 eigenvalues not converged
-     c_bands:  1 eigenvalues not converged
-     c_bands:  1 eigenvalues not converged
-     c_bands:  1 eigenvalues not converged
-     c_bands:  1 eigenvalues not converged
+     c_bands:  2 eigenvalues not converged
      c_bands:  1 eigenvalues not converged
      c_bands:  1 eigenvalues not converged
      c_bands:  1 eigenvalues not converged

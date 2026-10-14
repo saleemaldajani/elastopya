@@ -57,7 +57,7 @@ def write_input(path, cell, symbols, frac, k, ecut, calc):
   + (",\n  startingpot = 'file', startingwfc = 'file'" if os.environ.get("QE_START_FROM_FILE") else "") + """
 /
 &ions
-/
+""" + (f"  upscale = {os.environ['QE_UPSCALE']}\n" if "QE_UPSCALE" in os.environ else "") + """/
 &cell
   cell_dofree = 'xyz', press_conv_thr = 0.2
 /
