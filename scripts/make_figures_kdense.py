@@ -178,6 +178,7 @@ def save(fig, stem):
             dt, dp, dl = DFTS[stem]
             trend = suffix.endswith("_trend")
             undo_d = add_strip(fig, dt, dp, lanes=dl if trend else (), letter="(d)", aspect=VS.ASPECT,
+                               widths=[VS.width_ratio(x) for x in VS.STRIP_XS],
                                key=(("\u2191 moment", None), ("Cr", CR), ("Fe", FE)))
             name = (stem + suffix[:-len("_trend")] + "_dft_trend") if trend else (stem + suffix + "_dft")
             _export(fig, OUT / "with_strips" / name, name)
@@ -201,10 +202,11 @@ def _grid_ax(ax, grid):
 LANE_H, LABEL_W, GAP = 0.46, 0.80, 0.12   # inches: trend-lane height, lane-label column, block spacing
 
 
-def add_strip(fig, title, panels, lanes=(), letter="(c)", aspect=1.0, key=None):
+def add_strip(fig, title, panels, lanes=(), letter="(c)", aspect=1.0, key=None, widths=None):
     """Append a row of atomic-plane snapshots as panel (c), keeping (a)/(b) at their size.
     Called again, it appends a further row below (letter "(d)"); everything above moves up.
     aspect: block height / width; key: colour-key entries (name, colour or None for text only), default Cr/Fe.
+    widths: optional relative block widths (default all 1); blocks keep a common height and drawing scale.
 
     lanes: optional trend rows drawn under the blocks, each
       dict(label, values (one per block), fmt, mode='seq' | 'pairs', zero=False)
@@ -219,7 +221,8 @@ def add_strip(fig, title, panels, lanes=(), letter="(c)", aspect=1.0, key=None):
     left = old_axes[0].get_position().x0 * W
     right = max(ax.get_position().x1 for ax in old_axes) * W
     lab_w = LABEL_W if lanes else 0.0
-    cell = min(0.95 / aspect ** 0.5, (right - left - lab_w - (n - 1) * GAP) / n)
+    wr = list(widths) if widths else [1.0] * n
+    cell = min(0.95 / aspect ** 0.5, (right - left - lab_w - (n - 1) * GAP) / sum(wr))
     ch = cell * aspect                                       # block height
     head, lab, foot = 0.20, 0.14, (0.12 if lanes else 0.04)
     lanes_h = len(lanes) * LANE_H + (0.04 if lanes else 0.0)
@@ -232,12 +235,13 @@ def add_strip(fig, title, panels, lanes=(), letter="(c)", aspect=1.0, key=None):
         t.set_position((tx, (ty * H + extra) / Hn))
     for r, (rx, ry), rh in ppos:
         r.set_xy((rx, (ry * H + extra) / Hn)); r.set_height(rh * H / Hn)
-    total = n * cell + (n - 1) * GAP
+    total = sum(wr) * cell + (n - 1) * GAP
     x0_in = left + lab_w + (right - left - lab_w - total) / 2
     yblock = foot + lanes_h
-    centers = [k * (cell + GAP) + cell / 2 for k in range(n)]
+    starts = [sum(wr[:k]) * cell + k * GAP for k in range(n)]
+    centers = [starts[k] + wr[k] * cell / 2 for k in range(n)]
     for k, (label, draw) in enumerate(panels):
-        ax = fig.add_axes([(x0_in + k * (cell + GAP)) / W, yblock / Hn, cell / W, ch / Hn])
+        ax = fig.add_axes([(x0_in + starts[k]) / W, yblock / Hn, wr[k] * cell / W, ch / Hn])
         draw(ax)
         ax.set_title(label, fontsize=MIN_PT, pad=1.5).set_gid("strip")
     for i, lane in enumerate(lanes):
@@ -381,7 +385,7 @@ def strips():
 def dft_strips():
     """Panel (d): the DFT cells behind the first-principles points (bcc unit cells, 40-atom SQS), QE-relaxed,
     with local moments; the _dft_trend versions add lanes with the DFT values (VASP as plotted, and QE)."""
-    xs = [0.0, 0.2, 0.35, 0.5, 0.65, 0.95, 1.0]
+    xs = VS.STRIP_XS                      # one list, so the block widths match
     lab = lambda x: ("bcc Fe" if x == 0 else "bcc Cr" if x == 1 else f"{round(100 * x)}% Cr, SQS")
     panels = [(lab(x), (lambda x: lambda ax: VS.draw(ax, x))(x)) for x in xs]
     nan = float("nan")
