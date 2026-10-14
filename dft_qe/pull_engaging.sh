@@ -20,6 +20,9 @@ ssh engaging "cd $REMOTE && find unfold bandpath phonon phonopy dos saw \( -path
   \( -name '*.in' -o -name '*.out' -o -name 'qe_x*.csv' -o -name '*.npz' -o -name '*.txt' -o -name 'bands_data.xml' -o -name 'freq*' \
      -o -name 'pdos*' -o -name 'dyn*' -o -name 'fc' -o -name '*.log' -o -name 'dos.dat' -o -name 'phonopy_*.yaml' \)  -print 2>/dev/null | tar czf - -T - *.sbatch 2>/dev/null" \
   | tar xzf - -C engaging
+# Every job/analysis script on Engaging, including those in subfolders (dos/, saw/, frozen_Fe/, phonon_test/, ...)
+ssh engaging "cd $REMOTE && find . -maxdepth 2 \( -name '*.py' -o -name '*.sbatch' -o -name '*.sh' \) -not -path './venv/*' -not -path './qe75/*' -print \
+  | tar czf - -T - 2>/dev/null" | tar xzf - -C engaging
 rm -f engaging/pseudo/*.UPF; rmdir engaging/pseudo 2>/dev/null || true   # pseudopotentials are not redistributed
 find engaging -name "*.out" -size +20M -print -delete
 du -sh engaging

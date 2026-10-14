@@ -34,7 +34,7 @@ ESPRESSO scratch/wavefunctions) are not stored.
 | `lammps/random_alloys/` | Elastic constants of random bcc Fe–Cr alloys (same stiffness procedure), inputs and logs |
 | | Potential files are stored once, in `lammps/random_alloys/template/`; each run directory used a copy |
 | `lammps/decomposition/` | Spinodal-decomposition series at several compositions (25³ cells); inputs, logs, gzipped structures |
-| `dft_qe/` | Quantum ESPRESSO elastic-constant drivers, SQS cells, inputs/outputs, convergence study |
+| `dft_qe/` | Quantum ESPRESSO workflow (elastic constants, electronic structure, phonons, validation): final scripts, Engaging job scripts and outputs (`engaging/`), reference data and digitization scripts (`refdata/`). **[`dft_qe/WORKFLOW_NOTES.md`](dft_qe/WORKFLOW_NOTES.md)** lists the final scripts and every fix that was needed along the way |
 | `visualizations/` | Snapshots of the decomposed structures and local-composition histograms |
 
 ## Reproducing the figures
