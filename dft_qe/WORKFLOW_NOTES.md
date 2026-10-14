@@ -85,7 +85,7 @@ Settings (all runs):
 **Diagonalisation.**
 - Davidson failed in some band and NSCF steps (QE errors 227 and 1243, "S matrix not positive definite").
 - Fix: those steps use CG.
-- CG was then too slow for the 510-k-point unfolding band step: it timed out at 24 h on one node. Fix: `unfold2.sbatch` uses PPCG, which solves the same eigenproblem, on two nodes with the 2-day limit, and falls back to CG if PPCG fails. Failed DOS NSCFs are resubmitted with PPCG too.
+- CG was then too slow for the 510-k-point unfolding band step: it timed out at 24 h on one node. Fix: `unfold2.sbatch` runs on two nodes with the 2-day limit. It first tries ParO and falls back to CG if ParO fails. PPCG was the first choice, but QE 7.5 rejects it ("PPCG diagonalization not supported anymore (Dec. 2024)").
 
 **Projected DOS.**
 - projwfc with Gaussian broadening on a tetrahedron NSCF gave all-zero PDOS. Fix: tetrahedra with `-nk 1` (`pdosT.*`).
@@ -118,6 +118,7 @@ Settings (all runs):
 - *Disk quota (2026-10-14).* The 1.1 TB pool filled with wavefunction scratch, and one DOS job died at 13.5 h with exit code 2.
   - Fix: scratch of finished runs was deleted, logged in `CLEANUP_LOG.txt` on Engaging. For elastic and phonon runs the whole `tmp/` went; for DOS runs only the wavefunctions, because the density maps read the charge densities. Usage went from 100% to 63%.
   - `wait_key.sh` now alarms above 90%.
+  - Jobs that ran while the disk was full can carry silently truncated wavefunction files. On this NFS pool a write may appear to succeed and fail later. Two jobs crashed only when reading them back (`davcio` error 10: "error writing" or "error reading file ./tmp/*.wfc*"). Fix: rename the failed output, delete that run's `*.wfc*`, keep the SCF charge density written before the disk filled, and rerun the step.
 - *Connection.* Logins need Duo. The shared ControlMaster connection must be started detached (`ssh -f -N`), so closing Terminal does not end it. `watch_connection.sh` keeps it busy and the Mac awake.
 
 ## 3. Conventions
