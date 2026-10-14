@@ -7,6 +7,12 @@ read the stress tensor. No internal relaxation is needed for elemental bcc (inve
 
 Usage: elastic_qe.py <element Fe|Cr> <kx> <ky> <kz> <ecutwfc_Ry> <outdir> [--mag fm|afm|nm] [--np N]
 Writes <outdir>/result.json with a0, C11, C12, C44, magnetic moment, and wall time.
+
+QE_FIXED_A=exp (added 2026-10-14): skip step (1) and use the room-temperature experimental lattice parameter
+(Fe 2.8665 A, Cr 2.8846 A), or a number in A. Why: at the PBE-relaxed volume the bulk modulus is ~30% above
+experiment, and the SQS series at the experimental lattice parameter (elastic_sqs_qe.py, same option) needs pure-element
+end points and mixing-energy references at the same convention. Pure Fe at the experimental a gives K = 170 GPa
+(measured 168). Without the variable the behaviour is unchanged. Jobs: bcc2_variant.sbatch (SUFFIX=aexp).
 """
 import argparse
 import json
