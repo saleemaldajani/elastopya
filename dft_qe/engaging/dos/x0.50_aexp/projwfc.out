@@ -1,0 +1,61 @@
+
+     Program PROJWFC v.7.5 starts on 14Oct2026 at 16:28: 6 
+
+     This program is part of the open-source Quantum ESPRESSO suite
+     for quantum simulation of materials; please cite
+         "P. Giannozzi et al., J. Phys.:Condens. Matter 21 395502 (2009);
+         "P. Giannozzi et al., J. Phys.:Condens. Matter 29 465901 (2017);
+         "P. Giannozzi et al., J. Chem. Phys. 152 154105 (2020);
+          URL http://www.quantum-espresso.org", 
+     in publications or presentations arising from this work. More details at
+     http://www.quantum-espresso.org/quote
+
+     Parallel version (MPI), running on    16 processors
+
+     MPI processes distributed on     1 nodes
+     R & G space division:  proc/nbgrp/npool/nimage =      16
+     105275 MiB available memory on the printing compute node when the environment starts
+
+
+     Reading xml data from directory:
+
+     ./tmp/dos.save/
+     file Cr.pbe-spn-kjpaw_psl.1.0.0.UPF: wavefunction(s)  3S 3P 3D renormalized
+     file Fe.pbe-spn-kjpaw_psl.0.2.1.UPF: wavefunction(s)  3D renormalized
+
+     IMPORTANT: XC functional enforced from input :
+     Exchange-correlation= PBE
+                           (   1   4   3   4   0   0   0)
+     Any further DFT definition will be discarded
+     Please, verify this is what you really want
+
+
+     Parallelization info
+     --------------------
+     sticks:   dense  smooth     PW     G-vecs:    dense   smooth      PW
+     Min         281     140     38                35609    12584    1830
+     Max         282     141     39                35618    12597    1839
+     Sum        4501    2241    621               569801   201365   29363
+
+     Using Slab Decomposition
+
+
+     Check: negative core charge=   -0.000059
+
+     negative rho (up, down):  0.000E+00 1.186E-04
+
+     Optimized tetrahedron method (read from file) 
+     [opt_tetra]  Optimized tetrahedron method is used.
+
+     Calling projwave .... 
+     Subspace diagonalization in iterative solution of the eigenvalue problem:
+     a serial algorithm will be used
+
+
+  Problem Sizes 
+  natomwfc =          460
+  nbnd     =          488
+  nkstot   =          112
+  npwx     =         1609
+  nkb      =          720
+

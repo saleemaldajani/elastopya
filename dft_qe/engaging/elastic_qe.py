@@ -91,13 +91,21 @@ def main():
     a = ap.parse_args()
     d = Path(a.outdir); d.mkdir(parents=True, exist_ok=True)
     t0 = time.time()
-    a_guess = 2.83 if a.el == "Fe" else 2.87
-    write_input(d / "relax.in", a.el, np.eye(3) * a_guess, a.k, a.ecut, a.mag, "vc-relax")
-    txt = (d / "relax.out").read_text() if (d / "relax.out").exists() and "End final" in (d / "relax.out").read_text() \
-        else run(d, "relax", a.np)
-    cells = re.findall(r"CELL_PARAMETERS \(angstrom\)\n(.*)\n(.*)\n(.*)", txt)
-    vecs = np.array([[float(v) for v in r.split()] for r in cells[-1]])
-    a0 = float(np.cbrt(abs(np.linalg.det(vecs))))  # cubic cell edge
+    # QE_FIXED_A=exp: no lattice relaxation; the room-temperature experimental lattice parameter (Fe 2.8665,
+    # Cr 2.8846 A), as for the SQS (elastic_sqs_qe.py). A number instead of "exp" fixes that a (A).
+    fixed = os.environ.get("QE_FIXED_A")
+    if fixed:
+        a0 = {"Fe": 2.8665, "Cr": 2.8846}[a.el] if fixed == "exp" else float(fixed)
+        write_input(d / "relax.in", a.el, np.eye(3) * a0, a.k, a.ecut, a.mag, "scf")
+        txt = run(d, "relax", a.np)
+    else:
+        a_guess = 2.83 if a.el == "Fe" else 2.87
+        write_input(d / "relax.in", a.el, np.eye(3) * a_guess, a.k, a.ecut, a.mag, "vc-relax")
+        txt = (d / "relax.out").read_text() if (d / "relax.out").exists() and "End final" in (d / "relax.out").read_text() \
+            else run(d, "relax", a.np)
+        cells = re.findall(r"CELL_PARAMETERS \(angstrom\)\n(.*)\n(.*)\n(.*)", txt)
+        vecs = np.array([[float(v) for v in r.split()] for r in cells[-1]])
+        a0 = float(np.cbrt(abs(np.linalg.det(vecs))))  # cubic cell edge
     mag = re.findall(r"total magnetization\s+=\s+([-\d.]+)", txt)
     res = {"element": a.el, "k": a.k, "ecutwfc_Ry": a.ecut, "mag": a.mag, "a0_A": a0,
            "total_magnetization_muB_per_cell": float(mag[-1]) if mag else 0.0}
