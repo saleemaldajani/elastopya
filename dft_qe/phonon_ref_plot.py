@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 """Our DFPT phonons of bcc Fe and Cr against experiment.
 
-  phonon_ref_plot.py <outfile>
+  phonon_ref_plot.py <outfile>              Fe from DFPT (the original version of the figure)
+  phonon_ref_plot.py <outfile> --fe-fd      Fe from finite displacements (phonopy_cubic.py, 3x3x3 cubic supercell)
+                                            at the PBE-relaxed and the experimental lattice parameter. Used since
+                                            2026-10-14: DFPT (ph.x) gives FM Fe frequencies ~60% too high, while a
+                                            frozen phonon with identical settings agrees with neutron data (WORKFLOW_NOTES.md).
 
 (a) Fe (FM, DFPT) dispersion along Gamma-H-N-Gamma-P-H with the room-temperature neutron data of Minkiewicz,
     Shirane & Nathans, Phys. Rev. 162, 528 (1967) (tabulated).
@@ -44,11 +48,19 @@ def rows(name):
     return r
 
 
-def dispersion(ax, case, refname, label):
-    gp = np.loadtxt(ENG / case / "freq.gp")
-    x, w = gp[:, 0], gp[:, 1:] * CM1_THZ
-    for b in range(w.shape[1]):
-        ax.plot(x, w[:, b], color="#2A9DF4", lw=1.0, label="QE DFPT" if b == 0 else None)
+def ph_dir(case):
+    """DFPT runs in engaging/phonon/<case>; finite-displacement runs in phonopy_derived/<case> (same file formats)."""
+    d = HERE / "phonopy_derived" / case
+    return d if d.exists() else ENG / case
+
+
+def dispersion(ax, case, refname, label, variants=None):
+    """variants: list of (case, colour, linestyle, label); default: the one DFPT case in blue."""
+    for c, col, ls, lab in (variants or [(case, "#2A9DF4", "-", "QE DFPT")]):
+        gp = np.loadtxt(ph_dir(c) / "freq.gp")
+        x, w = gp[:, 0], gp[:, 1:] * CM1_THZ
+        for b in range(w.shape[1]):
+            ax.plot(x, w[:, b], ls, color=col, lw=1.0, label=lab if b == 0 else None)
     pts = [(path_x(r["direction"], float(r["zeta"])), float(r["nu_THz"])) for r in rows(refname)]
     pts = np.array([p for p in pts if p[0] is not None])
     ax.plot(pts[:, 0], pts[:, 1], "o", mfc="white", mec="0.1", ms=2.6, mew=0.6, label=label)
@@ -60,7 +72,7 @@ def dispersion(ax, case, refname, label):
 
 
 def dfpt_dos(case, sigma=0.15):
-    a = np.loadtxt(ENG / case / "dos.dat")
+    a = np.loadtxt(ph_dir(case) / "dos.dat")
     f, g = a[:, 0] * CM1_THZ, a[:, 1]
     grid = np.linspace(0, 12, 1201)
     gi = np.interp(grid, f, g, left=0, right=0)
@@ -69,18 +81,20 @@ def dfpt_dos(case, sigma=0.15):
     return grid, gs / np.trapezoid(gs, grid)
 
 
-def main(outfile):
+def main(outfile, fe_fd=False):
     import matplotlib.pyplot as plt
     sys.path.insert(0, str(HERE.parent / "scripts" / "kdense_scripta" / "scripts"))
     from style_presets import apply_publication_style
     apply_publication_style("scripta"); plt.rcParams["svg.fonttype"] = "none"
     fig, axs = plt.subplots(2, 2, figsize=(7.2, 5.0), gridspec_kw={"width_ratios": [1.4, 1]})
-    dispersion(axs[0, 0], "Fe_fm", "fe_phonon_minkiewicz1967.csv", "neutron, 295 K (Minkiewicz 1967)")
-    axs[0, 0].set_title("(a) bcc Fe (FM)", fontsize=8, loc="left")
+    fe_var = [("Fe_cub_aexp", "#2A9DF4", "-", "QE finite displ., exp. $a$"), ("Fe_cub", "#0B5D3B", "--", "QE finite displ., relaxed $a$")] if fe_fd else None
+    dispersion(axs[0, 0], "Fe_fm", "fe_phonon_minkiewicz1967.csv", "neutron, 295 K (Minkiewicz 1967)", variants=fe_var)
+    axs[0, 0].set_title("(a) bcc Fe (FM" + (", finite displacements)" if fe_fd else ")"), fontsize=8, loc="left")
     dispersion(axs[1, 0], "Cr_nm_v5_k24", "cr_phonon_shaw1971.csv", "neutron, 300 K (Shaw & Muhlestein 1971)")
     axs[1, 0].set_title("(b) bcc Cr (NM, $k=24^3$)", fontsize=8, loc="left")
     ax = axs[0, 1]
-    f, g = dfpt_dos("Fe_fm"); ax.plot(f, g, color="#2A9DF4", lw=1.2, label="QE DFPT")
+    for c, col, ls, lab in (fe_var or [("Fe_fm", "#2A9DF4", "-", "QE DFPT")]):
+        f, g = dfpt_dos(c); ax.plot(f, g, ls, color=col, lw=1.2, label=lab)
     mau = rows("fe_phonon_dos_mauger2014.csv")
     for T, ls in (("30", "-"), ("300", "--")):
         d = np.array([[float(r["nu_THz"]), float(r["g_perTHz"])] for r in mau if r["T_K"] == T])
@@ -104,4 +118,4 @@ def main(outfile):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    main(sys.argv[1], fe_fd="--fe-fd" in sys.argv)
