@@ -8,6 +8,9 @@ from pathlib import Path
 sys.path.insert(0, ".")
 import make_figures as mf
 import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt
+sys.path.insert(0, "kdense_scripta/scripts")
+from style_presets import apply_publication_style
+apply_publication_style("scripta")
 R = Path("../dft_qe/engaging/runs"); lit = mf.literature()
 def series(suf):
     out = []
@@ -35,12 +38,13 @@ fig, ax = plt.subplots(1, 3, figsize=(7.4, 2.4))
 ax[0].plot(lit["x"], np.array(lit["f"]) * 1e3, "o-", color="0.15", ms=3, lw=1, label="EMTO-CPA (Razumovskiy)")
 ax[0].plot(rel[:, 0], rel[:, 1], "D--", color="#D55E00", mfc="white", ms=3.5, lw=0.8, label="QE, relaxed PBE volume")
 ax[0].plot(aex[:, 0], aex[:, 1], "D-", color="#0072B2", ms=3.5, lw=1.1, label="QE, experimental lattice")
-ax[0].set(xlabel="$x_{Cr}$", ylabel="$f_{SAW}$ (MHz, 6.4 µm)", xlim=(0, 1)); ax[0].legend(fontsize=5.5, frameon=False)
+ax[0].set(xlabel="$x_{Cr}$", ylabel="$f_{SAW}$ (MHz, 6.4 µm)", xlim=(0, 1)); ax[0].legend(fontsize=5.5, frameon=False, loc="upper left")
 for k, (i, lab) in enumerate(((2, "$K$ (GPa)"), (3, "$G$ (GPa)")), start=1):
     ax[k].plot(rel[:, 0], rel[:, i], "D--", color="#D55E00", mfc="white", ms=3.5, lw=0.8)
     ax[k].plot(aex[:, 0], aex[:, i], "D-", color="#0072B2", ms=3.5, lw=1.1)
     ax[k].set(xlabel="$x_{Cr}$", ylabel=lab, xlim=(0, 1))
-for a in ax: a.axvspan(0.30, 0.40, color="#FFB000", alpha=0.2, lw=0)
+for a, t in zip(ax, ("(a) SAW frequency", "(b) bulk modulus", "(c) shear modulus (VRH)")):
+    a.axvspan(0.30, 0.40, color="#FFB000", alpha=0.2, lw=0); a.set_title(t, loc="left", fontsize=7)
 fig.tight_layout()
 out = "../manuscript/figures/kdense_scripta/supplementary/S_qe_aexp_progress.png"
-fig.savefig(out, dpi=300); print("wrote", out)
+fig.savefig(out, dpi=600); fig.savefig(out.replace(".png", ".pdf")); print("wrote", out)
