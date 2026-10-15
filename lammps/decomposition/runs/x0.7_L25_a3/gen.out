@@ -1,0 +1,72 @@
+LAMMPS (22 Jul 2025 - Update 6)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread.
+  using 1 OpenMP thread(s) per MPI task
+Lattice spacing in x,y,z = 2.866 2.866 2.866
+Created triclinic box = (0 0 0) to (71.65 71.65 71.65) with tilt (0 0 0)
+  2 by 2 by 4 MPI processor grid
+Created 31250 atoms
+  using lattice units in triclinic box = (0 0 0) to (71.65 71.65 71.65) with tilt (0 0 0)
+  create_atoms CPU = 0.001 seconds
+Setting atom values ...
+  21934 settings made for type/fraction
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Generated 0 of 1 mixed pair_coeff terms from geometric mixing rule
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 4.866
+  ghost atom cutoff = 4.866
+  binsize = 2.433, bins = 30 30 30
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair lj/cut, perpetual
+      attributes: half, newton on
+      pair build: half/bin/atomonly/newton/tri
+      stencil: half/bin/3d/tri
+      bin: standard
+Setting up Verlet run ...
+  Unit style    : metal
+  Current step  : 0
+  Time step     : 0.01
+Per MPI rank memory allocation (min/avg/max) = 3.224 | 3.224 | 3.224 Mbytes
+   Step         PotEng    
+         0   4.1487923e+13
+       500   2.8191351e+13
+      1000   2.3527425e+13
+      1500   2.080419e+13 
+      2000   1.8931903e+13
+      2500   1.7565103e+13
+      3000   1.6492885e+13
+      3500   1.5668947e+13
+      4000   1.5024275e+13
+      4500   1.4529183e+13
+      5000   1.4021379e+13
+Loop time of 124.852 on 16 procs for 5000 steps with 31250 atoms
+
+Performance: 34.601 ns/day, 0.694 hours/ns, 40.047 timesteps/s, 1.251 Matom-step/s
+99.1% CPU use with 16 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 1.1324     | 1.2809     | 1.4147     |   9.7 |  1.03
+Neigh   | 0.17468    | 0.19315    | 0.20769    |   2.3 |  0.15
+Comm    | 0.66556    | 1.0572     | 1.3267     |  21.1 |  0.85
+Output  | 0.00028507 | 0.00037679 | 0.00060142 |   0.0 |  0.00
+Modify  | 122.05     | 122.05     | 122.05     |   0.0 | 97.76
+Other   |            | 0.2684     |            |       |  0.22
+
+Nlocal:        1953.12 ave        2047 max        1872 min
+Histogram: 8 0 0 0 0 0 0 0 6 2
+Nghost:        2910.88 ave        2992 max        2817 min
+Histogram: 2 6 0 0 0 0 0 0 0 8
+Neighs:        48828.1 ave       51357 max       46546 min
+Histogram: 8 0 0 0 0 0 0 0 5 3
+
+Total # of neighbors = 781250
+Ave neighs/atom = 25
+Neighbor list builds = 200
+Dangerous builds = 0
+System init for write_data ...
+Generated 0 of 1 mixed pair_coeff terms from geometric mixing rule
+Total wall time: 0:02:04

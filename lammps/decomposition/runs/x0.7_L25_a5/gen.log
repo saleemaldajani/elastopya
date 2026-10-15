@@ -1,0 +1,93 @@
+LAMMPS (22 Jul 2025 - Update 6)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread.
+  using 1 OpenMP thread(s) per MPI task
+units metal
+dimension 3
+boundary p p p
+atom_style atomic
+lattice bcc 2.866
+Lattice spacing in x,y,z = 2.866 2.866 2.866
+variable L equal 25
+region SYSTEM prism 0 ${L} 0 ${L} 0 ${L} 0.0 0.0 0.0 units lattice
+region SYSTEM prism 0 25 0 ${L} 0 ${L} 0.0 0.0 0.0 units lattice
+region SYSTEM prism 0 25 0 25 0 ${L} 0.0 0.0 0.0 units lattice
+region SYSTEM prism 0 25 0 25 0 25 0.0 0.0 0.0 units lattice
+create_box 2 SYSTEM
+Created triclinic box = (0 0 0) to (71.65 71.65 71.65) with tilt (0 0 0)
+  2 by 2 by 4 MPI processor grid
+create_atoms 1 region SYSTEM
+Created 31250 atoms
+  using lattice units in triclinic box = (0 0 0) to (71.65 71.65 71.65) with tilt (0 0 0)
+  create_atoms CPU = 0.001 seconds
+mass 1 55.85
+mass 2 51.996
+set group all type/fraction 2 0.7 63689744
+Setting atom values ...
+  21728 settings made for type/fraction
+pair_style lj/cut 2.866
+pair_coeff 1 1 0.0 0.0 2.866
+pair_coeff 2 2 0.0 0.0 2.866
+pair_coeff 1 2 10 10 2.866
+fix 3 all atom/swap 50 3000 83263562 10 types 1 2
+thermo_style custom step pe
+thermo 500
+timestep 0.01
+run 5000
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Generated 0 of 1 mixed pair_coeff terms from geometric mixing rule
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 4.866
+  ghost atom cutoff = 4.866
+  binsize = 2.433, bins = 30 30 30
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair lj/cut, perpetual
+      attributes: half, newton on
+      pair build: half/bin/atomonly/newton/tri
+      stencil: half/bin/3d/tri
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 3.224 | 3.224 | 3.224 Mbytes
+   Step         PotEng    
+         0   4.1918776e+13
+       500   2.8579585e+13
+      1000   2.3479965e+13
+      1500   2.0500496e+13
+      2000   1.840308e+13 
+      2500   1.6893136e+13
+      3000   1.5767264e+13
+      3500   1.49311e+13  
+      4000   1.4165205e+13
+      4500   1.3605055e+13
+      5000   1.3104042e+13
+Loop time of 150.087 on 16 procs for 5000 steps with 31250 atoms
+
+Performance: 28.783 ns/day, 0.834 hours/ns, 33.314 timesteps/s, 1.041 Matom-step/s
+99.5% CPU use with 16 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0.73108    | 0.89873    | 1.5724     |  27.2 |  0.60
+Neigh   | 0.14477    | 0.17588    | 0.24213    |   6.7 |  0.12
+Comm    | 0.41261    | 1.0263     | 1.416      |  42.7 |  0.68
+Output  | 0.00028472 | 0.00080949 | 0.0021637  |   0.0 |  0.00
+Modify  | 147.68     | 147.69     | 147.7      |   0.0 | 98.40
+Other   |            | 0.2965     |            |       |  0.20
+
+Nlocal:        1953.12 ave        2047 max        1872 min
+Histogram: 8 0 0 0 0 0 0 0 6 2
+Nghost:        2910.88 ave        2992 max        2817 min
+Histogram: 2 6 0 0 0 0 0 0 0 8
+Neighs:        48828.1 ave       51357 max       46546 min
+Histogram: 8 0 0 0 0 0 0 0 5 3
+
+Total # of neighbors = 781250
+Ave neighs/atom = 25
+Neighbor list builds = 200
+Dangerous builds = 0
+write_data phi1.000.data nocoeff
+System init for write_data ...
+Generated 0 of 1 mixed pair_coeff terms from geometric mixing rule
+Total wall time: 0:02:30

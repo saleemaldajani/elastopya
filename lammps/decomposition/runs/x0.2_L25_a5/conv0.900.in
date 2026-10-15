@@ -1,0 +1,9 @@
+units metal
+atom_style atomic
+read_data phi1.000.data
+group G22 type 2
+group G11 type 1
+variable fB equal 0.15999999999999998*count(G22)/count(G11)
+set group G22 type/fraction 1 0.15999999999999998 68860890
+set group G11 type/fraction 2 ${fB} 62081045
+write_data phi0.900.data
