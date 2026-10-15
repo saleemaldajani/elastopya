@@ -1,5 +1,5 @@
 
-     Program PWSCF v.7.5 starts on 14Oct2026 at 20:34:57 
+     Program PWSCF v.7.5 starts on 15Oct2026 at  2:15:59 
 
      This program is part of the open-source Quantum ESPRESSO suite
      for quantum simulation of materials; please cite
@@ -13,9 +13,9 @@
      Parallel version (MPI), running on   128 processors
 
      MPI processes distributed on     2 nodes
-     121126 MiB available memory on the printing compute node when the environment starts
+     32887 MiB available memory on the printing compute node when the environment starts
 
-     Reading input from bands_cg.in
+     Reading input from bands_paro.in
 
      Current dimensions of program PWSCF are:
      Max number of different atomic species (ntypx) = 10
@@ -187,4 +187,41 @@
      Checking if some PAW data can be deallocated... 
 
      Band Structure Calculation
-     CG style diagonalization
+     ParO style diagonalization
+
+Message from syslogd@node1458 at Oct 15 02:22:59 ...
+ kernel:[Hardware Error]: Uncorrected, software containable error.
+
+Message from syslogd@node1458 at Oct 15 02:22:59 ...
+ kernel:[Hardware Error]: CPU:0 (17:31:0) MC255_STATUS[-|UE|-|AddrV|-|-|-|-|-]: 0xb40000000000009f
+
+Message from syslogd@node1458 at Oct 15 02:22:59 ...
+ kernel:[Hardware Error]: Error Addr: 0x0000002b18cad1c0
+
+Message from syslogd@node1458 at Oct 15 02:22:59 ...
+ kernel:[Hardware Error]: PPIN: 0x02b58e36d18cc07d
+
+Message from syslogd@node1458 at Oct 15 02:22:59 ...
+ kernel:[Hardware Error]: IPID: 0x0000000000000000
+
+Message from syslogd@node1458 at Oct 15 02:22:59 ...
+ kernel:[Hardware Error]: cache level: L3/GEN, tx: RESV
+
+Message from syslogd@node1458 at Oct 15 02:43:38 ...
+ kernel:[Hardware Error]: Uncorrected, software containable error.
+
+Message from syslogd@node1458 at Oct 15 02:43:38 ...
+ kernel:[Hardware Error]: CPU:0 (17:31:0) MC255_STATUS[-|UE|-|AddrV|-|-|-|-|-]: 0xb40000000000009f
+
+Message from syslogd@node1458 at Oct 15 02:43:38 ...
+ kernel:[Hardware Error]: Error Addr: 0x0000002b18cad1c0
+
+Message from syslogd@node1458 at Oct 15 02:43:38 ...
+ kernel:[Hardware Error]: PPIN: 0x02b58e36d18cc07d
+
+Message from syslogd@node1458 at Oct 15 02:43:38 ...
+ kernel:[Hardware Error]: IPID: 0x0000000000000000
+
+Message from syslogd@node1458 at Oct 15 02:43:38 ...
+ kernel:[Hardware Error]: cache level: L3/GEN, tx: RESV
+
