@@ -129,7 +129,10 @@ def uf_fermi(d):
     src = Path(d) / "scf_source.txt"
     if not src.exists():
         return None
-    t = Path(src.read_text().strip(), "scf.out").read_text()
+    path = Path(src.read_text().strip())
+    if not (path / "scf.out").exists():          # Engaging path recorded on the cluster -> local mirror
+        path = HERE / "engaging" / path.relative_to("/orcd/pool/004/sdajani/fecr_qe")
+    t = (path / "scf.out").read_text()
     return float(re.findall(r"the Fermi energy is\s+([-\d.]+) ev", t)[-1])
 
 
@@ -143,6 +146,10 @@ def sqs_plot(outfile, dirs, eta=0.06):
         for i, (spin, lab) in enumerate((("up", "spin up"), ("dw", "spin down"))):
             u = np.load(Path(d) / f"ebs_{spin}.npz")["bands"]   # BandUPpy: k index, k on path, energy (eV), weight
             ef = uf_fermi(d)
+            # BandUPpy/irrep already reference the energies to E_F read from the QE data (max ~ +6 eV, while the
+            # absolute E_F is ~18 eV); subtracting E_F again pushed every band out of the window (2026-10-15).
+            if ef is not None and u[:, 2].max() < ef - 2:
+                ef = None
             A = np.zeros((len(egrid), len(dist)))
             for ik, _, e, w in u[:, :4]:
                 e = e - ef if ef is not None else e

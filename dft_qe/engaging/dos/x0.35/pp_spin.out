@@ -1,0 +1,60 @@
+
+     Program POST-PROC v.7.5 starts on 15Oct2026 at  4:25:47 
+
+     This program is part of the open-source Quantum ESPRESSO suite
+     for quantum simulation of materials; please cite
+         "P. Giannozzi et al., J. Phys.:Condens. Matter 21 395502 (2009);
+         "P. Giannozzi et al., J. Phys.:Condens. Matter 29 465901 (2017);
+         "P. Giannozzi et al., J. Chem. Phys. 152 154105 (2020);
+          URL http://www.quantum-espresso.org", 
+     in publications or presentations arising from this work. More details at
+     http://www.quantum-espresso.org/quote
+
+     Parallel version (MPI), running on    16 processors
+
+     MPI processes distributed on     1 nodes
+     R & G space division:  proc/nbgrp/npool/nimage =      16
+     161740 MiB available memory on the printing compute node when the environment starts
+
+
+     Reading xml data from directory:
+
+     ./tmp/dos.save/
+     file Cr.pbe-spn-kjpaw_psl.1.0.0.UPF: wavefunction(s)  3S 3P 3D renormalized
+     file Fe.pbe-spn-kjpaw_psl.0.2.1.UPF: wavefunction(s)  3D renormalized
+
+     IMPORTANT: XC functional enforced from input :
+     Exchange-correlation= PBE
+                           (   1   4   3   4   0   0   0)
+     Any further DFT definition will be discarded
+     Please, verify this is what you really want
+
+
+     Parallelization info
+     --------------------
+     sticks:   dense  smooth     PW     G-vecs:    dense   smooth      PW
+     Min         273     137     37                34115    12059    1763
+     Max         274     138     38                34128    12069    1778
+     Sum        4381    2193    601               545927   193021   28269
+
+     Using Slab Decomposition
+
+
+     Check: negative core charge=   -0.000071
+
+     Calling punch_plot, plot_num =   6
+     Writing data to file  spin.pp
+     Reading data from file  spin.pp
+
+     Writing data to be plotted to file spin_110.dat
+     Min, Max, imaginary charge:    -0.175086    0.857104    0.000000
+     Plot Type: 2D contour             Output format: gnuplot x,y,f
+
+     POST-PROC    :     15.77s CPU     16.62s WALL
+
+
+   This run was terminated on:   4:26: 3  15Oct2026            
+
+=------------------------------------------------------------------------------=
+   JOB DONE.
+=------------------------------------------------------------------------------=

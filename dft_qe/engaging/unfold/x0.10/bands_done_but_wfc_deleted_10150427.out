@@ -1,0 +1,285 @@
+
+     Program PWSCF v.7.5 starts on 15Oct2026 at  2:15:59 
+
+     This program is part of the open-source Quantum ESPRESSO suite
+     for quantum simulation of materials; please cite
+         "P. Giannozzi et al., J. Phys.:Condens. Matter 21 395502 (2009);
+         "P. Giannozzi et al., J. Phys.:Condens. Matter 29 465901 (2017);
+         "P. Giannozzi et al., J. Chem. Phys. 152 154105 (2020);
+          URL http://www.quantum-espresso.org", 
+     in publications or presentations arising from this work. More details at
+     http://www.quantum-espresso.org/quote
+
+     Parallel version (MPI), running on   128 processors
+
+     MPI processes distributed on     2 nodes
+     32887 MiB available memory on the printing compute node when the environment starts
+
+     Reading input from bands_paro.in
+
+     Current dimensions of program PWSCF are:
+     Max number of different atomic species (ntypx) = 10
+     Max number of k-points (npk) =  40000
+     Max angular momentum in pseudopotentials (lmaxx) =  4
+     file Cr.pbe-spn-kjpaw_psl.1.0.0.UPF: wavefunction(s)  3S 3P 3D renormalized
+     file Fe.pbe-spn-kjpaw_psl.0.2.1.UPF: wavefunction(s)  3D renormalized
+
+     Atomic positions and unit cell read from directory:
+     ./tmp/uf.save/
+
+
+     K-points division:     npool     =      32
+     R & G space division:  proc/nbgrp/npool/nimage =       4
+     Subspace diagonalization in iterative solution of the eigenvalue problem:
+     one sub-group per band group will be used
+     custom distributed-memory algorithm (size of sub-group:  2*  2 procs)
+
+
+     Parallelization info
+     --------------------
+     sticks:   dense  smooth     PW     G-vecs:    dense   smooth      PW
+     Min        1093     546    166               135829    48026    8052
+     Max        1094     547    167               135840    48033    8059
+     Sum        4373    2185    665               543327   192115   32217
+
+     Using Slab Decomposition
+
+
+
+     bravais-lattice index     =            0
+     lattice parameter (alat)  =      10.6958  a.u.
+     unit-cell volume          =    3059.0453 (a.u.)^3
+     number of atoms/cell      =           40
+     number of atomic types    =            2
+     number of electrons       =       632.00
+     number of Kohn-Sham states=          387
+     kinetic-energy cutoff     =      60.0000  Ry
+     charge density cutoff     =     480.0000  Ry
+     Exchange-correlation= SLA  PW   PBX  PBC
+                           (   1   4   3   4   0   0   0)
+
+     celldm(1)=  10.695850  celldm(2)=   0.000000  celldm(3)=   0.000000
+     celldm(4)=   0.000000  celldm(5)=   0.000000  celldm(6)=   0.000000
+
+     crystal axes: (cart. coord. in units of alat)
+               a(1) = (   1.000000   0.000000   0.000000 )  
+               a(2) = (   0.000000   1.000000   0.000000 )  
+               a(3) = (   0.000000   0.000000   2.500000 )  
+
+     reciprocal axes: (cart. coord. in units 2 pi/alat)
+               b(1) = (  1.000000  0.000000  0.000000 )  
+               b(2) = (  0.000000  1.000000  0.000000 )  
+               b(3) = (  0.000000  0.000000  0.400000 )  
+
+
+     PseudoPot. # 1 for Cr read from file:
+     /orcd/pool/004/sdajani/fecr_qe/pseudo/Cr.pbe-spn-kjpaw_psl.1.0.0.UPF
+     MD5 check sum: 198f1a2427a48552563eee314eba32ba
+     Pseudo is Projector augmented-wave + core cor, Zval = 14.0
+     Generated using &quot;atomic&quot; code by A. Dal Corso  v.6.3
+     Shape of augmentation charge: PSQ
+     Using radial grid of 1183 points,  6 beta functions with: 
+                l(1) =   0
+                l(2) =   0
+                l(3) =   1
+                l(4) =   1
+                l(5) =   2
+                l(6) =   2
+     Q(r) pseudized with 0 coefficients 
+
+
+     PseudoPot. # 2 for Fe read from file:
+     /orcd/pool/004/sdajani/fecr_qe/pseudo/Fe.pbe-spn-kjpaw_psl.0.2.1.UPF
+     MD5 check sum: 4338034a7fd945be4bb7db5fd3b2d142
+     Pseudo is Projector augmented-wave + core cor, Zval = 16.0
+     Generated using "atomic" code by A. Dal Corso  v.5.0.2 svn rev. 9415
+     Shape of augmentation charge: PSQ
+     Using radial grid of 1191 points,  6 beta functions with: 
+                l(1) =   0
+                l(2) =   0
+                l(3) =   1
+                l(4) =   1
+                l(5) =   2
+                l(6) =   2
+     Q(r) pseudized with 0 coefficients 
+
+
+     atomic species   valence    mass     pseudopotential
+     Cr               14.00    51.99600     Cr( 1.00)
+     Fe               16.00    55.84500     Fe( 1.00)
+
+     Starting magnetic structure 
+     atomic species   magnetization
+     Cr             -0.300
+     Fe              0.600
+
+     No symmetry found
+
+
+
+   Cartesian axes
+
+     site n.     atom                  positions (alat units)
+         1        Cr     tau(   1) = (   0.5000000   0.5000000   1.5000000  )
+         2        Cr     tau(   2) = (   0.0000000   0.0000000   1.0000000  )
+         3        Cr     tau(   3) = (   0.5000000   0.5000000   1.0000000  )
+         4        Cr     tau(   4) = (   0.7500000   0.7500000   0.7500000  )
+         5        Fe     tau(   5) = (   0.0000000   0.0000000   0.0000000  )
+         6        Fe     tau(   6) = (   0.5000000   0.0000000   0.5000000  )
+         7        Fe     tau(   7) = (   0.7500000   0.2500000   0.7500000  )
+         8        Fe     tau(   8) = (   0.5000000   0.0000000   1.0000000  )
+         9        Fe     tau(   9) = (   0.7500000   0.2500000   1.2500000  )
+        10        Fe     tau(  10) = (   0.5000000   0.0000000   1.5000000  )
+        11        Fe     tau(  11) = (   0.7500000   0.2500000   1.7500000  )
+        12        Fe     tau(  12) = (   0.5000000   0.5000000   0.0000000  )
+        13        Fe     tau(  13) = (   0.7500000   0.2500000   2.2500000  )
+        14        Fe     tau(  14) = (   0.7500000   0.2500000   0.2500000  )
+        15        Fe     tau(  15) = (   0.7500000   0.7500000   0.2500000  )
+        16        Fe     tau(  16) = (   0.5000000   0.5000000   0.5000000  )
+        17        Fe     tau(  17) = (   0.7500000   0.7500000   1.2500000  )
+        18        Fe     tau(  18) = (   0.7500000   0.7500000   1.7500000  )
+        19        Fe     tau(  19) = (   0.5000000   0.0000000   2.0000000  )
+        20        Fe     tau(  20) = (   0.5000000   0.0000000   0.0000000  )
+        21        Fe     tau(  21) = (   0.2500000   0.7500000   2.2500000  )
+        22        Fe     tau(  22) = (   0.0000000   0.5000000   2.0000000  )
+        23        Fe     tau(  23) = (   0.2500000   0.2500000   0.2500000  )
+        24        Fe     tau(  24) = (   0.0000000   0.0000000   0.5000000  )
+        25        Fe     tau(  25) = (   0.2500000   0.2500000   0.7500000  )
+        26        Fe     tau(  26) = (   0.2500000   0.2500000   1.2500000  )
+        27        Fe     tau(  27) = (   0.0000000   0.0000000   1.5000000  )
+        28        Fe     tau(  28) = (   0.2500000   0.2500000   1.7500000  )
+        29        Fe     tau(  29) = (   0.0000000   0.0000000   2.0000000  )
+        30        Fe     tau(  30) = (   0.5000000   0.5000000   2.0000000  )
+        31        Fe     tau(  31) = (   0.2500000   0.2500000   2.2500000  )
+        32        Fe     tau(  32) = (   0.2500000   0.7500000   0.2500000  )
+        33        Fe     tau(  33) = (   0.0000000   0.5000000   0.5000000  )
+        34        Fe     tau(  34) = (   0.2500000   0.7500000   0.7500000  )
+        35        Fe     tau(  35) = (   0.0000000   0.5000000   1.0000000  )
+        36        Fe     tau(  36) = (   0.2500000   0.7500000   1.2500000  )
+        37        Fe     tau(  37) = (   0.0000000   0.5000000   1.5000000  )
+        38        Fe     tau(  38) = (   0.2500000   0.7500000   1.7500000  )
+        39        Fe     tau(  39) = (   0.0000000   0.5000000   0.0000000  )
+        40        Fe     tau(  40) = (   0.7500000   0.7500000   2.2500000  )
+
+     number of k points=   200  Marzari-Vanderbilt smearing, width (Ry)=  0.0200
+
+     Number of k-points >= 100: set verbosity='high' to print them.
+
+     Dense  grid:   543327 G-vectors     FFT dimensions: (  75,  75, 192)
+
+     Smooth grid:   192115 G-vectors     FFT dimensions: (  54,  54, 135)
+
+     Estimated max dynamical RAM per process >     234.87 MB
+
+     Estimated total dynamical RAM >      29.36 GB
+
+     Check: negative core charge=   -0.000088
+     Generating pointlists ...
+     new r_m :   0.1786 (alat units)  1.9105 (a.u.) for type    1
+     new r_m :   0.1786 (alat units)  1.9105 (a.u.) for type    2
+
+     The potential is recalculated from file :
+     ./tmp/uf.save/charge-density
+
+
+     negative rho (up, down):  0.000E+00 2.187E-04
+     Starting wfcs are  508 randomized atomic wfcs
+     Checking if some PAW data can be deallocated... 
+
+     Band Structure Calculation
+     ParO style diagonalization
+
+Message from syslogd@node1458 at Oct 15 02:22:59 ...
+ kernel:[Hardware Error]: Uncorrected, software containable error.
+
+Message from syslogd@node1458 at Oct 15 02:22:59 ...
+ kernel:[Hardware Error]: CPU:0 (17:31:0) MC255_STATUS[-|UE|-|AddrV|-|-|-|-|-]: 0xb40000000000009f
+
+Message from syslogd@node1458 at Oct 15 02:22:59 ...
+ kernel:[Hardware Error]: Error Addr: 0x0000002b18cad1c0
+
+Message from syslogd@node1458 at Oct 15 02:22:59 ...
+ kernel:[Hardware Error]: PPIN: 0x02b58e36d18cc07d
+
+Message from syslogd@node1458 at Oct 15 02:22:59 ...
+ kernel:[Hardware Error]: IPID: 0x0000000000000000
+
+Message from syslogd@node1458 at Oct 15 02:22:59 ...
+ kernel:[Hardware Error]: cache level: L3/GEN, tx: RESV
+
+Message from syslogd@node1458 at Oct 15 02:43:38 ...
+ kernel:[Hardware Error]: Uncorrected, software containable error.
+
+Message from syslogd@node1458 at Oct 15 02:43:38 ...
+ kernel:[Hardware Error]: CPU:0 (17:31:0) MC255_STATUS[-|UE|-|AddrV|-|-|-|-|-]: 0xb40000000000009f
+
+Message from syslogd@node1458 at Oct 15 02:43:38 ...
+ kernel:[Hardware Error]: Error Addr: 0x0000002b18cad1c0
+
+Message from syslogd@node1458 at Oct 15 02:43:38 ...
+ kernel:[Hardware Error]: PPIN: 0x02b58e36d18cc07d
+
+Message from syslogd@node1458 at Oct 15 02:43:38 ...
+ kernel:[Hardware Error]: IPID: 0x0000000000000000
+
+Message from syslogd@node1458 at Oct 15 02:43:38 ...
+ kernel:[Hardware Error]: cache level: L3/GEN, tx: RESV
+
+     ethr =  1.58E-12,  avg # of iterations = 31.1
+
+     total cpu time spent up to now is     2700.0 secs
+
+     End of band structure calculation
+
+     Number of k-points >= 100: set verbosity='high' to print the bands.
+
+     Writing all to output data dir ./tmp/uf.save/ :
+     XML data file, pseudopotentials, collected wavefunctions
+
+     init_run     :      3.30s CPU      4.06s WALL (       1 calls)
+     electrons    :   2641.96s CPU   2688.94s WALL (       1 calls)
+
+     Called by init_run:
+     wfcinit      :      0.00s CPU      0.01s WALL (       1 calls)
+     potinit      :      2.12s CPU      2.74s WALL (       1 calls)
+     hinit0       :      0.59s CPU      0.69s WALL (       1 calls)
+
+     Called by electrons:
+     c_bands      :   2641.94s CPU   2688.92s WALL (       1 calls)
+     v_of_rho     :      0.77s CPU      0.89s WALL (       1 calls)
+     newd         :      0.19s CPU      0.22s WALL (       1 calls)
+     PAW_pot      :      0.81s CPU      0.83s WALL (       1 calls)
+
+     Called by c_bands:
+     init_us_2    :      2.93s CPU      3.18s WALL (      13 calls)
+     paro_k       :   2406.92s CPU   2446.42s WALL (      13 calls)
+
+     Called by paro_*:
+     h_psi        :    975.23s CPU    987.53s WALL (    2783 calls)
+     s_psi        :    186.44s CPU    187.95s WALL (    2783 calls)
+     g_psi        :      6.56s CPU      6.67s WALL (    3883 calls)
+
+     Called by h_psi:
+     h_psi:calbec :    244.73s CPU    246.58s WALL (    2783 calls)
+     vloc_psi     :    532.14s CPU    540.59s WALL (    2783 calls)
+                                        0.00s GPU  (    2783 calls)
+     add_vuspsi   :    188.37s CPU    190.01s WALL (    2783 calls)
+
+     General routines
+     calbec       :    244.71s CPU    246.57s WALL (    2783 calls)
+     fft          :      0.51s CPU      0.75s WALL (      23 calls)
+     ffts         :      0.11s CPU      0.12s WALL (       2 calls)
+     fftw         :    481.71s CPU    489.55s WALL (  305460 calls)
+     interpolate  :      0.16s CPU      0.19s WALL (       2 calls)
+     davcio       :      0.01s CPU      1.08s WALL (      26 calls)
+
+     Parallel routines
+
+     PWSCF        :  44m12.46s CPU  45m38.13s WALL
+
+
+   This run was terminated on:   3: 1:37  15Oct2026            
+
+=------------------------------------------------------------------------------=
+   JOB DONE.
+=------------------------------------------------------------------------------=

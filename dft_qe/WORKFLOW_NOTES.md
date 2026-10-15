@@ -94,6 +94,7 @@ Settings (all runs):
 **Unfolding.**
 - BandUPpy returns `(bands, kpts)`, and the energy is the third band column; both were read wrongly at first.
 - Unfolding was attempted after a failed band step. Fix: the job now checks first.
+- The unfolded energies from BandUPpy are already relative to E_F. Subtracting E_F again in `bands_path.py sqs-plot` pushed every band out of the window (a blank plot). Fix: subtract only when the energies are absolute. `uf_fermi()` also maps the Engaging path in `scf_source.txt` to the local mirror.
 
 **Phonons.**
 - On Engaging, `q2r.x` and `matdyn.x` must run under `mpirun -np 1` (MPI_Init error otherwise).
@@ -118,7 +119,7 @@ Settings (all runs):
 - *Disk quota (2026-10-14).* The 1.1 TB pool filled with wavefunction scratch, and one DOS job died at 13.5 h with exit code 2.
   - Fix: scratch of finished runs was deleted, logged in `CLEANUP_LOG.txt` on Engaging. For elastic and phonon runs the whole `tmp/` went; for DOS runs only the wavefunctions, because the density maps read the charge densities. Usage went from 100% to 63%.
   - `wait_key.sh` now alarms above 90%.
-  - *Second fill (2026-10-15).* Each unfolding band step writes about 290 GB of wavefunctions (510 k × 2 spins × 392 bands), and the unfolding reads them back. With the faster ParO solver, three ran at once and filled the pool within an hour. Fix: the unfolding jobs run one at a time (`--dependency=afterany` chain). `unfold2.sbatch` and `bandpath_sqs.sbatch` delete their wavefunctions once the unfolded spectra (`unfolded_*.npz`, `ebs_*.npz`) exist, keeping the charge density the band-structure step reuses.
+  - *Second fill (2026-10-15).* Each unfolding band step writes about 290 GB of wavefunctions (510 k × 2 spins × 392 bands), and the unfolding reads them back. With the faster ParO solver, three ran at once and filled the pool within an hour. Fix: the unfolding jobs run one at a time (`--dependency=afterany` chain). `unfold2.sbatch` and `bandpath_sqs.sbatch` delete their wavefunctions once the unfolded spectra (`unfolded_*.npz`, `ebs_*.npz`) exist, keeping the charge density the band-structure step reuses. A manual cleanup must check that the band step did *not* finish (`JOB DONE` in `bands.out`) before deleting its wavefunctions. Two finished band steps were lost to this on 2026-10-15: an error check matched a harmless word, and the restarted jobs then skipped the band step and found no wavefunctions to unfold.
   - Jobs that ran while the disk was full can carry silently truncated wavefunction files. On this NFS pool a write may appear to succeed and fail later. Two jobs crashed only when reading them back (`davcio` error 10: "error writing" or "error reading file ./tmp/*.wfc*"). Fix: rename the failed output, delete that run's `*.wfc*`, keep the SCF charge density written before the disk filled, and rerun the step.
 - *Connection.* Logins need Duo. The shared ControlMaster connection must be started detached (`ssh -f -N`), so closing Terminal does not end it. `watch_connection.sh` keeps it busy and the Mac awake.
 
