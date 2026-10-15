@@ -888,7 +888,7 @@ def panel_d_v7(fig, rect):
     ax.text(0.99, 1.01, r"$10^4$ grains, $\lambda$ = 6.4 $\mu$m; QE at 35% Cr", transform=ax.transAxes, ha="right", va="bottom", fontsize=4.8, color="0.4")
 
 
-def build_full_v7():
+def build_full_v7(out_name="fig4_mechanism_v7_full", pc=None, pd=None):
     """v6 with the panels the later results made possible (see the block comment above); earlier versions unchanged."""
     sys.path.insert(0, str(HERE / "kdense_scripta" / "scripts"))
     from style_presets import apply_publication_style
@@ -946,7 +946,7 @@ def build_full_v7():
         if t.get_text().startswith("AF order: $K$") and "SAW" not in t.get_text():
             t.remove()
     # bottom row
-    panel_c_v7(fig, [0.03, 0.0, 0.46, 0.335], eq_at=(0.49, 0.355))
+    (pc or panel_c_v7)(fig, [0.03, 0.0, 0.46, 0.335], eq_at=(0.49, 0.355))
     sax = fig.add_axes([0.51, 0.148, 0.235, 0.205]); saw_schematic(sax)
     dec = mf.md_decomposition()[X0]
     f0, f1 = float(dec["f"][np.argmin(dec["phi"])]) * 1e3, float(dec["f"][np.argmax(dec["phi"])]) * 1e3
@@ -954,11 +954,55 @@ def build_full_v7():
              f"Fe$-$36Cr, MD: {f0:.0f} $\\to$ {f1:.0f} MHz (+{100 * (f1 / f0 - 1):.1f}%, 5 alloys)\nelectronic lever rule (EMTO-CPA): +7.7%\n"
              f"QE lever rule: {QE_LEVER[0]:+.1f}% (relaxed), {QE_LEVER[1]:+.1f}% (exp. $a$): no gain".replace("-", "$-$").replace("$$-$$", "$-$"),
              fontsize=5.6, va="top", color="0.1", linespacing=1.4)
-    panel_d_v7(fig, [0.755, 0.0, 0.245, 0.37])
-    out = ROOT / "manuscript" / "figures" / "kdense_scripta" / "fig4_mechanism_v7_full"
+    (pd or panel_d_v7)(fig, [0.755, 0.0, 0.245, 0.37])
+    out = ROOT / "manuscript" / "figures" / "kdense_scripta" / out_name
     fig.savefig(f"{out}.png", dpi=600); fig.savefig(f"{out}.pdf"); fig.savefig(f"{out}.svg")
     print("wrote", out)
     print(json.dumps({k: round(v, 3) for k, v in n.items()}))
+
+
+# v8 (2026-10-15, user review of v7): (e) the Fe-36Cr star and the alpha/alpha' labels sat on the x axis (ylim
+# started at 0.44 GHz, the markers at 0.443): the axis now starts lower and they sit above it. (g) the violins showed
+# every mode of every grain pooled, while the in-band percentage uses each grain's highest mode, so the in-band tail
+# looked thinner than the percentage; v8 draws each grain's highest mode, the quantity compared with the band.
+def panel_c_v8(fig, rect, eq_at=None):
+    panel_c_v7(fig, rect, eq_at=eq_at)
+    ax = fig.axes[-1]
+    for ln in ax.lines:
+        if ln.get_marker() == "*":
+            ln.set_ydata([0.4335])
+    for t in ax.texts:
+        if t.get_position()[1] == 0.443:
+            t.set_position((t.get_position()[0], 0.4290))
+    ax.set_ylim(0.425, 0.62)
+
+
+def panel_d_v8(fig, rect):
+    ax = fig.add_axes([rect[0] + 0.06, rect[1] + 0.09, rect[2] * 0.72, rect[3] * 0.71])
+    ax.axhspan(609, 833, color="0.90", lw=0); ax.axhline(609, color="0.4", lw=0.8, ls="--")
+    ax.text(1.5, 760, "unallowed in\npristine CASS", ha="center", va="center", fontsize=6, color="0.35")
+    for pos, pref, xx, col in ((0, "md", X0, MD), (1, "mddec", X0, "#0B5D3B"), (2, "qe", 0.35, QE_COL), (3, "qeaexp", 0.35, QE_AEXP)):
+        if not (mf.DATA / "saw" / f"{pref}_x{xx:.2f}.csv").exists():
+            continue
+        g = grain_top(pref, xx)                                   # highest (P)SAW mode of each of the 10^4 grains
+        frac = 100 * np.mean(g > 609)
+        ax.text(pos, g.max() + 12, f"{g.max():.0f}" + (f"\n{frac:.0f}% in band" if frac >= 0.5 else ""), ha="center", va="bottom",
+                fontsize=5.0, color="#FF3B00" if frac >= 0.5 else "0.3", fontweight="bold" if frac >= 0.5 else "normal")
+        v = ax.violinplot(g, positions=[pos], widths=0.75, showextrema=False, bw_method=0.12)
+        for b in v["bodies"]:
+            b.set_facecolor(col); b.set_edgecolor(col); b.set_alpha(0.55)
+        ax.plot([pos - 0.22, pos + 0.22], [g.max()] * 2, color="#FF3B00", lw=1.1)
+    ax.set(xlim=(-0.6, 3.6), ylim=(340, 860)); ax.tick_params(labelsize=5.5)
+    ax.set_xticks([0, 1, 2, 3])
+    ax.set_xticklabels(["MD\nrandom", "MD\ndecomp.", "QE\nrelaxed", "QE\nexp. $a$"], fontsize=5.0, linespacing=1.0)
+    ax.tick_params(axis="x", length=0)
+    ax.set_ylabel("highest (P)SAW per grain (MHz), Fe$-$36Cr", fontsize=6)
+    ax.text(0.99, 1.01, r"$10^4$ grains, $\lambda$ = 6.4 $\mu$m; QE at 35% Cr", transform=ax.transAxes, ha="right", va="bottom", fontsize=4.8, color="0.4")
+
+
+def build_full_v8():
+    """v7 with the (e) markers lifted off the axis and (g) drawn as each grain's highest mode."""
+    build_full_v7(out_name="fig4_mechanism_v8_full", pc=panel_c_v8, pd=panel_d_v8)
 
 
 def main():
