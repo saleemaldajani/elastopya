@@ -131,6 +131,20 @@ def main():
     if fixed:
         a_fix = 2.8665 * (1 - a.x) + 2.8846 * a.x if fixed == "exp" else float(fixed)
         cell = cell / cell[0, 0] * 2 * a_fix
+    # Resume after preemption (mit_preemptable requeues the job from the top): restart the relaxation from the
+    # last complete geometry of the interrupted relax.out, kept as relax_partN.out. Without this, Fe-80Cr lost
+    # 11 h of relaxation per preemption (2026-10-15). QE_RESUME=0 restores the old behaviour.
+    old = d / "relax.out"
+    if os.environ.get("QE_RESUME", "1") != "0" and old.exists() and "JOB DONE" not in old.read_text():
+        t = old.read_text()
+        blocks = t.split("ATOMIC_POSITIONS (crystal)")[1:]
+        full = [b for b in blocks if len([r for r in b.strip().split("\n")[: len(sym)] if len(r.split()) >= 4]) == len(sym)]
+        if full:
+            cut = t.rfind("ATOMIC_POSITIONS (crystal)" + full[-1])
+            cell, frac = final_structure(t[: cut + len("ATOMIC_POSITIONS (crystal)") + len(full[-1])], cell, frac)
+            n = len(list(d.glob("relax_part*.out"))) + 1
+            old.rename(d / f"relax_part{n}.out")
+            print(f"resuming relaxation from the last geometry of relax_part{n}.out ({len(blocks)} steps)", flush=True)
     write_input(d / "relax.in", cell, sym, frac, a.k, a.ecut, "relax" if fixed else "vc-relax")
     cell, frac = final_structure(run(d, "relax", a.np), cell, frac)
     # Guard: an under-converged cutoff makes vc-relax collapse the cell (16-atom test at 40 Ry: -12 %).

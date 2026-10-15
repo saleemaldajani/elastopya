@@ -120,8 +120,8 @@ def critical_level():
         out.setdefault(key, []).append((0.0, -ec, 0.0))
     for d in sorted((ENG / "bandpath").glob("sqs_x*")):
         f = d / "ebs_up.npz"
-        if not f.exists() or d.name == "sqs_x0.00":
-            continue
+        if not f.exists() or d.name.startswith("sqs_x0.00"):   # pure Fe comes from the primitive cell above;
+            continue                                             # its 40-atom copy would count x = 0 twice
         u = np.load(f)["bands"]
         z = np.load(d / "pathmap.npz", allow_pickle=True)
         iH2 = int(np.argmin(abs(np.asarray(z["dist"]) - 1.0)))
