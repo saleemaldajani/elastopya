@@ -654,6 +654,109 @@ def main_v6():
             row4=([0.085, 0.04, 0.20, 0.155], [0.345, 0.04, 0.20, 0.155], [0.585, 0.0, 0.40, 0.212]))
 
 
+# ---------------------------------------------------------------------------------------------------------------------
+# v7 (2026-10-15): adds the QE set at the experimental lattice parameter, which did not exist when v6 was drawn.
+#  (d) alpha-/alpha'-like cells give G and K/G at both lattice parameters
+#  (f) the alpha/alpha' shear-modulus misfit is also given for both QE sets
+#  (h, i, m) the exp.-a QE series is plotted next to the relaxed one
+# Implemented by swapping the v6 helpers for the duration of the v7 build; v1-v6 are unchanged.
+# ---------------------------------------------------------------------------------------------------------------------
+QE_AEXP_C = "#0072B2"
+
+
+def tensors_v7():
+    import json
+    T = _tensors_v6()
+    R = ROOT / "dft_qe" / "engaging" / "runs"
+    rows = []
+    for d in sorted(R.glob("sqs40_x*_k442_e60_aexp")) + sorted(R.glob("sqs40_x0.80_k442_e60_aexp_crafm")):
+        j = d / "result.json"
+        if j.exists():
+            r = json.loads(j.read_text()); b, g = vrh(r["C11"], r["C12"], r["C44"])
+            rows.append((r["x_cr"], b, g, r["C12"] - r["C44"]))
+    if rows:
+        T["qeaexp"] = np.array(sorted(rows))
+    return T
+
+
+def dft_cells_v7(fig, rect):
+    import visualize_sqs as VS
+    T = tensors_v7()
+    rel = {round(float(r[0]), 2): r for r in T["qe"]}
+    aex = {round(float(r[0]), 2): r for r in T.get("qeaexp", [])}
+    w = rect[2] / 2 - 0.004
+    for i, x in enumerate((0.20, 0.95)):
+        ax = fig.add_axes([rect[0] + i * (w + 0.008), rect[1] + rect[3] * 0.30, w, rect[3] * 0.55])
+        VS.draw(ax, x); ax.set_aspect("equal", adjustable="datalim")
+        r, a = rel[x], aex.get(x)
+        txt = f"{round(100 * x)}% Cr SQS (QE)\n$G$ = {r[2]:.0f} GPa, $K/G$ = {r[1] / r[2]:.2f}"
+        if a is not None:
+            txt = (f"{round(100 * x)}% Cr SQS (QE)\nrelaxed / exp. $a$:\n$G$ = {r[2]:.0f} / {a[2]:.0f} GPa\n"
+                   f"$K/G$ = {r[1] / r[2]:.2f} / {a[1] / a[2]:.2f}")
+        ax.text(0.5, -0.12, txt, transform=ax.transAxes, ha="center", va="top", fontsize=4.8, linespacing=1.15)
+    fig.text(rect[0], rect[1] + rect[3] * 0.92, "40 atoms; arrows: QE local moments", fontsize=5.0, color="0.35")
+
+
+def atom_d_v7(ax):
+    dg = _atom_d_v6(ax)
+    for t in list(ax.texts):
+        if t.get_text().startswith("$G_{\\alpha'}"):
+            t.remove()
+    T = tensors_v7()
+    pc = mf.read_csv("md_phase_compositions.csv"); m = (np.abs(pc["x_cr"] - 0.36) < 1e-6) & (pc["phi"] == 1.0)
+    xa, xb = float(pc["x_alpha"][m][0]), float(pc["x_alpha_prime"][m][0])
+    gd = {k: float(np.interp(xb, T[k][:, 0], T[k][:, 2]) - np.interp(xa, T[k][:, 0], T[k][:, 2])) for k in ("lit", "md", "qe", "qeaexp") if k in T}
+    eta = 100 * (xb - xa) * (2.8846 - 2.8665) / 2.8665
+    n = len(ax.images[0].get_array())
+    ax.text(0.5, -1.0, f"$G_{{\\alpha'}}-G_\\alpha$: {gd['lit']:+.0f} (EMTO-CPA), {gd.get('qe', np.nan):+.0f} (QE),\n"
+            f"{gd.get('qeaexp', np.nan):+.0f} (QE exp. $a$), {gd['md']:+.0f} GPa (MD); misfit {eta:.2f}%\n"
+            f"$\\Rightarrow$ modulus + misfit pinning: hardening", fontsize=4.6, va="top", ha="left", color="0.15")
+    return dg
+
+
+def coherency_v7(ax, T):
+    _coherency_v6(ax, T)
+    if "qeaexp" in T:
+        ev = 6.241509e18; a = T["qeaexp"]
+        y = young_planar(a[:, 1], a[:, 2]) * 1e9 * 2 * ETA_MISFIT ** 2 * OMEGA_A3 * 1e-30 * ev * 1e3
+        ax.plot(a[:, 0], y, "D", color=QE_AEXP_C, ms=3, label="QE, exp. $a$")
+        ax.legend(fontsize=5, frameon=False, loc="lower right")
+
+
+_tensors_v6, _atom_d_v6, _coherency_v6, _dft_cells_v6 = tensors, atom_d, coherency, dft_cells
+
+
+def panel_h_v7(ax, T, D):
+    panel_h_v5(ax, T, D)
+    ax.fill_between([-45, 0], 1 / 1.75, 0.75, color="0.90", lw=0, zorder=0)   # extend the doubly brittle quadrant
+    ax.set(xlim=(-45, 70), ylim=(0.34, 0.75))                          # the exp.-a Cr-rich point has C12 - C44 < -20 GPa
+    for t in ax.texts:
+        if t.get_text() == "brittle":
+            t.set_position((-44, 0.742))
+    ax.legend(fontsize=4.3, loc="upper right", frameon=False, handlelength=1.4, borderaxespad=0.2, labelspacing=0.2)   # empty corner
+
+
+def panel_c_v7(ax, T, D):
+    _panel_c_v6(ax, T, D)
+    ax.set_ylim(1.3, 2.8)                                              # the exp.-a 80 % Cr point has K/G = 1.4
+
+
+_panel_c_v6 = panel_c
+
+
+def main_v7():
+    """v6 with the experimental-lattice-parameter QE set added to (d), (f), (h), (i) and (m)."""
+    global tensors, atom_d, coherency, dft_cells, SER, panel_c
+    saved = (tensors, atom_d, coherency, dft_cells, SER, panel_c)
+    tensors, atom_d, coherency, dft_cells, panel_c = tensors_v7, atom_d_v7, coherency_v7, dft_cells_v7, panel_c_v7
+    SER = {**SER, "qeaexp": (QE_AEXP_C, "D", "QE, exp. $a$ (this work)")}
+    try:
+        main_v4(panel_h=panel_h_v7, name="fig5_embrittlement_v7", panel_n=psi_flow,
+                row4=([0.085, 0.04, 0.20, 0.155], [0.345, 0.04, 0.20, 0.155], [0.585, 0.0, 0.40, 0.212]))
+    finally:
+        tensors, atom_d, coherency, dft_cells, SER, panel_c = saved
+
+
 if __name__ == "__main__":
     main()
     main_v1()

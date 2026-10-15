@@ -714,6 +714,253 @@ def build_full_v6():
         _NEST_V5 = _MOD_V6 = False
 
 
+# ---------------------------------------------------------------------------------------------------------------------
+# v7 (2026-10-15): panels redrawn from results that did not exist when v6 was made. Earlier versions are unchanged.
+#  (a) <m_Cr>(x) from every relaxed QE SQS (5-95 % Cr) instead of five compositions
+#  (c) the schematic Lifshitz strip is replaced by our unfolded SQS Fermi surfaces (spin up, exp. a, 0/5/10 % Cr)
+#  (d) the SDW/CDW schematic is replaced by the computed Cr supercell (moments, site charges, forces) and the chain
+#      m^2 -> magnetic pressure -> K -> f_SAW is given in numbers
+#  (e) the exp.-a QE series is added, with its (absent) lever-rule gain stated
+#  (g) a fourth violin: QE Fe-35Cr at the experimental lattice parameter
+# ---------------------------------------------------------------------------------------------------------------------
+_V7 = False
+QE_LEVER = (float('nan'), float('nan'))
+QE_AEXP = "#0072B2"
+
+
+def qe_series_f(suf):
+    """(x, f_SAW GHz) of the QE SQS + pure elements for suf '' (PBE-relaxed) or '_aexp' (experimental a)."""
+    import json
+    R = ENG / "runs"; out = []
+    dirs = sorted(R.glob(f"sqs40_x*_k442_e60{suf}"))
+    dirs = [d for d in dirs if suf or not d.name.split("e60")[1]]
+    dirs += sorted(R.glob("sqs40_x0.80_k442_e60_aexp_crafm" if suf else "sqs40_x0.80_k442_e60_crafm2"))
+    pure = {"": ("Fe_fm_k16x16x16_e60", "Cr_afm_k16x16x16_e60"), "_aexp": ("Fe_fm_k16x16x16_e60_aexp", "Cr_afm_k16x16x16_e60_aexp")}[suf]
+    items = [(d / "result.json", None) for d in dirs] + [(R / n / "result.json", x) for x, n in zip((0.0, 1.0), pure)]
+    for j, xfix in items:
+        if j.exists():
+            r = json.loads(j.read_text()); x = r["x_cr"] if xfix is None else xfix
+            c11, c12, c44 = r["C11"], r["C12"], r["C44"]
+            b, cp = (c11 + 2 * c12) / 3, (c11 - c12) / 2
+            g = ((2 * cp + 3 * c44) / 5 + 5 * (2 * cp) * c44 / (4 * c44 + 3 * (2 * cp))) / 2
+            e = 9 * b * g / (3 * b + g)
+            out.append((x, float(mf.rayleigh_f(b, e, x * mf.RHO_CR + (1 - x) * mf.RHO_FE))))
+    return np.array(sorted(set(out)))
+
+
+def lever_gain(xs, fs, xa, xb, x0=X0):
+    fa, fb, f0 = (float(np.interp(v, xs, fs)) for v in (xa, xb, x0))
+    w = (x0 - xa) / (xb - xa)
+    return 100 * (((1 - w) * fa + w * fb) / f0 - 1)
+
+
+def panel_a_v7(fig, rect):
+    ax = panel_a(fig, rect)
+    import visualize_sqs as VS
+    ins = [a for a in fig.axes if a.get_ylabel().startswith(r"$\langle m_{\rm Cr}")][-1]
+    for ln in list(ins.lines):
+        if ln.get_color() not in ("0.6",):
+            ln.remove()
+    for c in list(ins.collections):
+        c.remove()
+    pts = []
+    for x in (0.05, 0.10, 0.20, 0.30, 0.35, 0.40, 0.45, 0.475, 0.50, 0.65, 0.70, 0.95):
+        try:
+            m = VS.mean_moments(x)[1]
+        except Exception:
+            m = None
+        if m is not None:
+            pts.append((x, m))
+    xs, mcr = np.array(pts).T
+    glow(ins, xs, mcr, CR, lw=1.1, marker="o", ms=2.6)
+    ins.set_ylim(min(-0.9, mcr.min() - 0.05), 0.15)
+    return ax
+
+
+def draw_unfolded_row(fig, x0, y0, w):
+    """Spin-up unfolded Fermi surfaces of the SQS at 0/5/10 % Cr (exp. a): the real version of the Lifshitz cartoon."""
+    import unfold_fs as uf
+    W, H = fig.get_size_inches()
+    gap = 0.008; s = (w - 2 * gap) / 3; hs = s * W / H
+    for i, x in enumerate((0.00, 0.05, 0.10)):
+        ax = fig.add_axes([x0 + i * (s + gap), y0, s, hs])
+        _, A, _ = uf.spectral(ENG / "unfold" / f"x{x:.2f}_aexp", "up")
+        ax.imshow(A, extent=(-1, 1, -1, 1), origin="lower", cmap="magma", vmin=0, vmax=np.percentile(A, 99.3))
+        ax.set_xticks([]); ax.set_yticks([])
+        for sp in ax.spines.values():
+            sp.set_linewidth(0.4)
+        ax.text(0, -1.08, f"{round(100 * x)}% Cr", ha="center", va="top", fontsize=5.2)
+        for (px, py, t) in ((-1, 1, "H"), (0, 1, "N")):
+            ax.text(px * 0.86, py * 0.86, t, ha="center", va="center", fontsize=4.2, color="white")
+    fig.text(x0, y0 + hs + 0.006, "our unfolded SQS, spin $\\uparrow$ at $E_{\\rm F}$ (exp. $a$): arms through N fade by 5% Cr",
+             fontsize=4.9, color="0.15", va="bottom")
+
+
+def sdw_numbers():
+    """Numbers of the chain m^2 -> magnetic pressure -> K -> f_SAW from the Cr supercell and the 2-atom Cr tensors."""
+    import json
+    import sdw_cr
+    res = {k: sdw_cr.sites(ENG / "sdw" / k / "scf.out") for k in ("nm", "afm", "sdw")}
+    P = {}
+    for k in ("nm", "afm", "sdw"):
+        t = (ENG / "sdw" / k / "scf.out").read_text()
+        P[k] = float(re.findall(r"P=\s*([-\d.]+)", t)[-1]) / 10           # kbar -> GPa
+    m2 = {k: float(np.mean(res[k][1] ** 2)) for k in ("afm", "sdw")}
+    tens = {}
+    for tag in ("nm", "afm"):
+        r = json.loads((ENG / "runs" / f"Cr_{tag}_k16x16x16_e60" / "result.json").read_text())
+        c11, c12, c44 = r["C11"], r["C12"], r["C44"]
+        b, cp = (c11 + 2 * c12) / 3, (c11 - c12) / 2
+        g = ((2 * cp + 3 * c44) / 5 + 5 * (2 * cp) * c44 / (4 * c44 + 3 * (2 * cp))) / 2
+        e = 9 * b * g / (3 * b + g)
+        tens[tag] = (b, g, float(mf.rayleigh_f(b, e, mf.RHO_CR)) * 1e3)
+    # strain wave: first harmonic of the forces at 2Q, static continuum response u = F / (C11 Omega q^2)
+    a, NL = sdw_cr.A, sdw_cr.NL
+    fz = res["sdw"][2] * 13.605693 / 0.529177                             # Ry/bohr -> eV/A
+    F = np.abs(np.fft.rfft(fz) / NL * 2); k = int(np.argmax(F[1:]) + 1)
+    q = 2 * np.pi * k / (NL * a / 2)
+    rj = json.loads((ENG / "runs" / "Cr_afm_k16x16x16_e60" / "result.json").read_text())
+    u = F[k] / (rj["C11"] / 160.21766 * a ** 3 / 2 * q ** 2)
+    return dict(Pmag_afm=P["afm"] - P["nm"], Pmag_sdw=P["sdw"] - P["nm"], m2_afm=m2["afm"], m2_sdw=m2["sdw"],
+                K_nm=tens["nm"][0], K_afm=tens["afm"][0], G_nm=tens["nm"][1], G_afm=tens["afm"][1],
+                f_nm=tens["nm"][2], f_afm=tens["afm"][2], u_A=u, strain=q * u, period_A=NL * a / 2 / k)
+
+
+def draw_sdw_computed(ax):
+    """Computed Cr SDW supercell (QE): moments m(z) as stems, site-charge CDW and the force (strain-wave drive) at 2Q."""
+    import sdw_cr
+    ch, mg, fz, _ = sdw_cr.sites(ENG / "sdw" / "sdw" / "scf.out")
+    z = np.arange(len(mg)) * sdw_cr.A / 2
+    for zi, mi in zip(z, mg):
+        ax.plot([zi, zi], [2.5, 2.5 + 0.45 * mi], color="0.15", lw=0.6)
+    ax.scatter(z, 2.5 + 0.45 * mg, s=3, color=CR, zorder=3)
+    glow(ax, z, 2.5 + 0.45 * np.abs(mg), "#FFB000", lw=0.6, ls="--")
+    dq = (ch - ch.mean()) / np.abs(ch - ch.mean()).max()
+    ax.fill_between(z, 1.3, 1.3 + 0.28 * dq, where=dq > 0, color="#7FDBFF", alpha=0.75, lw=0)
+    ax.fill_between(z, 1.3, 1.3 + 0.28 * dq, where=dq < 0, color="#0B1026", alpha=0.55, lw=0)
+    glow(ax, z, 1.3 + 0.28 * dq, "#2A9DF4", lw=0.7)
+    fn = fz / np.abs(fz).max()
+    glow(ax, z, 0.25 + 0.28 * fn, "#009E73", lw=0.7)
+    ax.axhline(0.25, color="0.75", lw=0.3)
+    for y, lab in ((3.1, "SDW moments $m(z)$ (computed, QE)"), (1.63, "CDW: site charge"), (0.58, "force at $2\\mathbf{Q}$ (drives the strain wave)")):
+        ax.text(-1.0, y, lab, fontsize=5.0, va="bottom", ha="left", color="0.1")
+    ax.set_xlim(-1.2, z[-1] + 1.0); ax.set_ylim(-0.42, 3.45); ax.axis("off")
+    ax.text(z[-1] + 0.8, -0.40, r"Cr, $1\times1\times20$ cell, $\delta=1/20$", fontsize=4.4, color="0.45", ha="right", va="bottom")
+
+
+def panel_c_v7(fig, rect, eq_at=None):
+    panel_c(fig, rect, eq_at=eq_at)
+    ax = fig.axes[-1]
+    s = qe_series_f("_aexp")
+    if len(s):
+        ax.plot(s[:, 0], s[:, 1], "D", mfc="none", mec=QE_AEXP, ms=3.0, mew=0.8, label="QE, exp. $a$")
+        ax.legend(fontsize=5.0, loc="upper left", bbox_to_anchor=(0.12, 1.0), frameon=False)
+        pc = mf.read_csv("md_phase_compositions.csv")
+        r = qe_series_f("")
+        g_rel = lever_gain(r[:, 0], r[:, 1], XA, XB) if len(r) else float("nan")
+        g_aex = lever_gain(s[:, 0], s[:, 1], XA, XB)
+        global QE_LEVER
+        QE_LEVER = (g_rel, g_aex)
+
+
+def panel_d_v7(fig, rect):
+    ax = fig.add_axes([rect[0] + 0.06, rect[1] + 0.09, rect[2] * 0.72, rect[3] * 0.71])
+    ax.axhspan(609, 833, color="0.90", lw=0); ax.axhline(609, color="0.4", lw=0.8, ls="--")
+    ax.text(1.5, 720, "unallowed in\npristine CASS", ha="center", va="center", fontsize=6, color="0.35")
+    cases = ((0, "md", X0, MD), (1, "mddec", X0, "#0B5D3B"), (2, "qe", 0.35, QE_COL), (3, "qeaexp", 0.35, QE_AEXP))
+    for pos, pref, xx, col in cases:
+        p = mf.DATA / "saw" / f"{pref}_x{xx:.2f}.csv"
+        if not p.exists():
+            continue
+        f = saw_top(pref, xx)
+        frac = 100 * np.mean(grain_top(pref, xx) > 609)
+        ax.text(pos, f.max() + 12, f"{f.max():.0f}" + (f"\n{frac:.0f}% in band" if frac >= 0.5 else ""), ha="center", va="bottom",
+                fontsize=5.0, color="#FF3B00" if frac >= 0.5 else "0.3", fontweight="bold" if frac >= 0.5 else "normal")
+        v = ax.violinplot(f, positions=[pos], widths=0.75, showextrema=False, bw_method=0.12)
+        for b in v["bodies"]:
+            b.set_facecolor(col); b.set_edgecolor(col); b.set_alpha(0.55)
+        ax.plot([pos - 0.22, pos + 0.22], [f.max()] * 2, color="#FF3B00", lw=1.1)
+    ax.set(xlim=(-0.6, 3.6), ylim=(330, 860)); ax.tick_params(labelsize=5.5)
+    ax.set_xticks([0, 1, 2, 3])
+    ax.set_xticklabels(["MD\nrandom", "MD\ndecomp.", "QE\nrelaxed", "QE\nexp. $a$"], fontsize=5.0, linespacing=1.0)
+    ax.tick_params(axis="x", length=0)
+    ax.set_ylabel("(P)SAW frequency (MHz), Fe$-$36Cr", fontsize=6)
+    ax.text(0.99, 1.01, r"$10^4$ grains, $\lambda$ = 6.4 $\mu$m; QE at 35% Cr", transform=ax.transAxes, ha="right", va="bottom", fontsize=4.8, color="0.4")
+
+
+def build_full_v7():
+    """v6 with the panels the later results made possible (see the block comment above); earlier versions unchanged."""
+    sys.path.insert(0, str(HERE / "kdense_scripta" / "scripts"))
+    from style_presets import apply_publication_style
+    apply_publication_style("scripta"); plt.rcParams["svg.fonttype"] = "none"
+    W, H = 190 / 25.4, 7.0
+    fig = plt.figure(figsize=(W, H))
+    bg = fig.add_axes([0, 0, 1, 1], zorder=-5); bg.axis("off")
+    cmap = LinearSegmentedColormap.from_list("fecr", [(*to_rgb(FE), 1), (1, 1, 1, 1), (*to_rgb(CR), 1)])
+    bg.imshow(np.linspace(0, 1, 512)[None, :], aspect="auto", cmap=cmap, alpha=0.10, extent=(0, 1, 0, 1))
+    bg.axhline(0.425, xmin=0.01, xmax=0.99, color="0.75", lw=0.6, ls=(0, (4, 3)))
+    top = [(0.005, "FRUSTRATE", "(a) atoms & moments"), (0.255, "NEST", "(b) Cr Fermi surface vs Fe content"),
+           (0.505, "TOPOLOGY", "(c) Fe-rich ETT: spin $\\uparrow$ vs $\\downarrow$"), (0.755, "MODULATE", "(d) SDW couples to volume, not shear")]
+    bot = [(0.005, "STIFFEN", "(e) electron $\\to$ lattice: decomposition"), (0.505, "PROPAGATE", "(f) Rayleigh wave in TGS"),
+           (0.755, "DETECT", "(g) (P)SAW vs pristine CASS")]
+    for row, y in ((top, 0.99), (bot, 0.41)):
+        for i, (x, verb, sub) in enumerate(row):
+            fig.text(x + 0.012, y, verb, fontsize=10.5, fontweight="heavy", color="0.08", va="top")
+            fig.text(x + 0.012, y - 0.031, sub, fontsize=6.6, color="0.3", va="top")
+            nxt = row[i + 1][0] if i + 1 < len(row) else None
+            if nxt is not None:
+                fig.patches.append(matplotlib.patches.FancyArrow(nxt - 0.045, y - 0.014, 0.03, 0, width=0.005, head_width=0.016,
+                                                                 head_length=0.010, color="#FF3B00", transform=fig.transFigure, figure=fig))
+    fig.patches.append(matplotlib.patches.FancyArrow(0.97, 0.445, 0, -0.03, width=0.004, head_width=0.012, head_length=0.010,
+                                                     color="#FF3B00", transform=fig.transFigure, figure=fig))
+    panel_a_v7(fig, [0.005, 0.445, 0.245, 0.49])
+    draw_bands_gh(fig.add_axes([0.30, 0.812, 0.185, 0.09]))
+    draw_fs_change(fig.add_axes([0.268, 0.50, 0.22, 0.30]), legend_below=True)
+    # (c): real unfolded Fermi surfaces replace the Lifshitz cartoon
+    draw_unfolded_row(fig, 0.515, 0.835, 0.225)
+    wsq = 0.105; hsq = wsq * W / H
+    draw_fs_spin(fig.add_axes([0.515, 0.640, wsq, hsq]), fig.add_axes([0.632, 0.640, wsq, hsq]))
+    fig.text(0.515, 0.597, "Cr brings the majority H level to $E_{\\rm F}$\n(0.10 $\\to$ 0.005 eV at 5% Cr, exp. $a$) $\\Rightarrow$ ETT at\n"
+             "$x_c\\approx0.08$, spin $\\uparrow$ only (S6; Korzhavyi: 5$-$10%)",
+             fontsize=4.7, color="#8A5A00", va="top", linespacing=1.15)
+    draw_nef(fig.add_axes([0.552, 0.465, 0.175, 0.075]))
+    # (d): computed SDW + the numbers that tie it to the SAW
+    n = sdw_numbers()
+    draw_sdw_computed(fig.add_axes([0.758, 0.735, 0.24, 0.17]))
+    fig.text(0.765, 0.728, f"$P_{{\\rm mag}}$ vs NM: AF {n['Pmag_afm']:.1f}, SDW {n['Pmag_sdw']:.1f} GPa\n"
+             f"SDW/AF {n['Pmag_sdw'] / n['Pmag_afm']:.2f} $\\approx\\langle m^2\\rangle$ ratio {n['m2_sdw'] / n['m2_afm']:.2f} (Landau)\n"
+             f"strain wave $u\\approx${n['u_A']:.2f} $\\AA$, $\\varepsilon\\approx${100 * n['strain']:.1f}%, period {n['period_A']:.0f} $\\AA$:\n"
+             f"averages out over a 6.4 $\\mu$m SAW", fontsize=4.5, color="0.15", va="top", linespacing=1.2)
+    kax = fig.add_axes([0.795, 0.583, 0.125, 0.062]); draw_kohn_v6(kax)
+    kax.legend(fontsize=4.0, loc="center left", bbox_to_anchor=(1.02, 0.5), frameon=False, handlelength=1.0, labelspacing=0.2)   # beside, not on, the data
+    for t in kax.get_legend().get_texts():
+        t.set_text(t.get_text().replace(" (Shaw 1971)", ""))      # cited in the caption; keeps the legend inside the figure
+    draw_af_vs_nm(fig.add_axes([0.83, 0.462, 0.155, 0.072]))
+    for t in fig.texts:
+        if t.get_text().startswith("AF order"):
+            t.remove()
+    fig.axes[-1].text(-0.42, 1.08, f"AF order: $K$ {100 * (n['K_afm'] / n['K_nm'] - 1):+.0f}%, $f_{{\\rm SAW}}$ "
+                      f"{100 * (n['f_afm'] / n['f_nm'] - 1):+.1f}% (shear unchanged)".replace("-", "$-$"),
+                      transform=fig.axes[-1].transAxes, fontsize=4.8, color="0.15", va="bottom")
+    for t in list(fig.axes[-1].texts):
+        if t.get_text().startswith("AF order: $K$") and "SAW" not in t.get_text():
+            t.remove()
+    # bottom row
+    panel_c_v7(fig, [0.03, 0.0, 0.46, 0.335], eq_at=(0.49, 0.355))
+    sax = fig.add_axes([0.51, 0.148, 0.235, 0.205]); saw_schematic(sax)
+    dec = mf.md_decomposition()[X0]
+    f0, f1 = float(dec["f"][np.argmin(dec["phi"])]) * 1e3, float(dec["f"][np.argmax(dec["phi"])]) * 1e3
+    fig.text(0.515, 0.10, r"$C_{ij}\!\uparrow\Rightarrow G\!\uparrow\Rightarrow v_R=\eta(\nu)\sqrt{G/\rho}\!\uparrow\Rightarrow f=v_R/\lambda\!\uparrow$" "\n"
+             f"Fe$-$36Cr, MD: {f0:.0f} $\\to$ {f1:.0f} MHz (+{100 * (f1 / f0 - 1):.1f}%, 5 alloys)\nelectronic lever rule (EMTO-CPA): +7.7%\n"
+             f"QE lever rule: {QE_LEVER[0]:+.1f}% (relaxed), {QE_LEVER[1]:+.1f}% (exp. $a$): no gain".replace("-", "$-$").replace("$$-$$", "$-$"),
+             fontsize=5.6, va="top", color="0.1", linespacing=1.4)
+    panel_d_v7(fig, [0.755, 0.0, 0.245, 0.37])
+    out = ROOT / "manuscript" / "figures" / "kdense_scripta" / "fig4_mechanism_v7_full"
+    fig.savefig(f"{out}.png", dpi=600); fig.savefig(f"{out}.pdf"); fig.savefig(f"{out}.svg")
+    print("wrote", out)
+    print(json.dumps({k: round(v, 3) for k, v in n.items()}))
+
+
 def main():
     build_full()
     build_full_v2()
