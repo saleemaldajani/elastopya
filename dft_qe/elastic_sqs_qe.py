@@ -14,6 +14,7 @@ import json
 import os
 import sys
 import re
+import shutil
 import subprocess
 import time
 from pathlib import Path
@@ -134,6 +135,8 @@ def main():
     # Resume after preemption (mit_preemptable requeues the job from the top): restart the relaxation from the
     # last complete geometry of the interrupted relax.out, kept as relax_partN.out. Without this, Fe-80Cr lost
     # 11 h of relaxation per preemption (2026-10-15). QE_RESUME=0 restores the old behaviour.
+    if os.environ.get("QE_STRAIN_ONLY") and not ((d / "relax.out").exists() and "JOB DONE" in (d / "relax.out").read_text()):
+        sys.exit("QE_STRAIN_ONLY needs a finished relax.out")      # never start a second relaxation in parallel
     old = d / "relax.out"
     if os.environ.get("QE_RESUME", "1") != "0" and old.exists() and "JOB DONE" not in old.read_text():
         t = old.read_text()
@@ -153,11 +156,28 @@ def main():
     if not 10.8 < v_at < 12.2:
         sys.exit(f"relaxed volume {v_at:.2f} A^3/atom is unphysical; raise ecut (Fe PAW needs >= 60 Ry)")
     sig = {}
+    # QE_STRAIN_ONLY=s_xx_p|s_xx_m|s_yz_p|s_yz_m runs just that strain step, in its own subdirectory (own ./tmp, so
+    # four jobs can run at once), and copies the output back as <name>.out. A normal run afterwards finds all four
+    # outputs done and only assembles result.json. Added 2026-10-15 to run the four Fe-80Cr strain steps in parallel
+    # (about 4 h instead of 15 h sequentially).
+    only = os.environ.get("QE_STRAIN_ONLY")
     for tag, E in {"xx": np.diag([a.strain, 0, 0]),
                    "yz": np.array([[0, 0, 0], [0, 0, a.strain / 2], [0, a.strain / 2, 0]])}.items():
         for sgn in (1, -1):
             c = cell @ (np.eye(3) + sgn * E).T
             name = f"s_{tag}_{'p' if sgn > 0 else 'm'}"
+            if only:
+                if name != only:
+                    continue
+                sd = d / f"par_{name}"
+                sd.mkdir(exist_ok=True)
+                write_input(sd / f"{name}.in", c, sym, frac, a.k, a.ecut, "relax")
+                stress_gpa(run(sd, name, a.np))
+                shutil.copy2(sd / f"{name}.out", d / f"{name}.out")
+                shutil.copy2(sd / f"{name}.in", d / f"{name}.in")
+                shutil.rmtree(sd / "tmp", ignore_errors=True)
+                print(f"{name} done", flush=True)
+                return
             write_input(d / f"{name}.in", c, sym, frac, a.k, a.ecut, "relax")
             sig[(tag, sgn)] = stress_gpa(run(d, name, a.np))
     dxx = (sig[("xx", 1)] - sig[("xx", -1)]) / (2 * a.strain)
