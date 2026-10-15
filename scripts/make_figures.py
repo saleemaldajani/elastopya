@@ -202,7 +202,7 @@ def qe_mixing(T_K=298.15, aexp=False):
         return None
     fe, cr = e_last(runs / f"Fe_fm_k8x8x10_e60{suf}") / 2, e_last(runs / f"Cr_afm_k8x8x10_e60{suf}") / 2
     out = {}
-    dirs = (sorted(runs.glob("sqs40_x*_k442_e60_aexp")) if aexp else
+    dirs = (sorted(runs.glob("sqs40_x*_k442_e60_aexp")) + sorted(runs.glob("sqs40_x0.80_k442_e60_aexp_crafm")) if aexp else
             sorted(runs.glob("sqs40_x*_k442_e60")) + sorted(runs.glob("sqs40_x0.80_k442_e60_crafm2")))
     for d in dirs:
         if (d / "result.json").exists():
