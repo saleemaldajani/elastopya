@@ -87,15 +87,20 @@ def plot(outfile, d):
         if "afm" in res:
             axs[0].plot(z, res["afm"][1], ".", color="0.4", ms=2, label="commensurate AFM")
         axs[0].set_ylabel(r"$m$ ($\mu_{\rm B}$)")
-        axs[0].legend(fontsize=6, ncol=3, loc="upper right")
-        ref = res["nm"][0] if "nm" in res else ch.mean()
+        axs[0].set_ylim(-1.35, 2.0)                          # head-room so the legend does not cover the moments
+        axs[0].legend(fontsize=6, ncol=3, loc="upper center", frameon=False)
+        # the NM run prints no site charges (no magnetic-moment block), so the CDW is measured from the mean
+        # site charge of the SDW cell itself (2026-10-15)
+        has_nm = "nm" in res and len(res["nm"][0]) == len(ch)
+        ref = res["nm"][0] if has_nm else ch.mean()
         axs[1].plot(z, 1e3 * (ch - ref), "s-", color="#D55E00", ms=3, lw=0.8)
         axs[1].set_ylabel(r"$\Delta q$ (10$^{-3}$ e)")
-        axs[1].text(0.01, 0.9, "site charge, SDW $-$ NM (period $\\lambda_{\\rm SDW}/2$: CDW)", transform=axs[1].transAxes, fontsize=6)
+        axs[1].set_ylim(-7.5, 6.5); axs[1].text(0.01, 0.88, "site charge, SDW $-$ " + ("NM" if has_nm else "mean") + " (period $\\lambda_{\\rm SDW}/2$: CDW)",
+                    transform=axs[1].transAxes, fontsize=6)
         if fz is not None:
             axs[2].plot(z, 1e3 * fz * 13.605693 / 0.529177, "^-", color="#009E73", ms=3, lw=0.8)
             axs[2].set_ylabel(r"$F_z$ (meV/$\AA$)")
-            axs[2].text(0.01, 0.9, "force along $Q$ (drives the strain wave)", transform=axs[2].transAxes, fontsize=6)
+            axs[2].set_ylim(-75, 95); axs[2].text(0.01, 0.88, "force along $Q$ (drives the strain wave)", transform=axs[2].transAxes, fontsize=6)
         if "afm" in res and "nm" in res:
             de = lambda k: (res[k][3] - res["nm"][3]) / NL * 13.605693e3
             axs[0].set_title(f"E(AFM) $-$ E(NM) = {de('afm'):.1f}, E(SDW) $-$ E(NM) = {de('sdw'):.1f} meV/atom", fontsize=7)
