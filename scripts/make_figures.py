@@ -857,6 +857,8 @@ def main():
     if qe is not None:   # review versions with the QE series next to VASP (_qe)
         fig2_orientation_bulk(lit, dft, mdd, mdr, kind="violin", with_decomp=True, qe=qe)
         fig3(lit, dft, mdd, mdr, lam=6.4, stem="fig3_fsaw_mddecomp_6p4um_qe", md_decomp_a=True, qe=qe)
+        fig3(lit, dft, mdd, mdr, lam=6.4, stem="fig3_fsaw_mddecomp_6p4um_qe_relative", md_decomp_a=True, qe=qe,
+             rel_b=True)   # decision for Mike: Fig. 3 as in the paper, but (b) as % change from the random alloy
         print("QE x, C11, f(6.4 um):", qe["x"], np.round(qe["c11"], 1), np.round(qe["f"], 4))
     if mdr is not None:
         print('MD random x, C11, f:', np.round(mdr['x'], 2), np.round(mdr['c11'], 1), np.round(mdr['f'], 4))
