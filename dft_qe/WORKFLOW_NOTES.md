@@ -157,3 +157,5 @@ Settings (all runs):
 | 2026-10-14 | `../scripts/make_figures_kdense.py`, `../scripts/visualize_sqs.py` | Per-block widths in `add_strip`; tight unit-cell blocks | Larger DFT cells in Fig. 1(d) at one common scale |
 | 2026-10-14 | `pull_engaging.sh` | Pull every script (subfolders included) and `phonopy_cubic/` | Some job scripts existed only on Engaging |
 | 2026-10-14 | `watch_connection.sh`, `wait_key.sh` | New | Keep the Duo-authenticated connection alive; catch results, failures and a full disk |
+| 2026-10-15 | `ett_analysis.py` | New: Lifshitz ETT analysis (SM S3.2, Fig. S27) | Locate the Fe-rich transition from our bands (critical majority level at H), test it against the EMTO-CPA moduli and measured bulk moduli with one shared onset, and split the lever-rule stiffening into α/α′ terms. A first version with free per-modulus onsets was discarded: poorly constrained, and it extrapolated the square-root term beyond its range of validity |
+| 2026-10-15 | `bands_path.py`, `unfold_fs.py` | Panel titles state the lattice convention | Panels at different lattice parameters are shown side by side |
