@@ -1,5 +1,5 @@
 
-     Program PWSCF v.7.5 starts on 14Oct2026 at  3:58:51 
+     Program PWSCF v.7.5 starts on 15Oct2026 at  2:16: 8 
 
      This program is part of the open-source Quantum ESPRESSO suite
      for quantum simulation of materials; please cite
@@ -13,9 +13,9 @@
      Parallel version (MPI), running on   128 processors
 
      MPI processes distributed on     2 nodes
-     53656 MiB available memory on the printing compute node when the environment starts
+     259163 MiB available memory on the printing compute node when the environment starts
 
-     Reading input from bands_cg.in
+     Reading input from bands_paro.in
 
      Current dimensions of program PWSCF are:
      Max number of different atomic species (ntypx) = 10
@@ -187,9 +187,4 @@
      Checking if some PAW data can be deallocated... 
 
      Band Structure Calculation
-     CG style diagonalization
-     c_bands:  3 eigenvalues not converged
-     c_bands:  3 eigenvalues not converged
-     c_bands:  3 eigenvalues not converged
-     c_bands:  3 eigenvalues not converged
-     c_bands:  3 eigenvalues not converged
+     ParO style diagonalization
