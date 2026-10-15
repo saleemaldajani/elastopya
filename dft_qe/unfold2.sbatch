@@ -26,3 +26,6 @@ if ! grep -q "JOB DONE" bands.out 2>/dev/null; then
 fi
 grep -q "JOB DONE" bands.out && [ ! -f unfolded_dw.npz ] && ../../venv/bin/python ../../unfold_fs.py unfold . > unfold.log 2>&1
 tail -3 unfold.log
+# Each band step leaves ~290 GB of wavefunctions; once both spin channels are unfolded they are no longer needed
+# (the EBS job copies only the charge density), so delete them: three at once filled the 1 TB pool (2026-10-15).
+[ -f unfolded_up.npz ] && [ -f unfolded_dw.npz ] && find tmp -type f \( -name "*.wfc*" -o -name "wfc*.dat" -o -name "wfc*.hdf5" \) -delete

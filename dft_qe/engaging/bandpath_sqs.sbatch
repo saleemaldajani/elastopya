@@ -24,3 +24,5 @@ if ! grep -q "JOB DONE" bands.out 2>/dev/null; then
 fi
 [ -f ebs_dw.npz ] || ../../venv/bin/python ../../bands_path.py sqs-unfold . > unfold.log 2>&1
 ls ebs_*.npz && echo EBS_OK
+# wavefunctions are only needed for the unfolding above; free the space (shared 1 TB pool)
+[ -f ebs_up.npz ] && [ -f ebs_dw.npz ] && find tmp -type f \( -name "*.wfc*" -o -name "wfc*.dat" -o -name "wfc*.hdf5" \) -delete
