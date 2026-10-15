@@ -137,7 +137,8 @@ def plot(outfile, dirs):
                                 (0, -1, "N"), (0, 1, "N"), (-1, 0, "N"), (1, 0, "N")):
                 ax.text(px * 1.08, py * 1.08, t, ha="center", va="center", fontsize=7, clip_on=False)
             ax.text(0.03, 0.03, "Γ", fontsize=7)
-            ax.set_title(f"{round(100 * x)}% Cr, {lab}", fontsize=7, pad=14)
+            conv = ", exp. $a$" if Path(d).name.endswith("_aexp") else ""        # lattice convention of the run
+            ax.set_title(f"{round(100 * x)}% Cr{conv}, {lab}", fontsize=7, pad=14)
     fig.tight_layout(h_pad=1.5)
     fig.savefig(outfile, dpi=600); fig.savefig(Path(outfile).with_suffix(".pdf")); fig.savefig(Path(outfile).with_suffix(".svg"))
     print("wrote", outfile)

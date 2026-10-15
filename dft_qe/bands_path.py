@@ -160,7 +160,8 @@ def sqs_plot(outfile, dirs, eta=0.06):
             ax.axhline(0, color="#D55E00", lw=0.6, ls=":")
             ax.set_xticks(z["ticks"]); ax.set_xticklabels(z["labels"]); ax.minorticks_off()
             ax.set_ylabel(r"$E - E_{\rm F}$ (eV)")
-            ax.set_title(f"{round(100 * float(z['x_cr']))}% Cr, {lab}", fontsize=7)
+            conv = ", exp. $a$" if Path(d).name.endswith("_aexp") else ""
+            ax.set_title(f"{round(100 * float(z['x_cr']))}% Cr{conv}, {lab}", fontsize=7)
     fig.tight_layout()
     fig.savefig(outfile, dpi=600); fig.savefig(Path(outfile).with_suffix(".pdf")); fig.savefig(Path(outfile).with_suffix(".svg"))
     print("wrote", outfile)
