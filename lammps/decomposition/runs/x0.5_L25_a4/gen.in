@@ -1,0 +1,22 @@
+units metal
+dimension 3
+boundary p p p
+atom_style atomic
+lattice bcc 2.866
+variable L equal 25
+region SYSTEM prism 0 ${L} 0 ${L} 0 ${L} 0.0 0.0 0.0 units lattice
+create_box 2 SYSTEM
+create_atoms 1 region SYSTEM
+mass 1 55.85
+mass 2 51.996
+set group all type/fraction 2 0.5 38507825
+pair_style lj/cut 2.866
+pair_coeff 1 1 0.0 0.0 2.866
+pair_coeff 2 2 0.0 0.0 2.866
+pair_coeff 1 2 10 10 2.866
+fix 3 all atom/swap 50 3000 97705767 10 types 1 2
+thermo_style custom step pe
+thermo 500
+timestep 0.01
+run 5000
+write_data phi1.000.data nocoeff
