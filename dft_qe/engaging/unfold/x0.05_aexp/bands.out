@@ -1,5 +1,5 @@
 
-     Program PWSCF v.7.5 starts on 14Oct2026 at 20:20:56 
+     Program PWSCF v.7.5 starts on 15Oct2026 at  9:42: 8 
 
      This program is part of the open-source Quantum ESPRESSO suite
      for quantum simulation of materials; please cite
@@ -13,9 +13,9 @@
      Parallel version (MPI), running on   128 processors
 
      MPI processes distributed on     2 nodes
-     153627 MiB available memory on the printing compute node when the environment starts
+     173917 MiB available memory on the printing compute node when the environment starts
 
-     Reading input from bands_cg.in
+     Reading input from bands_paro.in
 
      Current dimensions of program PWSCF are:
      Max number of different atomic species (ntypx) = 10
@@ -187,4 +187,63 @@
      Checking if some PAW data can be deallocated... 
 
      Band Structure Calculation
-     CG style diagonalization
+     ParO style diagonalization
+
+     ethr =  1.57E-12,  avg # of iterations = 30.4
+
+     total cpu time spent up to now is     4958.5 secs
+
+     End of band structure calculation
+
+     Number of k-points >= 100: set verbosity='high' to print the bands.
+
+     Writing all to output data dir ./tmp/uf.save/ :
+     XML data file, pseudopotentials, collected wavefunctions
+
+     init_run     :      2.32s CPU      4.92s WALL (       1 calls)
+     electrons    :   4896.93s CPU   4949.04s WALL (       1 calls)
+
+     Called by init_run:
+     wfcinit      :      0.00s CPU      0.00s WALL (       1 calls)
+     potinit      :      1.33s CPU      3.44s WALL (       1 calls)
+     hinit0       :      0.64s CPU      0.91s WALL (       1 calls)
+
+     Called by electrons:
+     c_bands      :   4896.93s CPU   4949.04s WALL (       1 calls)
+     v_of_rho     :      0.81s CPU      0.88s WALL (       1 calls)
+     newd         :      0.11s CPU      0.17s WALL (       1 calls)
+     PAW_pot      :      0.25s CPU      0.26s WALL (       1 calls)
+
+     Called by c_bands:
+     init_us_2    :      3.85s CPU      4.00s WALL (      32 calls)
+     paro_k       :   4338.12s CPU   4381.57s WALL (      32 calls)
+
+     Called by paro_*:
+     h_psi        :   1924.27s CPU   1942.18s WALL (    6759 calls)
+     s_psi        :    409.28s CPU    411.96s WALL (    6759 calls)
+     g_psi        :     12.81s CPU     12.93s WALL (    9559 calls)
+
+     Called by h_psi:
+     h_psi:calbec :    441.40s CPU    444.25s WALL (    6759 calls)
+     vloc_psi     :   1068.28s CPU   1080.00s WALL (    6759 calls)
+                                        0.00s GPU  (    6759 calls)
+     add_vuspsi   :    403.25s CPU    405.94s WALL (    6759 calls)
+
+     General routines
+     calbec       :    441.35s CPU    444.23s WALL (    6759 calls)
+     fft          :      0.69s CPU      0.93s WALL (      23 calls)
+     ffts         :      0.12s CPU      0.13s WALL (       2 calls)
+     fftw         :    983.25s CPU    994.19s WALL (  736430 calls)
+     interpolate  :      0.16s CPU      0.17s WALL (       2 calls)
+     davcio       :      0.01s CPU      1.10s WALL (      64 calls)
+
+     Parallel routines
+
+     PWSCF        :      1h22m CPU      1h24m WALL
+
+
+   This run was terminated on:  11: 6:31  15Oct2026            
+
+=------------------------------------------------------------------------------=
+   JOB DONE.
+=------------------------------------------------------------------------------=
