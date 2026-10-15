@@ -29,6 +29,8 @@ def inputs(d, n=32):   # 32^3 = 32768 k-points: QE pw.x allows at most 40000 (np
     (d / "scf.in").write_text(scf)
     head = scf.split("K_POINTS")[0].replace("calculation = 'scf'", "calculation = 'bands'")
     head = head.replace("nbnd = 16", "nbnd = 12, nosym = .true., noinv = .true.")
+    # Davidson from random wavefunctions aborted in cdiaghg (MPI error 37) on the 32^3 nosym grid (2026-10-15): use CG
+    head = head.replace("conv_thr = 1e-9, mixing_beta = 0.3", "conv_thr = 1e-9, mixing_beta = 0.3, diagonalization = 'cg'")
     g = np.arange(n) / n
     kk = np.stack(np.meshgrid(g, g, g, indexing="ij"), -1).reshape(-1, 3)
     (d / "bands.in").write_text(head + f"K_POINTS crystal\n{len(kk)}\n" +
