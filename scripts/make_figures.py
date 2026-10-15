@@ -142,8 +142,13 @@ def md_decomposition():
         gr = 5 * (c11 - c12) * c44 / (4 * c44 + 3 * (c11 - c12))
         g = (gv + gr) / 2
         e = 9 * b * g / (3 * b + g)
-        o = np.argsort(phi)
-        out[float(x)] = dict(phi=phi[o], f=rayleigh_f(b, e, x * RHO_CR + (1 - x) * RHO_FE)[o])
+        f = rayleigh_f(b, e, x * RHO_CR + (1 - x) * RHO_FE)
+        # several MD alloys (seeds) per composition: mean and sample s.d. at each phi (identical to before for one seed)
+        ph = np.unique(np.round(phi, 6))
+        fm = np.array([f[np.isclose(phi, q)].mean() for q in ph])
+        fs = np.array([f[np.isclose(phi, q)].std(ddof=1) if np.isclose(phi, q).sum() > 1 else 0.0 for q in ph])
+        nn = np.array([int(np.isclose(phi, q).sum()) for q in ph])
+        out[float(x)] = dict(phi=ph, f=fm, f_sd=fs, n=nn)
     return out
 
 
@@ -690,8 +695,10 @@ def fig3(lit, dft, mdd, mdr, lam=6.4, stem="fig3_fsaw", rel_b=False, crcolor=Fal
             a.plot([x, x], [ys[0], ys[-1]], ls=":", color=GREEN, lw=1.0, zorder=3)
             a.scatter(np.full(len(ph) - 2, x), ys[1:-1], s=7, c=GREEN, alpha=0.75, zorder=4, lw=0,
                       label=r"MD, $\phi$ = 0.6$-$0.9" if first else None)
-            a.plot([x], [ys[-1]], "s", mfc="white", mec=GREEN, mew=1.2, ms=5.5, ls="none", zorder=5,
-                   label=r"MD, fully decomposed ($\phi$ = 1)" if first else None)
+            sd1 = (ser["f_sd"][o][-1] * k) if ser.get("f_sd") is not None and ser["f_sd"][o][-1] > 0 else None
+            a.errorbar([x], [ys[-1]], yerr=sd1, fmt="s", mfc="white", mec=GREEN, ecolor=GREEN, mew=1.2, ms=5.5, ls="none",
+                       zorder=5, elinewidth=0.7, capsize=1.5,
+                       label=r"MD, fully decomposed ($\phi$ = 1)" if first else None)
             first = False
     # Partitioning schematic in its own strip below the data (no overlap with any series)
     xa, xb = 0.15, 0.85
@@ -727,6 +734,12 @@ def fig3(lit, dft, mdd, mdr, lam=6.4, stem="fig3_fsaw", rel_b=False, crcolor=Fal
 
     dec = md_decomposition()
 
+    def ysd(ser):     # seed-to-seed s.d. in the units of panel (b); None for a single seed (no error bar drawn)
+        sd = ser.get("f_sd")
+        if sd is None or not np.any(sd > 0):
+            return None
+        return 100 * sd / ser["f"][np.argmin(ser["phi"])] if rel_b else sd * k
+
     def yb(phi, f):  # absolute frequency, or % change relative to the random alloy (phi = 0.5)
         return 100 * (f / f[np.argmin(phi)] - 1) if rel_b else f * k
     if crcolor:
@@ -745,7 +758,8 @@ def fig3(lit, dft, mdd, mdr, lam=6.4, stem="fig3_fsaw", rel_b=False, crcolor=Fal
                        label=r"25$^3$ cell (validation)")
                 continue
             b.plot(ser["phi"], ys, "-", color=cx(x), lw=1.1, zorder=2)
-            b.plot(ser["phi"], ys, "s", color=cx(x), mec="black", mew=0.4, ms=4.5, ls="none", zorder=4)
+            b.errorbar(ser["phi"], ys, yerr=ysd(ser), fmt="s", color=cx(x), mec="black", mew=0.4, ms=4.5, ls="none",
+                       zorder=4, elinewidth=0.6, capsize=1.5)
             ends.append((ys[np.argmax(ser["phi"])], x))
         # direct labels at phi = 1, nudged apart vertically
         ends.sort()
@@ -770,8 +784,9 @@ def fig3(lit, dft, mdd, mdr, lam=6.4, stem="fig3_fsaw", rel_b=False, crcolor=Fal
                 continue
             col = colors.get(round(x, 2), RED)
             b.plot(ser["phi"], yb(ser["phi"], ser["f"]), "-", color=col, alpha=0.5, lw=0.8, zorder=1)
-            b.plot(ser["phi"], yb(ser["phi"], ser["f"]), "s", color=col, ms=4.5, ls="none", zorder=3,
-                   label=rf"Fe$_{{{100 - round(100 * x)}}}$Cr$_{{{round(100 * x)}}}$, 25$^3$ cell")
+            b.errorbar(ser["phi"], yb(ser["phi"], ser["f"]), yerr=ysd(ser), fmt="s", color=col, ms=4.5, ls="none", zorder=3,
+                       elinewidth=0.6, capsize=1.5,
+                       label=rf"Fe$_{{{100 - round(100 * x)}}}$Cr$_{{{round(100 * x)}}}$, 25$^3$ cell")
     b.set(xlabel=r"Spinodal conversion fraction, $\phi$", ylabel=rf"$f_{{\rm SAW}}$ (GHz), $\lambda$ = {lam:g} $\mu$m",
           xlim=(0.48, 1.13 if crcolor else 1.02))
     b.set_xticks([0.5, 0.6, 0.7, 0.8, 0.9, 1.0])

@@ -19,7 +19,7 @@ set -euo pipefail
 LMP=$1; NP=$2; X=$3; L=$4; A=${5:-1}
 HERE=$(cd "$(dirname "$0")" && pwd)
 TPL="$HERE/../random_alloys/template"
-MPIRUN="$(dirname "$LMP")/mpirun"
+MPIRUN="${MPIRUN:-$(dirname "$LMP")/mpirun}"   # override on a cluster (Engaging: module openmpi)
 SET_SEEDS=(23609378 67101604 8085385 38507825 63689744 20009178 67502748 70189207 83842524 90137588)
 SWAP_SEEDS=(50941252 63770018 25875305 97705767 83263562 75547858 63061468 48086192 62931845 58363333)
 CONV_A=(68860890 75832863 28717628 15965553 11347432)   # G22 (Cr -> Fe), conversions 10..50

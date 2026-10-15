@@ -52,9 +52,11 @@ def md_decomp():
     res = {}
     for x0 in (0.2, 0.36, 0.5):
         m = np.abs(dd["x_cr"] - x0) < 1e-9
-        o = np.argsort(dd["phi"][m])
-        rows = [(ph, *vrh(c11, c12, c44), c12 - c44) for ph, c11, c12, c44 in
-                zip(dd["phi"][m][o], dd["c11"][m][o], dd["c12"][m][o], dd["c44"][m][o])]
+        rows = []
+        for ph in np.unique(np.round(dd["phi"][m], 6)):            # mean over MD alloys (seeds) at each phi
+            k = m & np.isclose(dd["phi"], ph)
+            c11, c12, c44 = dd["c11"][k].mean(), dd["c12"][k].mean(), dd["c44"][k].mean()
+            rows.append((ph, *vrh(c11, c12, c44), c12 - c44))
         res[x0] = np.array(rows)          # phi, K, G, Cauchy
     return res
 
