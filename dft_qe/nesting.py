@@ -22,7 +22,7 @@ SIGMA = 0.05          # eV, Gaussian width of the Fermi-surface delta functions
 Y_FE = (0.0, 0.05, 0.10, 0.20)
 
 
-def inputs(d, n=40):
+def inputs(d, n=32):   # 32^3 = 32768 k-points: QE pw.x allows at most 40000 (npk); 40^3 aborted (2026-10-15)
     d = Path(d)
     fs.write_inputs("Cr_nm", d)
     scf = (d / "scf.in").read_text().replace("16 16 16 0 0 0", "24 24 24 0 0 0")
@@ -86,6 +86,6 @@ def analyse(d):
 
 if __name__ == "__main__":
     if sys.argv[1] == "inputs":
-        inputs(sys.argv[2], int(sys.argv[3]) if len(sys.argv) > 3 else 40)
+        inputs(sys.argv[2], int(sys.argv[3]) if len(sys.argv) > 3 else 32)
     elif sys.argv[1] == "analyse":
         analyse(sys.argv[2])
