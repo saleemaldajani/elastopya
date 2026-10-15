@@ -92,10 +92,11 @@ def decomposition_change():
     out = {}
     dd = rows(ROOT / "data" / "md_decomposition.csv")
     for x0 in sorted({float(r["x_cr"]) for r in dd}):
-        sel = sorted((float(r["phi"]), float(r["c11"]), float(r["c12"]), float(r["c44"])) for r in dd
-                     if abs(float(r["x_cr"]) - x0) < 1e-9 and r["L"] == "25")
-        if len(sel) >= 2:
-            a, b = props(*sel[0][1:], x0), props(*sel[-1][1:], x0)
+        sel = [(float(r["phi"]), float(r["c11"]), float(r["c12"]), float(r["c44"])) for r in dd
+               if abs(float(r["x_cr"]) - x0) < 1e-9 and r["L"] == "25"]
+        mean = lambda ph: np.mean([s_[1:] for s_ in sel if abs(s_[0] - ph) < 1e-6], axis=0)   # over MD alloys (seeds)
+        if {round(s_[0], 3) for s_ in sel} >= {0.5, 1.0}:
+            a, b = props(*mean(0.5), x0), props(*mean(1.0), x0)
             out[x0] = dict(dE_pct=100 * (b["E"] / a["E"] - 1), dD_pct=100 * (b["D"] / a["D"] - 1), dG_pct=100 * (b["G"] / a["G"] - 1))
     return out
 
