@@ -1,5 +1,5 @@
 
-     Program PWSCF v.7.5 starts on 14Oct2026 at  3:49:25 
+     Program PWSCF v.7.5 starts on 14Oct2026 at 20:42:46 
 
      This program is part of the open-source Quantum ESPRESSO suite
      for quantum simulation of materials; please cite
@@ -13,7 +13,7 @@
      Parallel version (MPI), running on    60 processors
 
      MPI processes distributed on     1 nodes
-     197382 MiB available memory on the printing compute node when the environment starts
+     227797 MiB available memory on the printing compute node when the environment starts
 
      Reading input from nscf.in
 
@@ -243,8 +243,3 @@
 
      Band Structure Calculation
      CG style diagonalization
-     c_bands:  7 eigenvalues not converged
-     c_bands: 10 eigenvalues not converged
-     c_bands:  6 eigenvalues not converged
-     c_bands:  8 eigenvalues not converged
-     c_bands:  3 eigenvalues not converged

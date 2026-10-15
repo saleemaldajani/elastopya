@@ -1,6 +1,6 @@
 #!/bin/bash
 # Exit (waking Claude) when a key Engaging result appears or a qe job fails; checks every 10 min, up to 12 h.
-KEYS="runs/sqs40_x0.05_k442_e60/result.json runs/sqs40_x0.10_k442_e60/result.json runs/sqs40_x0.70_k442_e60/result.json runs/sqs40_x0.05_k442_e60_aexp/result.json runs/sqs40_x0.10_k442_e60_aexp/result.json runs/sqs40_x0.65_k442_e60_aexp/result.json runs/sqs40_x0.80_k442_e60_aexp_crafm/result.json runs/sqs40_x0.80_k442_e60_crafm2/result.json phonopy_cubic/Fe_cub/d000.out phonopy_cubic/Fe_cub_aexp/d000.out"
+KEYS="runs/sqs40_x0.05_k442_e60/result.json runs/sqs40_x0.10_k442_e60/result.json runs/sqs40_x0.70_k442_e60/result.json runs/sqs40_x0.05_k442_e60_aexp/result.json runs/sqs40_x0.10_k442_e60_aexp/result.json runs/sqs40_x0.65_k442_e60_aexp/result.json runs/sqs40_x0.80_k442_e60_aexp_crafm/result.json runs/sqs40_x0.80_k442_e60_crafm2/result.json saw/qe_x0.05.csv saw/qe_x0.10.csv saw/qe_x0.30.csv saw/qe_x0.40.csv saw/qe_x0.45.csv saw/qe_x0.475.csv runs/sqs40_x0.70_k442_e60/result.json"
 have0=$(ssh engaging "cd /orcd/pool/004/sdajani/fecr_qe; for f in $KEYS; do [ -f \$f ] && grep -q . \$f 2>/dev/null && { [[ \$f == *.out ]] && ! grep -q 'JOB DONE' \$f && continue; echo \$f; }; done; true" 2>/dev/null)
 start=$(date +%s)
 while [ $(( $(date +%s) - start )) -lt 43200 ]; do
