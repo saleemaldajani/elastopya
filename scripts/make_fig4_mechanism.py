@@ -1046,6 +1046,48 @@ def build_full_v9():
     build_full_v7(out_name="fig4_mechanism_v9_full", pc=panel_c_v8, pd=panel_d_v9)
 
 
+# v10 (2026-10-15, user request): (g) composition-resolved. The highest per-grain (P)SAW across x_Cr for each series
+# (from scripts/make_saw_landscape.py data), the band, and where decomposition of Fe-36Cr sends material
+# (alpha 0.14, alpha' 0.88, CALPHAD 748 K); the lever-rule fraction of grains in the band is printed.
+def panel_d_v10(fig, rect):
+    import make_saw_landscape as L
+    ax = fig.add_axes([rect[0] + 0.05, rect[1] + 0.09, rect[2] * 0.74, rect[3] * 0.66])
+    ax.axhspan(609, 820, color="0.90", lw=0); ax.axhline(609, color="0.4", lw=0.8, ls="--")
+    ax.text(0.58, 690, "unallowed in\npristine CASS", ha="center", va="center", fontsize=5.2, color="0.35")
+    sty = {"qeaexp": (QE_AEXP, "D", "QE exp. $a$ (random)"), "qe": (QE_COL, "o", "QE relaxed (random)"),
+           "md5r": (MD, "s", "MD random"), "md5d": ("#0B5D3B", "s", "MD decomposed")}
+    frac = {}
+    for pre, (col, mk, lab) in sty.items():
+        s = L.load(pre)
+        if not len(s):
+            continue
+        ax.fill_between(s[:, 0], s[:, 3], s[:, 4], color=col, alpha=0.12, lw=0) if pre == "qeaexp" else None
+        ax.plot(s[:, 0], s[:, 4], mk + "-", color=col, ms=2.4, lw=0.9, label=lab)
+        fa, fb, f0 = (float(np.interp(v, s[:, 0], s[:, 5])) for v in (L.XA, L.XB, L.X0))
+        w = (L.X0 - L.XA) / (L.XB - L.XA)
+        frac[pre] = (f0, (1 - w) * fa + w * fb)
+    for v in (L.XA, L.XB):
+        ax.axvline(v, color="0.55", lw=0.5, ls=":")
+    ax.axvline(L.X0, color="#FF3B00", lw=0.6, ls=":")
+    ax.annotate("", xy=(L.XA, 455), xytext=(L.X0, 455), arrowprops=dict(arrowstyle="-|>", color="#FF3B00", lw=0.9, mutation_scale=6))
+    ax.annotate("", xy=(L.XB, 455), xytext=(L.X0, 455), arrowprops=dict(arrowstyle="-|>", color="#FF3B00", lw=0.9, mutation_scale=6))
+    for v, t in ((L.XA, r"$\alpha$"), (L.X0, "36"), (L.XB, r"$\alpha'$")):
+        ax.text(v, 438, t, ha="center", va="top", fontsize=5.4, color="#FF3B00" if t == "36" else "0.25")
+    if "qeaexp" in frac:
+        r, d = frac["qeaexp"]
+        ax.text(0.0, 1.01, f"QE exp. $a$ grains in band, Fe$-$36Cr: random {r:.1f}%,\ndecomposed {d:.1f}% (lever rule via $\\alpha'$)",
+                transform=ax.transAxes, fontsize=4.5, color=QE_AEXP, va="bottom", ha="left", linespacing=1.1)
+    ax.set(xlim=(0, 1), ylim=(420, 820)); ax.tick_params(labelsize=5.5)
+    ax.set_xlabel(r"$x_{\rm Cr}$", fontsize=6, labelpad=1)
+    ax.set_ylabel("highest (P)SAW of $10^4$ grains (MHz)", fontsize=5.6)
+    ax.legend(fontsize=4.3, loc="upper left", bbox_to_anchor=(0.0, 0.99), frameon=False, handlelength=1.2, labelspacing=0.15)
+
+
+def build_full_v10():
+    """v9 with (g) resolved in composition (see S_saw_landscape for the full distributions)."""
+    build_full_v7(out_name="fig4_mechanism_v10_full", pc=panel_c_v8, pd=panel_d_v10)
+
+
 def main():
     build_full()
     build_full_v2()
