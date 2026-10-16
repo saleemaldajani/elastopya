@@ -416,9 +416,11 @@ def trends():
     """Values shown in the trend lanes of the _strip_trend versions (same data as the figures)."""
     lev = mf.read_csv("sheet_levesque_parameters.csv")
     a0, b0, c0, d0 = (lev[k][0] for k in ("alpha", "beta", "gamma", "delta"))     # PWSCF-PAW, as Fig. 1b
-    dg_mix = lambda x: -1e3 * float(mf.levesque_model(np.array([x]), a0, b0, c0, d0)[0][0])   # meV/atom
+    # The lane shows Delta G_demix = -Delta G_mix, the quantity plotted in Fig. 1a (consistent sign; changed from
+    # Delta G_mix on 2026-10-15 at the user's request).
+    dg_demix = lambda x: 1e3 * float(mf.levesque_model(np.array([x]), a0, b0, c0, d0)[0][0])   # meV/atom
     xs1 = [float(lab.split("%")[0]) / 100 for lab, _ in STRIPS["fig1_free_energy"][1]]
-    TRENDS["fig1_free_energy"] = [dict(label="$\\Delta G_{\\rm mix}$\n(meV/atom)", values=[dg_mix(x) for x in xs1],
+    TRENDS["fig1_free_energy"] = [dict(label="$\\Delta G_{\\rm demix}$\n(meV/atom)", values=[dg_demix(x) for x in xs1],
                                        fmt="{:+.0f}", zero=True)]
     mdr = mf.md_random()
     rnd_x = (0.0, 0.2, 0.36, 0.5, 0.8, 1.0)
