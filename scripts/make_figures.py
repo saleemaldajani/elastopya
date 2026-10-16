@@ -209,8 +209,8 @@ def qe_mixing(T_K=298.15, aexp=False):
     out = {}
     dirs = (sorted(runs.glob("sqs40_x*_k442_e60_aexp")) + sorted(runs.glob("sqs40_x0.80_k442_e60_aexp_crafm")) if aexp else
             sorted(runs.glob("sqs40_x*_k442_e60")) + sorted(runs.glob("sqs40_x0.80_k442_e60_crafm2")))
-    for d in dirs:
-        if (d / "result.json").exists():
+    for d in dirs:   # relax_result.json: relaxation-only run (QE_RELAX_ONLY, energy without the elastic steps)
+        if (d / "result.json").exists() or (d / "relax_result.json").exists():
             x = float(re.match(r"sqs40_x([\d.]+)_", d.name).group(1))
             dh = (e_last(d) / 40 - (1 - x) * fe - x * cr) * ry
             s = -KB * (x * np.log(x) + (1 - x) * np.log(1 - x))

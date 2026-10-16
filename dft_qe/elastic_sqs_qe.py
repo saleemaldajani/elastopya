@@ -53,7 +53,7 @@ def write_input(path, cell, symbols, frac, k, ecut, calc):
   occupations = 'smearing', smearing = 'mv', degauss = 0.02, nspin = 2,
 """ + "".join(f"  starting_magnetization({i + 1}) = {mag[s]}\n" for i, s in enumerate(sp)) + """/
 &electrons
-  conv_thr = 1e-8, mixing_beta = """ + os.environ.get("QE_MIXING_BETA", "0.2") + """, mixing_mode = 'local-TF', electron_maxstep = """ + os.environ.get("QE_MAXSTEP", "300")
+  conv_thr = """ + os.environ.get("QE_CONV_THR", "1e-8") + """, mixing_beta = """ + os.environ.get("QE_MIXING_BETA", "0.2") + """, mixing_mode = 'local-TF', electron_maxstep = """ + os.environ.get("QE_MAXSTEP", "300")
   + (", mixing_ndim = " + os.environ["QE_MIXING_NDIM"] if "QE_MIXING_NDIM" in os.environ else "")
   + (",\n  startingpot = 'file', startingwfc = 'file'" if os.environ.get("QE_START_FROM_FILE") else "") + """
 /
@@ -75,7 +75,7 @@ def run(d, name, np_):
     out = d / f"{name}.out"
     if out.exists() and "JOB DONE" in out.read_text():
         text = out.read_text()
-        if "convergence NOT achieved" in text:
+        if "convergence NOT achieved" in text and not final_check_only(text):
             sys.exit(f"{name}: earlier run did not converge (see {out}); stopping")
         return text
     nk = int(os.environ.get("QE_NK", min(np_, 4)))
@@ -84,9 +84,18 @@ def run(d, name, np_):
     subprocess.run([str(MPIRUN), "-np", str(np_), str(PW), "-nk", str(nk), "-in", f"{name}.in"],
                    cwd=d, stdout=open(out, "w"), stderr=subprocess.STDOUT, check=True, env=env)
     text = out.read_text()
-    if "convergence NOT achieved" in text:      # QE prints JOB DONE even then; never build on such a step
+    if "convergence NOT achieved" in text and not final_check_only(text):   # QE prints JOB DONE even then
         sys.exit(f"{name}: SCF did not converge (see {out}); stopping")
     return text
+
+
+def final_check_only(text):
+    """vc-relax ends with one more SCF in a fresh plane-wave basis at the final cell, a check that is not used
+    for anything (geometry and energy are those of the last BFGS step). Fe-80Cr (2026-10-16) converged BFGS
+    (force 0.002 Ry/bohr, P = -0.03 kbar) but that check SCF sat at a 2e-7 Ry noise floor for 600 iterations;
+    such a run is accepted. Any non-converged SCF before 'End of BFGS' still stops the run."""
+    i = text.find("End of BFGS Geometry Optimization")
+    return i >= 0 and text.find("convergence NOT achieved") > i
 
 
 def final_structure(text, cell0, frac0):
@@ -139,15 +148,19 @@ def main():
         sys.exit("QE_STRAIN_ONLY needs a finished relax.out")      # never start a second relaxation in parallel
     old = d / "relax.out"
     if os.environ.get("QE_RESUME", "1") != "0" and old.exists() and "JOB DONE" not in old.read_text():
-        t = old.read_text()
-        blocks = t.split("ATOMIC_POSITIONS (crystal)")[1:]
-        full = [b for b in blocks if len([r for r in b.strip().split("\n")[: len(sym)] if len(r.split()) >= 4]) == len(sym)]
-        if full:
-            cut = t.rfind("ATOMIC_POSITIONS (crystal)" + full[-1])
-            cell, frac = final_structure(t[: cut + len("ATOMIC_POSITIONS (crystal)") + len(full[-1])], cell, frac)
-            n = len(list(d.glob("relax_part*.out"))) + 1
-            old.rename(d / f"relax_part{n}.out")
-            print(f"resuming relaxation from the last geometry of relax_part{n}.out ({len(blocks)} steps)", flush=True)
+        n = len(list(d.glob("relax_part*.out"))) + 1
+        old.rename(d / f"relax_part{n}.out")
+        # newest part with a complete geometry; a part interrupted in its first SCF has none (2026-10-16, Fe-65Cr
+        # exp-a), and the restart must then fall back to the part before it, not to the POSCAR
+        for part in sorted(d.glob("relax_part*.out"), key=lambda q: int(q.stem[10:]), reverse=True):
+            t = part.read_text()
+            blocks = t.split("ATOMIC_POSITIONS (crystal)")[1:]
+            full = [b for b in blocks if len([r for r in b.strip().split("\n")[: len(sym)] if len(r.split()) >= 4]) == len(sym)]
+            if full:
+                cut = t.rfind("ATOMIC_POSITIONS (crystal)" + full[-1])
+                cell, frac = final_structure(t[: cut + len("ATOMIC_POSITIONS (crystal)") + len(full[-1])], cell, frac)
+                print(f"resuming relaxation from the last geometry of {part.name} ({len(blocks)} steps)", flush=True)
+                break
     write_input(d / "relax.in", cell, sym, frac, a.k, a.ecut, "relax" if fixed else "vc-relax")
     cell, frac = final_structure(run(d, "relax", a.np), cell, frac)
     # Guard: an under-converged cutoff makes vc-relax collapse the cell (16-atom test at 40 Ry: -12 %).
@@ -155,6 +168,16 @@ def main():
     v_at = abs(np.linalg.det(cell)) / len(sym)
     if not 10.8 < v_at < 12.2:
         sys.exit(f"relaxed volume {v_at:.2f} A^3/atom is unphysical; raise ecut (Fe PAW needs >= 60 Ry)")
+    # QE_RELAX_ONLY=1: stop after the relaxation (energy only, e.g. for the mixing enthalpy) and record it in
+    # relax_result.json, which make_figures.qe_mixing accepts in place of result.json. Added 2026-10-16 for
+    # Fe-65Cr at the experimental lattice parameter, needed for Fig. 1a only.
+    if os.environ.get("QE_RELAX_ONLY") == "1":
+        mags = re.findall(r"total magnetization\s+=\s+([-\d.]+)", (d / "relax.out").read_text())
+        (d / "relax_result.json").write_text(json.dumps({"x_cr": a.x, "volume_A3": float(abs(np.linalg.det(cell))),
+            "moment_muB_per_atom": float(mags[-1]) / len(sym) if mags else None, "fixed_a": fixed,
+            "conv_thr": os.environ.get("QE_CONV_THR", "1e-8"), "wall_s": time.time() - t0}, indent=1))
+        print("relaxation done (QE_RELAX_ONLY)", flush=True)
+        return
     sig = {}
     # QE_STRAIN_ONLY=s_xx_p|s_xx_m|s_yz_p|s_yz_m runs just that strain step, in its own subdirectory (own ./tmp, so
     # four jobs can run at once), and copies the output back as <name>.out. A normal run afterwards finds all four
