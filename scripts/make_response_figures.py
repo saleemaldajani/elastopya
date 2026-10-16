@@ -173,3 +173,35 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+def md_validation_v2():
+    """R_md_validation with the five MD alloys of the 25^3 series shown as mean +- s.d. (v1 plotted every alloy
+    under a '1 alloy' label, written before seeds 2-5 existed; 2026-10-16). v1 is kept."""
+    acta = mf.read_csv("sheet_md.csv")
+    dd = mf.read_csv("md_decomposition.csv")
+    m = np.abs(dd["x_cr"] - 0.5) < 1e-9
+    phs = np.unique(np.round(dd["phi"][m], 6))
+    B = [(dd["c11"][m & np.isclose(dd["phi"], p)] + 2 * dd["c12"][m & np.isclose(dd["phi"], p)]) / 3 for p in phs]
+    c11_1 = dd["c11"][m & np.isclose(dd["phi"], 1.0)]
+    fig, (a, b) = plt.subplots(1, 2, figsize=(5.5, 2.5))
+    a.plot(acta["phi"], acta["bulk_gpa"], "o", color="0.15", ms=3.5, zorder=4, label=r"Acta, 50$^3$ (10 alloys)")
+    a.errorbar(phs, [v.mean() for v in B], yerr=[v.std(ddof=1) for v in B], fmt="s", mfc="white", mec=mf.GREEN,
+               ecolor=mf.GREEN, mew=1.2, ms=6, capsize=2, label=r"present, 25$^3$ (5 alloys, mean $\pm$ s.d.)")
+    a.set(xlabel=r"Spinodal conversion fraction, $\phi$", ylabel="Bulk modulus (GPa), Fe$_{50}$Cr$_{50}$",
+          xlim=(0.47, 1.03), ylim=(193.5, 199.5))
+    a.legend(loc="upper left")
+    a.text(0.98, 0.05, f"$C_{{11}}(\\phi=1)$: {acta['c11_phi1_gpa'][0]:.1f} vs {c11_1.mean():.1f} GPa",
+           transform=a.transAxes, ha="right", va="bottom")
+    mk.style(a, "(a)")
+    r = mf.read_csv("md_random_alloys.csv")
+    b.errorbar(r["x_cr"], r["c11"], yerr=r["c11_sd"], fmt="s", color=mf.GREEN, ms=4, capsize=2, label="present, random alloys")
+    b.plot([0.5], [252.7], "o", mfc="none", mec="0.15", mew=1.2, ms=8, label=r"Acta, 50/50 random ($\phi$ = 0.5)")
+    b.set(xlabel=r"$x_{\rm Cr}$", ylabel=r"MD $C_{11}$ (GPa)", xlim=(-0.03, 1.03), ylim=(230, 340))
+    b.legend(loc="upper left")
+    mk.style(b, "(b)")
+    return finish(fig, "R_md_validation_v2")
+
+
+if __name__ == "__main__" and len(sys.argv) > 1 and sys.argv[1] == "v2":
+    md_validation_v2()
