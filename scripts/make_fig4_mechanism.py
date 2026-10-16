@@ -1005,6 +1005,47 @@ def build_full_v8():
     build_full_v7(out_name="fig4_mechanism_v8_full", pc=panel_c_v8, pd=panel_d_v8)
 
 
+# v9 (2026-10-15, user request): (g) separates the random solid solution (MD Fe-36Cr phi = 0.5; QE 35 % Cr SQS at the
+# PBE-relaxed and the experimental lattice parameter) from the decomposed state (MD phi = 1; QE SQS of Cr-rich
+# alpha'-like compositions, 80 and 95 % Cr, experimental lattice parameter), so it is clear which QE tensors are random
+# and which stand in for the decomposed microstructure. QE SQS are always random alloys; for the decomposed state QE
+# can only supply the constituent alpha' phase, not the two-phase microstructure.
+def panel_d_v9(fig, rect):
+    ax = fig.add_axes([rect[0] + 0.045, rect[1] + 0.105, rect[2] * 0.80, rect[3] * 0.66])
+    ax.axhspan(609, 833, color="0.90", lw=0); ax.axhline(609, color="0.4", lw=0.8, ls="--")
+    ax.text(2.7, 780, "unallowed in pristine CASS", ha="center", va="center", fontsize=5.4, color="0.35")
+    cases = ((0, "md", X0, MD, "MD\n36%"), (1, "qe", 0.35, QE_COL, "QE\nrelaxed\n35%"), (2, "qeaexp", 0.35, QE_AEXP, "QE\nexp. $a$\n35%"),
+             (3.4, "mddec", X0, "#0B5D3B", "MD\n36%\n$\\phi$=1"), (4.4, "qeaexp", 0.80, "#004C80", "QE\nexp. $a$\n$\\alpha'$ 80%"),
+             (5.4, "qeaexp", 0.95, "#002B4A", "QE\nexp. $a$\n$\\alpha'$ 95%"))
+    ticks, labs = [], []
+    for pos, pref, xx, col, lab in cases:
+        if not (mf.DATA / "saw" / f"{pref}_x{xx:.2f}.csv").exists():
+            continue
+        g = grain_top(pref, xx)
+        frac = 100 * np.mean(g > 609)
+        ax.text(pos, g.max() + 10, f"{g.max():.0f}" + (f"\n{frac:.0f}%" if frac >= 0.5 else ""), ha="center", va="bottom",
+                fontsize=4.8, color="#FF3B00" if frac >= 0.5 else "0.3", fontweight="bold" if frac >= 0.5 else "normal", linespacing=1.0)
+        v = ax.violinplot(g, positions=[pos], widths=0.8, showextrema=False, bw_method=0.12)
+        for b in v["bodies"]:
+            b.set_facecolor(col); b.set_edgecolor(col); b.set_alpha(0.55)
+        ax.plot([pos - 0.25, pos + 0.25], [g.max()] * 2, color="#FF3B00", lw=1.0)
+        ticks.append(pos); labs.append(lab)
+    ax.axvline(2.7, ymax=(609 - 340) / (860 - 340), color="0.55", lw=0.6, ls=":")      # divider below the band only
+    ax.text(1.0, 846, "random alloy", ha="center", va="center", fontsize=4.7, color="0.2", fontweight="bold")
+    ax.text(4.4, 846, "decomposed / $\\alpha'$", ha="center", va="center", fontsize=4.7, color="0.2", fontweight="bold")
+    ax.set(xlim=(-0.6, 6.0), ylim=(340, 860)); ax.tick_params(labelsize=5.5)
+    ax.set_xticks(ticks); ax.set_xticklabels(labs, fontsize=4.4, linespacing=0.95)
+    ax.tick_params(axis="x", length=0)
+    ax.set_ylabel("highest (P)SAW per grain (MHz)", fontsize=6)
+    ax.text(0.99, 1.01, r"$10^4$ grains each, $\lambda$ = 6.4 $\mu$m; % = grains in band", transform=ax.transAxes,
+            ha="right", va="bottom", fontsize=4.6, color="0.4")
+
+
+def build_full_v9():
+    """v8 with (g) split into random solid solution vs decomposed / alpha' phase (QE alpha'-like tensors added)."""
+    build_full_v7(out_name="fig4_mechanism_v9_full", pc=panel_c_v8, pd=panel_d_v9)
+
+
 def main():
     build_full()
     build_full_v2()
