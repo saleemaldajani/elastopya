@@ -1,0 +1,4 @@
+saw_runs/qe_random.csv: n=10000 SAW 450-521 PSAW 490-848 MHz
+saw_runs/qe_laminate_tet.csv: n=10000 SAW 471-511 PSAW 503-809 MHz
+/opt/homebrew/Cellar/python@3.12/3.12.12_2/Frameworks/Python.framework/Versions/3.12/lib/python3.12/multiprocessing/resource_tracker.py:279: UserWarning: resource_tracker: There appear to be 6 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '

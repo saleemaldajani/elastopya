@@ -1,0 +1,9 @@
+saw_runs/qe_laminate_V3.csv: n=10000 SAW 475-512 PSAW 504-808 MHz
+saw_runs/qe_fft_axes.csv: n=10000 SAW 471-510 PSAW 502-808 MHz
+saw_runs/emto_random.csv: n=10000 SAW 467-499 PSAW 495-786 MHz
+saw_runs/emto_voigt.csv: n=10000 SAW 520-535 PSAW 559-834 MHz
+saw_runs/emto_reuss.csv: n=10000 SAW 504-530 PSAW 536-832 MHz
+saw_runs/emto_laminate_tet.csv: n=10000 SAW 514-534 PSAW 550-832 MHz
+saw_runs/emto_laminate_V3.csv: n=10000 SAW 516-534 PSAW 553-832 MHz
+saw_runs/emto_fft_axes.csv: n=10000 SAW 514-533 PSAW 550-832 MHz
+BATCH_DONE
