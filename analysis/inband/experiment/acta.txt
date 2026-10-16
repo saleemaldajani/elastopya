@@ -1,0 +1,924 @@
+      Detecting Thermally-Induced Spinodal Decomposition with Picosecond Ultrasonics
+                             in Cast Austenitic Stainless Steels
+
+     Saleem Abdulfattah Ahmed Al Dajania,j,k,∗, Benjamin Reid Dacusa , Cody A. Dennetta,b , M. Grace Burkec , Lawrence
+     Waldrond , Thak Sang Byune , James J. Wallf , Kuba Bar-Din Angling , Omar Abdulfattah Ahmed Al Dajanih , Konrad
+        J. Krakowiakh , Franz.-J. Ulmh , Alan Schwartzmanni , C. Cem Tasani , Peter Hosemannj , Michael Philip Shorta,∗
+      a Dept. Nuclear Science & Engineering, Massachusetts Institute of Technology, 77 Massachusetts Avenue, Cambridge, MA 02139, USA
+                     b Materials Science and Engineering Department, Idaho National Laboratory, Idaho Falls, ID 83415 USA
+            c School of Materials, Manchester University, Sackville Street Building, Manchester, Lancashire, M13 9PL, United Kingdom
+                                d Imperial College London, South Kensington, London SW7 2AZ, United Kingdom
+                                e Oak Ridge National Laboratory, 1 Bethel Valley Rd, Oak Ridge, TN 37830, USA
+                     f Electric Power Research Institute (EPRI), 1300 W. William T. Harris Blvd., Charlotte, NC 28262, USA
+                                        g Northeastern University, 360 Huntington Ave, Boston, MA 02115
+     h Dept. Civil & Environmental Engineering, Massachusetts Institute of Technology, 77 Massachusetts Avenue, Cambridge, MA 02139, USA
+     i Dept. of Materials Science & Engineering, Massachusetts Institute of Technology, 77 Massachusetts Avenue, Cambridge, MA 02139, USA
+        j Dept. of Nuclear Engineering, University of California Berkeley, Etcheverry Hall, 2505 Hearst Avenue, Berkeley, CA 94709, USA
+      k I-5116 Transformational Boulevard, King Abdullah University of Science and Technology (KAUST), Thuwal 23955-6900, Saudi Arabia
+
+
+
+
+     Abstract
+         Destructive techniques to monitor nuclear reactor component health may not always be available during service,
+     as they are time-consuming and often require pre-installed inspection coupons. Non-destructive evaluation (NDE)
+     techniques can bridge this gap by rapidly identifying the state of mission-critical reactor components, via inference
+     between NDE-measurable material properties and those of ultimate interest, such as ductility and toughness. Here,
+     we demonstrate one such inference about the health of thermally aged cast austenitic stainless steels. Observations of
+     surface acoustic wave peak (SAW) splitting correlate with spinodal decomposition-induced embrittlement as destructively
+     measured by Charpy impact energy. Elastodynamic calculations and molecular dynamics simulations of the effects of
+     spinodal decomposition on elastic moduli support that the new acoustic modes present are due to stiffening in the δ-
+     ferrite domains. This discovery enables one to probe structure-property relationships in materials in a greatly accelerated
+     manner, suggesting that similar inference methods can be used to determine material fitness-for-service, or to quickly
+     uncover new structure-property relationships.
+     Keywords: Stainless steel, spinodal decomposition, cast austenitic stainless steels (CASS), 304-type stainless steel,
+     316-type stainless steel, CF8, CF8M, non-destructive evaluation (NDE), transient grating spectroscopy (TGS), surface
+     acoustic wave (SAW), SAW analysis, thermal aging
+
+
+     1. Introduction                                                      irradiation aging, originating from a combination of spin-
+                                                                          odal decomposition [3], G-phase precipitation [4,5], and
+         The U.S. Nuclear Regulatory Commission (NRC) main-               carbide precipitation [6].                                           15
+     tenance rule, Title 10 of the Code of Federal Regulations                Gauging the reliability of structural materials such as
+     Part 50.65, (10 CFR 50.65) dictates that an effective ma-            these is often performed through destructive sectioning
+5    terial aging management program must be implemented                  and analysis. In some applications, such as CASS com-
+     throughout the lifetime of a nuclear reactor [1], including          ponents in nuclear reactors, this is rendered difficult by
+     any potential life extensions. This applies most critically          material inspectability and radioactivity. Non-destructive           20
+     to its core structural components, some of which are made            methods to detect the above modes of embrittlement, if
+     of cast austenitic stainless steel (CASS), chosen for their          properly linked to definitive microstructural and material
+10   strength, corrosion resistance in high temperature water,            property changes, would be a unique and powerful tool to
+     mechanical properties and castability [2]. However, CASS             monitor and inspect CASS components for service-related,
+     are susceptible to embrittlement from both thermal and               aging-induced embrittlement and allow better aging man-              25
+
+                                                                          agement approaches and optimize repair/mitigation strate-
+       ∗ Corresponding author                                             gies available to light water power reactor operators. There-
+        Email addresses: sdajani@mit.edu (Saleem Abdulfattah              fore, destructive materials examinations can be challeng-
+     Ahmed Al Dajani), hereiam@mit.edu (Michael Philip Short)             ing on in service nuclear components, giving preference to
+
+     Preprint submitted to Acta Materialia                                                                                  October 15, 2026
+30   non-destructive methods if available and reliable.                 primary coolant piping, pump casings, valve bodies, and         85
+
+         Material property changes often leave signatures of their      elbows of LWR systems [15]. However, the environmen-
+     evolution in the form of other, correlated material property       tal degradation of CASS is a primary concern for LWR
+     changes since their origin is based on fundamental physical        lifetime and sustainability due to their extensive usage in
+     phenomena. For example, thermal and electrical conduc-             the structural components of the primary side of the re-
+35   tivity are strongly linked in semiconductors and insulators        actor [2]. Among various compositions of CASS, higher           90
+
+     via phonon mean free path spectra [7,8], radiation defect          ferrite content is directly correlated to increased degrada-
+     clustering correlates with changes in thermal transport [9],       tion (in the form of hardening and thermal embrittlement)
+     and embrittlement in metastable austenitic steels due to           primarily caused by spinodal decomposition of retained,
+     radiation-induced martensitic transformations leave signa-         metastable δ-ferrite in CASS after casting [16,17].
+40   tures in their saturation magnetism [10]. Previous work                It has been well-established that long-term thermal ag-     95
+
+     [11] suggested that if spinodal decomposition is the cause         ing in CASS leads to embrittlement, [18,19], and that tem-
+     for embrittlement one can potentially detect the materi-           perature acts synergistically with irradiation to drive mi-
+     als property changes using surface acoustic wave (SAW)             crostructural degradation by the same mechanisms [20,21].
+     changes. However, the polycrystalline nature of the mate-          Detecting this form of degradation is an integral part of
+45   rial remains a challenge in proofing this correlation. There-      proactive management of nuclear material systems [22].          100
+
+     fore, we conduct this study to prove this correlation on           For example, loss of ductility, conventionally measured
+     long term aged materials. We show more conclusively that           by increasing the ductile-to-brittle temperature transition
+     spinodal decomposition of CASS after long-term thermal             (DBTT) [23,24], may be catastrophic as total material fail-
+     aging induces stiffening in δ-ferrite, and that it is sta-         ure could result from any pressurized thermal shock at re-
+50   tistically distinguishable from crystal anisotropy due to          actor primary loop operating conditions [25]. In the case       105
+
+     random grain orientation effects, using a combination of           of aged CASS alloys in reactor conditions (≥100k hours
+     deterministic measurement, probabilistic analysis, and ex-         at 280-340◦ C) [26], DBTTs after decades of aging may in-
+     planatory simulations.                                             crease to room temperature, signifying the end of life of
+         We employ transient grating spectroscopy (TGS), a              that component. [25,27]
+55   time-resolved, ultrasonic, non-contact, non-destructive tech-          The extent of thermal embrittlement depends on the al-      110
+
+     nique with picosecond resolution to induce and analyze             loy composition, and how long the material was exposed to
+     100-700 MHz SAWs on polished surfaces of CASS samples              elevated temperatures (time-at-temperature) [28,29]. Low-
+     thermally aged under various conditions. We correlate ma-          carbon grades such as CF3 are the most resistant to em-
+     terial properties obtained via destructive methods such as         brittlement, while high-carbon grades with high Mo con-
+60   Charpy impact testing, microindentation, and nanoinden-            tent are the least resistant to thermal degradation [15].       115
+
+     tation (pseudo-non-destructive) with the observed emer-            This form of thermal degradation and embrittlement is
+     gence of elastically-distinguishable domains through the           caused by various forms of microstructural evolution that
+     generation of new SAW peaks in thermally-aged materi-              ultimately lead to the cleavage of the α-δ ferrite/γ-phase
+     als (hereafter referred to as ”SAW peak splitting”). We            boundary in the δ-phase, and, thus, the separation across
+65   then show both elastodynamically and statistically that            the δ/γ phase boundary [6]. Thermal aging effects due to        120
+
+     the competing hypothesis of orientation-dependent SAW              microstructural degradation in the γ-phase are generally
+     speed variation cannot explain our observations. Finally,          negligible [6], even when G-phase, carbide, and nitride pre-
+     consistent with empirical observations from simulated strain-      cipitates may form slowly when exposed to elevated tem-
+     ing experiments, we show that simulated spinodal decom-            peratures [16].
+70   position also induces stiffening using molecular dynamics              Thermal embrittlement of δ-ferrite in CASS alloys is        125
+
+     (MD) simulations of spinodal decomposition in a model              driven primarily by two microstructural phase transforma-
+     binary Fe-Cr alloy. Linking spinodal decomposition of δ-           tions: spinodal decomposition and nucleation/precipitation
+     ferrite in CASS to stiffening and single-phase, elastody-          of G-phase and carbide precipitates [30–34]. Degradation
+     namically unallowed SAW peak splitting raises the distinct         via spinodal decomposition into nano-sized high-Cr α′ and
+75   possibility of non-destructive, on-site or in-vessel inspec-       high-Fe α phases [4] hardens the δ-phase, reducing its plas-    130
+
+     tion of critical components for continued operation and life       ticity and fracture toughness [35,36]. The precipitation
+     extension of light water reactors (LWRs).                          and growth of carbides, nitrides, and a high-Ni, high-Si G-
+                                                                        phase [37–39] at the δ-γ boundary make cracks more likely
+     2. Background                                                      to propagate through this interface region [15].
+
+     2.1. Embrittlement Mechanisms of CASS in LWRs                      2.2. Detecting Embrittlement in CASS with TGS                   135
+
+80       CASS are a class of alloys primarily composed of iron             TGS is a non-contact, gigahertz ultrasonic testing method
+     (Fe), chromium (Cr), and nickel (Ni) in a duplex structure         that can be used to investigate a wide class of phenomena
+     of austenite (γ) and meta-stable ferrite (δ) phases [12–14],       across various material systems, such as electronic, optical,
+     as shown in Table 1. These materials are highly resis-             thermal and elastic properties. The technique has been
+     tant to corrosion and are therefore predominantly used for
+                                                                    2
+140   recently demonstrated to have applicability to probe irra-       peak splitting.
+      diation and thermal damage to structural materials. [40]             Thus, we hypothesize that the measured distribution
+      In this work, the tool is adopted to quantify thermoelastic      of SAW frequencies in thermally aged CASS will allow us
+      material properties to investigate spinodal decomposition-       to infer embrittlement resulting from spinodal decomposi-      200
+
+      induced embrittlement in CASS. By generating SAWs on             tion, by comparing measured changes in SAW frequencies
+145   a material by utilizing thermal expansion from a 1D, pe-         (or speeds) with theoretical and computational predictions
+      riodic laser intensity profile projected onto the specimen       of expected SAW frequency (or speed) ranges.
+      in question, probe lasers are used measure oscillation and
+      decay of these SAWs, which are then analyzed to calcu-
+                                                                       3. Experimental Methods
+      late material properties. The periodic modulation at the
+150   specimen is given by the laser wavelength and the crossing       3.1. Sample Preparation and Aging Conditions                   205
+      angles, and the wavelength of the excitation pattern de-
+                                                                           The CASS alloys investigated here are 304-type stain-
+      termines the wavelength of the periodic spatial variation,
+                                                                       less steel (nuclear grade CF8) and 316-type stainless steel
+      such that the larger the excitation wavelength, the larger
+                                                                       (nuclear grade CF8M, ’M’ designating higher Mo content),
+      the SAWs that are generated. As a result, micrometer-
+                                                                       and the chemical composition of these alloys is listed in
+155   scale, monochromatic excitation patterns can be used to
+                                                                       Table 1 [13,14]. All samples were cut along the radial-        210
+      probe spatially variant microstructural features, such as
+                                                                       tangential plane of the original, cylindrical casting. CF8
+      the microstructures in CASS. [41] A cartoon illustrating
+                                                                       and CF8M CASS samples were aged by researchers at the
+      the method is displayed in Figure 1.
+                                                                       Pacific Northwest National Laboratory (PNNL) and the
+           A single TGS measurement has a time window of ≈200ns,
+                                                                       Oak Ridge National Laboratory (ORNL) [13,14] to 10,000
+160   so with a sampling rate of ∼1kHz a single trace takes
+                                                                       hours at 290◦ C, 330◦ C, 360◦ C, and 400◦ C, while retaining   215
+      about ≈1ms, enabling tens of thousands of averaged traces
+                                                                       an unaged control sample from each corresponding casting.
+      to ensure robust statistics [42,43]. During this pulse, as
+                                                                       1 mm cross-sectional samples were cut using a low-speed
+      shown in Figure 1, the probe laser diffracts off the ‘tran-
+                                                                       cutoff saw (IsoMet by Buehler), then polished down to
+      sient grating’ produced by the SAWs, and by recording this
+                                                                       0.05 µm grit size using consecutively finer SiC polishing
+165   diffraction signal, the local thermal and elastic properties
+                                                                       papers and an alumina colloidal suspension on a rotating       220
+      may be captured and used as metrics to monitor degra-
+                                                                       mount polishing system. Microstructural characterization
+      dation. A heterodyne detection scheme is used for these
+                                                                       via SEM and TEM, TGS, microindentation, and nanoin-
+      measurements employed to reduce measurement error and
+                                                                       dentation measurements were performed on these samples
+      the practice has been standard for more than a decade
+                                                                       as described below.
+170   for these types of experiments. [43]. Given that the spot
+      size of TGS is about 150 µm, any phases illuminated by
+                                                                       3.2. Charpy Impact Testing                                     225
+      the spot will contribute to the diffraction signal. Changes
+      in the thermoelastic properties returned by TGS can be               Impact tests were performed by researchers at PNNL
+      correlated to material health, from porosity evolution in        [13,14] for 304-type stainless steel (nuclear grade CF8) and
+175   irradiated materials [44] to thermal diffusivity changes in-     316-type stainless steel (nuclear grade CF8M) CASS al-
+      dicating radiation defect formation and clustering [9].          loys aged at 10,000 hours and unaged control samples on
+           Studies have showed that TGS is a viable method to          standard Charpy V-notched samples (10mm × 10mm ×               230
+
+      track changes in material properties indicative of microstruc-   55mm) using a 350J capacity Charpy impact tester. Only
+      tural evolution [44]. Close agreement between observed           the subset of room temperature (RT) Charpy impact en-
+180   results and predictive calculations using classical molecu-      ergies from these measurements are presented here to cor-
+      lar dynamics (MD) simulations have also been established         relate with room temperature (RT) TGS data. [47]
+      [42]. In 2016, Dennett et al. performed benchmark TGS
+      measurements on metallic single crystals that showed a           3.3. Microstructural Characterization                          235
+
+      0.1% absolute sensitivity and <575 ppm relative sensitiv-            TEM characterization was performed on thin-foil spec-
+185   ity, proving its ability to repeatedly detect small changes      imens of 304-type stainless steel (nuclear grade CF8) aged
+      in elastic properties due to material degradation induced        at 400◦ C for 10,000 hours as well as in the unaged condi-
+      by irradiation [42]. Hofmann et al. have also shown TGS          tion that were prepared from 3.0 mm diameter disc sam-
+      measurements of irradiated tungsten to correlate with the-       ples. The samples were mechanically thinned to 100 µm          240
+
+      oretical predictions [45], while Reza et al. showed similar      via electropolishing using a 20% solution of HClO4 and
+190   agreement between TGS and MD simulations of the same             80% CH3 OH at -35◦ C. These specimens were subsequently
+      [46]. In general, MD has been previously shown to in-            analyzed in a Philips CM20 200 kV LaB6 TEM and an
+      form correlations between structural features and material       FEI Talos F200 S/TEM with X-FEG and Super X (4
+      properties. In this study, MD simulation of binary Fe-Cr         SDDs) for STEM-EDX spectrum imaging and microanal-             245
+
+      undergoing spinodal decomposition is used to verify that         ysis. The STEM-EDX Spectrum Image datasets were pro-
+195   stiffening indeed occurs by spinodal decomposition, and          cessed using FEI Velox 2.3 software. Fracture surfaces of
+      can therefore be linked to the empirically observed SAW          the same CF8 alloy specimens (unaged control and aged
+                                                                   3
+           [wt.%]    Fe      Cr         Ni     Mn      Mo       Si     Cu       Co      P       V      [ppmw]       C      S     O      N
+            CF8      Bal    20.01      8.61    0.57     0.3    1.31   0.07     0.08   0.031    0.02      CF8       590    130    36    450
+           CF8M      Bal    20.77     10.16    0.95    2.51    0.85   0.39     0.16   0.023    0.02     CF8M       220     30    53    572
+
+      Table 1: 304-type stainless steel (nuclear grade CF8) and 316-type stainless steel (nuclear grade CF8M) CASS sample compositions in weight
+      percent (wt.%) or parts per million by weight (ppmw) as received from EPRI castings, measured via quantitative analysis by inductively
+      coupled plasma optical emission spectrometry at Dirats Laboratories [13,14]
+
+
+
+      at 400◦ C for 10,000 hrs) were examined in a Zeiss Mer-                 location based on the hardness and elastic modulus at the
+250   lin field emission gun scanning electron microscope (FEG-               same location.
+      SEM) equipped with two Oxford Instruments X-Max 150
+      silicon drift detectors (SDDs) for energy dispersive x-ray              3.5. Transient Grating Spectroscopy (TGS)
+      (EDX) microanalysis.                                                        The same experimental system described in Ref. [53]              300
+
+                                                                              and shown in Figure 1 of Ref. [43] was used in this work.
+      3.4. Micro and Nanoindentation                                          Ten TGS acquisitions, each consisting of the average of
+255       Vickers microhardness indents were performed on the                 a sequential batch of 10,000 traces, were taken in both
+      complete set of 304-type stainless steel (nuclear grade CF8)            air and in rough vacuum (20 mTorr) on each sample, re-
+      samples aged for 10,000 hours along with an unaged con-                 sulting in twenty acquisitions for each of the five mate-            305
+
+      trol via a Vickers LECO Microhardness tester using a 5g                 rials (unaged, plus 10,000 hours each at 290◦ C, 330◦ C,
+      force and the ConfiDent software package. This both min-                360◦ C, and 400◦ C). SAW excitation was performed using
+260   imized indentation size and localized the indent entirely               a passively Q-switched, 532nm, solid state laser (TEEM
+      within either austenite or δ-ferrite grains. Hardness val-              Photonics STG-03E-120) with a pulse length of ∼300ps, a
+      ues were calculated by manually inspecting and labelling                pulse power of ∼6µJ, and a repetition rate of ∼1kHz. The             310
+
+      diagonals using commercial software tied to an optical mi-              laser spot size was measured to be ∼140µm at the sample
+      croscope attached to the instrument. A dwell time of                    surface. The probe laser source was a 785nm, CW diode
+265   15 seconds was used, and the indent size was measured                   laser (Thorlabs LD785-SEV300 with LTC100-B controller)
+      as the average of the two diagonals. The instrument was                 modulated to a repetition rate of ∼1kHz with a 25% duty
+      calibrated using a 500g force on a known sample using the               cycle using an optical chopper wheel and a spot size at              315
+
+      same software.                                                          the sample surface of ∼105µm. Silicon avalanche pho-
+          Nanoindentation measurements were also performed on                 todiode detectors (Hamamatsu C5658) with a 50 kHz-1
+270   the complete set of 304-type stainless steel (nuclear grade             GHz bandwidth were used to detect the dual-heterodyne-
+      CF8) alloy specimens aged for 10,000 hours along with an                amplified probe signal. Both phase outputs were concur-
+      unaged control using a Hysitron TI 950 TriboIndenter with               rently recorded on a dual-band ∼5GHz digital oscilloscope            320
+
+      a Berkovich diamond indenter tip. Samples were tested                   acquiring ∼40GSamples/sec. Heterodyne detection both
+      under load control using a trapezoidal load function, with              greatly amplifies the admittedly weak signal, and the dual
+275   10 seconds loading, 5 seconds holding, 10 seconds unload-               heterodyne configuration used in our experiment automat-
+      ing with a peak force of 10 mN. A 25×25 grid of indents                 ically removes many sources of noise by doubling the opti-
+      were performed in a 120×120 µm area with 5 µm in be-                    cal signal strength (by subtracting the negative phase sig-          325
+
+      tween indents to avoid plastic zone overlap. Raw displace-              nal from the positive one) while simultaneously removing
+      ment curves collected from nanoindentation were analyzed                any common-mode fluctuations by the same mathematical
+280   using Oliver-Pharr analysis to calculate reduced modulus,               operation. [43]
+      contact stiffness, and nanohardness [48]. In our case, the                  TGS signals contain two dominant components: (1)
+      Poisson’s ratio used for CASS was 0.28 [49]. The tip area               SAW and/or pseudo-SAW (PSAW) oscillations at one or                  330
+
+      function was obtained by calibrating the tool against fused             more frequencies and (2) a decaying thermal background
+      quartz (hardness 9.25 GPa, reduced modulus 69.6 GPa)                    as the induced temperature profile equilibriates [44]. The
+285       Processed data from performing Oliver-Pharr analysis                time-domain responses may be fitted to a known thermoa-
+      on nanoindentation results were analyzed using Bayesian                 coustic response model to obtain values for thermal dif-
+      Information Criterion (BIC) phase clustering, a method                  fusivity [41]. (P)SAW propagation speeds are extracted               335
+
+      of automatically grouping sets of nominally independent                 using a a peak-finding algorithm from the filtered power
+      data, to determine the material properties in each phase                spectrum of the time-domain response to identify the dom-
+290   of the material as described in [50–52]. This was achieved              inant acoustic modes present. Figure 2 shows raw TGS
+      by interpolating material property values across the spa-               responses on aged and un-aged CASS exhibiting a single
+      tial grid of indents, and then clustering the data by plot-             and multiple SAW propagation speeds, respectively. Ab-               340
+
+      ting hardness vs. elastic modulus. The optimal number of                solute (P)SAW velocities can be recovered by multiplying
+      phases in each indentation map is determined in a statisti-             the peak frequencies by Λ, but for this work comparisons
+295   cal manner by taking the number of phases that minimize                 will be carried out in frequency space as a uniform grating
+      the overall BIC error and assigning a phase to each spatial             of nominally Λ = 6.4 µm was applied for all measurements.
+                                                                          4
+345   The wavelength in the selected measurement does not in-                                    Elastic Constant [GPa]
+                                                                                Material                                             Ref.
+      fluence whether or not the sampling is non-uniform. No                                      C11    C12      C44
+      matter what the grating spacing, the depth profile of the                                  229.0 135.8     116.8               [59]
+                                                                               M-X (Calc.)
+      Rayleigh-type wave will always look the same for a given                                   200.4 129.3     125.8               [60]
+      orientation and is decidedly non-uniform. [54] However, at                SC (Exp.)        204.6 137.7     126.2               [61]
+350   the selected grating spacing, SAWs for both the tungsten                 Poly. (Exp.)      261.4 106.6      —                  [61]
+      calibration sample and the steels under investigation are
+      well below the 1GHz limitation of our detector electron-            Table 2: Values of elastic constants for single crystal (SC) and poly-
+                                                                          crystalline (poly.) 304-type stainless steel
+      ics, thus ensuring a well-resolved SAW signal. Keeping the
+      grating spacing the same between tungsten calibration and
+355   experiments, and particularly using the same spot on the            the elastic tensor used to predict this range is shown in
+      phase mask, serves as a fine calibration of the actual grat-        Table. 2. The theoretical variation can be validated with
+      ing spacing (which may differ from the nominal grating              high certainty based on robust statistics from TGS mea-
+      spacing by 0.8% at most), allowing even finer resolution            surements. If the variation in TGS measurements fall
+      in SAW frequencies after calibration. The analysis code             within the range of elastodynamically-allowed frequencies,               405
+360   base for TGS responses is available alongside all raw ex-           then polycrystallinity is the explanation. However, if fre-
+      perimental data in the repository for this manuscript.              quencies are observed outside of what is elastodynami-
+                                                                          cally determined, then another mechanism beyond poly-
+      3.6. Expected (P)SAW Frequency Calculations                         crstallinity, texture, orientation, and grain size is respon-
+          Changes in the frequency of SAWs/PSAWs or the pres-             sible, such as the growth of a new phase with different                  410
+      ence of multiple (P)SAW modes in a given TGS measure-               elastic properties, like spinodal decomposition, which al-
+365   ment may, in principle, be attributed to multiple sources.          ters the parameters influencing the solution to the elasto-
+      Most simply, for elastically anisotropic crystals the ob-           dynamic wave equation.
+      served acoustic wave velocities are strongly dependent on               For a given set of elastic material properties, the ex-
+      the direction of propagation of the acoustic wave [55]. Ad-         pected (P)SAW velocities may be calculated by seeking a                  415
+      ditionally, for polycrystals with grain sizes on the order of       Green’s function solution to the elastodynamic equation
+370   the TGS measurement spot size, multiple grains of differ-           in an infinite half-space. Descriptions of solutions to this
+      ent relative orientations may simultaneously contribute to          problem are well-reported in the literature and will not
+      the aggregate measured signal [56]. Therefore, such elastic         be reproduced here [55,57,58]. In this work, we adopt the
+      anisotropy and polycrystalline features of the acoustic re-         method of Du et al. implemented in MATLAB to calculate                   420
+      sponse must be systematically investigated to ensure that           (P)SAW velocities for given crystal elastic constants, den-
+375   the presence of SAW peak splitting in aged CASS is in-              sities, and acoustic wave polarizations [57]. Pure Rayleigh-
+      deed an effect of the aging process itself, and not simply          type SAWs are almost always induced, and along some
+      an artifact of crystal anisotropy.                                  directions ’leaky’ or PSAW modes which radiate energy
+          It is worth noting that thermal aging in CASS may               away into the depth of the crystal will also be induced [55].            425
+      change the grain size, texture, or orientation of polycrys-         These PSAW modes will always have velocities greater
+380   talline material, and therefore cannot be immediately ex-           than those of the pure SAW modes for a given direc-
+      cluded as an explanation for observed peak splitting. How-          tion. As discussed later, high-frequency acoustic modes
+      ever, in practice, a relatively small number of spots on a          are sometimes observed to split from the primary TGS
+      polycrystalline surface are measured via TGS, which may             peak. As such, a determination of all elastodynamically                  430
+      give rise to multiple frequency responses. Randomly sam-            allowed (P)SAW modes in unaged CASS is necessary to
+385   pling spots of different orientations and textures and grain        determine whether the peak splitting is due to microstruc-
+      sizes at different orientations on the surface is one rea-          tural degradation induced by thermal aging.
+      son why multiple peaks in the Fourier transform of the                  To do so, literature values for the elastic constants of
+      TGS signal may be observed at one condition. If the tex-            CASS CF8 (304-type stainless steel) as shown in Table 2                  435
+      ture or grain size is changed, like changes in orientation,         we used as inputs to the method of Du et al. [57]. The
+390   the probability of seeing multiple frequency responses also         materials under investigation are untextured polycrystals,
+      changes, but is still affected by randomly sampling the             therefore to investigate the range of possible (P)SAW ve-
+      polycrystalline surface illuminated by TGS. This only in-           locities measurable in experiment, acoustic polarizations
+      creases or decreases the likelihood of multiple frequency           were randomly selected in Euler angle space and velocities               440
+      responses depending on several factors, but does not ex-            calculated until the resulting distribution converged. This
+395   clude polycrystallinity as a source of multiple frequency           distribution of (P)SAW frequencies (assuming an applied
+      responses. However, the elastodynamically-allowed range             TGS grating spacing of 6.4 µm) determines the elastody-
+      of variation due to these changes in texture, grain-size,           namically allowable frequencies for pristine CASS CF8. If
+      and orientation due to polycrystallinity is deterministic           (P)SAW frequencies are experimentally observed outside                   445
+      and is predicted by the theory of elasticity using the elas-        of those expected due to anisotropy alone, then the change
+400   tic tensor for any given material. In the case of CASS,
+                                                                      5
+      must be due to some underlying microstructural evolution.           3.8. Quantification of Spinodal Decomposition Dynamics
+                                                                               via Spinodal Wavelength and Wavenumber
+      3.7. Molecular Dynamics (MD) of Binary Fe-Cr Stiffen-                   To measure spinodal wavelength, image analysis of the       500
+           ing during Spinodal Decomposition                              structures generated was carried out in ImageJ [64]. By
+450       MD simulations were performed to confirm that stiff-            performing a Fast Fourier Transform (FFT), a radially-
+      ening would be predicted as a result of spinodal composi-           averaged intensity profile as a function of the distance from
+      tion using a model binary Fe-Cr alloy system. The scripts           the center of the spectrum was generated. The characteris-
+      however can easily be adjusted to look at different com-            tic spinodal wavelength λ(t)F F T and wavenumber k(t)F F T      505
+
+      positions of different alloy systems. MD was implemented            were calculated according to Eq. 2-3, or Bragg’s formula:
+455   using the LAMMPS (Large-scale Atomic/Molecular Mas-
+      sively Parallel Simulator) toolkit [62] to produce structures
+      with varying degrees of spinodal decomposition. By com-                     λ(t)F FT
+                                                                                      F eCr [nm] = r(t)[pixel] × s[nm/pixel]       (2)
+      putationally measuring their stiffness, a relationship be-
+      tween spinodal decomposition extend and stiffening could                                                   θ(r)
+                                                                                       k(t)F F T [nm−1 ] =                         (3)
+460   be determined.                                                                                         λ(t)F F T [nm]
+          Initially, a 50x50x50 cell structure was generated, com-        where s is the scale ratio and r is the distance from the
+      prising 250,000 atoms. The composition was 50% iron and             center of the radially-averaged intensity spectrum obtained
+      50% chromium, with atoms initially randomly dispersed.              at θ = 2π in the intensity profile generated via FFT. To
+      The energies of an Fe-Fe or Cr-Cr bond were set to 0 eV             validate the theoretical results of the Fe-Cr model binary      510
+465   and the Fe-Cr bond energy was set to 10 eV, the latter              alloy, the same process of FFT image analysis was per-
+      being an arbitrary value used for the practical purpose of          formed on STEM-EDX elemental maps of Fe and Cr in
+      quickly creating a fully-mixed structure for further ma-            304-type stainless steel (CASS CF8) to obtain experimen-
+      nipulation (see Figure 7a1). Subsequently, a Monte Carlo            tal values of λ(t)F F T and k(t)F F T .
+      simulation was carried out to partially unmix some of the
+470   structures, in which 60,000 potential atom swaps were car-
+      ried out. If the swap satisfies Eq:                                 4. Results                                                      515
+
+
+
+
+                                                                        4.1. Tabular Summary of Charpy Impact Testing, Vickers
+                                    ∆E                                         Hardness, Nanoindentation, and TGS Double Peak
+                          x < exp −                            (1)
+                                    kB T                                       Incidence
+                                                                              Table 3 provides a summary of the results obtained in
+          it will be carried out, where x is a random number              this study, showing how thermal aging is correlated di-         520
+      between 0 and 1, ∆E is the energy change in the system              rectly with decreased Charpy energy, increased Vickers
+      due to the swap, kB is Boltzmann’s constant, and T is               and nanohardnesses in spinodally decomposed δ-ferrite,
+475   the temperature which was set to 10 K for the swapping              and an increased incidence of (P)SAW peak splitting. The
+      process.                                                            raw data and complete, unprocessed datasets from which
+          The Monte Carlo simulation produces a Fe-Cr struc-              these results are derived are available at the data reposi-     525
+      ture that has undergone spinodal decomposition, with dis-           tory for this manuscript.
+      tinct regions of almost pure Cr and almost pure Fe. In
+480   order to show the effects of spinodal decomposition as              4.2. Microstructural Characterization
+      it progresses, these regions are converted from regions of
+      pure material to regions of different compositions. Start-              The fracture surfaces of two 304-type stainless steel
+      ing from the decomposed structure, 10% of the iron atoms            (nuclear grade CF8) specimens, one unaged and one aged
+      in the pure iron region are converted to chromium atoms             at 400C for 10kh, are shown in Figure 3. SEM analysis           530
+
+
+485   and 10% of the chromium atoms in the pure chromium re-              of unaged CF8 (Figure 3a-b) shows more ductile features,
+      gion are converted to iron atoms, thus producing a region           typical of a tougher material as evidenced by the higher
+      with 10 at.% iron and a region with 90 at.% iron. This was          Charpy impact energies in Table 3. SEM analysis of the
+      repeated for conversions of 20%, 30%, 40%, and 50%. The             400◦ C, 10kh-aged CF8 shows more brittle cleavage planes
+      structure with 50% conversion will have been returned to            (Figure 3c-d), associated with lower Charpy impact ener-        535
+
+
+490   the completely random structure.                                    gies. TEM dark-field imaging and STEM-EDX revealed
+          The elastic constant tensor was calculated for the al-          that the 400◦ C, 10kh aged CF8 specimen had indeed un-
+      loy at each different conversion using the embedded atom            dergone both spinodal decomposition and G-phase precip-
+      method (EAM) potential developed by Bonny et al. [63].              itation, evident as homogeneous Fe/Cr separation (Fig-
+      This was repeated for 10 different randomly generated al-           ure 3g) and Ni-rich precipitates roughly 5 nm in diameter       540
+
+
+495   loys and was used to extract the value of C11 , the bulk            (Figure 3e,h), respectively. The austenite only exhibited
+      modulus, the shear modulus, and the Poisson’s ratio for             a regular dislocation microstructure, with no evidence of
+      each conversion.                                                    phase precipitation or decomposition (Figure 3f).
+
+                                                                      6
+                    Aging      Aging      Charpy          HV5gf     HN anoind. [GPa]   EN anoind. [GPa]     TGS [MHz]       ∆f
+       Material                                                                                                                    NP eak Splits
+                  Time [hrs]   T [◦ C]   Energy [J]     γ       δ     γ         δ         γ         δ     fSAW,1 fSAW,2   [MHz]
+                                RT          88.5      241.8 411.6   5.459     8.056     214.7     250.0    392.8  405.1    12.3       0 / 20
+                                290         51.0      292.0 322.8   4.352     4.843     188.4     197.0    429.0  560.2    131.2     20 / 20
+                   10,000       330         24.0      282.2 372.8   3.898     5.641     215.6     261.9    458.3  586.2    128.0     19 / 20
+                                360         14.0      256.4 450.8   3.718     6.457     194.2     221.7    394.0  622.7    228.7     17 / 20
+                                400         15.0      239.7 298.3   3.538     4.422    127.9*     152.1    422.9  558.3    135.4     18 / 20
+         CF8
+                                RT         172.0      237.8 289.4   3.868     4.582     212.0     225.6    392.3  415.3    23.0       4 / 20
+                                290        174.6      241.0 320.6   4.093     5.169     197.4     233.7    396.1  539.7    143.6     13 / 20
+                   30,000       330         25.1      224.6 388.8   3.427     6.827     180.3     216.6    425.9  504.1    78.2      15 / 20
+                                360         21.0      221.4 548.2   3.640     8.130     236.2     249.5    417.3  589.0    172.7     17 / 20
+                                400         21.0      200.4 543.2   3.256     8.824     157.7     204.0    438.2  568.9    130.7     18 / 20
+                                RT         108.0      218.4 294.2   3.627     4.195     206.4     216.3    396.6  430.1    33.5       5 / 20
+                                290        111.0      227.0 395.8   3.487     4.692    110.6* 128.8*       365.2  583.1    217.8     19 / 20
+                   10,000       330         81.0      236.4 452.6   3.598     6.560     193.6     229.7    438.6  553.3    114.7     20 / 20
+                                360         52.0      215.2 498.2   3.363     7.260     164.0     203.0    358.4  605.5    247.1     20 / 20
+                                400         49.0      227.6 612.6   3.483     7.884     114.3     151.1    411.9  525.7    113.9     12 / 20
+        CF8M
+                                RT         182.0      220.8 289.4   3.706     4.496     153.2     161.0    435.2  473.2    38.0       4 / 20
+                                290        201.3      222.2 304.2   3.524     4.621     177.5     198.7    392.4  497.7    105.2     19 / 20
+                   30,000       330         50.2      226.2 520.2   3.635     7.518     115.4     148.1    406.4  574.9    168.5     15 / 20
+                                360         44.1      242.0 555.8   3.372     6.175      36.3      46.6    413.8  585.3    171.5     20 / 20
+                                400         52.2      239.2 589.0   2.966     8.009     51.5*     76.8*    447.2  559.1    111.9     13 / 20
+
+      Table 3: Numerical summary of all results in this study, including Charpy impact energies, Vickers microhardnesses in γ and δ phases,
+      nanohardness in γ and δ phases, nanostiffness in γ and δ phases, average SAW frequencies, difference in average SAW frequencies, and
+      number of SAW peak splits observed. Asterisks denote failed indents reported along with the data reported for consistency across all
+      indentation experiments performed, as expected from the sources of error in nanoindentation.
+
+
+      4.3. Mechanical Property Characterization                                4.4. TGS SAW Analysis                                               575
+
+545       A summary of the most relevant mechanical property                       Representative TGS signals from unaged and aged CASS,
+      changes as measured by Vickers microhardness and nanoin-                 as well as a complete graphical summary of SAW peak
+      dentation is shown in Figure 4. The thermally aged 304-                  splitting incidence, are shown in Figure 5. In Figure 5a,
+      type stainless steel (nuclear grade CF8) and 316-type stain-             a representative time-domain TGS signal from 304-type
+      less steel (nuclear grade CF8M) specimens were observed                  stainless steel (nuclear grade CF8) is shown. Representa- 580
+550   to undergo clear hardening in the δ-ferrite regions (Fig-                tive TGS signals from unaged CF8 (Figure 5b) and 400◦ C,
+      ure 4b and blue markers in 4c) as well as stiffening in                  10kh-aged CF8 (Figure 5c) are shown for comparison, with
+      the δ-ferrite regions (red markers in Figure 4d), while the              the latter exhibiting a second SAW peak in the signal’s
+      austenite regions remained unaffected (Figure 4a, black                  Fourier transform. As is evident in the last column of
+      markers in 4b, and green markers in 4c). Relative trends                 Table 3, SAW peak splitting was only occasionally ob- 585
+555   in Vickers microhardness show clear increases in hardness                served in unaged specimens, while most but not all signals
+      as a function of aging temperature for equivalent times in               from aged CASS exhibited SAW peak splitting. Figure 5d
+      all alloys, save for one outlier for the 400◦ C, 10kh aged CF8           summarizes this information, showing that all aged CASS
+      specimen. Example maps of nanohardness for the 400◦ C,                   specimens in this study exhibited statistically more SAW
+      30kh-aged CF8 and nanostiffness for the 400◦ C, 10kh-                    peak splitting than their unaged reference materials. This 590
+560   aged CF8 are shown in Figure 4c and Figure 4d, respec-                   is believed to result from the grain sizes in CASS being
+      tively. Nanoindentation locations are marked with small                  on the same length scale as the ∼140µm TGS spot size.
+      circles or squares, color-coded by phases auto-identified                Based on the beam spot size and the statistics for twenty
+      from BIC clustering (Figure 4e). When comparing the                      spot TGS measurements on each sample, the randomly-
+      nanoindentation-mapped features in Figure 4c-d with op-                  sampled TGS measurements, therefore, may be represen- 595
+565   tical micrographs such as that in Figure 4f, it is clear that            tative of areas containing only austenite, only δ-ferrite, or
+      the darker regions (δ-ferrite) are undergoing relative stiff-            some combination of both.
+      ening and hardening compared to the γ phases. These                          Two potential mechanistic reasons for SAW peak split-
+      properties are often tightly correlated [65,66]. It should               ting exist: (1) The effect of random grain orientation and
+      be noted from the data in Table 3 that absolute trends                   associated elastic anisotropy resulting in multiple SAW 600
+570   in nanoindentation-measured properties are not consistent                peaks from a single measurement, and (2) the relative stiff-
+      across different times at temperature for both alloys, thus              ening of the δ-ferrite established in Sec. 4.3 resulting in
+      these results should only be used to confirm that the δ-                 the second, higher-frequency SAW peak. This discrimina-
+      ferrite is indeed the stiffer and harder region in these spec-           tion between these two competing hypotheses occupies the
+      imens.                                                                   remainder of this work.                                       605
+
+
+
+
+                                                                           7
+                                                                                                FFT
+                                                                    λ(t)F FT                 ⃗
+                                                                                           |k(t)               −1
+          Material     % Spinodal Decomp.         % Conversion          Spinodal [nm]            Spinodal | [nm   ]   Method
+          Fe-Cr        50                         0.5               4.19                   1.50                       MD-AKMC-FFT
+          Fe-Cr        60                         0.4               4.28                   1.47                       MD-AKMC-FFT
+          Fe-Cr        70                         0.3               4.45                   1.41                       MD-AKMC-FFT
+          Fe-Cr        80                         0.2               4.61                   1.36                       MD-AKMC-FFT
+          Fe-Cr        90                         0.1               4.70                   1.34                       MD-AKMC-FFT
+          Fe-Cr        100                        0.0               4.81                   1.31                       MD-AKMC-FFT
+          SS304        95                         0.05*             4.76                   1.32                       STEM-EDX-FFT
+
+      Table 4: Results from FFT image analysis performed to obtain spinodal wavelength and wavenumbers from AKMC Fe-Cr model structures
+      in comparison to STEM-EDX map of 304-type stainless steel. Percent spinodal decomposition and conversion fraction for 304-type stainless
+      steel obtained via linear interpolation from its corresponding STEM-EDX-FFT radially averaged intensity map.
+
+
+      4.5. Elastodynamic Wave Calculations                                   obtained via FFT analysis are λ(t)F       FT
+                                                                                                                     SS304 = 4.76nm and
+          The results of elastodynamic Green’s function wave                 λ(t)F  FT
+                                                                                  F eCr = 4.81nm.
+      calculations at a large sample of random crystal orienta-                   The MD results show that for an Fe-Cr alloy, spinodal
+      tions are summarized in Figure 6. The results show that                decomposition causes increased stiffness, linked indirectly         650
+
+
+610   there exists an elastodynamically unallowed region beyond              to a decrease in ductility from Charpy impact experiments.
+      609 MHz, where no SAW or PSAW modes are present.                       This is expected given that Fe-Fe and Cr-Cr bonds are
+      Beyond this frequency range only bulk wave modes are                   stronger and more stable than Fe-Cr bonds, which leads
+      present at a much higher frequency which we would not ob-              to a higher bond energy and therefore a higher stiffness in a
+      serve due to a 1GHz limitation in our detection electronics.           spinodal structure of like atoms. This can be quantified by         655
+
+
+615   Even if they were there to be observed, they damp away ex-             the elastic modulus and is explained by the spring model
+      tremely quickly relative to the (P)SAWs that you measure               for bonded atoms, where the elastic modulus is directly
+      in practice. [67]. It is in this elastodynamically unallowed           proportional to the bond energy and the second derivative
+      region that some of the higher frequency (P)SAW peaks                  of the bond potential. [69] Therefore, as shown in Fig-
+      were observed, providing evidence that grain orientation               ure 8, the extent of spinodal decomposition is expected             660
+
+620   is not solely responsible for their appearance. This will be           to increase proportionally to the magnitude of increase in
+      addressed more carefully in the Discussion section.                    stiffness, as a correlation between a decrease in Charpy
+                                                                             impact energy (change in ductility attributed to spinodal
+      4.6. Molecular Dynamics of Binary Fe-Cr Stiffening dur-                decomposition) and increases in SAW frequencies in the
+           ing Spinodal Decomposition                                        2nd (faster) peak are observed. The discrepancy between             665
+
+                                                                             the characteristic length and spatial frequency in the Fe-Cr
+          Our results have shown that spinodal decomposition
+                                                                             AKMC model results and STEM-EDX maps of 304-type
+625   can be a cause for increasing stiffness in alloys, similar
+                                                                             stainless steel (nuclear grade CF8) is likely attributed to
+      to the work of Zhang et al who showed that developing
+                                                                             the alloying elements present that were not incorporated
+      regions of local chemical heterogeneity also increased the
+                                                                             into the binary alloy model. While the simulations showed           670
+      Young’s modulus of an alloy [68]. By looking at one of the
+                                                                             an increase in stiffness, just like the actual alloy, the mag-
+      simplest alloy examples and the simplest composition, the
+                                                                             nitude of the increase was not as high. This could be due
+630   general relationship between the two can be more clearly
+                                                                             to the simulated, model alloy not being a perfect represen-
+      seen. No other conditions were changed in the simulation
+                                                                             tation of the experimentally investigated steel. More sim-
+      other than the positions of the atoms, so the spinodal con-
+                                                                             ulations which more accurately represent the steel used             675
+      version of the structure is the only factor that could cause
+                                                                             in the reactor should be done in order to gauge a more
+      a change in stiffness.
+                                                                             accurate value for the stiffness change due to spinodal de-
+635       Looking at Figure 8, the relationship between spinodal
+                                                                             composition. Nevertheless, the increasing stiffness trends
+      decomposition and stiffness is clear. Decreasingly random
+                                                                             in the MD simulations of spinodal decomposition in binary
+      Fe-Cr structures where like atoms have been grouped to-
+                                                                             Fe-Cr alloys shown in Fig. [8] strengthen this assertion            680
+      gether in spinodal-like groupings induced higher simulated
+      modulus, up to a 5.4% increase.
+640       The model for stiffening of binary Fe-Cr during spin-              5. Discussion
+      odal decomposition using the EAM was validated by com-
+      paring the characteristic spinodal wavelength and wavenum-                 As would be expected based on prior literature [11,16],
+      ber, λ(t)F F T and k(t)F F T , from the vacancy-driven atom-           thermal aging of 304-type stainless steel (CASS nuclear
+      istic kinetic Monte Carlo (AKMC) simulation to exper-                  grade CF8) and 316-type stainless steel (CASS nuclear
+645   imental elemental maps obtained from STEM-EDX. As                      grade CF8M) CASS indeed produced the changes in ma-                 685
+
+
+      shown in Table 4, the characteristic spinodal wavelengths              terial properties typical of embrittlement due to spinodal
+                                                                             decomposition and G-phase precipitation. These two mi-
+
+                                                                         8
+      crostructural changes have long been linked with loss of            the same length scale as the grating period, are present         745
+
+      ductility and toughness, as observed in previous studies            in the area illuminated by TGS, it is expected that they
+690   and this one. However, the new physical insight is that             will produce different SAW frequencies. A higher stiffness
+      stiffening in δ-ferrite provides a new observable window            would lead to a higher frequency, which is what was ob-
+      into the extent of embrittlement by spinodal decomposi-             served in the δ-ferrite grains that were stiffened by spin-
+      tion in thermally aged CASS. This is supported by the               odal decomposition. It is worth noting that if you had           750
+
+      correlation between stiffness and hardness in a wide range          other phases that were significantly smaller than the grat-
+695   of materials, from metals to cermets to superhard oxides            ing period, a continuum would be observed and only an
+      [65,66]. Figure 3 demonstrated that both spinodal decom-            effective frequency response from the phase(s) at the same
+      position and G-phase were observed in the same materials            length scale as the grating period would be measured.
+      which exhibited decreased Charpy impact energy in Ta-                    The results from this study strongly suggest that the       755
+
+      ble 3 and increased Vickers hardness in Figure 4b. These            higher incidence of TGS-observed SAW peak splitting is
+700   same specimens exhibited significantly more SAW peak                due to spinodal decomposition of thermally aged CASS.
+      splitting as evidenced in Figure 5, particularly at frequen-        TGS can therefore be used to detect spinodal decompo-
+      cies shown to be in an elastodynamically unallowed region           sition in mission-critical components, such as core barrels
+      beyond (P)SAW frequencies expected in 304-type stainless            or primary-side piping in nuclear reactors, simply by a          760
+
+      steel (CASS nuclear grade CF8) from Figure 6. Finally,              higher incidence of SAW peak splitting compared to un-
+705   MD simulations showed that spinodal decomposition in                aged materials. The need to proactively monitor such ma-
+      a binary Fe-Cr model alloy, nominally similar in composi-           terials for light water reactors underpins our ability to seek
+      tion to CASS and to the structure of δ-ferrite, also exhibits       life extensions, thus TGS could represent a powerful new
+      stiffening. These results point strongly to the stiffening of       tool to quickly and non-destructively determine whether          765
+
+      δ-ferrite in CASS due to spinodal decomposition. This               a CASS component is still fit for service. The incidence
+710   demonstrates the co-location of the SAW measurements                of SAW peak splitting would indicate spinodal decompo-
+      in δ-ferrite grains that have undergone spinodal decom-             sition, and the average difference between observed SAW
+      position, and enables the non-contact, non-destructive de-          frequencies correlates to its relative Charpy impact energy
+      tection of hardening by spinodal decomposition through              [11]. The same changes in properties induced by ther-            770
+
+      co-located stiffening. As a result of thermal aging, coinci-        mal aging are exacerbated by simultaneous neutron irra-
+715   dent split peak SAWs were measured in hardened δ-ferrite,           diation aging [70], thus the non-contact, non-destructive
+      indicative of spinodal decomposition, [[17]] which were also        nature of this finding enabled by the physical insight of
+      found to be stiffened.                                              spinodal decomposition-induced stiffening represents both
+           A particularly important point should be made in com-          useful science and its potentially impactful, practical ap-      775
+
+      paring the likelihood of two competing hypotheses to ex-            plication.
+720   plain the observed incidence of SAW peak splitting. It                   Accordingly, this result shows a relationship for a Fe-Cr
+      is well known that CASS is elastically anisotropic, as is           alloy, but that does not prove a result for all alloy systems.
+      evident from the elastic constants in Table 2, which give           By simply adding alloying elements and their composition
+      a range of Zener anisotropy ratios of A=2.5-3.8. There-             in the scripts, other alloys with different compositions can     780
+
+      fore, different orientation relationships between the im-           be explored. This comes at a fundamental tradeoff be-
+725   posed TGS grating and the orientation of the particular             tween accuracy and complexity given that the number of
+      grain(s) under investigation could lead to two SAW peaks,           atoms that can be computed in any given structure are
+      as illuminating two nearby grains with different orienta-           limited by the computational capacity of the system used.
+      tions should induce SAWs and/or PSAWs characteristic                A more accurate comparison to the 304-type stainless steel       785
+
+      of each. This could theoretically explain the observations          (CASS nuclear grade CF8) can be explored by mirroring
+730   of SAW peak splitting, if two important facts were to be            the same chemical composition. For example, adding Ni
+      omitted. First is the statistically significant (p-value =          to the alloy could more accurately represent the steel’s
+      0.0015 from t-test, indicating 99.85% confidence in a trend         composition but would introduce more complexity given
+      present), increased occurrence of SAW peak splitting on             the additional material degradation that can occur with          790
+
+      aged CASS specimens known to have undergone spinodal                the presence of Ni, i.e. G-phase precipitation. Adding C
+735   decomposition, evident in Figure 5. Second is the obser-            and Si could be used to explore the effects of carbide and
+      vation of SAW frequencies in the elastodynamically un-              silicide precipitations that also occur as a result of ther-
+      allowed region, assuming the elastic constants in Table 2           mal aging. The interactions between all of the alloying
+      are used. Knowing that δ-ferrite stiffens from Figure 4             elements present in alloy CF8 can be explored by incorpo-        795
+
+      means that its elastic constants should change as aging             rating them all into a single simulation with a systematic
+740   occurs, which would change the allowable (P)SAW modes               study performed in this manner.
+      to be observed. Figure 9 graphically illustrates this coinci-            Practical issues remain when proposing to use TGS as
+      dence, where only thermally aged CASS specimens exhibit             a field inspection technique to identify spinodal decompo-
+      (P)SAW frequencies in the theoretically predicted, elasto-          sition in CASS, such as the need for a non-moving, reflec-       800
+
+      dynamically unallowed region. If two or more phases, at             tive surface so as not to scatter the laser light. This study
+                                                                      9
+      motivates the engineering development of a robust TGS                Declaration of Interest Statement
+      inspection system for critical LWR component inspection.
+                                                                               The authors declare that they have no known compet-
+                                                                           ing financial interests or personal relationships that could
+      6. Conclusion                                                        have appeared to influence the work reported in this paper.
+805        We demonstrate that spinodal decomposition induces
+      stiffening in thermally aged cast austenitic stainless steels        References                                                                855
+
+      (CASS), detectable by non-contact, non-destructive, pi-
+                                                                            [1] United States NRC. 50.65 requirements for monitoring the effec-
+      cosecond ultrasonics. When non-destructively evaluating                   tiveness of maintenance at nuclear power plants. NRC Library,
+      CASS for embrittlement due to spinodal decomposition,                     April 2017. Available at https://www.nrc.gov/reading-rm/doc-
+810   the statistically significant, increased incidence of SAW                 collections/cfr/part050/part050-0065.html.
+      peak splitting in the Fourier transform of TGS time-domain            [2] S. J. Zinkle and J. T. Busby. Structural materials for fission       860
+                                                                                & fusion energy. Mater. Today, 12(11):12 – 19, 2009. Figure
+      signals is the hallmark of δ-ferrite stiffening and hardening             adapted from Roger Staehle, Beaune Workshop 2008.
+      throughout microstructural evolution and degradation as               [3] M. K. Miller and J. Bentley. APFIM and AEM investigation
+      a result of thermal and irradiation aging.                                of CF8 and CF8M primary coolant pipe steels. Mater. Sci.
+815        In summary, it has been shown that spinodal decom-                   Technol., 6(3):285–292, 1990.                                        865
+                                                                            [4] S. L. Li, Y. L. Wang, H. L. Zhang, S. X. Li, K. Zheng, F. Xue,
+      position leads to increased stiffness in aged 304-type stain-             and X. T. Wang. Microstructure evolution and impact fracture
+      less steels (nuclear grade CF8) in reactor pressure vessels.              behaviors of z3cn20-09m stainless steels after long-term thermal
+      This key structure-property relationship is what enables                  aging. J. Nucl. Mater., 433(1):41 – 49, 2013.
+                                                                            [5] Yuichi Ishikawa and Toshihiko Yoshimura. Electrochemical and         870
+      non-destructive qualification nuclear reactor components                  atom probe studies of cast and aged duplex stainless steel.
+820   for continued service. TGS or similar elastic property mea-               Mater. Trans., JIM, 35(12):895–901, 1994.
+      surements could be used to inspect mission-critical com-              [6] Y. Chen, B. Alexandreanu, W.-Y. Chen, K. Natesan, Z. Li,
+      ponents in nuclear reactors, as well as many other appli-                 Y. Yang, and A. S. Rao. Cracking behavior of thermally aged
+                                                                                and irradiated cf-8 cast austenitic stainless steel. J. Nucl.        875
+      cations determining whether they are fit to serve based on                Mater., 466:560 – 568, 2015.
+      indirect measurement of their key mechanical properties               [7] Lawrence E Nielsen. The thermal and electrical conductivity of
+825   from which the underlying microstructural state can be                    two-phase systems. Industrial & Engineering chemistry funda-
+      inferred.                                                                 mentals, 13(1):17–20, 1974.
+                                                                            [8] RB Dingle. The electrical conductivity of thin wires. Proceed-       880
+                                                                                ings of the Royal Society of London. Series A. Mathematical
+                                                                                and Physical Sciences, 201(1067):545–560, 1950.
+      Acknowledgments                                                       [9] Sara E Ferry, Cody A Dennett, Kevin B Woller, and Michael P
+                                                                                Short. Inferring radiation-induced microstructural evolution in
+          The authors acknowledge generous financial support                    single-crystal niobium through changes in thermal transport. J.      885
+      from the International Design Center (IDC) at the Mas-                    Nucl. Mater., 2019.
+830   sachusetts Institute of Technology (MIT) in collaboration            [10] TM Lapina, VA Shabashov, VV Sagaradze, and VL Arbuzov.
+                                                                                The redistribution of atoms during radiation-induced marten-
+      with the Singapore University of Technology and Design
+                                                                                sitic transformations in fe-ni alloys. In Materials science forum,
+      (SUTD). M.P.S. acknowledges funding from the US Nu-                       volume 294, pages 767–770, 1999.                                     890
+      clear Regulatory Commission’s MIT Nuclear Education                  [11] Saleem A. Al Dajani et al. Non-destructively detecting lwr
+      Faculty Development Program under Grant No. NRC-                          structural material embrittlement using transient grating spec-
+                                                                                troscopy. In Proc. 19th Intl. Conf. Env. Deg. Mater. Nucl.
+835   HQ-84-15-G-0045. S.A.A. acknowledges financial support                    Power Systems, 2019.
+      from Raidah Saleem A. Al Baradie, Abdul Fattah Ahmed                 [12] M. D. Mathew, L. M. Lietzan, K. L. Murty, and V. N. Shah. Low        895
+      A. Al Dajani, the Strategic National Advancement (SNA)                    temperature aging embrittlement of cf-8 stainless steel. Mater.
+      division at KAUST through the KAUST Gifted Student                        Sci. Eng., A, 269(1):186 – 196, 1999.
+                                                                           [13] T. S. Byun, T. G. Lach, D. A. Collins, E. L. Barkley, and F. Yu.
+      Program (KGSP) scholarship, as well as the Manson Bene-                   Mechanical and microstructural characteristics of cast stainless
+840   dict (1932) Fellowship from the Department of Nuclear                     steels after thermal aging for 10000 hours. Technical report,        900
+
+      Science and Engineering at MIT. C.A.D. acknowledges                       Department of Energy/Office of Nuclear Energy, 2017.
+      support through the INL Laboratory Directed Research                 [14] TS Byun and JT Busby. Cast stainless steel aging research plan.
+                                                                                ORNL/LTR-2012/440, 2012.
+      & Development (LDRD) Program under DOE Idaho Op-                     [15] T. S. Byun, Y. Yang, N. R. Overman, and J. T. Busby. Ther-
+      erations Office Contract DE-AC07-05ID14517. This mate-                    mal aging phenomena in cast duplex stainless steels. JOM,            905
+
+845   rial is based upon work supported by the National Science                 68(2):507–516, 2016.
+      Foundation Graduate Research Fellowship under Grant                  [16] O. K. Chopra and H. M. Chung. Embrittlement of cast stainless
+                                                                                steels in LWR systems. Technical report, Argonne National
+      No. 1122374 and 174530. Any opinions, findings, and                       Lab., 1989.
+      conclusions or recommendations expressed in this mate-               [17] F Danoix, P Auger, and D Blavette. Hardening of aged duplex          910
+
+      rial are those of the author(s), do not necessarily reflect               stainless steels by spinodal decomposition. Microsc. Microanal.,
+                                                                                10(3):349–354, 2004.
+850   the views of the National Science Foundation.
+                                                                           [18] OK Chopra and AS Rao. A review of irradiation effects on lwr
+                                                                                core internal materials–neutron embrittlement. J. Nucl. Mater.,
+                                                                                412(1):195–208, 2011.                                                915
+
+
+
+
+                                                                      10
+      [19] HM Chung and TR Leax. Embrittlement of laboratory and                      [39] T. R. Leax, S. S. Brenner, and J. A. Spitznagel. Atom probe
+           reactor aged cf3, cf8, and cf8m duplex stainless steels. Mater.                 examination of thermally ages cf8m cast stainless steel. Metall.
+           Sci. Technol., 6(3):249–262, 1990.                                              Trans. A, 23(10):2725–2736, 1992.
+      [20] Y Chen, B Alexandreanu, and Krishnamurti Natesan. Crack                    [40] Michael P Short, Cody A Dennett, Sara E Ferry, Yang Yang,            990
+920        growth rate and fracture toughness tests on irradiated cast                     Vikash K Mishra, Jeffrey K Eliason, Alejandro Vega-Flick,
+           stainless steels. Technical report, Argonne National Lab.(ANL),                 Alexei A Maznev, and Keith A Nelson. Applications of tran-
+           Argonne, IL (United States), 2013.                                              sient grating spectroscopy to radiation materials science. JOM,
+      [21] OK Chopra and WJ Shack. Crack growth rates and fracture                         67(8):1840–1848, 2015.
+           toughness of irradiated austenitic stainless steels in bwr envi-           [41] Cody A Dennett and Michael P Short. Thermal diffusivity de-          995
+925        ronments. Technical report, Argonne National Lab.(ANL), Ar-                     termination using heterodyne phase insensitive transient grat-
+           gonne, IL (United States), 2008.                                                ing spectroscopy. J. Appl. Phys., 123(21):215109, 2018.
+      [22] P. L. Andresen, F. P. Ford, K. Gott, R. L. Jones, P. M. Scott,             [42] C. A. Dennett, P. Cao, S. E. Ferry, A. Vega-Flick, A. A. Maznev,
+           T. Shoji, R. W. Staehle, and R. L. Tapping. Expert panel report                 K. A. Nelson, A. G. Every, and M. P. Short. Bridging the gap
+           on proactive materials degradation assessment (nureg/cr-6923).                  to mesoscale radiation materials science with transient grating     1000
+930        US NRC, 2007.                                                                   spectroscopy. Phys. Rev. B, 94(21):214106, 2016.
+      [23] S. L. Li, Y. L. Wang, S. X. Li, and X. T. Wang. Effect of long             [43] C. A. Dennett and M. P. Short. Time-resolved, dual heterodyne
+           term aging on the microstructure and mechanical properties of                   phase collection transient grating spectroscopy. Appl. Phys.
+           cast austenitic stainless steels. Acta Metall. Sin., 46(10):1186,               Lett., 110(21):211106, 2017.
+           2010.                                                                      [44] Felix Hofmann, Michael P Short, and Cody A Dennett. Tran-           1005
+935   [24] S. L. Li, Y. L. Wang, H. Wang, C. S. Xin, and X. T. Wang. Ef-                   sient grating spectroscopy: An ultrarapid, nondestructive ma-
+           fects of long-term thermal aging on the stress corrosion cracking               terials evaluation technique. MRS Bull., 44(5):392–402, 2019.
+           behavior of cast austenitic stainless steels in simulated pwr pri-         [45] F Hofmann, D Nguyen-Manh, MR Gilbert, CE Beck, JK Elia-
+           mary water. J. Nucl. Mater., 469:262 – 268, 2016.                               son, AA Maznev, W Liu, DEJ Armstrong, KA Nelson, and
+      [25] G. A. Qian and M. Niffenegger. Deterministic and probabilistic                  SL Dudarev.       Lattice swelling and modulus change in a          1010
+940        analysis of a reactor pressure vessel subjected to pressurized                  helium-implanted tungsten alloy: X-ray micro-diffraction, sur-
+           thermal shocks. Nucl. Eng. Des., 273:381 – 395, 2014.                           face acoustic wave measurements, and multiscale modelling.
+      [26] O. K. Chopra. Prediction of aging degradation of cast stainless                 Acta Mater., 89:352–363, 2015.
+           steel components in lwr systems. Technical report, Argonne                 [46] Abdallah Reza, Hongbing Yu, K. Mizohata, and F. Hofmann.
+           National Lab., IL (United States), 1992. No. ANL/CP-75791;                      Thermal diffusivity degradation and point defect density in self-   1015
+945        CONF-920375-24.                                                                 ion implanted tungsten. arXiv: Materials Science, 2019.
+      [27] Thak Sang Byun, Timothy G Lach, Ying Yang, and Changheui                   [47] Thak Sang Byun, David A Collins, Timothy G Lach, and
+           Jang. Influence of δ-ferrite content on thermal aging induced                   Emily L Carter. Degradation of impact toughness in cast stain-
+           mechanical property degradation in cast stainless steels. In                    less steels during long-term thermal aging. Journal of Nuclear
+           Proc. 18th Intl. Conf. Env. Deg. Mater. Nucl. Power Systems,                    Materials, 542:152524, 2020.                                        1020
+950        pages 1829–1840. Springer, 2019.                                           [48] Warren Carl Oliver and George Mathews Pharr. An improved
+      [28] OK Chopra and A Sather. Initial assessment of the mechanisms                    technique for determining hardness and elastic modulus us-
+           and significance of low-temperature embrittlement of cast stain-                ing load and displacement sensing indentation experiments. J.
+           less steels in lwr systems. Technical report, Nuclear Regulatory                Mater. Res., 7(6):1564–1583, 1992.
+           Commission, 1990.                                                          [49] Caitlin Huotilainen, Mykola Ivanchenko, Ulla Ehrnstén, and Pål    1025
+955   [29] HM Chung. Evaluation of aging of cast stainless steel com-                      Efsing. Electrochemical investigation of in-service thermal aging
+           ponents. Technical report, Argonne National Lab, 1991. No.                      in two cf8m cast stainless steels. J. Nucl. Mater., 520:34–40,
+           ANL/CP–70872.                                                                   2019.
+      [30] Thomas Sourmail. Precipitation in creep resistant austenitic               [50] Geoffrey McLachlan and David Peel. Finite mixture models.
+           stainless steels. Mater. Sci. Technol., 17(1):1–14, 2001.                       John Wiley & Sons, 2004.                                            1030
+960   [31] BF Weiss and R Stickler. Phase instabilities during high temper-           [51] Gideon Schwarz et al. Estimating the dimension of a model.
+           ature exposure of 316 austenitic stainless steel. Metal. Mater.                 Ann. Statistics, 6(2):461–464, 1978.
+           Trans. B, 3(4):851–866, 1972.                                              [52] Konrad J Krakowiak, William Wilson, Simon James, Simone
+      [32] JE Spruiell, JA Scott, CS Ary, and RL Hardin. Microstructural                   Musso, and Franz-Josef Ulm.          Inference of the phase-to-
+           stability of thermal-mechanically pretreated type 316 austenitic                mechanical property link via coupled x-ray spectrometry and         1035
+965        stainless steel. Metal. Trans., 4(6):1533–1544, 1973.                           indentation analysis: Application to cement-based materials.
+      [33] J. E. Brown, A. Cerezo, T. J. Godfrey, M. G. Hetherington, and                  Cem. Concr. Res., 67:271–285, 2015.
+           G. D. W. Smith. Quantitative atom probe analysis of spinodal               [53] CA Dennett, KP So, A Kushima, DL Buller, K Hattar, and
+           reaction in ferrite phase of duplex stainless steel. Mater. Sci.                MP Short. Detecting self-ion irradiation-induced void swelling
+           Technol., 6(3):293–300, 1990.                                                   in pure copper using transient grating spectroscopy. Acta           1040
+970   [34] P. Auger, F. Danoix, A. Menand, S. Bonnet, J. Bourgoin,                         Mater., 145:496–503, 2018.
+           and M. Guttmann. Atom probe and transmission electron mi-                  [54] D Royer and E Dieulesaint. Rayleigh wave velocity and dis-
+           croscopy study of aging of cast duplex stainless steels. Mater.                 placement in orthorhombic, tetragonal, hexagonal, and cubic
+           Sci. Technol., 6(3):301–313, 1990.                                              crystals. The Journal of the Acoustical Society of America,
+      [35] LP Stoter. Thermal ageing effects in aisi type 316 stainless steel.             76(5):1438–1444, 1984.                                              1045
+975        J. Mater. Sci., 16(4):1039–1051, 1981.                                     [55] A. G. Every, A. A. Maznev, W. Grill, M. Pluta, J. D. Comins,
+      [36] H. M. Chung and O. K. Chopra. Microstructures of cast-duplex                    O. B. Wright, O. Matsuda, W. Sachse, and J. P. Wolfe. Bulk
+           stainless steel after long-term aging. Technical report, Argonne                and surface acoustic wave phenomena in crystals: Observation
+           National Lab., IL (USA), 1985.                                                  and interpretation. Wave Motion, 50(8):1197–1217, 2013.
+      [37] S. Kawaguchi, N. Sakamoto, G. Takano, F. Matsuda,                          [56] D. H. Hurley, S. J. Reese, S. K. Park, Z. Utegulov, J. R.           1050
+980        Y. Kikuchi, and L. Mráz. Microstructural changes and fracture                  Kennedy, and K. L. Telschow. In situ laser-based resonant ul-
+           behavior of cf8m duplex stainless steels after long-term aging.                 trasound measurements of microstructure mediated mechanical
+           Nucl. Eng. Des., 174(3):273–285, 1997.                                          property evolution. J. Appl. Phys., 107(6):063510, 2010.
+      [38] J. J. Shiao, C. H. Tsai, J. J. Kai, and J. H. Huang. Aging                 [57] Xinpeng Du and Ji-Cheng Zhao. Facile measurement of single-
+           embrittlement and lattice image analysis in a fe-cr-ni duplex                   crystal elastic constants from polycrystalline samples. npj Com-    1055
+985        stainless steel aged at 400◦c. J. Nucl. Mater., 217(3):269–278,                 put. Mater., 3(1):17, 2017.
+           1994.                                                                      [58] P. Zhao, J.-C. Zhao, and R. Weaver. Dynamic surface acous-
+
+
+                                                                                 11
+            tic response to a thermal expansion source on an anisotropic
+            half space. The Journal of the Acoustical Society of America,
+1060        133(5):2634–2640, 2013.
+       [59] HM Ledbetter. Predicted monocrystal elastic constants of 304-
+            type stainless steel. Physica B+ C, 128(1):1–4, 1985.
+       [60] Kamel Benyelloul and Hafid Aourag. Elastic constants of
+            austenitic stainless steel: Investigation by the first-principles
+1065        calculations and the artificial neural network approach. Comp.
+            Mater. Sci., 67:353–358, 2013.
+       [61] HM Ledbetter. Monocrystal-polycrystal elastic constants of a
+            stainless steel. Physica Status Solidi (a), 85(1):89–96, 1984.
+       [62] Steve Plimpton. Fast parallel algorithms for short-range molec-
+1070        ular dynamics. Journal of Computational Physics, 117(1):1–19,
+            1995.
+       [63] Giovanni Bonny, Nicolas Castin, and Dmitry Terentyev. Inter-
+            atomic potential for studying ageing under irradiation in stain-
+            less steels: the fenicr model alloy. Modelling and Simulation in
+1075        Materials Science and Engineering, 21(8):085004, 2013.
+       [64] Adeline Boire, Christian Sanchez, Marie-Hélène Morel,
+            Minne Paul Lettinga, and Paul Menut. Dynamics of liquid-
+            liquid phase separation of wheat gliadins. Scientific reports,
+            8(1):1–13, 2018.
+1080   [65] H.D. Merchant, G.S. Murty, S.N. Bahadur, et al. Hardness-
+            temperature relationships in metals. Journal of Materials Sci-
+            ence, 8:437–442, 1973.
+       [66] Hsiu-Ying Chung, Michelle B. Weinberger, Jenn-Ming Yang,
+            Sarah H. Tolbert, and Richard B. Kaner. Correlation between
+1085        hardness and elastic moduli of the ultraincompressible transi-
+            tion metal diborides rub2, osb2, and reb2. Applied Physics
+            Letters, 92(26):261904, 2008.
+       [67] P Stoklasová, T Grabec, K Zoubková, P Sedlák, S Krátkỳ,
+            and H Seiner. Laser-ultrasonic characterization of strongly
+1090        anisotropic materials by transient grating spectroscopy. Exper-
+            imental Mechanics, 61(4):663–676, 2021.
+       [68] Ruopeng Zhang, Shiteng Zhao, Jun Ding, Yan Chong, Tao Jia,
+            Colin Ophus, Mark Asta, Robert O. Ritchie, and Andrew M.
+            Minor. Short-range order and its impact on the crconi medium-
+1095        entropy alloy. Nature, 581:283–287, 2020.
+       [69] Helmut Föll. Spring model and properties of crystals.
+       [70] Zhangbo Li, Wei-Yang Lo, Yiren Chen, Janne Pakarinen,
+            Yaqiao Wu, Todd Allen, and Yong Yang. Irradiation response
+            of delta ferrite in as-cast and thermally aged cast stainless steel.
+1100        Journal of Nuclear Materials, 466:201–207, 2015.
+
+
+
+
+                                                                                   12
+Figure 1: (Top) Diagram of a TGS experimental apparatus. (Bottom) Diagram of SAW generation due to pump pulse interference. Adapted
+from [42]
+
+
+
+
+                                                                13
+Figure 2: (Top) Annotated unaged 304-type stainless steel (nuclear grade CF8) sample signal showing thermal fit (blue), acoustic decay, (red)
+and frequency of oscillations (dashed). Measurement was taken in vacuum so there is no oscillation due to waves created in air. Adapted
+from [11]. (Middle) Representative TGS signal from unaged CASS 304, showing one SAW peak. (Bottom) Representative TGS signal from
+aged CASS 304, showing two SAW peaks.
+
+
+
+                                                                     14
+Figure 3: Electron microscope analysis of unaged and 400◦ C 10kh-aged 304-type stainless steel (CASS nuclear grade CF8). (a-b) SEM of
+the unaged CF8 shows more typically ductile features, while (c-d) SEM of CF8 aged at 400C for 10kh shows more brittle cleavage planes.
+Dark-field TEM analysis of the 400◦ C, 10kh aged CF8 exhibits small, 5 nm precipitates in the δ-ferrite regions (e) and a regular dislocation
+microstructure in the austenite regions (f). The δ-ferrite in the alloy was verified to have undergone spinodal decomposition using STEM-EDX
+(g), where homogeneous Fe and Cr separation are evident. The precipitates in (e) were shown to be Ni-rich (h), typical of G-phase.
+
+
+                                                                     15
+Figure 4: Summary of mechanical properties of unaged and thermally aged 304-type stainless steel (nuclear grade CF8) and 316-type stainless
+steel (nuclear grade CF8M). (a) Aging temperature was found not to have an effect on Vickers microhardness in austenite, (b) while δ-ferrite
+became noticeably harder as a function of aging temperature in all specimens. Nanoindentation maps of (c) nanohardness on 400C, 30kh-aged
+CF8 and (d) nanostiffness on 400◦ C, 10kh-aged CF8 were automatically identified by BIC phase analysis (red squares: δ ferrite, green squares:
+γ austenite, blue squares: δ-γ boundary) (e). Features visible in these maps, with red, black, and blue points corresponding to austenite,
+delta-ferrite, and the two-phase interface, respectively (c-d) visually correlate to observed regions of δ-ferrite evident in optical micrographs
+of the materials in this study (f).
+
+
+
+
+                                                                       16
+Figure 5: Observed incidence of SAW peak splitting on all materials in this study, demonstrating that aged 304-type stainless steel (CASS
+nuclear grade CF8) and 316-type stainless steel (CASS nuclear grade CF8M) display SAW peak splitting significantly more often than in the
+unaged condition. Black-outlined, clear circles indicate 304-type stainless steel (nuclear grade CF8) aged for 30,000 hours, black-filled circles
+indicate 304-type stainless steel (nuclear grade CF8) for 10,000 hours. Black-outlined, clear squares indicate 316-type stainless steel (nuclear
+grade CF8M) aged for 30,000 hours, black squares indicate 316-type stainless steel (nuclear grade CF8M) aged for 10,000 hours. Standard
+error is shown to estimate standard deviation as count rate is subject to Poisson error.
+
+
+
+
+                                                                       17
+Figure 6: Distribution of (P)SAW frequencies expected from elastodynamic calculations of 304-type stainless steel at a 6.4 µm TGS excitation
+grating spacing based on literature constants. Distribution shown for 10,000 randomly-sampled Euler angles defining the acoustic polarization.
+
+
+
+
+                                                                     18
+Figure 7: Spinodal structures and analyses created in MD to study the effect of percent spinodal decomposition on stiffness. Columns
+from left to right: (a) Full color Fe-Cr structures, (b) black-and-white binarized structures, (c) FFT of binarized structures, (d) 3D FFT of
+binarized structures, (e) radial intensity plots showing spinodal wavelengths of each structure. Percent spinodal decomposition is shown in
+the upper-right of each panel in column (a).
+
+                                                                     19
+Figure 8: Simulated mechanical properties of spinodally decomposed binary Fe-Cr. (a) Spinodal wavelength vs. spinodal conversion fraction,
+(b) C11 elastic constant vs. spinodal conversion fraction, (c) C11 elastic constant vs. spinodal wavelength, (d) Average elastic modulus vs.
+spinodal conversion fraction, (e) Average elastic modulus vs. spinodal wavelength. A spinodal conversion fraction of 0.5 corresponds to a
+fully homogeneous pristine binary alloy with randomly distributed Fe-Cr bonds, and a spinodal conversion fraction of 1.0 corresponds to a
+binary alloy that has undergone the maximum spinodal decomposition with fully separated Fe-rich, α regions and Cr-rich α′ regions (i.e. all
+Fe-Cr bonds in the pristine alloy have structurally evolved to separated Fe-Fe and Cr-Cr bonds).
+
+
+
+
+                                                                    20
+Figure 9: Overlay of observed (P)SAW frequencies in unaged and thermally aged 304-type stainless steel (CASS nuclear grade CF8) and
+316-type stainless steel (CASS nuclear grade CF8M) on top of elastodynamic wave frequency predictions from theory. Note that none of
+the (P)SAW frequencies in the unaged materials fall within the unallowed region (blue histogram), while all other aging conditions exhibit
+(P)SAW frequencies inside this region. This points strongly to the stiffening of δ-ferrite as the mechanism responsible for the observations
+of supposedly elastically-unallowed frequencies observed in our experiments. Based on the elastodynamic calculations shown in Figure 6,
+fSAW, min corresponds to the minimum SAW frequency, fSAW, max corresponds to the maximum SAW frequency, fPSAW, min corresponds
+to the minimum PSAW frequency, fPSAW, max corresponds to the maximum PSAW frequency, and fbulk wave corresponds to bulk acoustic
+wave frequency.
+
+
+
+
+                                                                    21
+
