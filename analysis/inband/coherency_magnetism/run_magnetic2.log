@@ -14,3 +14,15 @@ dec36_MEASFE [255.05 107.57 105.04] 7628.8
 done alpha_qe {'fmax': np.float64(578.0919661733616), 'p999': np.float64(576.8723628691984), 'p99': np.float64(573.2442348008386), 'frac_in': 0.0}
 done aprime_AF {'fmax': np.float64(660.4770531400966), 'p999': np.float64(653.3751493428913), 'p99': np.float64(622.1558589306029), 'frac_in': 0.0189}
 done dec36_AF {'fmax': np.float64(569.0686784599376), 'p999': np.float64(566.123188405797), 'p99': np.float64(559.74923234391), 'frac_in': 0.0}
+n=10000 f(6.4um) MHz: SAW 525-579  PSAW 551-951  all max 951
+done aprime_NM1 {'fmax': np.float64(669.3696450428397), 'p999': np.float64(659.6803377563328), 'p99': np.float64(631.4953810623556), 'frac_in': 0.0311}
+Traceback (most recent call last):
+  File "/Users/saleem/MIT/research/Scripta/mike_final_touches/analysis/inband/coherency_magnetism/magnetic_tensors.py", line 73, in <module>
+    cm.run10k(r[0], *r[2:6])
+  File "/Users/saleem/MIT/research/Scripta/mike_final_touches/analysis/inband/coherency_magnetism/common.py", line 79, in run10k
+    subprocess.run([sys.executable, str(SCRIPTS / "saw_random_orientations.py"), "run", f"{c11}", f"{c12}",
+  File "/opt/homebrew/Cellar/python@3.12/3.12.12_2/Frameworks/Python.framework/Versions/3.12/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/Users/saleem/MIT/research/Scripta/fecr_dft_reconstruction/.venv/bin/python3', '/Users/saleem/MIT/research/Scripta/mike_final_touches/scripts/saw_random_orientations.py', 'run', '281.83261261261254', '120.08447447447449', '101.88114114114116', '7628.799999999999', '/Users/saleem/MIT/research/Scripta/mike_final_touches/data/saw/angles_10k.csv', '/Users/saleem/MIT/research/Scripta/mike_final_touches/analysis/inband/coherency_magnetism/saw/dec36_NM1.csv', '10000', '6']' died with <Signals.SIGTERM: 15>.
+/opt/homebrew/Cellar/python@3.12/3.12.12_2/Frameworks/Python.framework/Versions/3.12/lib/python3.12/multiprocessing/resource_tracker.py:279: UserWarning: resource_tracker: There appear to be 6 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '

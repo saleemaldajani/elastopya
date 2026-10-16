@@ -1,0 +1,76 @@
+
+== eta=0.0039, alpha'=aprime_AF: strains alpha [ 0.00165  0.00165 -0.00169], alpha' [-0.00225 -0.00225  0.00117]; stress (GPa) alpha [0.387 0.387 0.   ], alpha' [-0.914 -0.914  0.   ]
+  alpha   dC11:  -3.44 ..  -3.44
+  alpha   dC33:   0.15 ..   0.15
+  alpha   dC12:  -1.01 ..  -1.01
+  alpha   dC13:  -1.17 ..  -1.17
+  alpha   dC44:  -2.33 ..  -0.09
+  alpha   dC66:  -2.73 ..   1.73
+  alpha   3-variant cubic dC11,dC12,dC44: [-2.25 -1.12 -0.98] .. [-2.25 -1.12 -0.97]
+  alpha'  dC11:   2.53 ..   6.77
+  alpha'  dC33:   2.84 ..   9.39
+  alpha'  dC12:   3.95 ..  10.62
+  alpha'  dC13:  -4.05 ..   1.74
+  alpha'  dC44:   0.34 ..   3.02
+  alpha'  dC66:  -1.43 ..   3.53
+  alpha'  3-variant cubic dC11,dC12,dC44: [4.18 0.16 1.27] .. [6.1  2.82 1.67]
+  dec36 3-variant cubic dC11,dC12,dC44: [-0.34 -0.74 -0.31] .. [ 0.24  0.05 -0.18]
+  dec36 single variant (11,33,12,13,44,66): [-1.67  0.95  0.47 -2.03 -1.54 -2.35] .. [-0.41  2.9   2.45 -0.31  0.83  2.26]
+  density change dec36: -1.561 kg/m3
+
+== eta=0.0039, alpha'=aprime_MEAS: strains alpha [ 0.00161  0.00161 -0.00165], alpha' [-0.00229 -0.00229  0.00089]; stress (GPa) alpha [ 0.379  0.379 -0.   ], alpha' [-0.895 -0.895 -0.   ]
+  alpha   dC11:  -3.37 ..  -3.37
+  alpha   dC33:   0.15 ..   0.15
+  alpha   dC12:  -0.99 ..  -0.99
+  alpha   dC13:  -1.15 ..  -1.15
+  alpha   dC44:  -2.29 ..  -0.09
+  alpha   dC66:  -2.68 ..   1.69
+  alpha   3-variant cubic dC11,dC12,dC44: [-2.2  -1.09 -0.96] .. [-2.2  -1.09 -0.95]
+  alpha'  dC11:   3.15 ..   7.42
+  alpha'  dC33:   3.30 ..   9.72
+  alpha'  dC12:   3.83 ..  10.34
+  alpha'  dC13:  -3.75 ..   2.09
+  alpha'  dC44:   0.55 ..   3.10
+  alpha'  dC66:  -1.15 ..   3.52
+  alpha'  3-variant cubic dC11,dC12,dC44: [4.63 0.21 1.39] .. [6.76 3.15 1.83]
+  dec36 3-variant cubic dC11,dC12,dC44: [-0.17 -0.71 -0.26] .. [ 0.46  0.17 -0.12]
+  dec36 single variant (11,33,12,13,44,66): [-1.43  1.08  0.45 -1.92 -1.44 -2.22] .. [-0.16  2.99  2.38 -0.19  0.86  2.24]
+  density change dec36: -0.626 kg/m3
+
+== eta=0.0047, alpha'=aprime_AF: strains alpha [ 0.00198  0.00198 -0.00203], alpha' [-0.00272 -0.00272  0.00141]; stress (GPa) alpha [0.466 0.466 0.   ], alpha' [-1.101 -1.101 -0.   ]
+  alpha   dC11:  -4.15 ..  -4.15
+  alpha   dC33:   0.18 ..   0.18
+  alpha   dC12:  -1.21 ..  -1.21
+  alpha   dC13:  -1.41 ..  -1.41
+  alpha   dC44:  -2.81 ..  -0.11
+  alpha   dC66:  -3.29 ..   2.08
+  alpha   3-variant cubic dC11,dC12,dC44: [-2.71 -1.35 -1.19] .. [-2.71 -1.35 -1.16]
+  alpha'  dC11:   3.05 ..   8.16
+  alpha'  dC33:   3.42 ..  11.32
+  alpha'  dC12:   4.76 ..  12.80
+  alpha'  dC13:  -4.88 ..   2.09
+  alpha'  dC44:   0.41 ..   3.64
+  alpha'  dC66:  -1.72 ..   4.25
+  alpha'  3-variant cubic dC11,dC12,dC44: [5.04 0.19 1.53] .. [7.36 3.4  2.01]
+  dec36 3-variant cubic dC11,dC12,dC44: [-0.41 -0.89 -0.38] .. [ 0.28  0.07 -0.22]
+  dec36 single variant (11,33,12,13,44,66): [-2.01  1.14  0.56 -2.44 -1.85 -2.83] .. [-0.49  3.49  2.95 -0.37  1.    2.73]
+  density change dec36: -1.881 kg/m3
+
+== eta=0.0047, alpha'=aprime_MEAS: strains alpha [ 0.00194  0.00194 -0.00199], alpha' [-0.00276 -0.00276  0.00107]; stress (GPa) alpha [0.457 0.457 0.   ], alpha' [-1.079 -1.079  0.   ]
+  alpha   dC11:  -4.07 ..  -4.07
+  alpha   dC33:   0.18 ..   0.18
+  alpha   dC12:  -1.19 ..  -1.19
+  alpha   dC13:  -1.39 ..  -1.39
+  alpha   dC44:  -2.75 ..  -0.11
+  alpha   dC66:  -3.23 ..   2.04
+  alpha   3-variant cubic dC11,dC12,dC44: [-2.65 -1.32 -1.16] .. [-2.65 -1.32 -1.14]
+  alpha'  dC11:   3.80 ..   8.94
+  alpha'  dC33:   3.98 ..  11.71
+  alpha'  dC12:   4.62 ..  12.46
+  alpha'  dC13:  -4.52 ..   2.52
+  alpha'  dC44:   0.66 ..   3.74
+  alpha'  dC66:  -1.39 ..   4.24
+  alpha'  3-variant cubic dC11,dC12,dC44: [5.58 0.25 1.68] .. [8.14 3.8  2.21]
+  dec36 3-variant cubic dC11,dC12,dC44: [-0.2  -0.85 -0.32] .. [ 0.56  0.2  -0.15]
+  dec36 single variant (11,33,12,13,44,66): [-1.73  1.31  0.54 -2.32 -1.74 -2.68] .. [-0.2   3.61  2.87 -0.23  1.03  2.7 ]
+  density change dec36: -0.754 kg/m3

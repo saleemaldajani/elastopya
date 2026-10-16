@@ -1,0 +1,35 @@
+alpha_qe [237.68 121.64 106.7 ] 7776.2
+aprime_AF [360.62  93.49  91.81] 7280.4
+dec36_AF [274.23 113.27 102.27] 7628.8
+aprime_NM1 [386.19 116.41  90.49] 7280.4
+dec36_NM1 [281.83 120.08 101.88] 7628.8
+aprime_NM2 [396.96 114.13  92.18] 7280.4
+dec36_NM2 [285.03 119.41 102.38] 7628.8
+aprime_NM3 [402.92 169.19  87.91] 7280.4
+dec36_NM3 [286.81 135.78 101.11] 7628.8
+aprime_MEAS [350.   67.8 100.8] 7280.4
+dec36_MEAS [271.07 105.63 104.95] 7628.8
+aprime_MEASFE [296.12  74.3  101.12] 7280.4
+dec36_MEASFE [255.05 107.57 105.04] 7628.8
+done alpha_qe {'fmax': np.float64(578.0919661733616), 'p999': np.float64(576.8723628691984), 'p99': np.float64(573.2442348008386), 'frac_in': 0.0}
+done aprime_AF {'fmax': np.float64(660.4770531400966), 'p999': np.float64(653.3751493428913), 'p99': np.float64(622.1558589306029), 'frac_in': 0.0189}
+done dec36_AF {'fmax': np.float64(569.0686784599376), 'p999': np.float64(566.123188405797), 'p99': np.float64(559.74923234391), 'frac_in': 0.0}
+done aprime_NM1 {'fmax': np.float64(669.3696450428397), 'p999': np.float64(659.6803377563328), 'p99': np.float64(631.4953810623556), 'frac_in': 0.0311}
+n=10000 f(6.4um) MHz: SAW 482-514  PSAW 511-808  all max 808
+done dec36_NM1 {'fmax': np.float64(568.477130977131), 'p999': np.float64(564.9540966299027), 'p99': np.float64(559.1826150228258), 'frac_in': 0.0}
+n=10000 f(6.4um) MHz: SAW 531-589  PSAW 556-973  all max 973
+done aprime_NM2 {'fmax': np.float64(684.4493116395494), 'p999': np.float64(675.1543209876543), 'p99': np.float64(644.8997641509434), 'frac_in': 0.0489}
+n=10000 f(6.4um) MHz: SAW 487-516  PSAW 516-810  all max 810
+done dec36_NM2 {'fmax': np.float64(569.6614583333333), 'p999': np.float64(566.123188405797), 'p99': np.float64(559.74923234391), 'frac_in': 0.0}
+n=10000 f(6.4um) MHz: SAW 517-557  PSAW 543-885  all max 885
+done aprime_NM3 {'fmax': np.float64(621.4488636363636), 'p999': np.float64(616.5452280049677), 'p99': np.float64(600.3018660812295), 'frac_in': 0.0042}
+n=10000 f(6.4um) MHz: SAW 469-511  PSAW 499-804  all max 804
+done dec36_NM3 {'fmax': np.float64(566.7098445595855), 'p999': np.float64(565.5377456049638), 'p99': np.float64(561.4733059548254), 'frac_in': 0.0}
+n=10000 f(6.4um) MHz: SAW 546-589  PSAW 581-973  all max 973
+done aprime_MEAS {'fmax': np.float64(666.9207317073171), 'p999': np.float64(650.27064625517), 'p99': np.float64(623.5746864310148), 'frac_in': 0.0269}
+n=10000 f(6.4um) MHz: SAW 486-519  PSAW 517-820  all max 820
+done dec36_MEAS {'fmax': np.float64(575.0525762355414), 'p999': np.float64(572.6439790575915), 'p99': np.float64(565.5377456049638), 'frac_in': 0.0}
+n=10000 f(6.4um) MHz: SAW 536-549  PSAW 582-863  all max 863
+done aprime_MEASFE {'fmax': np.float64(549.0712851405623), 'p999': np.float64(549.0712851405623), 'p99': np.float64(547.9709418837676), 'frac_in': 0.0}
+n=10000 f(6.4um) MHz: SAW 464-513  PSAW 484-820  all max 820
+done dec36_MEASFE {'fmax': np.float64(578.0919661733616), 'p999': np.float64(576.2644889357217), 'p99': np.float64(571.4472309299896), 'frac_in': 0.0}
