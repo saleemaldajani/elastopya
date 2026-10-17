@@ -407,7 +407,7 @@ def dft_strips():
     dft = mf.read_csv("sheet_dft.csv")
     vasp = lambda col: [float(dft[col][np.argmin(np.abs(dft["x_cr"] - x))]) if np.min(np.abs(dft["x_cr"] - x)) < 0.01
                         else nan for x in xs]
-    head = "DFT cells of Figs. 2$-$3, relaxed in QE: bcc unit cells and 40-atom SQS (2$\\times$2$\\times$5)"
+    head = "DFT cells, relaxed in QE: bcc unit cells and 40-atom SQS (2$\\times$2$\\times$5)"
     DFTS["fig1_free_energy"] = (
         head + "; Cr moments vanish at 35$-$50% Cr", panels,
         [dict(label="QE $\\langle m_{\\rm Fe}\\rangle$\n($\\mu_{\\rm B}$)", values=mfe, fmt="{:.2f}"),
