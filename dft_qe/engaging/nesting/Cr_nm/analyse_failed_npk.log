@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/orcd/pool/004/sdajani/fecr_qe/nesting/Cr_nm/../../nesting.py", line 91, in <module>
+    analyse(sys.argv[2])
+  File "/orcd/pool/004/sdajani/fecr_qe/nesting/Cr_nm/../../nesting.py", line 62, in analyse
+    grid = ev.reshape(n, n, n, -1)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: cannot reshape array of size 6608 into shape (40,40,40,newaxis)

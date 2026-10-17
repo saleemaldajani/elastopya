@@ -1,0 +1,1 @@
+2026-10-16 21:05: startingpot=file from the relaxed density started with ~60 e negative density and total moment ~2 muB (relaxed 13.6): magnetic state lost. Cancelled; rerun with per-site starting magnetization from site_moments_relaxed.txt (QE_MAG_SITES).

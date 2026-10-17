@@ -1,0 +1,1 @@
+2026-10-16 20:50: strain steps from the atomic guess: s_xx_p converged (282 it.) into a different magnetic state (13.24 vs 14.55 muB/cell relaxed); the other three sat at a 5e-7 Ry noise floor for 350+ iterations. All four rerun from the relaxed charge/spin density (QE_START_FROM_FILE=pot).

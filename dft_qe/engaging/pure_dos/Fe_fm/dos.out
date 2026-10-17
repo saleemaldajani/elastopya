@@ -1,0 +1,54 @@
+
+     Program DOS v.7.5 starts on 16Oct2026 at  9:26:29 
+
+     This program is part of the open-source Quantum ESPRESSO suite
+     for quantum simulation of materials; please cite
+         "P. Giannozzi et al., J. Phys.:Condens. Matter 21 395502 (2009);
+         "P. Giannozzi et al., J. Phys.:Condens. Matter 29 465901 (2017);
+         "P. Giannozzi et al., J. Chem. Phys. 152 154105 (2020);
+          URL http://www.quantum-espresso.org", 
+     in publications or presentations arising from this work. More details at
+     http://www.quantum-espresso.org/quote
+
+     Parallel version (MPI), running on     1 processors
+
+     MPI processes distributed on     1 nodes
+     58357 MiB available memory on the printing compute node when the environment starts
+
+
+     Reading xml data from directory:
+
+     ./tmp/fs.save/
+     file Fe.pbe-spn-kjpaw_psl.0.2.1.UPF: wavefunction(s)  3D renormalized
+
+     IMPORTANT: XC functional enforced from input :
+     Exchange-correlation= PBE
+                           (   1   4   3   4   0   0   0)
+     Any further DFT definition will be discarded
+     Please, verify this is what you really want
+
+
+     G-vector sticks info
+     --------------------
+     sticks:   dense  smooth     PW     G-vecs:    dense   smooth      PW
+     Sum         773     387    129                13571     4753     935
+
+     Using Slab Decomposition
+
+
+     Check: negative core charge=   -0.000094
+
+     negative rho (up, down):  0.000E+00 6.201E-05
+
+     Optimized tetrahedron method used
+
+     [opt_tetra]  Optimized tetrahedron method is used.
+
+     DOS          :  38m39.76s CPU  38m48.06s WALL
+
+
+   This run was terminated on:  10: 5:17  16Oct2026            
+
+=------------------------------------------------------------------------------=
+   JOB DONE.
+=------------------------------------------------------------------------------=

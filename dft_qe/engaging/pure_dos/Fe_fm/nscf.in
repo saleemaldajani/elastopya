@@ -8,7 +8,7 @@
   starting_magnetization(1) = 0.4
 /
 &electrons
-  conv_thr = 1e-9, mixing_beta = 0.3
+  conv_thr = 1e-9, mixing_beta = 0.3, diagonalization = 'cg'
 /
 ATOMIC_SPECIES
 Fe 55.845 Fe.pbe-spn-kjpaw_psl.0.2.1.UPF
