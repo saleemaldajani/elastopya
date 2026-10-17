@@ -160,15 +160,15 @@ def plot():
           xlim=(0.47, 1.03), ylim=(2.3, 7.0))
     b.legend(loc="upper left")
     xs = np.unique(d["x_cr"])
-    for key, phi_c, mk_, col, lab in (("lambda_chord_nm", 1.0, "s", mf.GREEN, r"$\phi$ = 1, fully decomposed"),
-                                      ("lambda_chord_nm", 0.5, "o", "0.55", r"$\phi$ = 0.5, random alloy")):
-        mu = [d[key][np.isclose(d["x_cr"], x) & np.isclose(d["phi"], phi_c)].mean() for x in xs]
-        sd = [d[key][np.isclose(d["x_cr"], x) & np.isclose(d["phi"], phi_c)].std(ddof=1) for x in xs]
-        c.errorbar(xs, mu, yerr=sd, fmt="-" + mk_, ms=3, lw=0.8, capsize=1.5, color=col, label=lab)
+    for phi_c in (0.5, 0.6, 0.7, 0.8, 0.9, 1.0):      # every phi, colours as in (a) (user, 2026-10-17)
+        mu = [d["lambda_chord_nm"][np.isclose(d["x_cr"], x) & np.isclose(d["phi"], phi_c)].mean() for x in xs]
+        sd = [d["lambda_chord_nm"][np.isclose(d["x_cr"], x) & np.isclose(d["phi"], phi_c)].std(ddof=1) for x in xs]
+        c.errorbar(xs, mu, yerr=sd, fmt="-o", ms=2.6, lw=0.8, capsize=1.2, color=cmap((phi_c - 0.5) / 0.5),
+                   label=rf"$\phi$ = {phi_c:.1f}" + (" (random)" if phi_c == 0.5 else ""))
     c.axvspan(0.30, 0.71, color="0.9", lw=0, zorder=0, label="spinodal, 748 K")
     c.axhline(ACTA["ss304"], color="#8A5A00", lw=0.8, ls="--")
     c.set(xlabel=r"$x_{\rm Cr}$", ylabel=r"Wavelength $\lambda$ (nm), chord length", xlim=(0, 1), ylim=(2.3, 7.0))
-    c.legend(loc="upper center", bbox_to_anchor=(0.5, 1.0))
+    c.legend(loc="upper center", ncol=2, columnspacing=0.8)
     for ax, t in zip((a, b, c), "abc"):
         mk.style(ax, f"({t})")
     fig.set_size_inches(mk.PROFILE["widths_mm"]["full"] / 25.4, 2.6 * mk.PROFILE["widths_mm"]["full"] / 25.4 / 7.4)
