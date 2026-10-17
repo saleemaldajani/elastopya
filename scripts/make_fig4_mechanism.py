@@ -366,13 +366,13 @@ def build_full():
 N_EF_CR = 0.70     # states/eV/atom, NM bcc Cr (Moruzzi, Janak & Williams 1978, p. 76) -> rigid-band shift
 
 
-def draw_fs_change(ax, y_fe=0.10, legend_below=False):
+def draw_fs_change(ax, y_fe=0.10, legend_below=False, de=None, de_label="rigid band"):
     """Cr Fermi-surface section at E_F (pure Cr) and at the rigid-band E_F with y_fe Fe (2 extra electrons per Fe):
     the electron jack (Gamma) and hole octahedron (H) change size in opposite senses, so Q no longer nests both."""
     import fermi_slices as fs
     k, ev, ef = fs.read_xml(ENG / "fermi" / "Cr_nm" / "fs_data.xml")
     n = int(round(np.sqrt(len(k)))); kx, ky = k[:, 0].reshape(n, n), k[:, 1].reshape(n, n)
-    de = 2 * y_fe / N_EF_CR
+    de = 2 * y_fe / N_EF_CR if de is None else de
     ax.add_patch(plt.Polygon([(1, 0), (0, 1), (-1, 0), (0, -1)], closed=True, fc="#0B1026", ec="0.6", lw=0.6, zorder=0))
     for b in range(ev.shape[2]):
         e = ev[0, :, b].reshape(n, n) - ef
@@ -388,7 +388,7 @@ def draw_fs_change(ax, y_fe=0.10, legend_below=False):
     for lab, (x, y) in {"Γ": (0, 0), "H": (1, 0)}.items():
         ax.text(x + 0.03, y + 0.05, lab, fontsize=6.5, color="white", zorder=6)
     ax.plot([], [], "-", color="#7FDBFF", label="pure Cr: jack and octahedron nest")
-    ax.plot([], [], "--", color="#FF8C1A", label=f"+{round(100 * y_fe)}% Fe (rigid band, $\\Delta E_F$ = +{de:.2f} eV):\nsheets resize oppositely $\\Rightarrow$ nesting lost")
+    ax.plot([], [], "--", color="#FF8C1A", label=f"+{round(100 * y_fe)}% Fe ({de_label}, $\\Delta E_F$ = +{de:.2f} eV):\nsheets resize oppositely $\\Rightarrow$ nesting lost")
     if legend_below:
         ax.legend(loc="upper center", bbox_to_anchor=(0.5, 0.0), fontsize=5.2, frameon=False, handlelength=1.8)
     else:
@@ -616,7 +616,7 @@ def build_full_v4(out_name="fig4_mechanism_v4_full"):
     print("wrote", out)
 
 
-def draw_bands_gh(ax, y_fe=0.10):
+def draw_bands_gh(ax, y_fe=0.10, de=None):
     """NM Cr bands along Gamma-H near E_F (QE): the d band that bounds the electron jack (Gamma side) and the hole
     octahedron (H side) crosses E_F at k_F; with y_fe Fe (rigid band) the crossing moves, resizing both sheets."""
     import fermi_slices as fs
@@ -624,7 +624,7 @@ def draw_bands_gh(ax, y_fe=0.10):
     d = np.r_[0, np.cumsum(np.linalg.norm(np.diff(k, axis=0), axis=1))]
     m = d <= 1 + 1e-6
     kk, E = d[m], ev[0][m] - ef
-    de = 2 * y_fe / N_EF_CR
+    de = 2 * y_fe / N_EF_CR if de is None else de
     for b in range(E.shape[1]):
         if E[:, b].min() < 1.2 and E[:, b].max() > -1.5:
             ax.plot(kk, E[:, b], color="0.2", lw=0.8)
@@ -888,7 +888,7 @@ def panel_d_v7(fig, rect):
     ax.text(0.99, 1.01, r"$10^4$ grains, $\lambda$ = 6.4 $\mu$m; QE at 35% Cr", transform=ax.transAxes, ha="right", va="bottom", fontsize=4.8, color="0.4")
 
 
-def build_full_v7(out_name="fig4_mechanism_v7_full", pc=None, pd=None):
+def build_full_v7(out_name="fig4_mechanism_v7_full", pc=None, pd=None, pb=None):
     """v6 with the panels the later results made possible (see the block comment above); earlier versions unchanged."""
     sys.path.insert(0, str(HERE / "kdense_scripta" / "scripts"))
     from style_presets import apply_publication_style
@@ -914,8 +914,11 @@ def build_full_v7(out_name="fig4_mechanism_v7_full", pc=None, pd=None):
     fig.patches.append(matplotlib.patches.FancyArrow(0.97, 0.445, 0, -0.03, width=0.004, head_width=0.012, head_length=0.010,
                                                      color="#FF3B00", transform=fig.transFigure, figure=fig))
     panel_a_v7(fig, [0.005, 0.445, 0.245, 0.49])
-    draw_bands_gh(fig.add_axes([0.30, 0.812, 0.185, 0.09]))
-    draw_fs_change(fig.add_axes([0.268, 0.50, 0.22, 0.30]), legend_below=True)
+    if pb is None:
+        draw_bands_gh(fig.add_axes([0.30, 0.812, 0.185, 0.09]))
+        draw_fs_change(fig.add_axes([0.268, 0.50, 0.22, 0.30]), legend_below=True)
+    else:
+        pb(fig)
     # (c): real unfolded Fermi surfaces replace the Lifshitz cartoon
     draw_unfolded_row(fig, 0.515, 0.835, 0.225)
     wsq = 0.105; hsq = wsq * W / H
@@ -1086,6 +1089,24 @@ def panel_d_v10(fig, rect):
 def build_full_v10():
     """v9 with (g) resolved in composition (see S_saw_landscape for the full distributions)."""
     build_full_v7(out_name="fig4_mechanism_v10_full", pc=panel_c_v8, pd=panel_d_v10)
+
+
+NEST = ENG / "nesting" / "Cr_nm_ibz36" / "nesting.npz"   # nesting.py analyse-ibz (pure_dos NM Cr, 36^3, unfolded by O_h)
+
+
+def panel_b_v11(fig):
+    """(b) v11 (2026-10-16): the Fermi-level shift for +10% Fe is our own (rigid filling of the QE bands of NM Cr on the
+    36^3 grid, +0.23 eV; nesting.py analyse-ibz) instead of the estimate from the Moruzzi N(E_F) (+0.29 eV), in both
+    the Gamma-H band strip and the Fermi surface. The nesting function itself is SM Fig. S_nesting."""
+    z = np.load(NEST)
+    de = float(z["ef_y0.10"] - z["ef_y0.00"])
+    draw_bands_gh(fig.add_axes([0.30, 0.812, 0.185, 0.09]), de=de)
+    draw_fs_change(fig.add_axes([0.268, 0.50, 0.22, 0.30]), legend_below=True, de=de, de_label="QE rigid band")
+
+
+def build_full_v11():
+    """v10 with the computed nesting in (b) (panel_b_v11)."""
+    build_full_v7(out_name="fig4_mechanism_v11_full", pc=panel_c_v8, pd=panel_d_v10, pb=panel_b_v11)
 
 
 def main():

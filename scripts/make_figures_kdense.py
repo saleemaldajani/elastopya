@@ -26,6 +26,7 @@ import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 from matplotlib.collections import PathCollection  # noqa: E402
 from matplotlib.colors import ListedColormap  # noqa: E402
+from matplotlib.legend import Legend  # noqa: E402
 from matplotlib.lines import Line2D  # noqa: E402
 from matplotlib.text import Text  # noqa: E402
 
@@ -64,6 +65,9 @@ def style(ax, label):
     ax.set_title(label, loc="left", fontsize=9, fontweight="bold", pad=3)
 
 
+LEGEND_PT = 6.25
+
+
 def normalize_text(fig):
     """Final-size lettering: Arial, nothing under 7 pt, axis labels 7.5 pt, panel labels 9 pt."""
     for ax in fig.axes:
@@ -74,6 +78,13 @@ def normalize_text(fig):
             t.set_text(t.get_text().replace(r"$\mu$m", "\u00b5m"))   # upright micro sign
             t.set_fontfamily("Arial")
             t.set_fontsize(max(MIN_PT, t.get_fontsize()))
+    # legends: one size everywhere (user, 2026-10-17), exempt from the 7 pt floor so they fit inside square axes
+    legends = [ax.get_legend() for ax in fig.axes if ax.get_legend() is not None] + list(fig.legends)
+    for ax in fig.axes:   # legends kept with add_artist (two-legend panels)
+        legends += [a for a in ax.artists if isinstance(a, Legend)]
+    for lg in legends:
+        for t in lg.get_texts() + [lg.get_title()]:
+            t.set_fontsize(LEGEND_PT)
 
 
 def _data_points(ax, r):

@@ -1,0 +1,2 @@
+2026-10-16: 3rd SCF oscillated (542/600 iterations, accuracy rising to 4e-4) after 2 converged ionic steps; cancelled and resumed from the last complete geometry (QE_RESUME) with mixing beta 0.1, ndim 12, maxstep 1000.
+2026-10-16 16:15: 4th attempt (job 26064928, beta 0.1, ndim 12) sat at a 1e-6 Ry SCF noise floor for 490 iterations in its first SCF. Cancelled; resumed from the last complete geometry (relax_part1.out) with conv_thr 3e-6 Ry (energy error < 1 ueV/atom) and QE_RELAX_ONLY=1 (energy for Fig. 1a only).

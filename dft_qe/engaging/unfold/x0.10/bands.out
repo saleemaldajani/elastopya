@@ -1,5 +1,5 @@
 
-     Program PWSCF v.7.5 starts on 15Oct2026 at  2:15:59 
+     Program PWSCF v.7.5 starts on 15Oct2026 at 17:15:31 
 
      This program is part of the open-source Quantum ESPRESSO suite
      for quantum simulation of materials; please cite
@@ -13,7 +13,7 @@
      Parallel version (MPI), running on   128 processors
 
      MPI processes distributed on     2 nodes
-     32887 MiB available memory on the printing compute node when the environment starts
+     112015 MiB available memory on the printing compute node when the environment starts
 
      Reading input from bands_paro.in
 
@@ -189,39 +189,61 @@
      Band Structure Calculation
      ParO style diagonalization
 
-Message from syslogd@node1458 at Oct 15 02:22:59 ...
- kernel:[Hardware Error]: Uncorrected, software containable error.
-
-Message from syslogd@node1458 at Oct 15 02:22:59 ...
- kernel:[Hardware Error]: CPU:0 (17:31:0) MC255_STATUS[-|UE|-|AddrV|-|-|-|-|-]: 0xb40000000000009f
-
-Message from syslogd@node1458 at Oct 15 02:22:59 ...
- kernel:[Hardware Error]: Error Addr: 0x0000002b18cad1c0
-
-Message from syslogd@node1458 at Oct 15 02:22:59 ...
- kernel:[Hardware Error]: PPIN: 0x02b58e36d18cc07d
-
-Message from syslogd@node1458 at Oct 15 02:22:59 ...
- kernel:[Hardware Error]: IPID: 0x0000000000000000
-
-Message from syslogd@node1458 at Oct 15 02:22:59 ...
- kernel:[Hardware Error]: cache level: L3/GEN, tx: RESV
-
-Message from syslogd@node1458 at Oct 15 02:43:38 ...
- kernel:[Hardware Error]: Uncorrected, software containable error.
-
-Message from syslogd@node1458 at Oct 15 02:43:38 ...
- kernel:[Hardware Error]: CPU:0 (17:31:0) MC255_STATUS[-|UE|-|AddrV|-|-|-|-|-]: 0xb40000000000009f
-
-Message from syslogd@node1458 at Oct 15 02:43:38 ...
- kernel:[Hardware Error]: Error Addr: 0x0000002b18cad1c0
-
-Message from syslogd@node1458 at Oct 15 02:43:38 ...
- kernel:[Hardware Error]: PPIN: 0x02b58e36d18cc07d
-
-Message from syslogd@node1458 at Oct 15 02:43:38 ...
- kernel:[Hardware Error]: IPID: 0x0000000000000000
-
-Message from syslogd@node1458 at Oct 15 02:43:38 ...
- kernel:[Hardware Error]: cache level: L3/GEN, tx: RESV
-
+     ethr =  1.58E-12,  avg # of iterations = 31.1
+
+     total cpu time spent up to now is     2017.4 secs
+
+     End of band structure calculation
+
+     Number of k-points >= 100: set verbosity='high' to print the bands.
+
+     Writing all to output data dir ./tmp/uf.save/ :
+     XML data file, pseudopotentials, collected wavefunctions
+
+     init_run     :      2.47s CPU      4.17s WALL (       1 calls)
+     electrons    :   1892.75s CPU   1913.23s WALL (       1 calls)
+
+     Called by init_run:
+     wfcinit      :      0.00s CPU      0.13s WALL (       1 calls)
+     potinit      :      1.55s CPU      2.73s WALL (       1 calls)
+     hinit0       :      0.60s CPU      0.70s WALL (       1 calls)
+
+     Called by electrons:
+     c_bands      :   1892.74s CPU   1913.22s WALL (       1 calls)
+     v_of_rho     :      0.72s CPU      0.88s WALL (       1 calls)
+     newd         :      0.16s CPU      0.24s WALL (       1 calls)
+     PAW_pot      :      0.40s CPU      0.40s WALL (       1 calls)
+
+     Called by c_bands:
+     init_us_2    :      1.29s CPU      1.36s WALL (      13 calls)
+     paro_k       :   1714.34s CPU   1732.40s WALL (      13 calls)
+
+     Called by paro_*:
+     h_psi        :    780.88s CPU    787.08s WALL (    2785 calls)
+     s_psi        :    157.76s CPU    158.71s WALL (    2785 calls)
+     g_psi        :      5.25s CPU      5.30s WALL (    3883 calls)
+
+     Called by h_psi:
+     h_psi:calbec :    163.99s CPU    165.09s WALL (    2785 calls)
+     vloc_psi     :    455.91s CPU    459.82s WALL (    2785 calls)
+                                        0.00s GPU  (    2785 calls)
+     add_vuspsi   :    156.53s CPU    157.56s WALL (    2785 calls)
+
+     General routines
+     calbec       :    163.97s CPU    165.08s WALL (    2785 calls)
+     fft          :      0.55s CPU      0.78s WALL (      23 calls)
+     ffts         :      0.11s CPU      0.12s WALL (       2 calls)
+     fftw         :    416.20s CPU    419.79s WALL (  305422 calls)
+     interpolate  :      0.15s CPU      0.18s WALL (       2 calls)
+     davcio       :      0.00s CPU      1.68s WALL (      26 calls)
+
+     Parallel routines
+
+     PWSCF        :  33m10.42s CPU  34m10.58s WALL
+
+
+   This run was terminated on:  17:49:42  15Oct2026            
+
+=------------------------------------------------------------------------------=
+   JOB DONE.
+=------------------------------------------------------------------------------=

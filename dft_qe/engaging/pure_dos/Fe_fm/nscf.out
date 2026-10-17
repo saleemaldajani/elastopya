@@ -1,5 +1,5 @@
 
-     Program PWSCF v.7.5 starts on 15Oct2026 at  8: 3:24 
+     Program PWSCF v.7.5 starts on 16Oct2026 at  9:25:13 
 
      This program is part of the open-source Quantum ESPRESSO suite
      for quantum simulation of materials; please cite
@@ -13,7 +13,7 @@
      Parallel version (MPI), running on    32 processors
 
      MPI processes distributed on     1 nodes
-     57992 MiB available memory on the printing compute node when the environment starts
+     54801 MiB available memory on the printing compute node when the environment starts
 
      Reading input from nscf.in
 
@@ -128,4 +128,68 @@
      Checking if some PAW data can be deallocated... 
 
      Band Structure Calculation
-     Davidson diagonalization with overlap
+     CG style diagonalization
+
+     ethr =  6.25E-12,  avg # of iterations = 39.1
+
+     total cpu time spent up to now is       70.6 secs
+
+     End of band structure calculation
+
+     Number of k-points >= 100: set verbosity='high' to print the bands.
+
+     the Fermi energy is    18.4135 ev
+     (compare with:    18.4164 eV, computed in scf)
+
+     Writing all to output data dir ./tmp/fs.save/ :
+     XML data file, pseudopotentials, collected wavefunctions
+
+     init_run     :      0.52s CPU      0.56s WALL (       1 calls)
+     electrons    :     26.30s CPU     29.36s WALL (       1 calls)
+
+     Called by init_run:
+     wfcinit      :      0.00s CPU      0.00s WALL (       1 calls)
+     potinit      :      0.25s CPU      0.28s WALL (       1 calls)
+     hinit0       :      0.23s CPU      0.25s WALL (       1 calls)
+
+     Called by electrons:
+     c_bands      :     24.55s CPU     27.60s WALL (       1 calls)
+     v_of_rho     :      0.02s CPU      0.04s WALL (       1 calls)
+     newd         :      0.00s CPU      0.01s WALL (       1 calls)
+     PAW_pot      :      0.07s CPU      0.08s WALL (       1 calls)
+
+     Called by c_bands:
+     init_us_2    :      0.01s CPU      0.01s WALL (     155 calls)
+     ccgdiagg     :     13.26s CPU     16.10s WALL (     472 calls)
+     wfcrot       :      0.93s CPU      1.01s WALL (     472 calls)
+
+     Called by *cgdiagg:
+     h_psi        :     11.05s CPU     13.30s WALL (  114306 calls)
+     s_psi        :      0.41s CPU      0.51s WALL (  228140 calls)
+
+     Called by h_psi:
+     h_psi:calbec :      0.54s CPU      0.65s WALL (  114306 calls)
+     vloc_psi     :      9.67s CPU     11.63s WALL (  114306 calls)
+                                        0.00s GPU  (  114306 calls)
+     add_vuspsi   :      0.40s CPU      0.50s WALL (  114306 calls)
+     hs_1psi      :     10.90s CPU     13.21s WALL (  113834 calls)
+     s_1psi       :      0.90s CPU      1.08s WALL (  113834 calls)
+
+     General routines
+     calbec       :      0.74s CPU      0.91s WALL (  228140 calls)
+     fft          :      0.10s CPU      0.12s WALL (      23 calls)
+     ffts         :      0.06s CPU      0.07s WALL (       2 calls)
+     fftw         :      8.88s CPU     10.68s WALL (  246548 calls)
+     interpolate  :      0.06s CPU      0.07s WALL (       2 calls)
+     davcio       :      0.01s CPU      0.09s WALL (     310 calls)
+
+     Parallel routines
+
+     PWSCF        :   1m 7.40s CPU   1m13.92s WALL
+
+
+   This run was terminated on:   9:26:27  16Oct2026            
+
+=------------------------------------------------------------------------------=
+   JOB DONE.
+=------------------------------------------------------------------------------=

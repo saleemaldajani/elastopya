@@ -1,0 +1,50 @@
+{
+  "notice": "Export completed with explicit settings. This report does not establish visual, accessibility, scientific-integrity, or journal-submission compliance.",
+  "outputs": [
+    {
+      "format": "pdf",
+      "kind": "vector-container",
+      "path": "/Users/saleem/MIT/research/Scripta/mike_final_touches/manuscript/figures/kdense_scripta/response/R_fig3b_options.pdf",
+      "size_bytes": 74379
+    },
+    {
+      "format": "png",
+      "kind": "raster",
+      "path": "/Users/saleem/MIT/research/Scripta/mike_final_touches/manuscript/figures/kdense_scripta/response/R_fig3b_options.png",
+      "size_bytes": 600139
+    },
+    {
+      "format": "svg",
+      "kind": "vector-container",
+      "path": "/Users/saleem/MIT/research/Scripta/mike_final_touches/manuscript/figures/kdense_scripta/response/R_fig3b_options.svg",
+      "size_bytes": 279034
+    }
+  ],
+  "provenance": {
+    "source": "scripts/make_response_figures.py"
+  },
+  "schema_version": "1.0",
+  "settings": {
+    "bbox_inches": "tight",
+    "dpi": 600.0,
+    "facecolor": "white",
+    "figure_size_inches": [
+      7.480314960629921,
+      2.7293041072568633
+    ],
+    "font_mode": "truetype",
+    "formats": [
+      "pdf",
+      "png",
+      "svg"
+    ],
+    "pad_inches": 0.1,
+    "tiff_rgb": false,
+    "transparent": false
+  },
+  "versions": {
+    "matplotlib": "3.11.1",
+    "pillow": "12.3.0"
+  },
+  "warnings": []
+}

@@ -744,14 +744,19 @@ def panel_c_v7(ax, T, D):
 _panel_c_v6 = panel_c
 
 
-def main_v7():
+def main_v8():
+    """v7 redrawn after the PBE-relaxed Fe-80Cr tensor was added (2026-10-17); v7 kept."""
+    main_v7(name="fig5_embrittlement_v8")
+
+
+def main_v7(name="fig5_embrittlement_v7"):
     """v6 with the experimental-lattice-parameter QE set added to (d), (f), (h), (i) and (m)."""
     global tensors, atom_d, coherency, dft_cells, SER, panel_c
     saved = (tensors, atom_d, coherency, dft_cells, SER, panel_c)
     tensors, atom_d, coherency, dft_cells, panel_c = tensors_v7, atom_d_v7, coherency_v7, dft_cells_v7, panel_c_v7
     SER = {**SER, "qeaexp": (QE_AEXP_C, "D", "QE, exp. $a$ (this work)")}
     try:
-        main_v4(panel_h=panel_h_v7, name="fig5_embrittlement_v7", panel_n=psi_flow,
+        main_v4(panel_h=panel_h_v7, name=name, panel_n=psi_flow,
                 row4=([0.085, 0.04, 0.20, 0.155], [0.345, 0.04, 0.20, 0.155], [0.585, 0.0, 0.40, 0.212]))
     finally:
         tensors, atom_d, coherency, dft_cells, SER, panel_c = saved

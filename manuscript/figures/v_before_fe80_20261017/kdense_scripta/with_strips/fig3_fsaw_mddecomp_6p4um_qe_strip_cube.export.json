@@ -1,0 +1,52 @@
+{
+  "notice": "Export completed with explicit settings. This report does not establish visual, accessibility, scientific-integrity, or journal-submission compliance.",
+  "outputs": [
+    {
+      "format": "pdf",
+      "kind": "vector-container",
+      "path": "/Users/saleem/MIT/research/Scripta/mike_final_touches/manuscript/figures/kdense_scripta/with_strips/fig3_fsaw_mddecomp_6p4um_qe_strip_cube.pdf",
+      "size_bytes": 168055
+    },
+    {
+      "format": "png",
+      "kind": "raster",
+      "path": "/Users/saleem/MIT/research/Scripta/mike_final_touches/manuscript/figures/kdense_scripta/with_strips/fig3_fsaw_mddecomp_6p4um_qe_strip_cube.png",
+      "size_bytes": 660326
+    },
+    {
+      "format": "svg",
+      "kind": "vector-container",
+      "path": "/Users/saleem/MIT/research/Scripta/mike_final_touches/manuscript/figures/kdense_scripta/with_strips/fig3_fsaw_mddecomp_6p4um_qe_strip_cube.svg",
+      "size_bytes": 288299
+    }
+  ],
+  "provenance": {
+    "profile": "scripta",
+    "profile_accessed": "2026-10-12",
+    "source": "scripts/make_figures_kdense.py"
+  },
+  "schema_version": "1.0",
+  "settings": {
+    "bbox_inches": null,
+    "dpi": 600.0,
+    "facecolor": "white",
+    "figure_size_inches": [
+      7.480314960629921,
+      4.446797900262467
+    ],
+    "font_mode": "truetype",
+    "formats": [
+      "pdf",
+      "png",
+      "svg"
+    ],
+    "pad_inches": 0.1,
+    "tiff_rgb": false,
+    "transparent": false
+  },
+  "versions": {
+    "matplotlib": "3.11.1",
+    "pillow": "12.3.0"
+  },
+  "warnings": []
+}

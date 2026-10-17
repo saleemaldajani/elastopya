@@ -524,6 +524,11 @@ def fig2_orientation_violin(lit, dft, mdd, mdr):
 
 
 QE_COL = "#8F3A00"   # QE series (darker vermilion; VASP keeps RED)
+QE2 = None           # optional second QE series (experimental lattice parameter) for Figs. 2a/3a comparison versions
+QE2_COL = "#0072B2"
+STEM_SUFFIX = ""     # appended to the Fig. 2/3 stems when QE2 is drawn (comparison versions only)
+LEGEND_A = None      # optional callable(ax, handles, labels, fig_id) placing the panel-(a) legend (layout options)
+VIOLIN_QE2 = False   # also draw the QE2 (experimental-lattice) tensors as violins in Fig. 2b (comparison versions)
 
 
 def qe_dft():
@@ -600,7 +605,10 @@ def fig2_orientation_bulk(lit, dft, mdd, mdr, kind="violin", with_decomp=False, 
            label="DFT (VASP, this work)" if qe is not None else "DFT (this work)", zorder=4)
     if qe is not None:   # QE: open diamonds (same convention as the SM figures)
         a.plot(qe["x"], qe["c11"], "D", mfc="white", mec=QE_COL, mew=1.1, ms=5.5, ls="none",
-               label="DFT (QE, this work)", zorder=5)
+               label="DFT (QE, this work)" if QE2 is None else "DFT (QE, relaxed $a$)", zorder=5)
+    if QE2 is not None:
+        a.plot(QE2["x"], QE2["c11"], "D", color=QE2_COL, mec="white", mew=0.5, ms=5.0, ls="none",
+               label="DFT (QE, experimental $a$)", zorder=5)
     if mdr is not None:
         a.plot(mdr["x"], mdr["c11"], "-", color=GREEN, alpha=0.5, lw=0.8, zorder=1)
         a.errorbar(mdr["x"], mdr["c11"], yerr=mdr["c11_sd"], fmt="s", color=GREEN, ms=4.5, capsize=2,
@@ -613,7 +621,10 @@ def fig2_orientation_bulk(lit, dft, mdd, mdr, kind="violin", with_decomp=False, 
     a.set(xlabel=r"$x_{\rm Cr}$", ylabel=r"$C_{11}$ (GPa)", xlim=(-0.03, 1.03), ylim=(200, 600))
     h, l = a.get_legend_handles_labels()
     o = sorted(range(len(l)), key=lambda i: ("Razum" not in l[i], "DFT" not in l[i], "decomposed" in l[i]))
-    a.legend([h[i] for i in o], [l[i] for i in o], frameon=False, fontsize=6.5, loc="upper left")
+    if LEGEND_A is None:
+        a.legend([h[i] for i in o], [l[i] for i in o], frameon=False, fontsize=6.5, loc="upper left")
+    else:
+        LEGEND_A(a, [h[i] for i in o], [l[i] for i in o], "fig2")
     style(a, "(a)")
 
     tens = saw_tensors()
@@ -625,7 +636,11 @@ def fig2_orientation_bulk(lit, dft, mdd, mdr, kind="violin", with_decomp=False, 
     series = [("lit", "0.15", "Razumovskiy et al. [8]"),
               ("dft", RED, "DFT (VASP, this work)" if qe is not None else "DFT (this work)")]
     if qe is not None:
-        series.append(("qe", QE_COL, "DFT (QE, this work)"))
+        series.append(("qe", QE_COL, "DFT (QE, this work)" if QE2 is None else "DFT (QE, relaxed $a$)"))
+    if QE2 is not None and VIOLIN_QE2:
+        series.append(("qeaexp", QE2_COL, "DFT (QE, experimental $a$)"))
+        for i, xq in enumerate(QE2["x"]):
+            tens[f"qeaexp_x{xq:.2f}"] = (float(xq), float(QE2["c11"][i]), float(QE2["c12"][i]), float(QE2["c44"][i]))
     series.append(("md", GREEN, "MD, random alloy"))
     if with_decomp:
         series.append(("mddec", "#0B5D3B", r"MD, fully decomposed ($\phi$ = 1)"))
@@ -656,8 +671,9 @@ def fig2_orientation_bulk(lit, dft, mdd, mdr, kind="violin", with_decomp=False, 
                              alpha=0.75 if hatch is None else 0.35, zorder=3)
         handles.append(Patch(facecolor=col, alpha=0.35, edgecolor=col, label=lab))
 
+    both = QE2 is not None and VIOLIN_QE2
     b.set(xlabel=r"$C_{11}$ (GPa)", ylabel=r"Frequency (GHz), $\lambda$ = 6.4 $\mu$m",
-          xlim=(225, 595), ylim=(0.34, 1.42))
+          xlim=(225, 595), ylim=(0.34, 1.52 if both else 1.42))   # taller with both QE sets so the legend clears the data
     b.legend(handles=handles, frameon=False, fontsize=6.0, loc="upper left", handlelength=1.4)
     b.text(590, 0.95, "bulk (quasi-longitudinal)\nwaves", ha="right", va="center", fontsize=6.3, color="0.35",
            style="italic")
@@ -665,7 +681,7 @@ def fig2_orientation_bulk(lit, dft, mdd, mdr, kind="violin", with_decomp=False, 
     b.text(590, 0.36, "(P)SAW", ha="right", va="bottom", fontsize=6.3, color="0.35", style="italic")
     style(b, "(b)")
     save(fig, f"fig2_elastic_mapping_orientation_{kind}_bulk" + ("_mddecomp" if with_decomp else "")
-         + ("_qe" if qe is not None else ""))
+         + ("_qe" if qe is not None else "") + STEM_SUFFIX)
 
 
 def fig3(lit, dft, mdd, mdr, lam=6.4, stem="fig3_fsaw", rel_b=False, crcolor=False, md_decomp_a=False,
@@ -678,7 +694,10 @@ def fig3(lit, dft, mdd, mdr, lam=6.4, stem="fig3_fsaw", rel_b=False, crcolor=Fal
            label="DFT (VASP, this work)" if qe is not None else "DFT (this work)", zorder=4)
     if qe is not None:
         a.plot(qe["x"], qe["f"] * k, "o", mfc="white", mec=QE_COL, mew=1.1, ms=6, ls="none",
-               label="DFT (QE, this work)", zorder=5)
+               label="DFT (QE, this work)" if QE2 is None else "DFT (QE, relaxed $a$)", zorder=5)
+    if QE2 is not None:
+        a.plot(QE2["x"], QE2["f"] * k, "D", color=QE2_COL, mec="white", mew=0.5, ms=5.0, ls="none",
+               label="DFT (QE, experimental $a$)", zorder=5)
     if mdr is not None:
         a.plot(mdr["x"], mdr["f"] * k, "-", color=GREEN, alpha=0.5, lw=0.8, zorder=1)
         a.plot(mdr["x"], mdr["f"] * k, "s", color=GREEN, mec="white", mew=0.6, ms=5.5, ls="none",
@@ -729,7 +748,10 @@ def fig3(lit, dft, mdd, mdr, lam=6.4, stem="fig3_fsaw", rel_b=False, crcolor=Fal
         a.text(xb, y0 - 0.008 * k, r"Cr-rich $\alpha'$", ha="center", va="top", fontsize=6.6, color=BLUE)
     a.set(xlabel=r"$x_{\rm Cr}$", ylabel=rf"$f_{{\rm SAW}}$ (GHz), $\lambda$ = {lam:g} $\mu$m",
           xlim=(-0.03, 1.03), ylim=(0.405 * k, 0.64 * k))
-    a.legend(frameon=False, fontsize=6.5, loc="upper left")
+    if LEGEND_A is None:
+        a.legend(frameon=False, fontsize=6.5, loc="upper left")
+    else:
+        LEGEND_A(a, *a.get_legend_handles_labels(), "fig3")
     style(a, "(a)")
 
     dec = md_decomposition()
@@ -813,6 +835,32 @@ def fig3(lit, dft, mdd, mdr, lam=6.4, stem="fig3_fsaw", rel_b=False, crcolor=Fal
     save(fig, stem)
 
 
+def qe_dft_aexp(exclude=(0.80,)):
+    """Experimental-lattice QE tensors for Figs. 2a/3a (2026-10-17). 80% Cr is left out: that tensor lies on the
+    antiferromagnetic branch (discussion_items.tex); 65% Cr has a relaxation only."""
+    import json
+    rows = {}
+    for d in sorted((ROOT / "dft_qe" / "engaging" / "runs").glob("sqs40_x*_k442_e60_aexp")):
+        j = d / "result.json"
+        if j.exists():
+            r = json.loads(j.read_text())
+            if round(r["x_cr"], 3) not in exclude:
+                rows[round(r["x_cr"], 3)] = (r["C11"], r["C12"], r["C44"])
+    x = np.array(sorted(rows))
+    c11, c12, c44 = (np.array([rows[v][i] for v in x]) for i in range(3))
+    b, cp = (c11 + 2 * c12) / 3, (c11 - c12) / 2
+    g = ((2 * cp + 3 * c44) / 5 + 5 * (2 * cp) * c44 / (4 * c44 + 3 * (2 * cp))) / 2
+    e = 9 * b * g / (3 * b + g)
+    return dict(x=x, c11=c11, c12=c12, c44=c44, f=rayleigh_f(b, e, x * RHO_CR + (1 - x) * RHO_FE))
+
+
+def legend_a_compact(ax, h, l, fid):
+    """Panel-(a) legend of Figs. 2/3 with both QE sets (user, 2026-10-17): square axes kept, one column, tight spacing,
+    0.65 em from the axes so it clears the inward ticks."""
+    ax.legend(h, l, fontsize=6.25, loc="upper left", frameon=False, handlelength=1.2, handletextpad=0.35,
+              labelspacing=0.16, borderaxespad=0.65)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--xlsx", help="Google Sheet .xlsx export; refreshes data/sheet_*.csv")
@@ -854,11 +902,15 @@ def main():
         fig1(qe=qmix, entropy_fix=True)
         print("QE x, dH_mix, demix (eV/atom):", qmix["x"], np.round(qmix["dh"], 4), np.round(qmix["demix"], 4))
     qe = qe_dft()
-    if qe is not None:   # review versions with the QE series next to VASP (_qe)
+    if qe is not None:   # review versions with the QE series next to VASP (_qe); these are the paper's Figs. 2-3
+        global QE2, LEGEND_A
+        global VIOLIN_QE2
+        QE2, LEGEND_A, VIOLIN_QE2 = qe_dft_aexp(), legend_a_compact, True   # both QE sets in (a) and (b) (user, 2026-10-17)
         fig2_orientation_bulk(lit, dft, mdd, mdr, kind="violin", with_decomp=True, qe=qe)
         fig3(lit, dft, mdd, mdr, lam=6.4, stem="fig3_fsaw_mddecomp_6p4um_qe", md_decomp_a=True, qe=qe)
         fig3(lit, dft, mdd, mdr, lam=6.4, stem="fig3_fsaw_mddecomp_6p4um_qe_relative", md_decomp_a=True, qe=qe,
              rel_b=True)   # decision for Mike: Fig. 3 as in the paper, but (b) as % change from the random alloy
+        QE2, LEGEND_A, VIOLIN_QE2 = None, None, False
         print("QE x, C11, f(6.4 um):", qe["x"], np.round(qe["c11"], 1), np.round(qe["f"], 4))
     if mdr is not None:
         print('MD random x, C11, f:', np.round(mdr['x'], 2), np.round(mdr['c11'], 1), np.round(mdr['f'], 4))

@@ -1,0 +1,1 @@
+2026-10-16 22:45: backup of the Fe-80Cr strain steps s_xx_m, s_yz_p, s_yz_m with QE_CONV_THR=3e-6 (the 1e-8 runs sat at a ~2e-6 Ry floor after 300 iterations). relax and s_xx_p (converged at 1e-8) copied from sqs40_x0.80_k442_e60_crafm2.

@@ -1,0 +1,52 @@
+{
+  "notice": "Export completed with explicit settings. This report does not establish visual, accessibility, scientific-integrity, or journal-submission compliance.",
+  "outputs": [
+    {
+      "format": "pdf",
+      "kind": "vector-container",
+      "path": "/Users/saleem/MIT/research/Scripta/mike_final_touches/manuscript/figures/kdense_scripta/with_strips/fig2_elastic_mapping_orientation_violin_bulk_mddecomp_strip_cube_trend.pdf",
+      "size_bytes": 275108
+    },
+    {
+      "format": "png",
+      "kind": "raster",
+      "path": "/Users/saleem/MIT/research/Scripta/mike_final_touches/manuscript/figures/kdense_scripta/with_strips/fig2_elastic_mapping_orientation_violin_bulk_mddecomp_strip_cube_trend.png",
+      "size_bytes": 978229
+    },
+    {
+      "format": "svg",
+      "kind": "vector-container",
+      "path": "/Users/saleem/MIT/research/Scripta/mike_final_touches/manuscript/figures/kdense_scripta/with_strips/fig2_elastic_mapping_orientation_violin_bulk_mddecomp_strip_cube_trend.svg",
+      "size_bytes": 627112
+    }
+  ],
+  "provenance": {
+    "profile": "scripta",
+    "profile_accessed": "2026-10-12",
+    "source": "scripts/make_figures_kdense.py"
+  },
+  "schema_version": "1.0",
+  "settings": {
+    "bbox_inches": null,
+    "dpi": 600.0,
+    "facecolor": "white",
+    "figure_size_inches": [
+      7.480314960629921,
+      5.682553587051618
+    ],
+    "font_mode": "truetype",
+    "formats": [
+      "pdf",
+      "png",
+      "svg"
+    ],
+    "pad_inches": 0.1,
+    "tiff_rgb": false,
+    "transparent": false
+  },
+  "versions": {
+    "matplotlib": "3.11.1",
+    "pillow": "12.3.0"
+  },
+  "warnings": []
+}

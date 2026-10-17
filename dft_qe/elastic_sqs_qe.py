@@ -44,6 +44,18 @@ def write_input(path, cell, symbols, frac, k, ecut, calc):
     mass = {"Fe": 55.845, "Cr": 51.996}
     upf = {"Fe": "Fe.pbe-spn-kjpaw_psl.0.2.1.UPF", "Cr": "Cr.pbe-spn-kjpaw_psl.1.0.0.UPF"}
     mag = {"Fe": 0.6, "Cr": float(os.environ.get("QE_MAG_CR", "0.25"))}   # QE_MAG_CR < 0: Cr antiparallel to Fe
+    # QE_MAG_SITES=<file of per-atom moments, input order>: each atom starts with the sign of its moment in that
+    # file (labels Fe1/Cr1 up, Fe2/Cr2 down, same pseudopotentials, |starting magnetization| as above). Added
+    # 2026-10-16 so the Fe-80Cr strain steps start in the magnetic state of the relaxed cell: from a uniform start,
+    # two of four steps wandered between Cr sign patterns at a 5e-7 Ry SCF noise floor.
+    if os.environ.get("QE_MAG_SITES"):
+        m = [float(v) for v in Path(os.environ["QE_MAG_SITES"]).read_text().split()]
+        assert len(m) == len(symbols), "QE_MAG_SITES needs one moment per atom"
+        symbols = [f"{s}{1 if v > 0 else 2}" for s, v in zip(symbols, m)]
+        sp = sorted(set(symbols))
+        el = lambda lab: lab.rstrip("12")
+        mass = {lab: mass[el(lab)] for lab in sp}; upf = {lab: upf[el(lab)] for lab in sp}
+        mag = {lab: (1 if lab.endswith("1") else -1) * abs(mag[el(lab)]) for lab in sp}
     lines = [f"""&control
   calculation = '{calc}', prefix = 'sqs', outdir = './tmp', pseudo_dir = '{PSEUDO}',
   tstress = .true., tprnfor = .true., etot_conv_thr = 1e-5, forc_conv_thr = 1e-3, nstep = 60
@@ -55,7 +67,8 @@ def write_input(path, cell, symbols, frac, k, ecut, calc):
 &electrons
   conv_thr = """ + os.environ.get("QE_CONV_THR", "1e-8") + """, mixing_beta = """ + os.environ.get("QE_MIXING_BETA", "0.2") + """, mixing_mode = 'local-TF', electron_maxstep = """ + os.environ.get("QE_MAXSTEP", "300")
   + (", mixing_ndim = " + os.environ["QE_MIXING_NDIM"] if "QE_MIXING_NDIM" in os.environ else "")
-  + (",\n  startingpot = 'file', startingwfc = 'file'" if os.environ.get("QE_START_FROM_FILE") else "") + """
+  + ({"pot": ",\n  startingpot = 'file'"}.get(os.environ.get("QE_START_FROM_FILE"), ",\n  startingpot = 'file', startingwfc = 'file'")
+     if os.environ.get("QE_START_FROM_FILE") else "") + """
 /
 &ions
 """ + (f"  upscale = {os.environ['QE_UPSCALE']}\n" if "QE_UPSCALE" in os.environ else "") + """/
@@ -194,6 +207,16 @@ def main():
                     continue
                 sd = d / f"par_{name}"
                 sd.mkdir(exist_ok=True)
+                # QE_START_FROM_FILE=pot: start the SCF from the relaxed charge and spin density (copied from the
+                # relaxation's ./tmp; no wavefunctions are kept there). Added 2026-10-16 for Fe-80Cr: from the atomic
+                # guess, three of the four steps sat at a 5e-7 Ry noise floor for 350+ iterations, and the one that
+                # converged had a different moment from the relaxed cell (13.2 vs 14.6 muB/cell), i.e. a different
+                # magnetic state; all ten SCFs of the relaxation, each started from the previous density, converged.
+                if os.environ.get("QE_START_FROM_FILE") == "pot":
+                    src, dst = d / "tmp" / "sqs.save", sd / "tmp" / "sqs.save"
+                    dst.mkdir(parents=True, exist_ok=True)
+                    for f in ("charge-density.dat", "data-file-schema.xml", "paw.txt"):
+                        shutil.copy2(src / f, dst / f)
                 write_input(sd / f"{name}.in", c, sym, frac, a.k, a.ecut, "relax")
                 stress_gpa(run(sd, name, a.np))
                 shutil.copy2(sd / f"{name}.out", d / f"{name}.out")

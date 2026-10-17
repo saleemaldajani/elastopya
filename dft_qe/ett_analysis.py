@@ -262,11 +262,15 @@ def plot(res, L, lit_f, E):
                       ax.axvline(ee["xc"], color="#B07800", lw=0.8, ls="--"))
     # (a) critical level
     ax = axs[0, 0]; win(ax)
-    for key, mk, col, lab in (("relaxed", "o", "#D55E00", "PBE-relaxed $a$"), ("aexp", "D", "#0072B2", "experimental $a$")):
+    xx = np.linspace(0, 0.2, 50)
+    for key, mk, col, lab, dx, ls in (("relaxed", "o", "#D55E00", "PBE-relaxed $a$", -0.003, "--"),
+                                      ("aexp", "D", "#0072B2", "experimental $a$", 0.003, "-")):
         pts = np.array(res["critical_level"].get(key, []))
-        if len(pts):
-            ax.errorbar(pts[:, 0], pts[:, 1], yerr=pts[:, 2], fmt=mk, color=col, ms=4, capsize=2, lw=0.8, label=lab)
-    xx = np.linspace(0, 0.2, 50); ax.plot(xx, ee["dz_dx_eV"] * (xx - ee["xc"]), color="#0072B2", lw=0.8)
+        if len(pts):   # the two series are offset by +-0.003 in x so that the error bars do not hide each other
+            ax.errorbar(pts[:, 0] + dx, pts[:, 1], yerr=pts[:, 2], fmt=mk, color=col, ms=4, capsize=2, lw=0.8, label=lab)
+        e_k = res["xc_electronic"].get(key)
+        if e_k:
+            ax.plot(xx, e_k["dz_dx_eV"] * (xx - e_k["xc"]), ls, color=col, lw=0.8)
     ax.axhline(0, color="0.5", lw=0.5)
     ax.set(xlim=(0, 0.2), xlabel="$x_{Cr}$", ylabel="$z=E_F-E_c$ (eV)", title="(a) majority level at H")
     ax.legend(fontsize=5.5, loc="upper left", frameon=False)

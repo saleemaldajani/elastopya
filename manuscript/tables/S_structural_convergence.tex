@@ -1,0 +1,40 @@
+\begin{table}[!htbp]
+\centering
+\caption{Structural convergence of the Quantum ESPRESSO relaxations (40-atom SQS). Residual total force and pressure at
+the last ionic step, and number of ionic (BFGS) steps. Thresholds: energy change $10^{-5}$~Ry, force components
+$10^{-3}$~Ry/bohr, pressure 0.2~kbar for the PBE-relaxed cells; at the experimental lattice parameter the cell is fixed
+and only the ions relax, hence the non-zero pressure. The SCF threshold is $10^{-8}$~Ry, except $3\times10^{-6}$~Ry for
+the last 19 of the 21 ionic steps of Fe--65Cr at the experimental lattice parameter, where the SCF reached a $10^{-6}$~Ry noise floor (energy error below
+1~$\mu$eV/atom). Every SCF of every ionic step converged.}
+\label{tab:S_structural_convergence}
+\small
+\begin{tabular}{rlrrr}
+\hline
+$x_{\mathrm{Cr}}$ & lattice & force (Ry/bohr) & $P$ (kbar) & ionic steps \\
+\hline
+0.05 & relaxed & 0.0006 & -0.11 & 11 \\
+0.10 & relaxed & 0.0013 & 0.00 & 9 \\
+0.20 & relaxed & 0.0019 & 0.04 & 12 \\
+0.30 & relaxed & 0.0008 & -0.12 & 16 \\
+0.35 & relaxed & 0.0015 & 0.12 & 12 \\
+0.40 & relaxed & 0.0020 & 0.12 & 9 \\
+0.45 & relaxed & 0.0011 & -0.07 & 16 \\
+0.475 & relaxed & 0.0010 & -0.08 & 16 \\
+0.50 & relaxed & 0.0021 & -0.10 & 13 \\
+0.65 & relaxed & 0.0014 & -0.10 & 15 \\
+0.70 & relaxed & 0.0011 & -0.07 & 16 \\
+0.95 & relaxed & 0.0006 & 0.05 & 9 \\
+0.05 & exp. & 0.0014 & -63.05 & 9 \\
+0.10 & exp. & 0.0016 & -66.28 & 9 \\
+0.20 & exp. & 0.0017 & -59.98 & 14 \\
+0.30 & exp. & 0.0010 & -71.41 & 17 \\
+0.35 & exp. & 0.0017 & -74.33 & 11 \\
+0.40 & exp. & 0.0023 & -75.47 & 9 \\
+0.45 & exp. & 0.0013 & -80.61 & 17 \\
+0.50 & exp. & 0.0017 & -83.82 & 15 \\
+0.65 & exp. & 0.0030 & -91.64 & 21 \\
+0.80 & exp. & 0.0020 & -69.40 & 12 \\
+0.95 & exp. & 0.0008 & -101.31 & 8 \\
+\hline
+\end{tabular}
+\end{table}
