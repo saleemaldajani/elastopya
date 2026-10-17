@@ -1,7 +1,7 @@
 %% Author: Saleem Al Dajani, MIT, KAUST. UCB-NE
 %DIF LATEXDIFF DIFFERENCE FILE
 %DIF DEL finalpaper_mike_reviewed.tex                 Mon Oct 12 06:12:19 2026
-%DIF ADD finalpaper_qe_mechanism_v38_validation.tex   Sat Oct 17 06:08:41 2026
+%DIF ADD finalpaper_qe_mechanism_v38_validation.tex   Sat Oct 17 06:11:54 2026
 %% This is the manuscript draft for our paper about LWR MMLC
 % draft format
 %\documentclass[preprint,12pt]{elsarticle}
@@ -1458,7 +1458,7 @@ reproduce the explicit MD decomposed tensors to 3--5~MHz (73--84\% of the freque
 \cite{al2023detecting}}\hskip0pt%DIFAUXCMD
 , each structure is turned into a black-and-white Cr map: the $25^3$ cell is coarse-grained onto its conventional cubic cells, smoothed over one cell and thresholded at the alloy composition (Cr-rich or Fe-rich). (a) Two-point correlation $C(r)$ of the map of Fe--36Cr from the random alloy ($\phi=0.5$) to full decomposition ($\phi=1$): the correlated Cr-rich regions grow from about 1 to 2 nm. (b) Wavelength from the chord lengths, $\lambda=\langle l_{\rm Cr}\rangle+\langle l_{\rm Fe}\rangle$ (mean length of the Cr-rich and Fe-rich runs along all lattice lines, i.e.\ one Fe/Cr period), against $\phi$ (mean $\pm$ s.d. of five alloys), with the 2D-FFT values of Ref.~\mbox{%DIFAUXCMD
 \cite{al2023detecting} }\hskip0pt%DIFAUXCMD
-for Fe$_{50}$Cr$_{50}$ ($50^3$ cells, open circles) and its STEM-EDX value for CF8 aged at 400~$^\circ$C for 10 kh (dashed, 4.76 nm). (c) $\lambda$ against Cr content for the fully decomposed ($\phi=1$) and random ($\phi=0.5$) structures. The random alloy gives 2.6--2.7 nm at every composition, the scale of the one-cell smoothing and so the floor of the measure. Inside the spinodal window the wavelength grows from there to 3.3 nm at $\phi=0.6$ and 4.2--4.4 nm at $\phi=1$, the trend and scale of Ref.~\mbox{%DIFAUXCMD
+for Fe$_{50}$Cr$_{50}$ ($50^3$ cells, open circles) and its STEM-EDX value for CF8 aged at 400~$^\circ$C for 10 kh (dashed, 4.76 nm). (c) $\lambda$ against Cr content at every $\phi$ (colours as in a). The random alloy gives 2.6--2.7 nm at every composition, the scale of the one-cell smoothing and so the floor of the measure. Inside the spinodal window the wavelength grows from there to 3.3 nm at $\phi=0.6$ and 4.2--4.4 nm at $\phi=1$, the trend and scale of Ref.~\mbox{%DIFAUXCMD
 \cite{al2023detecting} }\hskip0pt%DIFAUXCMD
 (4.2--4.8 nm) and of the measured 4.76 nm. Outside the window the minority element forms isolated clusters, and the long matrix runs make $\lambda$ larger without a spinodal period. A 3D FFT of the same maps gives a structure factor that keeps rising towards the lowest $k$ the 7.2~nm box allows, so its wavelength is set by the cell size; the chord lengths are not quantised in this way. The conversion procedure (Sec.~\ref{sec:md}) is a Monte Carlo construction, not aging kinetics, so $\phi$ is not a time. Script: }\texttt{\DIFaddFL{scripts/spinodal\_wavelength.py}}\DIFaddFL{.}}
 \label{fig:S_spinodal_wavelength}
