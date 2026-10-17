@@ -145,7 +145,7 @@ def plot():
     a.set(xlabel=r"$r$ (nm)", ylabel=r"Two-point correlation $C(r)$", xlim=(0, L / 2), ylim=(-0.12, 1.02))
     a.text(0.97, 0.55, "Fe$-$36Cr, one alloy", transform=a.transAxes, ha="right", fontsize=6.5)
     a.legend(loc="upper right", ncol=2)
-    win = d["phi"] > 0.55                                   # phi = 0.5 is the random alloy: no spinodal structure
+    win = d["phi"] > 0.45   # phi = 0.5 (random alloy) included: the noise floor of the measure (user, 2026-10-17)
     cols = {0.2: mf.BLUE, 0.36: mf.RED, 0.5: "0.2", 0.7: mf.GREEN}
     for x, col in cols.items():
         m = np.isclose(d["x_cr"], x) & win
@@ -157,17 +157,17 @@ def plot():
     b.axhline(ACTA["ss304"], color="#8A5A00", lw=0.8, ls="--")
     b.text(0.49, ACTA["ss304"] + 0.06, "STEM-EDX, aged CF8 (Acta)", fontsize=6, color="#8A5A00", va="bottom")
     b.set(xlabel=r"Spinodal conversion fraction, $\phi$", ylabel=r"Wavelength $\lambda$ (nm), chord length",
-          xlim=(0.47, 1.03), ylim=(3.0, 7.0))
+          xlim=(0.47, 1.03), ylim=(2.3, 7.0))
     b.legend(loc="upper left")
     xs = np.unique(d["x_cr"])
-    for key, mk_, col, lab in (("lambda_chord_nm", "s", mf.GREEN, r"chord length, $\phi$ = 1"),
-                               ("lambda_mean_bw_nm", "^", "0.5", r"FFT first moment, $\phi$ = 1")):
-        mu = [d[key][np.isclose(d["x_cr"], x) & np.isclose(d["phi"], 1.0)].mean() for x in xs]
-        sd = [d[key][np.isclose(d["x_cr"], x) & np.isclose(d["phi"], 1.0)].std(ddof=1) for x in xs]
+    for key, phi_c, mk_, col, lab in (("lambda_chord_nm", 1.0, "s", mf.GREEN, r"$\phi$ = 1, fully decomposed"),
+                                      ("lambda_chord_nm", 0.5, "o", "0.55", r"$\phi$ = 0.5, random alloy")):
+        mu = [d[key][np.isclose(d["x_cr"], x) & np.isclose(d["phi"], phi_c)].mean() for x in xs]
+        sd = [d[key][np.isclose(d["x_cr"], x) & np.isclose(d["phi"], phi_c)].std(ddof=1) for x in xs]
         c.errorbar(xs, mu, yerr=sd, fmt="-" + mk_, ms=3, lw=0.8, capsize=1.5, color=col, label=lab)
     c.axvspan(0.30, 0.71, color="0.9", lw=0, zorder=0, label="spinodal, 748 K")
     c.axhline(ACTA["ss304"], color="#8A5A00", lw=0.8, ls="--")
-    c.set(xlabel=r"$x_{\rm Cr}$", ylabel=r"Wavelength $\lambda$ (nm)", xlim=(0, 1), ylim=(3.0, 6.4))
+    c.set(xlabel=r"$x_{\rm Cr}$", ylabel=r"Wavelength $\lambda$ (nm), chord length", xlim=(0, 1), ylim=(2.3, 7.0))
     c.legend(loc="upper center", bbox_to_anchor=(0.5, 1.0))
     for ax, t in zip((a, b, c), "abc"):
         mk.style(ax, f"({t})")
