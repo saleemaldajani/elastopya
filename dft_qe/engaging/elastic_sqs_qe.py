@@ -14,6 +14,7 @@ import json
 import os
 import sys
 import re
+import shutil
 import subprocess
 import time
 from pathlib import Path
@@ -43,6 +44,18 @@ def write_input(path, cell, symbols, frac, k, ecut, calc):
     mass = {"Fe": 55.845, "Cr": 51.996}
     upf = {"Fe": "Fe.pbe-spn-kjpaw_psl.0.2.1.UPF", "Cr": "Cr.pbe-spn-kjpaw_psl.1.0.0.UPF"}
     mag = {"Fe": 0.6, "Cr": float(os.environ.get("QE_MAG_CR", "0.25"))}   # QE_MAG_CR < 0: Cr antiparallel to Fe
+    # QE_MAG_SITES=<file of per-atom moments, input order>: each atom starts with the sign of its moment in that
+    # file (labels Fe1/Cr1 up, Fe2/Cr2 down, same pseudopotentials, |starting magnetization| as above). Added
+    # 2026-10-16 so the Fe-80Cr strain steps start in the magnetic state of the relaxed cell: from a uniform start,
+    # two of four steps wandered between Cr sign patterns at a 5e-7 Ry SCF noise floor.
+    if os.environ.get("QE_MAG_SITES"):
+        m = [float(v) for v in Path(os.environ["QE_MAG_SITES"]).read_text().split()]
+        assert len(m) == len(symbols), "QE_MAG_SITES needs one moment per atom"
+        symbols = [f"{s}{1 if v > 0 else 2}" for s, v in zip(symbols, m)]
+        sp = sorted(set(symbols))
+        el = lambda lab: lab.rstrip("12")
+        mass = {lab: mass[el(lab)] for lab in sp}; upf = {lab: upf[el(lab)] for lab in sp}
+        mag = {lab: (1 if lab.endswith("1") else -1) * abs(mag[el(lab)]) for lab in sp}
     lines = [f"""&control
   calculation = '{calc}', prefix = 'sqs', outdir = './tmp', pseudo_dir = '{PSEUDO}',
   tstress = .true., tprnfor = .true., etot_conv_thr = 1e-5, forc_conv_thr = 1e-3, nstep = 60
@@ -52,9 +65,10 @@ def write_input(path, cell, symbols, frac, k, ecut, calc):
   occupations = 'smearing', smearing = 'mv', degauss = 0.02, nspin = 2,
 """ + "".join(f"  starting_magnetization({i + 1}) = {mag[s]}\n" for i, s in enumerate(sp)) + """/
 &electrons
-  conv_thr = 1e-8, mixing_beta = """ + os.environ.get("QE_MIXING_BETA", "0.2") + """, mixing_mode = 'local-TF', electron_maxstep = """ + os.environ.get("QE_MAXSTEP", "300")
+  conv_thr = """ + os.environ.get("QE_CONV_THR", "1e-8") + """, mixing_beta = """ + os.environ.get("QE_MIXING_BETA", "0.2") + """, mixing_mode = 'local-TF', electron_maxstep = """ + os.environ.get("QE_MAXSTEP", "300")
   + (", mixing_ndim = " + os.environ["QE_MIXING_NDIM"] if "QE_MIXING_NDIM" in os.environ else "")
-  + (",\n  startingpot = 'file', startingwfc = 'file'" if os.environ.get("QE_START_FROM_FILE") else "") + """
+  + ({"pot": ",\n  startingpot = 'file'"}.get(os.environ.get("QE_START_FROM_FILE"), ",\n  startingpot = 'file', startingwfc = 'file'")
+     if os.environ.get("QE_START_FROM_FILE") else "") + """
 /
 &ions
 """ + (f"  upscale = {os.environ['QE_UPSCALE']}\n" if "QE_UPSCALE" in os.environ else "") + """/
@@ -74,7 +88,7 @@ def run(d, name, np_):
     out = d / f"{name}.out"
     if out.exists() and "JOB DONE" in out.read_text():
         text = out.read_text()
-        if "convergence NOT achieved" in text:
+        if "convergence NOT achieved" in text and not final_check_only(text):
             sys.exit(f"{name}: earlier run did not converge (see {out}); stopping")
         return text
     nk = int(os.environ.get("QE_NK", min(np_, 4)))
@@ -83,9 +97,18 @@ def run(d, name, np_):
     subprocess.run([str(MPIRUN), "-np", str(np_), str(PW), "-nk", str(nk), "-in", f"{name}.in"],
                    cwd=d, stdout=open(out, "w"), stderr=subprocess.STDOUT, check=True, env=env)
     text = out.read_text()
-    if "convergence NOT achieved" in text:      # QE prints JOB DONE even then; never build on such a step
+    if "convergence NOT achieved" in text and not final_check_only(text):   # QE prints JOB DONE even then
         sys.exit(f"{name}: SCF did not converge (see {out}); stopping")
     return text
+
+
+def final_check_only(text):
+    """vc-relax ends with one more SCF in a fresh plane-wave basis at the final cell, a check that is not used
+    for anything (geometry and energy are those of the last BFGS step). Fe-80Cr (2026-10-16) converged BFGS
+    (force 0.002 Ry/bohr, P = -0.03 kbar) but that check SCF sat at a 2e-7 Ry noise floor for 600 iterations;
+    such a run is accepted. Any non-converged SCF before 'End of BFGS' still stops the run."""
+    i = text.find("End of BFGS Geometry Optimization")
+    return i >= 0 and text.find("convergence NOT achieved") > i
 
 
 def final_structure(text, cell0, frac0):
@@ -131,6 +154,26 @@ def main():
     if fixed:
         a_fix = 2.8665 * (1 - a.x) + 2.8846 * a.x if fixed == "exp" else float(fixed)
         cell = cell / cell[0, 0] * 2 * a_fix
+    # Resume after preemption (mit_preemptable requeues the job from the top): restart the relaxation from the
+    # last complete geometry of the interrupted relax.out, kept as relax_partN.out. Without this, Fe-80Cr lost
+    # 11 h of relaxation per preemption (2026-10-15). QE_RESUME=0 restores the old behaviour.
+    if os.environ.get("QE_STRAIN_ONLY") and not ((d / "relax.out").exists() and "JOB DONE" in (d / "relax.out").read_text()):
+        sys.exit("QE_STRAIN_ONLY needs a finished relax.out")      # never start a second relaxation in parallel
+    old = d / "relax.out"
+    if os.environ.get("QE_RESUME", "1") != "0" and old.exists() and "JOB DONE" not in old.read_text():
+        n = len(list(d.glob("relax_part*.out"))) + 1
+        old.rename(d / f"relax_part{n}.out")
+        # newest part with a complete geometry; a part interrupted in its first SCF has none (2026-10-16, Fe-65Cr
+        # exp-a), and the restart must then fall back to the part before it, not to the POSCAR
+        for part in sorted(d.glob("relax_part*.out"), key=lambda q: int(q.stem[10:]), reverse=True):
+            t = part.read_text()
+            blocks = t.split("ATOMIC_POSITIONS (crystal)")[1:]
+            full = [b for b in blocks if len([r for r in b.strip().split("\n")[: len(sym)] if len(r.split()) >= 4]) == len(sym)]
+            if full:
+                cut = t.rfind("ATOMIC_POSITIONS (crystal)" + full[-1])
+                cell, frac = final_structure(t[: cut + len("ATOMIC_POSITIONS (crystal)") + len(full[-1])], cell, frac)
+                print(f"resuming relaxation from the last geometry of {part.name} ({len(blocks)} steps)", flush=True)
+                break
     write_input(d / "relax.in", cell, sym, frac, a.k, a.ecut, "relax" if fixed else "vc-relax")
     cell, frac = final_structure(run(d, "relax", a.np), cell, frac)
     # Guard: an under-converged cutoff makes vc-relax collapse the cell (16-atom test at 40 Ry: -12 %).
@@ -138,12 +181,49 @@ def main():
     v_at = abs(np.linalg.det(cell)) / len(sym)
     if not 10.8 < v_at < 12.2:
         sys.exit(f"relaxed volume {v_at:.2f} A^3/atom is unphysical; raise ecut (Fe PAW needs >= 60 Ry)")
+    # QE_RELAX_ONLY=1: stop after the relaxation (energy only, e.g. for the mixing enthalpy) and record it in
+    # relax_result.json, which make_figures.qe_mixing accepts in place of result.json. Added 2026-10-16 for
+    # Fe-65Cr at the experimental lattice parameter, needed for Fig. 1a only.
+    if os.environ.get("QE_RELAX_ONLY") == "1":
+        mags = re.findall(r"total magnetization\s+=\s+([-\d.]+)", (d / "relax.out").read_text())
+        (d / "relax_result.json").write_text(json.dumps({"x_cr": a.x, "volume_A3": float(abs(np.linalg.det(cell))),
+            "moment_muB_per_atom": float(mags[-1]) / len(sym) if mags else None, "fixed_a": fixed,
+            "conv_thr": os.environ.get("QE_CONV_THR", "1e-8"), "wall_s": time.time() - t0}, indent=1))
+        print("relaxation done (QE_RELAX_ONLY)", flush=True)
+        return
     sig = {}
+    # QE_STRAIN_ONLY=s_xx_p|s_xx_m|s_yz_p|s_yz_m runs just that strain step, in its own subdirectory (own ./tmp, so
+    # four jobs can run at once), and copies the output back as <name>.out. A normal run afterwards finds all four
+    # outputs done and only assembles result.json. Added 2026-10-15 to run the four Fe-80Cr strain steps in parallel
+    # (about 4 h instead of 15 h sequentially).
+    only = os.environ.get("QE_STRAIN_ONLY")
     for tag, E in {"xx": np.diag([a.strain, 0, 0]),
                    "yz": np.array([[0, 0, 0], [0, 0, a.strain / 2], [0, a.strain / 2, 0]])}.items():
         for sgn in (1, -1):
             c = cell @ (np.eye(3) + sgn * E).T
             name = f"s_{tag}_{'p' if sgn > 0 else 'm'}"
+            if only:
+                if name != only:
+                    continue
+                sd = d / f"par_{name}"
+                sd.mkdir(exist_ok=True)
+                # QE_START_FROM_FILE=pot: start the SCF from the relaxed charge and spin density (copied from the
+                # relaxation's ./tmp; no wavefunctions are kept there). Added 2026-10-16 for Fe-80Cr: from the atomic
+                # guess, three of the four steps sat at a 5e-7 Ry noise floor for 350+ iterations, and the one that
+                # converged had a different moment from the relaxed cell (13.2 vs 14.6 muB/cell), i.e. a different
+                # magnetic state; all ten SCFs of the relaxation, each started from the previous density, converged.
+                if os.environ.get("QE_START_FROM_FILE") == "pot":
+                    src, dst = d / "tmp" / "sqs.save", sd / "tmp" / "sqs.save"
+                    dst.mkdir(parents=True, exist_ok=True)
+                    for f in ("charge-density.dat", "data-file-schema.xml", "paw.txt"):
+                        shutil.copy2(src / f, dst / f)
+                write_input(sd / f"{name}.in", c, sym, frac, a.k, a.ecut, "relax")
+                stress_gpa(run(sd, name, a.np))
+                shutil.copy2(sd / f"{name}.out", d / f"{name}.out")
+                shutil.copy2(sd / f"{name}.in", d / f"{name}.in")
+                shutil.rmtree(sd / "tmp", ignore_errors=True)
+                print(f"{name} done", flush=True)
+                return
             write_input(d / f"{name}.in", c, sym, frac, a.k, a.ecut, "relax")
             sig[(tag, sgn)] = stress_gpa(run(d, name, a.np))
     dxx = (sig[("xx", 1)] - sig[("xx", -1)]) / (2 * a.strain)

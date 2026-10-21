@@ -1,0 +1,331 @@
+
+     Program PWSCF v.7.5 starts on 17Oct2026 at  2:18:48 
+
+     This program is part of the open-source Quantum ESPRESSO suite
+     for quantum simulation of materials; please cite
+         "P. Giannozzi et al., J. Phys.:Condens. Matter 21 395502 (2009);
+         "P. Giannozzi et al., J. Phys.:Condens. Matter 29 465901 (2017);
+         "P. Giannozzi et al., J. Chem. Phys. 152 154105 (2020);
+          URL http://www.quantum-espresso.org", 
+     in publications or presentations arising from this work. More details at
+     http://www.quantum-espresso.org/quote
+
+     Parallel version (MPI), running on    60 processors
+
+     MPI processes distributed on     1 nodes
+     110791 MiB available memory on the printing compute node when the environment starts
+
+     Reading input from nscf.in
+
+     Current dimensions of program PWSCF are:
+     Max number of different atomic species (ntypx) = 10
+     Max number of k-points (npk) =  40000
+     Max angular momentum in pseudopotentials (lmaxx) =  4
+     file Cr.pbe-spn-kjpaw_psl.1.0.0.UPF: wavefunction(s)  3S 3P 3D renormalized
+     file Cr.pbe-spn-kjpaw_psl.1.0.0.UPF: wavefunction(s)  3S 3P 3D renormalized
+     file Fe.pbe-spn-kjpaw_psl.0.2.1.UPF: wavefunction(s)  3D renormalized
+
+     Atomic positions and unit cell read from directory:
+     ./tmp/dos.save/
+
+     [opt_tetra]  Optimized tetrahedron method is used.
+
+     K-points division:     npool     =      20
+     R & G space division:  proc/nbgrp/npool/nimage =       3
+     Subspace diagonalization in iterative solution of the eigenvalue problem:
+     a serial algorithm will be used
+
+
+     Parallelization info
+     --------------------
+     sticks:   dense  smooth     PW     G-vecs:    dense   smooth      PW
+     Min        1468     739    203               183090    64723    9469
+     Max        1469     739    203               183095    64725    9473
+     Sum        4405    2217    609               549279   194173   28413
+
+     Using Slab Decomposition
+
+
+
+     bravais-lattice index     =            0
+     lattice parameter (alat)  =      10.7427  a.u.
+     unit-cell volume          =    3092.4543 (a.u.)^3
+     number of atoms/cell      =           40
+     number of atomic types    =            3
+     number of electrons       =       576.00
+     number of Kohn-Sham states=          353
+     kinetic-energy cutoff     =      60.0000  Ry
+     charge density cutoff     =     480.0000  Ry
+     Exchange-correlation= SLA  PW   PBX  PBC
+                           (   1   4   3   4   0   0   0)
+
+     celldm(1)=  10.742657  celldm(2)=   0.000000  celldm(3)=   0.000000
+     celldm(4)=   0.000000  celldm(5)=   0.000000  celldm(6)=   0.000000
+
+     crystal axes: (cart. coord. in units of alat)
+               a(1) = (   1.000000   0.000000   0.000000 )  
+               a(2) = (   0.000000   1.000221   0.000000 )  
+               a(3) = (   0.000000   0.000000   2.493861 )  
+
+     reciprocal axes: (cart. coord. in units 2 pi/alat)
+               b(1) = (  1.000000  0.000000  0.000000 )  
+               b(2) = (  0.000000  0.999779  0.000000 )  
+               b(3) = (  0.000000  0.000000  0.400985 )  
+
+
+     PseudoPot. # 1 for Cr read from file:
+     /orcd/pool/004/sdajani/fecr_qe/pseudo/Cr.pbe-spn-kjpaw_psl.1.0.0.UPF
+     MD5 check sum: 198f1a2427a48552563eee314eba32ba
+     Pseudo is Projector augmented-wave + core cor, Zval = 14.0
+     Generated using &quot;atomic&quot; code by A. Dal Corso  v.6.3
+     Shape of augmentation charge: PSQ
+     Using radial grid of 1183 points,  6 beta functions with: 
+                l(1) =   0
+                l(2) =   0
+                l(3) =   1
+                l(4) =   1
+                l(5) =   2
+                l(6) =   2
+     Q(r) pseudized with 0 coefficients 
+
+
+     PseudoPot. # 2 for Cr read from file:
+     /orcd/pool/004/sdajani/fecr_qe/pseudo/Cr.pbe-spn-kjpaw_psl.1.0.0.UPF
+     MD5 check sum: 198f1a2427a48552563eee314eba32ba
+     Pseudo is Projector augmented-wave + core cor, Zval = 14.0
+     Generated using &quot;atomic&quot; code by A. Dal Corso  v.6.3
+     Shape of augmentation charge: PSQ
+     Using radial grid of 1183 points,  6 beta functions with: 
+                l(1) =   0
+                l(2) =   0
+                l(3) =   1
+                l(4) =   1
+                l(5) =   2
+                l(6) =   2
+     Q(r) pseudized with 0 coefficients 
+
+
+     PseudoPot. # 3 for Fe read from file:
+     /orcd/pool/004/sdajani/fecr_qe/pseudo/Fe.pbe-spn-kjpaw_psl.0.2.1.UPF
+     MD5 check sum: 4338034a7fd945be4bb7db5fd3b2d142
+     Pseudo is Projector augmented-wave + core cor, Zval = 16.0
+     Generated using "atomic" code by A. Dal Corso  v.5.0.2 svn rev. 9415
+     Shape of augmentation charge: PSQ
+     Using radial grid of 1191 points,  6 beta functions with: 
+                l(1) =   0
+                l(2) =   0
+                l(3) =   1
+                l(4) =   1
+                l(5) =   2
+                l(6) =   2
+     Q(r) pseudized with 0 coefficients 
+
+
+     atomic species   valence    mass     pseudopotential
+     Cr1              14.00    51.99600     Cr( 1.00)
+     Cr2              14.00    51.99600     Cr( 1.00)
+     Fe1              16.00    55.84500     Fe( 1.00)
+
+     Starting magnetic structure 
+     atomic species   magnetization
+     Cr1             0.300
+     Cr2            -0.300
+     Fe1             0.600
+
+     No symmetry found
+
+
+
+   Cartesian axes
+
+     site n.     atom                  positions (alat units)
+         1        Cr2    tau(   1) = (  -0.0045016  -0.0041391  -0.0039508  )
+         2        Cr2    tau(   2) = (   0.5019627  -0.0020773  -0.0032121  )
+         3        Cr2    tau(   3) = (   0.5017456  -0.0014998   0.5012903  )
+         4        Cr1    tau(   4) = (   0.7508776   0.2512449   0.7491532  )
+         5        Cr2    tau(   5) = (   0.5005230   0.0005939   0.9952991  )
+         6        Cr2    tau(   6) = (   0.5004907   0.0003780   1.4962158  )
+         7        Cr1    tau(   7) = (   0.7483440   0.2484188   1.7453506  )
+         8        Cr2    tau(   8) = (   0.5008999  -0.0016849   1.9958663  )
+         9        Cr1    tau(   9) = (   0.7507654   0.2493911   2.2478108  )
+        10        Cr1    tau(  10) = (   0.7509602   0.7516851   0.2515116  )
+        11        Cr2    tau(  11) = (   0.5007108   0.5008824   0.4976817  )
+        12        Cr1    tau(  12) = (   0.7505753   0.7502714   0.7494984  )
+        13        Cr2    tau(  13) = (   0.4988320   0.5031926   0.9951784  )
+        14        Cr1    tau(  14) = (   0.7488383   0.7520654   1.2468755  )
+        15        Cr2    tau(  15) = (   0.5003320   0.4998265   1.4965797  )
+        16        Cr1    tau(  16) = (   0.7483440   0.7511561   1.7455671  )
+        17        Cr2    tau(  17) = (   0.5046290   0.4987263   1.9975584  )
+        18        Cr2    tau(  18) = (  -0.0035189   0.5007666   1.9914523  )
+        19        Cr1    tau(  19) = (   0.2475164   0.7509200   2.2432623  )
+        20        Cr2    tau(  20) = (  -0.0030924   0.0018642   1.9935116  )
+        21        Cr2    tau(  21) = (  -0.0006503  -0.0000685   0.4998595  )
+        22        Cr1    tau(  22) = (   0.2509623   0.2513622   0.7450526  )
+        23        Cr2    tau(  23) = (   0.0034506  -0.0010991   0.9955894  )
+        24        Cr1    tau(  24) = (   0.2525270   0.2481230   1.2464155  )
+        25        Cr2    tau(  25) = (   0.0009780   0.0006584   1.4963448  )
+        26        Cr1    tau(  26) = (   0.2521319   0.2473510   1.7509018  )
+        27        Cr2    tau(  27) = (  -0.0023037   0.5035539  -0.0041769  )
+        28        Cr1    tau(  28) = (   0.7501223   0.7507945   2.2435633  )
+        29        Cr2    tau(  29) = (  -0.0017914   0.5018856   0.5032242  )
+        30        Cr1    tau(  30) = (   0.2508415   0.7505751   0.7454381  )
+        31        Cr2    tau(  31) = (   0.0024308   0.5020746   0.9999138  )
+        32        Cr1    tau(  32) = (   0.2520677   0.7515646   1.2493436  )
+        33        Fe1    tau(  33) = (   0.2497822   0.2508865   2.2461323  )
+        34        Fe1    tau(  34) = (   0.2504201   0.7485369   1.7472901  )
+        35        Fe1    tau(  35) = (   0.4979186   0.4992292   0.0014226  )
+        36        Fe1    tau(  36) = (   0.7504182   0.2501733   1.2432366  )
+        37        Fe1    tau(  37) = (   0.7494833   0.2511298   0.2517051  )
+        38        Fe1    tau(  38) = (   0.2457067   0.2461726   0.2490639  )
+        39        Fe1    tau(  39) = (   0.2498816   0.7495850   0.2503772  )
+        40        Fe1    tau(  40) = (   0.0003887   0.4988408   1.4962996  )
+
+     number of k points=    56 (tetrahedron method)
+                       cart. coord. in units 2pi/alat
+        k(    1) = (   0.0000000   0.0000000   0.0000000), wk =   0.0092593
+        k(    2) = (   0.0000000   0.0000000   0.1336616), wk =   0.0185185
+        k(    3) = (   0.0000000   0.1666299   0.0000000), wk =   0.0185185
+        k(    4) = (   0.0000000   0.1666299   0.1336616), wk =   0.0185185
+        k(    5) = (   0.0000000   0.3332598   0.0000000), wk =   0.0185185
+        k(    6) = (   0.0000000   0.3332598   0.1336616), wk =   0.0185185
+        k(    7) = (   0.0000000  -0.4998896   0.0000000), wk =   0.0092593
+        k(    8) = (   0.0000000  -0.4998896   0.1336616), wk =   0.0185185
+        k(    9) = (   0.1666667   0.0000000   0.0000000), wk =   0.0185185
+        k(   10) = (   0.1666667   0.0000000   0.1336616), wk =   0.0185185
+        k(   11) = (   0.1666667   0.1666299   0.0000000), wk =   0.0185185
+        k(   12) = (   0.1666667   0.1666299   0.1336616), wk =   0.0185185
+        k(   13) = (   0.1666667   0.3332598   0.0000000), wk =   0.0185185
+        k(   14) = (   0.1666667   0.3332598   0.1336616), wk =   0.0185185
+        k(   15) = (   0.1666667  -0.4998896   0.0000000), wk =   0.0185185
+        k(   16) = (   0.1666667  -0.4998896   0.1336616), wk =   0.0185185
+        k(   17) = (   0.3333333   0.0000000   0.0000000), wk =   0.0185185
+        k(   18) = (   0.3333333   0.0000000   0.1336616), wk =   0.0185185
+        k(   19) = (   0.3333333   0.1666299   0.0000000), wk =   0.0185185
+        k(   20) = (   0.3333333   0.1666299   0.1336616), wk =   0.0185185
+        k(   21) = (   0.3333333   0.3332598   0.0000000), wk =   0.0185185
+        k(   22) = (   0.3333333   0.3332598   0.1336616), wk =   0.0185185
+        k(   23) = (   0.3333333  -0.4998896   0.0000000), wk =   0.0185185
+        k(   24) = (   0.3333333  -0.4998896   0.1336616), wk =   0.0185185
+        k(   25) = (  -0.5000000   0.0000000   0.0000000), wk =   0.0092593
+        k(   26) = (  -0.5000000   0.0000000   0.1336616), wk =   0.0185185
+        k(   27) = (  -0.5000000   0.1666299   0.0000000), wk =   0.0185185
+        k(   28) = (  -0.5000000   0.1666299   0.1336616), wk =   0.0185185
+        k(   29) = (  -0.5000000   0.3332598   0.0000000), wk =   0.0185185
+        k(   30) = (  -0.5000000   0.3332598   0.1336616), wk =   0.0185185
+        k(   31) = (  -0.5000000  -0.4998896   0.0000000), wk =   0.0092593
+        k(   32) = (  -0.5000000  -0.4998896   0.1336616), wk =   0.0185185
+        k(   33) = (   0.0000000  -0.1666299   0.1336616), wk =   0.0185185
+        k(   34) = (   0.0000000  -0.3332598   0.1336616), wk =   0.0185185
+        k(   35) = (  -0.1666667   0.0000000   0.1336616), wk =   0.0185185
+        k(   36) = (  -0.1666667   0.1666299   0.0000000), wk =   0.0185185
+        k(   37) = (  -0.1666667  -0.1666299   0.1336616), wk =   0.0185185
+        k(   38) = (  -0.1666667   0.1666299  -0.1336616), wk =   0.0185185
+        k(   39) = (   0.1666667  -0.1666299  -0.1336616), wk =   0.0185185
+        k(   40) = (  -0.1666667   0.3332598   0.0000000), wk =   0.0185185
+        k(   41) = (  -0.1666667  -0.3332598   0.1336616), wk =   0.0185185
+        k(   42) = (  -0.1666667   0.3332598  -0.1336616), wk =   0.0185185
+        k(   43) = (   0.1666667  -0.3332598  -0.1336616), wk =   0.0185185
+        k(   44) = (  -0.1666667   0.4998896   0.1336616), wk =   0.0185185
+        k(   45) = (  -0.3333333   0.0000000   0.1336616), wk =   0.0185185
+        k(   46) = (  -0.3333333   0.1666299   0.0000000), wk =   0.0185185
+        k(   47) = (  -0.3333333  -0.1666299   0.1336616), wk =   0.0185185
+        k(   48) = (  -0.3333333   0.1666299  -0.1336616), wk =   0.0185185
+        k(   49) = (   0.3333333  -0.1666299  -0.1336616), wk =   0.0185185
+        k(   50) = (  -0.3333333   0.3332598   0.0000000), wk =   0.0185185
+        k(   51) = (  -0.3333333  -0.3332598   0.1336616), wk =   0.0185185
+        k(   52) = (  -0.3333333   0.3332598  -0.1336616), wk =   0.0185185
+        k(   53) = (   0.3333333  -0.3332598  -0.1336616), wk =   0.0185185
+        k(   54) = (  -0.3333333   0.4998896   0.1336616), wk =   0.0185185
+        k(   55) = (   0.5000000  -0.1666299   0.1336616), wk =   0.0185185
+        k(   56) = (   0.5000000  -0.3332598   0.1336616), wk =   0.0185185
+
+     Dense  grid:   549279 G-vectors     FFT dimensions: (  75,  75, 192)
+
+     Smooth grid:   194173 G-vectors     FFT dimensions: (  54,  54, 135)
+
+     Estimated max dynamical RAM per process >     506.13 MB
+
+     Estimated total dynamical RAM >      29.66 GB
+
+     Check: negative core charge=   -0.000034
+     Generating pointlists ...
+     new r_m :   0.1755 (alat units)  1.8856 (a.u.) for type    1
+     new r_m :   0.1755 (alat units)  1.8856 (a.u.) for type    2
+     new r_m :   0.1771 (alat units)  1.9020 (a.u.) for type    3
+
+     The potential is recalculated from file :
+     ./tmp/dos.save/charge-density
+
+     Starting wfcs are  424 randomized atomic wfcs
+     Checking if some PAW data can be deallocated... 
+
+     Band Structure Calculation
+     Davidson diagonalization with overlap
+     c_bands:  3 eigenvalues not converged
+     c_bands:  4 eigenvalues not converged
+     c_bands:  2 eigenvalues not converged
+     c_bands:  7 eigenvalues not converged
+     c_bands:  2 eigenvalues not converged
+
+     ethr =  1.74E-10,  avg # of iterations =113.2
+
+     total cpu time spent up to now is     1580.7 secs
+
+     End of band structure calculation
+
+     Number of k-points >= 100: set verbosity='high' to print the bands.
+
+     the Fermi energy is    19.4911 ev
+     (compare with:    19.4810 eV, computed in scf)
+
+     Writing all to output data dir ./tmp/dos.save/ :
+     XML data file, pseudopotentials, collected wavefunctions
+
+     init_run     :      3.00s CPU      3.29s WALL (       1 calls)
+     electrons    :   1561.84s CPU   1573.13s WALL (       1 calls)
+
+     Called by init_run:
+     wfcinit      :      0.00s CPU      0.00s WALL (       1 calls)
+     potinit      :      1.80s CPU      2.02s WALL (       1 calls)
+     hinit0       :      0.84s CPU      0.89s WALL (       1 calls)
+
+     Called by electrons:
+     c_bands      :   1561.56s CPU   1572.85s WALL (       1 calls)
+     v_of_rho     :      0.96s CPU      1.11s WALL (       1 calls)
+     newd         :      0.20s CPU      0.20s WALL (       1 calls)
+     PAW_pot      :      0.49s CPU      0.50s WALL (       1 calls)
+
+     Called by c_bands:
+     init_us_2    :      0.91s CPU      1.00s WALL (       6 calls)
+     cegterg      :   1520.92s CPU   1531.45s WALL (      36 calls)
+
+     Called by *egterg:
+     cdiaghg      :    195.08s CPU    196.11s WALL (     708 calls)
+     h_psi        :    596.25s CPU    600.83s WALL (     744 calls)
+     s_psi        :    114.63s CPU    115.24s WALL (     744 calls)
+     g_psi        :      3.13s CPU      3.15s WALL (     702 calls)
+
+     Called by h_psi:
+     h_psi:calbec :    120.65s CPU    121.36s WALL (     744 calls)
+     vloc_psi     :    358.37s CPU    361.04s WALL (     744 calls)
+                                        0.00s GPU  (     744 calls)
+     add_vuspsi   :    114.75s CPU    115.36s WALL (     744 calls)
+
+     General routines
+     calbec       :    120.65s CPU    121.36s WALL (     744 calls)
+     fft          :      0.73s CPU      0.83s WALL (      23 calls)
+     ffts         :      0.11s CPU      0.11s WALL (       2 calls)
+     fftw         :    331.78s CPU    334.27s WALL (  209886 calls)
+     interpolate  :      0.17s CPU      0.17s WALL (       2 calls)
+     davcio       :      0.00s CPU      0.19s WALL (      12 calls)
+
+     Parallel routines
+
+     PWSCF        :  26m 9.50s CPU  26m33.95s WALL
+
+
+   This run was terminated on:   2:45:21  17Oct2026            
+
+=------------------------------------------------------------------------------=
+   JOB DONE.
+=------------------------------------------------------------------------------=

@@ -6,7 +6,8 @@ Cross-document references are resolved to the numbers of the combined paper (rea
 figures (S1, S13), SM -> main-text Fig. 1 and Sec. 2.3. SM equations are numbered S1, S2, ... as its figures and
 tables already are.
 
-  make_submission.py <combined .tex> <combined .aux> <out dir>
+  make_submission.py <combined .tex> <combined .aux> <out dir> [main name, default main]
+  (figure-style variants: run once per variant with main_trend, main_cubes, main_cubes_trend; the SM is the same)
 """
 import re
 import shutil
@@ -18,6 +19,7 @@ MS = Path(__file__).resolve().parent.parent / "manuscript"
 
 def main():
     src, aux, out = Path(sys.argv[1]), Path(sys.argv[2]), Path(sys.argv[3])
+    name = sys.argv[4] if len(sys.argv) > 4 else "main"
     labels = dict(re.findall(r"\\newlabel\{([^}]*)\}\{\{([^}]*)\}", aux.read_text()))
     t = src.read_text().split("\n")
     i_doc = next(i for i, l in enumerate(t) if l.startswith("\\begin{document}"))
@@ -51,7 +53,7 @@ Department of Nuclear Science and Engineering, Massachusetts Institute of Techno
 \end{center}
 """
     out.mkdir(parents=True, exist_ok=True)
-    (out / "main.tex").write_text("\n".join(pre) + "\n" + main_txt + "\n\n\\end{document}\n")
+    (out / f"{name}.tex").write_text("\n".join(pre) + "\n" + main_txt + "\n\n\\end{document}\n")
     (out / "supplement.tex").write_text("\n".join(pre) + "\n" + sm_head + sm_head_eq + sm_txt
                                         + "\n\n\\bibliographystyle{elsarticle-num}\n\\bibliography{references}\n\n\\end{document}\n")
     # assets: figures, tables, bibliography
