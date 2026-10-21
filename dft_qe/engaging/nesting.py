@@ -22,13 +22,19 @@ SIGMA = 0.05          # eV, Gaussian width of the Fermi-surface delta functions
 Y_FE = (0.0, 0.05, 0.10, 0.20)
 
 
-def inputs(d, n=40):
+def inputs(d, n=32):   # 32^3 = 32768 k-points: QE pw.x allows at most 40000 (npk); 40^3 aborted (2026-10-15)
     d = Path(d)
     fs.write_inputs("Cr_nm", d)
     scf = (d / "scf.in").read_text().replace("16 16 16 0 0 0", "24 24 24 0 0 0")
     (d / "scf.in").write_text(scf)
     head = scf.split("K_POINTS")[0].replace("calculation = 'scf'", "calculation = 'bands'")
     head = head.replace("nbnd = 16", "nbnd = 12, nosym = .true., noinv = .true.")
+    # Davidson from random wavefunctions aborted in cdiaghg (MPI error 37) on the 32^3 nosym grid (2026-10-15). CG then
+    # finished but left 47% of the k-points unconverged (3s level anywhere from -96 to -10 eV instead of -52.4 eV; the
+    # grid E_F came out 1.6 eV above the SCF value) -- found 2026-10-16. ParO, as in the unfolded SQS bands, with full
+    # accuracy for the empty states.
+    head = head.replace("conv_thr = 1e-9, mixing_beta = 0.3",
+                        "conv_thr = 1e-9, mixing_beta = 0.3, diagonalization = 'paro', diago_full_acc = .true.")
     g = np.arange(n) / n
     kk = np.stack(np.meshgrid(g, g, g, indexing="ij"), -1).reshape(-1, 3)
     (d / "bands.in").write_text(head + f"K_POINTS crystal\n{len(kk)}\n" +
@@ -59,6 +65,12 @@ def analyse(d):
     B = np.array([[float(v) for v in root.find(f"output/basis_set/reciprocal_lattice/b{i}").text.split()]
                   for i in (1, 2, 3)])                    # rows b_i, units 2 pi/alat (alat = a)
     nel = 14.0                                            # Cr spn PAW: 3s2 3p6 3d5 4s1
+    # guards (2026-10-16): every k-point must have the flat 3s level, and the grid E_F must match the SCF one
+    if np.ptp(ev[:, 0]) > 1.0:
+        sys.exit(f"bands not converged: lowest band spans {ev[:, 0].min():.1f} to {ev[:, 0].max():.1f} eV")
+    ef_scf = float(root.find("output/band_structure/fermi_energy").text) * 27.211386
+    if abs(fermi_level(ev, nel) - ef_scf) > 0.1:
+        sys.exit(f"grid E_F {fermi_level(ev, nel):.3f} eV differs from the SCF {ef_scf:.3f} eV")
     grid = ev.reshape(n, n, n, -1)
     s = np.linspace(0, 1, 201)                            # Gamma -> H = (0, 0, 1) 2 pi/a
     cryst = np.outer(s, [0, 0, 1.0]) @ np.linalg.inv(B)   # crystal coordinates of q
@@ -86,6 +98,6 @@ def analyse(d):
 
 if __name__ == "__main__":
     if sys.argv[1] == "inputs":
-        inputs(sys.argv[2], int(sys.argv[3]) if len(sys.argv) > 3 else 40)
+        inputs(sys.argv[2], int(sys.argv[3]) if len(sys.argv) > 3 else 32)
     elif sys.argv[1] == "analyse":
         analyse(sys.argv[2])
