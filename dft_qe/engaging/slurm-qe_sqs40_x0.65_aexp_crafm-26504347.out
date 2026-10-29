@@ -1,0 +1,18 @@
+environment: line 17: /usr/share/lmod/lmod/libexec/lmod: No such file or directory
+Illegal option --
+Traceback (most recent call last):
+  File "/orcd/pool/004/sdajani/fecr_qe/elastic_sqs_qe.py", line 242, in <module>
+    main()
+  File "/orcd/pool/004/sdajani/fecr_qe/elastic_sqs_qe.py", line 178, in main
+    cell, frac = final_structure(run(d, "relax", a.np), cell, frac)
+                                 ^^^^^^^^^^^^^^^^^^^^^
+  File "/orcd/pool/004/sdajani/fecr_qe/elastic_sqs_qe.py", line 97, in run
+    subprocess.run([str(MPIRUN), "-np", str(np_), str(PW), "-nk", str(nk), "-in", f"{name}.in"],
+  File "/orcd/data/omarabu/001/sdajani/mamba/lib/python3.12/subprocess.py", line 550, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/orcd/data/omarabu/001/sdajani/mamba/lib/python3.12/subprocess.py", line 1028, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/orcd/data/omarabu/001/sdajani/mamba/lib/python3.12/subprocess.py", line 1963, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: 'Usage: /usr/bin/which [-as] args'
