@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Graphical abstract for the Scripta Materialia submission (v12, 2026-11-01: v11 plus the QE cells of alpha and
-alpha' under the MD cube in panel 1).
+"""Graphical abstract for the Scripta Materialia submission (v13, 2026-11-01: v12 beautified, same content:
+rounded cards and claim strips, smoothed spectra, open axes, shadow under the cube).
 
 Modelled on the graphical abstract of Al Dajani et al., Acta Mater. 2023 (three panels, one strong image each, a bold
 claim underneath), as its theoretical counterpart (user request; no spinodal shading, which the user found confusing):
@@ -40,16 +40,33 @@ def box(fig, x0, y0, w, h):
 
 
 def frame(ax):
-    ax.tick_params(direction="in", length=2.2, width=0.6, labelsize=FS - 1, pad=1.5, colors="0.15")
-    for s in ax.spines.values():
-        s.set_linewidth(0.6)
+    """Open axes: left and bottom spines only, ticks out, soft dark grey."""
+    ax.tick_params(direction="out", length=2.0, width=0.6, labelsize=FS - 1, pad=1.2, colors="0.25")
+    for k, sp in ax.spines.items():
+        sp.set_visible(k in ("left", "bottom")); sp.set_linewidth(0.6); sp.set_color("0.3")
+    ax.set_facecolor("none")
+
+
+CARD = "#F6F7F9"
+
+
+def card(fig, x0, w):
+    """Soft rounded card behind each panel and its claim strip."""
+    fig.patches.append(FancyBboxPatch((x0 / W, 0.04 / H), w / W, 1.88 / H, transform=fig.transFigure,
+                                      boxstyle="round,pad=0,rounding_size=0.03", fc=CARD, ec="0.86", lw=0.5,
+                                      zorder=-5))
+
+
+def smooth(h, n=2):
+    k = np.exp(-0.5 * (np.arange(-3 * n, 3 * n + 1) / n) ** 2); k /= k.sum()
+    return np.convolve(h, k, mode="same")
 
 
 def caption(fig, x0, w, text):
     """Bold claim in a light grey strip under each panel, as in the Acta graphical abstract."""
-    fig.patches.append(Rectangle((x0 / W, 0.03 / H), w / W, 0.36 / H, transform=fig.transFigure, fc="0.92",
-                                 ec="none", zorder=-1))
-    fig.text((x0 + w / 2) / W, 0.21 / H, text, fontsize=FS - 0.5, fontweight="bold", ha="center", va="center",
+    fig.patches.append(FancyBboxPatch(((x0 + 0.04) / W, 0.08 / H), (w - 0.08) / W, 0.40 / H, transform=fig.transFigure,
+                                      boxstyle="round,pad=0,rounding_size=0.025", fc="#E4E7EC", ec="none", zorder=-1))
+    fig.text((x0 + w / 2) / W, 0.28 / H, text, fontsize=FS - 1, fontweight="bold", ha="center", va="center",
              linespacing=1.15, color="0.1")
 
 
@@ -73,11 +90,17 @@ def main():
                          "mathtext.it": "Arial:italic", "mathtext.bf": "Arial:bold", "font.size": FS,
                          "pdf.fonttype": 42, "axes.linewidth": 0.6})
     fig = plt.figure(figsize=(W, H))
-    yb, ht = 0.52, 1.36                            # panel area above the caption strips
+    yb, ht = 0.56, 1.32                            # panel area above the caption strips
 
     # ---------------- 1: MD decomposition of Fe-36Cr, and the DFT cells of the two phases it separates into
     x0, w0 = 0.05, 1.16
-    c = box(fig, x0 + 0.30, yb + 0.56, 0.60, 0.70)
+    card(fig, x0, w0)
+    xm = x0 + 0.68                                 # cube axis; the two DFT cells sit symmetrically about it
+    from matplotlib.patches import Ellipse
+    for r, a_ in ((1.0, 0.10), (0.7, 0.10), (0.45, 0.10)):
+        fig.patches.append(Ellipse((xm / W, (yb + 0.57) / H), 0.62 * r / W, 0.10 * r / H,
+                                   transform=fig.transFigure, fc="0.3", ec="none", alpha=a_, zorder=-1))
+    c = box(fig, xm - 0.30, yb + 0.56, 0.60, 0.70)
     _cube_ax(c, md_grid3d(series()[0.36][-1]))
     for k, (name, col, lab) in enumerate((("Fe", FE, r"Fe-rich $\alpha$"), ("Cr", CR, r"Cr-rich $\alpha'$"))):
         y = yb + ht - 0.02
@@ -85,43 +108,45 @@ def main():
         fig.patches.append(Rectangle((xk / W, (y - 0.04) / H), 0.08 / W, 0.08 / H,
                                      transform=fig.transFigure, fc=col, ec="none"))
         fig.text((xk + 0.10) / W, y / H, lab, fontsize=FS - 1.5, va="center", color="0.15")
-    fig.text((x0 + 0.02) / W, (yb + 0.90) / H, "MD", fontsize=FS - 0.5, fontweight="bold", color=GREEN,
+    fig.text((x0 + 0.02) / W, (yb + 0.90) / H, "MD", fontsize=FS - 1, fontweight="bold", color=GREEN,
              ha="left", va="center")
-    bw = 0.42; bh = bw * VS.ASPECT; yc = yb + 0.04
-    cxs = (x0 + 0.45, x0 + 0.92)
+    bw = 0.37; bh = bw * VS.ASPECT; yc = yb + 0.04
+    cxs = (xm - 0.27, xm + 0.27)
     for xc, cx, lab in ((0.05, cxs[0], r"$\alpha$ (5% Cr)"), (0.95, cxs[1], r"$\alpha'$ (95% Cr)")):
         VS.draw(box(fig, cx - bw / 2, yc, bw, bh), xc, moments=False)
         fig.text(cx / W, (yc + bh + 0.02) / H, lab, fontsize=FS - 1.5, color=VERM, fontweight="bold",
                  ha="center", va="bottom")
-    xv = x0 + 0.60                                  # bottom vertex of the cube
-    for xe in (cxs[0] + 0.04, cxs[1] - 0.04):
+    xv = xm                                        # bottom vertex of the cube
+    for xe in (cxs[0] + 0.06, cxs[1] - 0.06):
         fig.patches.append(FancyArrowPatch((xv / W, (yb + 0.54) / H), (xe / W, (yc + bh + 0.13) / H),
                                            transform=fig.transFigure, arrowstyle="-|>", mutation_scale=6, lw=0.8,
                                            color=VERM))
-    fig.text((x0 + 0.02) / W, (yc + bh / 2) / H, "DFT", fontsize=FS - 0.5, fontweight="bold", color=BLUE,
+    fig.text((x0 + 0.02) / W, (yc + bh / 2) / H, "DFT", fontsize=FS - 1, fontweight="bold", color=BLUE,
              ha="left", va="center")
     caption(fig, x0, w0, "Simulated spinodal\ndecomposition of Fe–36Cr")
 
     # ---------------- 2: surface-mode spectrum and the unallowed range
     x1, w1 = 1.30, 2.10
-    s = box(fig, x1 + 0.12, yb + 0.20, w1 - 0.20, ht - 0.26)
+    card(fig, x1, w1)
+    s = box(fig, x1 + 0.14, yb + 0.20, w1 - 0.24, ht - 0.30)
     s.axvspan(LO, HI, color="#FBE0D2", lw=0, zorder=0)
     s.axvline(LO, color=VERM, lw=0.6, ls=(0, (2, 2)), zorder=1)
-    bins = np.arange(0.35, 0.80, 0.005)
-    series_ = ((modes("qeaexp_x0.35"), BLUE, "Fe–36Cr, homogeneous (DFT)", "-"),
-               (modes("mddec_x0.36"), GREEN, "Fe–36Cr, decomposed (MD)", "-"),
-               (modes("qeaexp_x0.95"), VERM, r"Cr-rich $\alpha'$, 95% Cr (DFT)", "-"))
+    bins = np.arange(0.35, 0.80, 0.0025)
+    series_ = ((modes("qeaexp_x0.35"), BLUE, "Fe–36Cr (DFT)", "-"),
+               (modes("mddec_x0.36"), GREEN, "Fe–36Cr decomposed (MD)", "-"),
+               (modes("qeaexp_x0.95"), VERM, r"$\alpha'$, 95% Cr (DFT)", "-"))
     hists = []
     for m, col, lab, ls in series_:
         h, e = np.histogram(m, bins=bins, density=True)
         xc = (e[:-1] + e[1:]) / 2
+        h = smooth(h)
         hists.append((xc, h, col))
-        s.fill_between(xc, 0, h, color=col, alpha=0.18, lw=0, step="mid")
-        s.plot(xc, h, color=col, lw=1.0, drawstyle="steps-mid", label=lab)
+        s.fill_between(xc, 0, h, color=col, alpha=0.16, lw=0)
+        s.plot(xc, h, color=col, lw=1.2, label=lab, solid_capstyle="round")
     s.text(LO + 0.012, s.get_ylim()[1] * 0.93 if False else 0, "", fontsize=1)
     s.set(xlim=(0.35, 0.80), xticks=[0.4, 0.5, 0.6, 0.7, 0.8], yticks=[])
     s.set_xlabel(r"(P)SAW frequency (GHz), $\lambda$ = 6.4 $\mu$m", fontsize=FS - 1, labelpad=1)
-    s.set_ylabel("grains", fontsize=FS - 1, labelpad=2)
+    s.set_ylabel("grains", fontsize=FS - 1, labelpad=2, color="0.25")
     top = max(h.max() for _, h, _ in hists)
     s.set_ylim(0, top * 1.42)
     s.text(0.795, top * 1.36, "unallowed for\npristine CASS", fontsize=FS - 1.5, color="#9A3A10", style="italic",
@@ -134,8 +159,8 @@ def main():
     ins.axvspan(LO, HI, color="#FBE0D2", lw=0, zorder=0)
     ins.axvline(LO, color=VERM, lw=0.5, ls=(0, (2, 2)))
     for xc, h, col in hists:
-        ins.plot(xc, h, color=col, lw=0.9, drawstyle="steps-mid")
-        ins.fill_between(xc, 0, h, color=col, alpha=0.18, lw=0, step="mid")
+        ins.plot(xc, h, color=col, lw=1.0)
+        ins.fill_between(xc, 0, h, color=col, alpha=0.16, lw=0)
     ymax = max(h[(xc > LO)].max() for xc, h, _ in hists) * 1.6
     ins.set(xlim=(0.58, 0.72), ylim=(0, ymax), xticks=[0.6, 0.7], yticks=[])
     ins.tick_params(labelsize=FS - 2.5, length=1.5, width=0.5, pad=1, direction="in")
@@ -146,7 +171,8 @@ def main():
 
     # ---------------- 3: f_SAW up, K/G down at every composition
     x2, w2 = 3.49, 1.58
-    k = box(fig, x2 + 0.26, yb + 0.20, w2 - 0.32, ht - 0.26)
+    card(fig, x2, w2)
+    k = box(fig, x2 + 0.28, yb + 0.20, w2 - 0.36, ht - 0.30)
     dec = mf.md_decomposition()
     xd = np.array(sorted(dec))
     df = np.array([100 * (dec[x]["f"][np.argmax(dec[x]["phi"])] / dec[x]["f"][np.argmin(dec[x]["phi"])] - 1)
