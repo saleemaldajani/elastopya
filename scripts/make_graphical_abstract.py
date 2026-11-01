@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Graphical abstract for the Scripta Materialia submission (v5, 2026-11-01; v4 layout, restyled: tinted cards,
-open axes, highlighted alpha' point, larger DFT cells, message banner).
+"""Graphical abstract for the Scripta Materialia submission (v6, 2026-11-01: v5 style, both cards on one x_Cr axis with
+many compositions; user: "integrate more compositions so it's clearer").
 
 Elsevier: one panel, at least 1328 x 531 px (w x h), readable at 13 x 5 cm. Drawn at exactly 13 x 5 cm, so the lettering
 sizes are the printed sizes; exported as PDF (vector), PNG and TIFF (600 dpi, 3071 x 1181 px).
@@ -13,7 +13,9 @@ and MD with the key points in figures above"):
        at the experimental lattice parameter, joined to their compositions on a plot of the highest (P)SAW frequency over
        10^4 grain orientations: only the Cr-rich alpha' tensor enters the range unallowed for pristine CASS, and no MD
        tensor does (Fig. 2b); spinodal window of Fig. 1b shaded
-Earlier versions: make_graphical_abstract_v1.py ... _v4.py (outputs in figures/graphical_abstract_v1 ... _v4).
+MD card (v6): stiffening on decomposition at all twelve MD compositions for phi = 0.7-1 (Fig. 3b), fully decomposed
+cells at six compositions under their x_Cr (Fig. 1c). DFT card (v6): five QE cells with C' (exp. a) under the top-mode plot.
+Earlier versions: make_graphical_abstract_v1.py ... _v5.py (outputs in figures/graphical_abstract_v1 ... _v5).
 
 Output: manuscript/figures/graphical_abstract/graphical_abstract.{pdf,png,tiff}, graphical_abstract_screen.png (96 dpi)
 """
@@ -103,44 +105,56 @@ def main():
     card(fig, 0.06, 0.31, 2.50, 1.62, MDT)
     card(fig, 2.62, 0.31, 2.44, 1.62, DFTT)
 
-    # ---------------- MD
+    # ---------------- MD: stiffening at every composition, decomposed cells under their compositions
     pill(fig, 0.16, 1.78, "MD", "Decomposition stiffens the SAW", GREEN)
-    x0, w = 0.52, 1.92
+    x0, w = 0.50, 1.86
     a = box(fig, x0, yp, w, hp)
-    d = mf.md_decomposition()[0.36]
-    o = np.argsort(d["phi"]); ph, f = d["phi"][o], d["f"][o]
-    a.fill_between(ph, f[0], f, color=GREEN, alpha=0.18, lw=0, zorder=1)
-    a.plot(ph, f, "-o", color=GREEN, mfc="white", mew=1.1, ms=3.4, lw=1.4, zorder=3)
-    a.plot([0.5, 1.0], [f[0], f[0]], ls=(0, (2, 2)), color="0.55", lw=0.6, zorder=1)
-    a.annotate("", xy=(1.025, f[-1]), xytext=(1.025, f[0]),
-               arrowprops=dict(arrowstyle="-|>", lw=1.1, color=VERM, mutation_scale=7, shrinkA=0, shrinkB=0))
-    a.text(0.985, f[0] + 0.006, f"+{100 * (f[-1] / f[0] - 1):.0f}%", color=VERM, fontsize=FS + 2,
-           fontweight="bold", ha="right", va="center")
-    a.set(xlim=(0.47, 1.05), ylim=(0.448, 0.476), xticks=[0.5, 0.6, 0.7, 0.8, 0.9, 1.0], yticks=[0.45, 0.46, 0.47])
-    a.set_xticklabels(["0.5", "0.6", "0.7", "0.8", "0.9", "1"])
-    open_axes(a)
-    a.set_ylabel(r"$f_{\rm SAW}$ (GHz)", fontsize=FS - 0.5, labelpad=1, color="0.2")
-    a.text(1.05, 0.4445, r"$\phi$", fontsize=FS, ha="left", va="top", clip_on=False, color="0.2")
-    cw, ch = 0.29, 0.33
-    for fpath, p in zip(series()[0.36], ph):
-        xc = x0 + (p - 0.47) / 0.58 * w
-        _cube_ax(box(fig, xc - cw / 2, 0.47, cw, ch), md_grid3d(fpath))
-    fig.text((x0 + w / 2) / W, 0.43 / H, r"Fe$_{64}$Cr$_{36}$ (MD):  random  $\longrightarrow$  $\alpha$ + $\alpha'$",
-             fontsize=FS - 0.5, ha="center", va="top", color="0.2")
-
-    # ---------------- DFT
-    pill(fig, 2.72, 1.78, "DFT", r"Stiff $\alpha'$ enters the unallowed range", BLUE)
-    x1, w1 = 3.10, 1.74
-    u = box(fig, x1, yp, w1, hp)
     p = mf.read_csv("sheet_levesque_parameters.csv")
     xs = np.linspace(0.005, 0.995, 2000)
     _, curv = mf.levesque_model(xs, *(p[k][0] for k in ("alpha", "beta", "gamma", "delta")))
+    a.fill_between(xs, -0.5, 8.2, where=curv > 0, color="#D9D0EA", alpha=0.55, lw=0, zorder=0)
+    a.text(0.235, 8.1, "spinodal window", fontsize=FS - 1.5, color="#6A5A8C", ha="left", va="top")
+    dec = mf.md_decomposition()
+    xd = np.array(sorted(dec))
+    rel = lambda ph: np.array([100 * (dec[x]["f"][np.argmin(abs(dec[x]["phi"] - ph))] /
+                                      dec[x]["f"][np.argmin(dec[x]["phi"])] - 1) for x in xd])
+    for ph, al in ((0.7, 0.30), (0.8, 0.50), (0.9, 0.72)):
+        a.plot(xd, rel(ph), "-", color=GREEN, alpha=al, lw=0.9, zorder=2)
+        a.text(xd[6] + 0.015, rel(ph)[6] + 0.25, rf"{ph:g}", color=GREEN, alpha=min(1, al + 0.25), fontsize=FS - 2,
+               ha="left", va="bottom")
+    r1 = rel(1.0)
+    a.fill_between(xd, 0, r1, color=GREEN, alpha=0.15, lw=0, zorder=1)
+    a.plot(xd, r1, "-o", color=GREEN, mfc="white", mew=1.0, ms=3.0, lw=1.4, zorder=3)
+    k = int(np.argmax(r1))
+    a.text(xd[k] + 0.03, r1[k] + 0.25, f"+{r1[k]:.1f}%", color=VERM, fontsize=FS + 1, fontweight="bold", ha="left",
+           va="bottom")
+    a.text(0.75, 4.4, r"$\phi$ = 1", color=GREEN, fontsize=FS - 1, ha="left", va="bottom", fontweight="bold")
+    a.set(xlim=(0, 1), ylim=(-0.3, 8.2), xticks=[0, 0.5, 1], yticks=[0, 2, 4, 6, 8])
+    a.set_xticklabels(["0", "0.5", "1"])
+    open_axes(a)
+    a.set_ylabel(r"$\Delta f_{\rm SAW}$ (%)", fontsize=FS - 0.5, labelpad=1, color="0.2")
+    a.text(1.03, -0.9, r"$x_{\rm Cr}$", fontsize=FS, ha="left", va="top", clip_on=False, color="0.2")
+    cw, ch = 0.25, 0.29
+    mx = (0.05, 0.2, 0.36, 0.5, 0.7, 0.95)
+    ser = series()
+    for n, xc in enumerate(mx):
+        cx = x0 + 0.08 + n * (w - 0.16) / (len(mx) - 1)
+        _cube_ax(box(fig, cx - cw / 2, 0.50, cw, ch), md_grid3d(ser[xc][-1]))
+        fig.text(cx / W, 0.47 / H, f"{round(100 * xc)}%", fontsize=FS - 1, ha="center", va="top",
+                 color=BLUE if xc == 0.36 else "0.2", fontweight="bold" if xc == 0.36 else "normal")
+        fig.add_artist(ConnectionPatch(xyA=(xc, -0.3), coordsA=a.transData, xyB=(cx / W, (0.50 + ch + 0.01) / H),
+                                       coordsB=fig.transFigure, color="0.6", lw=0.5, ls=(0, (2, 1.5))))
+    fig.text((x0 - 0.30) / W, 0.47 / H, r"$\phi$ = 1:", fontsize=FS - 1, ha="left", va="top", color="0.2")
+
+    # ---------------- DFT: top surface mode at every QE composition, five cells with their C'
+    pill(fig, 2.72, 1.78, "DFT", r"Stiff $\alpha'$ enters the unallowed range", BLUE)
+    x1, w1 = 3.10, 1.74
+    u = box(fig, x1, yp, w1, hp)
     u.fill_between(xs, 0.5, 0.86, where=curv > 0, color="#D9D0EA", alpha=0.55, lw=0, zorder=0)
     u.axhspan(LO, 0.86, color="#FBE0D2", lw=0, zorder=0.5)
     u.axhline(LO, color=VERM, lw=0.6, ls=(0, (2, 2)), zorder=1)
     u.text(0.03, 0.845, "unallowed for pristine CASS", fontsize=FS - 1, color="#9A3A10", style="italic",
            ha="left", va="top")
-    u.text(0.48, 0.505, "spinodal", fontsize=FS - 1.5, color="#6A5A8C", ha="center", va="bottom")
     qa = mf.qe_dft_aexp()
     xq, tq = series_top("qeaexp")
     m = np.isin(np.round(xq, 3), np.round(qa["x"], 3))           # the QE tensors of Fig. 2b (80% Cr excluded)
@@ -161,21 +175,20 @@ def main():
     u.set_ylabel("top (P)SAW (GHz)", fontsize=FS - 0.5, labelpad=1, color="0.2")
     u.text(1.03, 0.495, r"$x_{\rm Cr}$", fontsize=FS, ha="left", va="top", clip_on=False, color="0.2")
     cp = dict(zip(np.round(qa["x"], 2), (qa["c11"] - qa["c12"]) / 2))
-    cells = ((0.05, r"$\alpha$"), (0.35, "Fe–36Cr"), (0.95, r"$\alpha'$"))
-    bw = 0.54; bh = bw * VS.ASPECT; yc = 0.60
-    centers = [x1 + 0.12, x1 + w1 / 2 + 0.0, x1 + w1 - 0.10]
-    for (xc, lab), cx in zip(cells, centers):
+    qx = (0.05, 0.2, 0.35, 0.5, 0.95)
+    bw = 0.37; bh = bw * VS.ASPECT; yc = 0.62
+    for n, xc in enumerate(qx):
+        cx = x1 + 0.08 + n * (w1 - 0.10) / (len(qx) - 1)
         VS.draw(box(fig, cx - bw / 2, yc, bw, bh), xc)
-        fig.text(cx / W, (yc - 0.02) / H, lab, fontsize=FS - 0.5, ha="center", va="top",
-                 color=VERM if xc == 0.95 else "0.2", fontweight="bold" if xc == 0.95 else "normal")
-        fig.text(cx / W, (yc - 0.14) / H, rf"$C'$ = {cp[round(xc, 2)]:.0f} GPa", fontsize=FS - 1, ha="center",
-                 va="top", color=VERM if xc == 0.95 else "0.2", fontweight="bold" if xc == 0.95 else "normal")
+        hi = xc == 0.95
+        col = VERM if hi else (BLUE if xc == 0.35 else "0.2")
+        fig.text(cx / W, (yc - 0.02) / H, f"{round(100 * xc)}%", fontsize=FS - 1, ha="center", va="top", color=col,
+                 fontweight="bold" if xc in (0.35, 0.95) else "normal")
+        fig.text(cx / W, (yc - 0.15) / H, f"{cp[round(xc, 2)]:.0f}", fontsize=FS - 0.5, ha="center", va="top",
+                 color=VERM if hi else "0.2", fontweight="bold" if hi else "normal")
         fig.add_artist(ConnectionPatch(xyA=(xc, 0.50), coordsA=u.transData, xyB=(cx / W, (yc + bh + 0.005) / H),
                                        coordsB=fig.transFigure, color="0.6", lw=0.5, ls=(0, (2, 1.5))))
-    for xa, xb in ((centers[1] - 0.29, centers[0] + 0.29), (centers[1] + 0.29, centers[2] - 0.29)):
-        fig.patches.append(FancyArrowPatch((xa / W, (yc + bh / 2) / H), (xb / W, (yc + bh / 2) / H),
-                                           transform=fig.transFigure, arrowstyle="-|>", mutation_scale=7, lw=1.0,
-                                           color=VERM))
+    fig.text(2.68 / W, (yc - 0.15) / H, r"$C'$ (GPa)", fontsize=FS - 1.5, ha="left", va="top", color="0.2")
     fig.text(4.98 / W, 1.635 / H, "QE cells; arrows: local moments", fontsize=FS - 2, color="0.45",
              ha="right", va="center")
 
@@ -190,7 +203,7 @@ def main():
     fig.savefig(OUT / "graphical_abstract.png", dpi=600)
     fig.savefig(OUT / "graphical_abstract.tiff", dpi=600, pil_kwargs={"compression": "tiff_lzw"})
     fig.savefig(OUT / "graphical_abstract_screen.png", dpi=96)
-    print("Fe-36Cr stiffening", round(100 * (f[-1] / f[0] - 1), 2), "%; MD top max", tm.max().round(3),
+    print("MD stiffening at phi = 1:", dict(zip(xd, r1.round(2))), "; MD top max", tm.max().round(3),
           "; QE top", dict(zip(xq, tq.round(3))))
 
 
