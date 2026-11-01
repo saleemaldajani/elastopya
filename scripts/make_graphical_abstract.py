@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Graphical abstract for the Scripta Materialia submission (v11, 2026-11-01).
+"""Graphical abstract for the Scripta Materialia submission (v12, 2026-11-01: v11 plus the QE cells of alpha and
+alpha' under the MD cube in panel 1).
 
 Modelled on the graphical abstract of Al Dajani et al., Acta Mater. 2023 (three panels, one strong image each, a bold
 claim underneath), as its theoretical counterpart (user request; no spinodal shading, which the user found confusing):
@@ -19,11 +20,12 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
-from matplotlib.patches import FancyBboxPatch, Rectangle  # noqa: E402
+from matplotlib.patches import FancyArrowPatch, FancyBboxPatch, Rectangle  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import make_figures as mf  # noqa: E402
+import visualize_sqs as VS  # noqa: E402
 from visualize_decomposition import CR, FE, _cube_ax, md_grid3d, series  # noqa: E402
 
 OUT = mf.ROOT / "manuscript" / "figures" / "graphical_abstract"
@@ -73,9 +75,9 @@ def main():
     fig = plt.figure(figsize=(W, H))
     yb, ht = 0.52, 1.36                            # panel area above the caption strips
 
-    # ---------------- 1: MD decomposition of Fe-36Cr
+    # ---------------- 1: MD decomposition of Fe-36Cr, and the DFT cells of the two phases it separates into
     x0, w0 = 0.05, 1.16
-    c = box(fig, x0 + 0.16, yb + 0.06, 0.86, 1.04)
+    c = box(fig, x0 + 0.30, yb + 0.56, 0.60, 0.70)
     _cube_ax(c, md_grid3d(series()[0.36][-1]))
     for k, (name, col, lab) in enumerate((("Fe", FE, r"Fe-rich $\alpha$"), ("Cr", CR, r"Cr-rich $\alpha'$"))):
         y = yb + ht - 0.02
@@ -83,8 +85,21 @@ def main():
         fig.patches.append(Rectangle((xk / W, (y - 0.04) / H), 0.08 / W, 0.08 / H,
                                      transform=fig.transFigure, fc=col, ec="none"))
         fig.text((xk + 0.10) / W, y / H, lab, fontsize=FS - 1.5, va="center", color="0.15")
-    fig.text((x0 + w0 - 0.02) / W, (yb + 0.02) / H, r"MD, 25$^3$ cell", fontsize=FS - 1.5, ha="right", va="bottom",
-             color=GREY)
+    fig.text((x0 + 0.02) / W, (yb + 0.90) / H, "MD", fontsize=FS - 0.5, fontweight="bold", color=GREEN,
+             ha="left", va="center")
+    bw = 0.42; bh = bw * VS.ASPECT; yc = yb + 0.04
+    cxs = (x0 + 0.45, x0 + 0.92)
+    for xc, cx, lab in ((0.05, cxs[0], r"$\alpha$ (5% Cr)"), (0.95, cxs[1], r"$\alpha'$ (95% Cr)")):
+        VS.draw(box(fig, cx - bw / 2, yc, bw, bh), xc, moments=False)
+        fig.text(cx / W, (yc + bh + 0.02) / H, lab, fontsize=FS - 1.5, color=VERM, fontweight="bold",
+                 ha="center", va="bottom")
+    xv = x0 + 0.60                                  # bottom vertex of the cube
+    for xe in (cxs[0] + 0.04, cxs[1] - 0.04):
+        fig.patches.append(FancyArrowPatch((xv / W, (yb + 0.54) / H), (xe / W, (yc + bh + 0.13) / H),
+                                           transform=fig.transFigure, arrowstyle="-|>", mutation_scale=6, lw=0.8,
+                                           color=VERM))
+    fig.text((x0 + 0.02) / W, (yc + bh / 2) / H, "DFT", fontsize=FS - 0.5, fontweight="bold", color=BLUE,
+             ha="left", va="center")
     caption(fig, x0, w0, "Simulated spinodal\ndecomposition of Fe–36Cr")
 
     # ---------------- 2: surface-mode spectrum and the unallowed range
