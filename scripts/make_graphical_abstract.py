@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Graphical abstract for the Scripta Materialia submission (v6, 2026-11-01: v5 style, both cards on one x_Cr axis with
-many compositions; user: "integrate more compositions so it's clearer").
+"""Graphical abstract for the Scripta Materialia submission (v7, 2026-11-01: v6 with "spinodal decomposition" in the
+MD title and banner, and alpha / alpha' labels on the cells and the DFT plot as in v5).
 
 Elsevier: one panel, at least 1328 x 531 px (w x h), readable at 13 x 5 cm. Drawn at exactly 13 x 5 cm, so the lettering
 sizes are the printed sizes; exported as PDF (vector), PNG and TIFF (600 dpi, 3071 x 1181 px).
@@ -15,7 +15,7 @@ and MD with the key points in figures above"):
        tensor does (Fig. 2b); spinodal window of Fig. 1b shaded
 MD card (v6): stiffening on decomposition at all twelve MD compositions for phi = 0.7-1 (Fig. 3b), fully decomposed
 cells at six compositions under their x_Cr (Fig. 1c). DFT card (v6): five QE cells with C' (exp. a) under the top-mode plot.
-Earlier versions: make_graphical_abstract_v1.py ... _v5.py (outputs in figures/graphical_abstract_v1 ... _v5).
+Earlier versions: make_graphical_abstract_v1.py ... _v6.py (outputs in figures/graphical_abstract_v1 ... _v6).
 
 Output: manuscript/figures/graphical_abstract/graphical_abstract.{pdf,png,tiff}, graphical_abstract_screen.png (96 dpi)
 """
@@ -106,7 +106,7 @@ def main():
     card(fig, 2.62, 0.31, 2.44, 1.62, DFTT)
 
     # ---------------- MD: stiffening at every composition, decomposed cells under their compositions
-    pill(fig, 0.16, 1.78, "MD", "Decomposition stiffens the SAW", GREEN)
+    pill(fig, 0.16, 1.78, "MD", "Spinodal decomposition stiffens the SAW", GREEN)
     x0, w = 0.50, 1.86
     a = box(fig, x0, yp, w, hp)
     p = mf.read_csv("sheet_levesque_parameters.csv")
@@ -126,7 +126,7 @@ def main():
     a.fill_between(xd, 0, r1, color=GREEN, alpha=0.15, lw=0, zorder=1)
     a.plot(xd, r1, "-o", color=GREEN, mfc="white", mew=1.0, ms=3.0, lw=1.4, zorder=3)
     k = int(np.argmax(r1))
-    a.text(xd[k] + 0.03, r1[k] + 0.25, f"+{r1[k]:.1f}%", color=VERM, fontsize=FS + 1, fontweight="bold", ha="left",
+    a.text(xd[k] + 0.04, r1[k] - 0.05, f"+{r1[k]:.1f}%", color=VERM, fontsize=FS + 1, fontweight="bold", ha="left",
            va="bottom")
     a.text(0.75, 4.4, r"$\phi$ = 1", color=GREEN, fontsize=FS - 1, ha="left", va="bottom", fontweight="bold")
     a.set(xlim=(0, 1), ylim=(-0.3, 8.2), xticks=[0, 0.5, 1], yticks=[0, 2, 4, 6, 8])
@@ -144,7 +144,8 @@ def main():
                  color=BLUE if xc == 0.36 else "0.2", fontweight="bold" if xc == 0.36 else "normal")
         fig.add_artist(ConnectionPatch(xyA=(xc, -0.3), coordsA=a.transData, xyB=(cx / W, (0.50 + ch + 0.01) / H),
                                        coordsB=fig.transFigure, color="0.6", lw=0.5, ls=(0, (2, 1.5))))
-    fig.text((x0 - 0.30) / W, 0.47 / H, r"$\phi$ = 1:", fontsize=FS - 1, ha="left", va="top", color="0.2")
+    fig.text(0.14 / W, 0.645 / H, r"$\alpha$ + $\alpha'$" + "\n" + r"($\phi$ = 1)", fontsize=FS - 1.5, ha="left",
+             va="center", color=VERM, linespacing=1.0)
 
     # ---------------- DFT: top surface mode at every QE composition, five cells with their C'
     pill(fig, 2.72, 1.78, "DFT", r"Stiff $\alpha'$ enters the unallowed range", BLUE)
@@ -167,8 +168,10 @@ def main():
     u.plot(xq[-1:], tq[-1:], "D", color=VERM, mec="white", mew=0.4, ms=3.6, zorder=5)
     u.text(xq[-1] - 0.06, tq[-1] + 0.005, r"$\alpha'$", color=VERM, fontsize=FS + 1, fontweight="bold",
            ha="right", va="center")
+    u.text(xq[0] + 0.02, 0.528, r"$\alpha$", color=VERM, fontsize=FS + 1, fontweight="bold", ha="center",
+           va="center")
     u.text(0.84, 0.585, "MD", color=GREEN, fontsize=FS - 0.5, fontweight="bold", ha="center", va="top")
-    u.text(0.27, 0.527, "DFT", color=BLUE, fontsize=FS - 0.5, fontweight="bold", ha="center", va="center")
+    u.text(0.30, 0.527, "DFT", color=BLUE, fontsize=FS - 0.5, fontweight="bold", ha="center", va="center")
     u.set(xlim=(0, 1), ylim=(0.50, 0.86), xticks=[0, 0.5, 1], yticks=[0.5, 0.6, 0.7, 0.8])
     u.set_xticklabels(["0", "0.5", "1"])
     open_axes(u)
@@ -182,8 +185,9 @@ def main():
         VS.draw(box(fig, cx - bw / 2, yc, bw, bh), xc)
         hi = xc == 0.95
         col = VERM if hi else (BLUE if xc == 0.35 else "0.2")
-        fig.text(cx / W, (yc - 0.02) / H, f"{round(100 * xc)}%", fontsize=FS - 1, ha="center", va="top", color=col,
-                 fontweight="bold" if xc in (0.35, 0.95) else "normal")
+        lab = {0.05: r"$\alpha$  5%", 0.95: r"$\alpha'$  95%"}.get(xc, f"{round(100 * xc)}%")
+        fig.text(cx / W, (yc - 0.02) / H, lab, fontsize=FS - 1, ha="center", va="top",
+                 color=VERM if xc in (0.05, 0.95) else col, fontweight="bold" if xc in (0.05, 0.35, 0.95) else "normal")
         fig.text(cx / W, (yc - 0.15) / H, f"{cp[round(xc, 2)]:.0f}", fontsize=FS - 0.5, ha="center", va="top",
                  color=VERM if hi else "0.2", fontweight="bold" if hi else "normal")
         fig.add_artist(ConnectionPatch(xyA=(xc, 0.50), coordsA=u.transData, xyB=(cx / W, (yc + bh + 0.005) / H),
@@ -193,7 +197,7 @@ def main():
              ha="right", va="center")
 
     # ---------------- banner
-    fig.text(0.5, 0.16 / H, r"Decomposition $\rightarrow$ stiffer $\delta$-ferrite ($C'$ $\uparrow$) $\rightarrow$ "
+    fig.text(0.5, 0.16 / H, r"Spinodal decomposition $\rightarrow$ stiffer $\delta$-ferrite ($C'$ $\uparrow$) $\rightarrow$ "
              r"higher SAW frequency $\rightarrow$ non-destructive sign of embrittlement",
              fontsize=FS - 0.5, ha="center", va="center", color="0.12")
 
