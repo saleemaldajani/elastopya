@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Graphical abstract for the Scripta Materialia submission (v13, 2026-11-01: v12 beautified, same content:
-rounded cards and claim strips, smoothed spectra, open axes, shadow under the cube).
+"""Graphical abstract for the Scripta Materialia submission (v14, 2026-11-01: v13 with Fe(1-x)Cr(x) made explicit
+and Fe-36Cr marked as the TGS-measured alloy (Rae et al.), not a CASS composition).
 
 Modelled on the graphical abstract of Al Dajani et al., Acta Mater. 2023 (three panels, one strong image each, a bold
 claim underneath), as its theoretical counterpart (user request; no spinodal shading, which the user found confusing):
@@ -123,7 +123,7 @@ def main():
                                            color=VERM))
     fig.text((x0 + 0.02) / W, (yc + bh / 2) / H, "DFT", fontsize=FS - 1, fontweight="bold", color=BLUE,
              ha="left", va="center")
-    caption(fig, x0, w0, "Simulated spinodal\ndecomposition of Fe–36Cr")
+    caption(fig, x0, w0, "Simulated spinodal\ndecomposition of Fe$_{1-x}$Cr$_x$\n(shown: $x$ = 0.36)")
 
     # ---------------- 2: surface-mode spectrum and the unallowed range
     x1, w1 = 1.30, 2.10
@@ -189,11 +189,10 @@ def main():
            ha="center", va="top")
     i36 = int(np.argmin(abs(xd - mf.X_FE36CR)))
     k.plot([mf.X_FE36CR] * 2, [dkg[i36], df[i36]], color=BLUE, lw=0.6, ls=(0, (2, 2)))
-    k.text(mf.X_FE36CR - 0.02, -3.0, "Fe–36Cr", color=BLUE, fontsize=FS - 1.5, rotation=90, ha="right",
-           va="center")
+    k.text(mf.X_FE36CR + 0.02, -2.3, "Fe–36Cr (TGS)", color=BLUE, fontsize=FS - 1.5, ha="left", va="center")
     k.set(xlim=(0, 1), ylim=(-16, 11), xticks=[0, 0.5, 1], yticks=[-10, 0, 10])
     k.set_xticklabels(["0", "0.5", "1"])
-    k.set_xlabel(r"$x_{\rm Cr}$", fontsize=FS - 0.5, labelpad=1)
+    k.set_xlabel(r"$x$ in Fe$_{1-x}$Cr$_x$", fontsize=FS - 0.5, labelpad=1)
     k.set_ylabel("change on decomposition (%)", fontsize=FS - 1.5, labelpad=1)
     frame(k)
     caption(fig, x2, w2, "Shear stiffening raises $f_{\\rm SAW}$\nand lowers $K/G$: a signature\nof embrittlement")
