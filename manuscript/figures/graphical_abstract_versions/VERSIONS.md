@@ -17,3 +17,4 @@ version's script over `scripts/make_graphical_abstract.py` and run it. The curre
 | v8 | 2026-11-01 | Mechanism line as coloured chips including K/G down (embrittlement) |
 | v9 | 2026-11-01 | Decluttered v8: phi = 1 curve only, QE cells without moment arrows, no window shading or extra alpha label in the DFT plot, mechanism line as plain coloured text |
 | v10 | 2026-11-01 | One spinodal band: the 748 K CALPHAD spinodal (30-71% Cr, Sec. 3.1) instead of the two 298 K PWSCF-PAW windows of Fig. 1b, whose narrow second window near 95% Cr was confusing; +5.7% under the peak |
+| v11 | 2026-11-01 | New design after the Acta 2023 graphical abstract: three panels with bold claims beneath (MD decomposed Fe-36Cr cell; (P)SAW spectrum over grain orientations with inset on the unallowed range, DFT alpha' reaching 0.69 GHz; f_SAW up and K/G down at all twelve MD compositions); no spinodal shading |
