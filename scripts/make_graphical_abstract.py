@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Graphical abstract for the Scripta Materialia submission (v16, 2026-11-01: v15 with headroom so the alpha' peak
-clears the legend, and no Fe-36Cr marker in panel 3; Fe-36Cr is named only in the centre legend).
+"""Graphical abstract for the Scripta Materialia submission (v17, 2026-11-01: v16 with a wider frequency axis so the
+centre legend ends before the band, panel-3 labels moved off their curves, panel-1 key inset from the card edge).
 
 Modelled on the graphical abstract of Al Dajani et al., Acta Mater. 2023 (three panels, one strong image each, a bold
 claim underneath), as its theoretical counterpart (user request; no spinodal shading, which the user found confusing):
@@ -103,8 +103,8 @@ def main():
     c = box(fig, xm - 0.27, yb + 0.54, 0.54, 0.63)
     _cube_ax(c, md_grid3d(series()[0.36][-1]))
     for k, (name, col, lab) in enumerate((("Fe", FE, r"Fe-rich $\alpha$"), ("Cr", CR, r"Cr-rich $\alpha'$"))):
-        y = yb + ht - 0.02
-        xk = x0 + 0.04 + k * 0.58
+        y = yb + ht - 0.07
+        xk = x0 + 0.11 + k * 0.50
         fig.patches.append(Rectangle((xk / W, (y - 0.04) / H), 0.08 / W, 0.08 / H,
                                      transform=fig.transFigure, fc=col, ec="none"))
         fig.text((xk + 0.10) / W, y / H, lab, fontsize=FS - 1.5, va="center", color="0.15")
@@ -137,7 +137,7 @@ def main():
     s = box(fig, x1 + 0.14, yb + 0.20, w1 - 0.24, ht - 0.30)
     s.axvspan(LO, HI, color="#FBE0D2", lw=0, zorder=0)
     s.axvline(LO, color=VERM, lw=0.6, ls=(0, (2, 2)), zorder=1)
-    bins = np.arange(0.35, 0.80, 0.0025)
+    bins = np.arange(0.27, 0.80, 0.0025)
     series_ = ((modes("mddec_x0.36"), GREEN, "Fe–36Cr decomposed (MD)", "-"),
                (modes("qeaexp_x0.35"), BLUE, "Fe–36Cr (DFT)", "-"),
                (modes("qeaexp_x0.95"), VERM, r"$\alpha'$, 95% Cr (DFT)", "-"))
@@ -150,18 +150,18 @@ def main():
         s.fill_between(xc, 0, h, color=col, alpha=0.16, lw=0)
         s.plot(xc, h, color=col, lw=1.2, label=lab, solid_capstyle="round")
     s.text(LO + 0.012, s.get_ylim()[1] * 0.93 if False else 0, "", fontsize=1)
-    s.set(xlim=(0.35, 0.80), xticks=[0.4, 0.5, 0.6, 0.7, 0.8], yticks=[])
+    s.set(xlim=(0.27, 0.80), xticks=[0.3, 0.4, 0.5, 0.6, 0.7, 0.8], yticks=[])
     s.set_xlabel(r"(P)SAW frequency (GHz), $\lambda$ = 6.4 $\mu$m", fontsize=FS - 1, labelpad=1)
     s.set_ylabel("grains", fontsize=FS - 1, labelpad=2, color="0.25")
     top = max(h.max() for _, h, _ in hists)
     s.set_ylim(0, top * 1.62)
     s.text(0.795, top * 1.55, "unallowed for\npristine CASS", fontsize=FS - 1.5, color="#9A3A10", style="italic",
            ha="right", va="top", linespacing=1.0)
-    s.legend(loc="upper left", fontsize=FS - 1.5, frameon=False, handlelength=1.0, borderaxespad=0.2,
+    s.legend(loc="upper left", fontsize=FS - 1.5, frameon=False, handlelength=1.0, borderaxespad=0.15,
              labelspacing=0.15, handletextpad=0.4)
     frame(s)
     # inset: zoom on the unallowed range, as in the Acta inset
-    ins = s.inset_axes([0.60, 0.20, 0.38, 0.40])
+    ins = s.inset_axes([0.665, 0.22, 0.32, 0.38])
     ins.axvspan(LO, HI, color="#FBE0D2", lw=0, zorder=0)
     ins.axvline(LO, color=VERM, lw=0.5, ls=(0, (2, 2)))
     for xc, h, col in hists:
@@ -189,11 +189,11 @@ def main():
     k.fill_between(xd, 0, dkg, color=VERM, alpha=0.15, lw=0)
     k.plot(xd, df, "-o", color=GREEN, ms=2.4, lw=1.2, mfc="white", mew=0.8)
     k.plot(xd, dkg, "-o", color=VERM, ms=2.4, lw=1.2, mfc="white", mew=0.8)
-    k.text(0.5, df.max() + 1.0, r"$f_{\rm SAW}$ $\uparrow$  (signal)", color=GREEN, fontsize=FS - 0.5,
+    k.text(0.5, df.max() + 2.3, r"$f_{\rm SAW}$ $\uparrow$  (signal)", color=GREEN, fontsize=FS - 0.5,
            fontweight="bold", ha="center", va="bottom")
-    k.text(0.5, dkg.min() - 1.0, r"$K/G$ $\downarrow$  (embrittlement)", color=VERM, fontsize=FS - 0.5, fontweight="bold",
+    k.text(0.5, dkg.min() - 2.3, r"$K/G$ $\downarrow$  (embrittlement)", color=VERM, fontsize=FS - 0.5, fontweight="bold",
            ha="center", va="top")
-    k.set(xlim=(0, 1), ylim=(-16, 11), xticks=[0, 0.5, 1], yticks=[-10, 0, 10])
+    k.set(xlim=(0, 1), ylim=(-18, 12), xticks=[0, 0.5, 1], yticks=[-10, 0, 10])
     k.set_xticklabels(["0", "0.5", "1"])
     k.set_xlabel(r"$x$ in Fe$_{1-x}$Cr$_x$", fontsize=FS - 0.5, labelpad=1)
     k.set_ylabel("change on decomposition (%)", fontsize=FS - 1.5, labelpad=1)
