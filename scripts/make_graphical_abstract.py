@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Graphical abstract for the Scripta Materialia submission (v8, 2026-11-01: v7 with the bottom mechanism line as a
-chain of steps that includes K/G falling, i.e. embrittlement; user request).
+"""Graphical abstract for the Scripta Materialia submission (v9, 2026-11-01: v8 decluttered; versions with their
+scripts in manuscript/figures/graphical_abstract_versions/, see VERSIONS.md there).
 
 Elsevier: one panel, at least 1328 x 531 px (w x h), readable at 13 x 5 cm. Drawn at exactly 13 x 5 cm, so the lettering
 sizes are the printed sizes; exported as PDF (vector), PNG and TIFF (600 dpi, 3071 x 1181 px).
@@ -118,18 +118,13 @@ def main():
     xd = np.array(sorted(dec))
     rel = lambda ph: np.array([100 * (dec[x]["f"][np.argmin(abs(dec[x]["phi"] - ph))] /
                                       dec[x]["f"][np.argmin(dec[x]["phi"])] - 1) for x in xd])
-    for ph, al in ((0.7, 0.30), (0.8, 0.50), (0.9, 0.72)):
-        a.plot(xd, rel(ph), "-", color=GREEN, alpha=al, lw=0.9, zorder=2)
-        a.text(xd[6] + 0.015, rel(ph)[6] + 0.25, rf"{ph:g}", color=GREEN, alpha=min(1, al + 0.25), fontsize=FS - 2,
-               ha="left", va="bottom")
     r1 = rel(1.0)
-    a.fill_between(xd, 0, r1, color=GREEN, alpha=0.15, lw=0, zorder=1)
+    a.fill_between(xd, 0, r1, color=GREEN, alpha=0.18, lw=0, zorder=1)
     a.plot(xd, r1, "-o", color=GREEN, mfc="white", mew=1.0, ms=3.0, lw=1.4, zorder=3)
     k = int(np.argmax(r1))
     a.text(xd[k] + 0.04, r1[k] - 0.05, f"+{r1[k]:.1f}%", color=VERM, fontsize=FS + 1, fontweight="bold", ha="left",
            va="bottom")
-    a.text(0.75, 4.4, r"$\phi$ = 1", color=GREEN, fontsize=FS - 1, ha="left", va="bottom", fontweight="bold")
-    a.set(xlim=(0, 1), ylim=(-0.3, 8.2), xticks=[0, 0.5, 1], yticks=[0, 2, 4, 6, 8])
+    a.set(xlim=(0, 1), ylim=(-0.3, 8.2), xticks=[0, 0.5, 1], yticks=[0, 2, 4, 6])
     a.set_xticklabels(["0", "0.5", "1"])
     open_axes(a)
     a.set_ylabel(r"$\Delta f_{\rm SAW}$ (%)", fontsize=FS - 0.5, labelpad=1, color="0.2")
@@ -151,7 +146,6 @@ def main():
     pill(fig, 2.72, 1.78, "DFT", r"Stiff $\alpha'$ enters the unallowed range", BLUE)
     x1, w1 = 3.10, 1.74
     u = box(fig, x1, yp, w1, hp)
-    u.fill_between(xs, 0.5, 0.86, where=curv > 0, color="#D9D0EA", alpha=0.55, lw=0, zorder=0)
     u.axhspan(LO, 0.86, color="#FBE0D2", lw=0, zorder=0.5)
     u.axhline(LO, color=VERM, lw=0.6, ls=(0, (2, 2)), zorder=1)
     u.text(0.03, 0.845, "unallowed for pristine CASS", fontsize=FS - 1, color="#9A3A10", style="italic",
@@ -168,8 +162,6 @@ def main():
     u.plot(xq[-1:], tq[-1:], "D", color=VERM, mec="white", mew=0.4, ms=3.6, zorder=5)
     u.text(xq[-1] - 0.06, tq[-1] + 0.005, r"$\alpha'$", color=VERM, fontsize=FS + 1, fontweight="bold",
            ha="right", va="center")
-    u.text(xq[0] + 0.02, 0.528, r"$\alpha$", color=VERM, fontsize=FS + 1, fontweight="bold", ha="center",
-           va="center")
     u.text(0.84, 0.585, "MD", color=GREEN, fontsize=FS - 0.5, fontweight="bold", ha="center", va="top")
     u.text(0.30, 0.527, "DFT", color=BLUE, fontsize=FS - 0.5, fontweight="bold", ha="center", va="center")
     u.set(xlim=(0, 1), ylim=(0.50, 0.86), xticks=[0, 0.5, 1], yticks=[0.5, 0.6, 0.7, 0.8])
@@ -182,7 +174,7 @@ def main():
     bw = 0.37; bh = bw * VS.ASPECT; yc = 0.62
     for n, xc in enumerate(qx):
         cx = x1 + 0.08 + n * (w1 - 0.10) / (len(qx) - 1)
-        VS.draw(box(fig, cx - bw / 2, yc, bw, bh), xc)
+        VS.draw(box(fig, cx - bw / 2, yc, bw, bh), xc, moments=False)
         hi = xc == 0.95
         col = VERM if hi else (BLUE if xc == 0.35 else "0.2")
         lab = {0.05: r"$\alpha$  5%", 0.95: r"$\alpha'$  95%"}.get(xc, f"{round(100 * xc)}%")
@@ -193,8 +185,7 @@ def main():
         fig.add_artist(ConnectionPatch(xyA=(xc, 0.50), coordsA=u.transData, xyB=(cx / W, (yc + bh + 0.005) / H),
                                        coordsB=fig.transFigure, color="0.6", lw=0.5, ls=(0, (2, 1.5))))
     fig.text(2.68 / W, (yc - 0.15) / H, r"$C'$ (GPa)", fontsize=FS - 1.5, ha="left", va="top", color="0.2")
-    fig.text(4.98 / W, 1.635 / H, "QE cells; arrows: local moments", fontsize=FS - 2, color="0.45",
-             ha="right", va="center")
+    fig.text(4.98 / W, 1.635 / H, "QE 40-atom cells", fontsize=FS - 2, color="0.45", ha="right", va="center")
 
     # ---------------- banner
     # mechanism line (Sec. 3.2): the same shear stiffening raises f_SAW and lowers Pugh's K/G
@@ -209,7 +200,7 @@ def main():
     for k, (txt, fc, tc) in enumerate(steps):
         t = fig.text(0, 0.165 / H, txt, fontsize=FS - 1, ha="left", va="center", color=tc,
                      fontweight="bold" if k in (1, 2, 3) else "normal",
-                     bbox=dict(boxstyle="round,pad=0.30,rounding_size=0.6", fc=fc, ec="none"))
+                     bbox=dict(boxstyle="round,pad=0.30,rounding_size=0.6", fc="none", ec="none"))
         arts.append(t)
     dpi0 = fig.dpi
     fig.set_dpi(600)                             # measure at the export resolution (text hinting differs at 100 dpi)
