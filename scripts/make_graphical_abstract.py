@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Graphical abstract for the Scripta Materialia submission (v17, 2026-11-01: v16 with a wider frequency axis so the
-centre legend ends before the band, panel-3 labels moved off their curves, panel-1 key inset from the card edge).
+"""Graphical abstract for the Scripta Materialia submission (v18, 2026-11-01: v17 with the alpha / alpha' cell labels
+without percentages, which the MD cube does not show; SVG output added).
 
 Modelled on the graphical abstract of Al Dajani et al., Acta Mater. 2023 (three panels, one strong image each, a bold
 claim underneath), as its theoretical counterpart (user request; no spinodal shading, which the user found confusing):
@@ -112,9 +112,9 @@ def main():
              ha="left", va="center")
     bw = 0.37; bh = bw * VS.ASPECT; yc = yb + 0.08
     cxs = (xm - 0.27, xm + 0.27)
-    for xc, cx, lab in ((0.05, cxs[0], r"$\alpha$ (5% Cr)"), (0.95, cxs[1], r"$\alpha'$ (95% Cr)")):
+    for xc, cx, lab in ((0.05, cxs[0], r"$\alpha$"), (0.95, cxs[1], r"$\alpha'$")):
         VS.draw(box(fig, cx - bw / 2, yc, bw, bh), xc, moments=False)
-        fig.text(cx / W, (yc + bh + 0.02) / H, lab, fontsize=FS - 1.5, color=VERM, fontweight="bold",
+        fig.text(cx / W, (yc + bh + 0.02) / H, lab, fontsize=FS + 0.5, color=VERM, fontweight="bold",
                  ha="center", va="bottom")
     xv = xm                                        # bottom vertex of the cube
     for xe in (cxs[0] + 0.06, cxs[1] - 0.06):
@@ -203,6 +203,8 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     meta = {"Title": "Graphical abstract", "Creator": "S. A. Al Dajani"}
     fig.savefig(OUT / "graphical_abstract.pdf", metadata=meta)
+    plt.rcParams["svg.fonttype"] = "none"            # editable text in the SVG
+    fig.savefig(OUT / "graphical_abstract.svg")
     fig.savefig(OUT / "graphical_abstract.png", dpi=600)
     fig.savefig(OUT / "graphical_abstract.tiff", dpi=600, pil_kwargs={"compression": "tiff_lzw"})
     fig.savefig(OUT / "graphical_abstract_screen.png", dpi=96)

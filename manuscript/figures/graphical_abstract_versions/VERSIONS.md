@@ -24,3 +24,4 @@ version's script over `scripts/make_graphical_abstract.py` and run it. The curre
 | v15 | 2026-11-01 | Centre legend ordered MD (green), DFT Fe-36Cr (blue), DFT alpha' (orange); panel 1 claim without Fe-36Cr ('Simulated spinodal decomposition of Fe1-xCrx'); cube smaller and clear of the key; Fe/Cr atom key under the DFT cells |
 | v16 | 2026-11-01 | Headroom so the alpha' peak clears the centre legend; Fe-36Cr marker removed from panel 3 (Fe-36Cr named only in the centre legend) |
 | v17 | 2026-11-01 | Wider frequency axis (0.27-0.80 GHz) so the centre legend ends before the band; smaller inset off the curves; panel-3 labels moved off their curves; panel-1 key inset from the card edge |
+| v18 | 2026-11-01 | alpha / alpha' cell labels without percentages (the MD cube does not show a composition); SVG output added to the script |

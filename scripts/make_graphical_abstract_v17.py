@@ -203,6 +203,8 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     meta = {"Title": "Graphical abstract", "Creator": "S. A. Al Dajani"}
     fig.savefig(OUT / "graphical_abstract.pdf", metadata=meta)
+    plt.rcParams["svg.fonttype"] = "none"            # editable text in the SVG
+    fig.savefig(OUT / "graphical_abstract.svg")
     fig.savefig(OUT / "graphical_abstract.png", dpi=600)
     fig.savefig(OUT / "graphical_abstract.tiff", dpi=600, pil_kwargs={"compression": "tiff_lzw"})
     fig.savefig(OUT / "graphical_abstract_screen.png", dpi=96)
