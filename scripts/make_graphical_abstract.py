@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Graphical abstract for the Scripta Materialia submission (v15, 2026-11-01: v14 with the centre legend ordered
-MD, DFT Fe-36Cr, DFT alpha'; no Fe-36Cr in panel 1; cube clear of the key; Fe/Cr atom key under the DFT cells).
+"""Graphical abstract for the Scripta Materialia submission (v16, 2026-11-01: v15 with headroom so the alpha' peak
+clears the legend, and no Fe-36Cr marker in panel 3; Fe-36Cr is named only in the centre legend).
 
 Modelled on the graphical abstract of Al Dajani et al., Acta Mater. 2023 (three panels, one strong image each, a bold
 claim underneath), as its theoretical counterpart (user request; no spinodal shading, which the user found confusing):
@@ -154,8 +154,8 @@ def main():
     s.set_xlabel(r"(P)SAW frequency (GHz), $\lambda$ = 6.4 $\mu$m", fontsize=FS - 1, labelpad=1)
     s.set_ylabel("grains", fontsize=FS - 1, labelpad=2, color="0.25")
     top = max(h.max() for _, h, _ in hists)
-    s.set_ylim(0, top * 1.42)
-    s.text(0.795, top * 1.36, "unallowed for\npristine CASS", fontsize=FS - 1.5, color="#9A3A10", style="italic",
+    s.set_ylim(0, top * 1.62)
+    s.text(0.795, top * 1.55, "unallowed for\npristine CASS", fontsize=FS - 1.5, color="#9A3A10", style="italic",
            ha="right", va="top", linespacing=1.0)
     s.legend(loc="upper left", fontsize=FS - 1.5, frameon=False, handlelength=1.0, borderaxespad=0.2,
              labelspacing=0.15, handletextpad=0.4)
@@ -193,9 +193,6 @@ def main():
            fontweight="bold", ha="center", va="bottom")
     k.text(0.5, dkg.min() - 1.0, r"$K/G$ $\downarrow$  (embrittlement)", color=VERM, fontsize=FS - 0.5, fontweight="bold",
            ha="center", va="top")
-    i36 = int(np.argmin(abs(xd - mf.X_FE36CR)))
-    k.plot([mf.X_FE36CR] * 2, [dkg[i36], df[i36]], color=BLUE, lw=0.6, ls=(0, (2, 2)))
-    k.text(mf.X_FE36CR + 0.02, -2.3, "Fe–36Cr (TGS)", color=BLUE, fontsize=FS - 1.5, ha="left", va="center")
     k.set(xlim=(0, 1), ylim=(-16, 11), xticks=[0, 0.5, 1], yticks=[-10, 0, 10])
     k.set_xticklabels(["0", "0.5", "1"])
     k.set_xlabel(r"$x$ in Fe$_{1-x}$Cr$_x$", fontsize=FS - 0.5, labelpad=1)

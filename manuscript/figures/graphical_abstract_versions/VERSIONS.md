@@ -22,3 +22,4 @@ version's script over `scripts/make_graphical_abstract.py` and run it. The curre
 | v13 | 2026-11-01 | v12 beautified, same content: rounded cards and claim strips, smoothed spectra, open axes, soft shadow under the cube, DFT cells symmetric about the cube, shorter legend |
 | v14 | 2026-11-01 | Fe(1-x)Cr(x) made explicit (panel 1 claim 'of Fe1-xCrx (shown: x = 0.36)', panel 3 axis 'x in Fe1-xCrx'); Fe-36Cr marked '(TGS)', the alloy in which TGS detected spinodal decomposition (Rae et al.), not a CASS composition |
 | v15 | 2026-11-01 | Centre legend ordered MD (green), DFT Fe-36Cr (blue), DFT alpha' (orange); panel 1 claim without Fe-36Cr ('Simulated spinodal decomposition of Fe1-xCrx'); cube smaller and clear of the key; Fe/Cr atom key under the DFT cells |
+| v16 | 2026-11-01 | Headroom so the alpha' peak clears the centre legend; Fe-36Cr marker removed from panel 3 (Fe-36Cr named only in the centre legend) |
