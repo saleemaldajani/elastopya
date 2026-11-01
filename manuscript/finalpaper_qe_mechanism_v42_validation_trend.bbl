@@ -1,0 +1,303 @@
+\begin{thebibliography}{10}
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\expandafter\ifx\csname href\endcsname\relax
+  \def\href#1#2{#2} \def\path#1{#1}\fi
+
+\bibitem{al2023detecting}
+S.~A.~A. Al~Dajani, B.~R. Dacus, C.~A. Dennett, M.~G. Burke, L.~Waldron, T.~S.
+  Byun, J.~J. Wall, K.~B.-D. Anglin, O.~A.~A. Al~Dajani, K.~J. Krakowiak,
+  et~al., Detecting thermally-induced spinodal decomposition with picosecond
+  ultrasonics in cast austenitic stainless steels, Acta Materialia 246 (2023)
+  118552.
+
+\bibitem{al2020detecting}
+S.~Al~Dajani, B.~Dacus, C.~Dennett, M.~G. Burke, A.~Alahmadi, K.~Mukahiwa,
+  K.~Anglin, J.~Wall, T.~S. Byun, M.~Short, Detecting thermally induced
+  spinodal decomposition with picosecond ultrasonics in cast austenitic
+  stainless steels, Microscopy and Microanalysis 26~(S2) (2020) 1104--1106.
+
+\bibitem{al2020non}
+S.~A.~A. Al~Dajani, Non-destructively detecting spinodal decomposition at a
+  distance towards developing gigahertz ultrasonics for in-vessel inspection,
+  Ph.D. thesis, Massachusetts Institute of Technology (2020).
+
+\bibitem{pugh1954xcii}
+S.~Pugh, Xcii. relations between the elastic moduli and the plastic properties
+  of polycrystalline pure metals, The London, Edinburgh, and Dublin
+  Philosophical Magazine and Journal of Science 45~(367) (1954) 823--843.
+
+\bibitem{chang1966correlation}
+Y.~Chang, A correlation of the coefficients of thermal expansion of metallic
+  solids with temperature, The Journal of Physical Chemistry 70~(4) (1966)
+  1310--1312.
+
+\bibitem{fine1984elastic}
+M.~Fine, L.~Brown, H.~Marcus, Elastic constants versus melting temperature in
+  metals, Scripta metallurgica 18~(9) (1984) 951--956.
+
+\bibitem{korzhavyi2009electronic}
+P.~A. Korzhavyi, A.~Ruban, J.~Odqvist, J.-O. Nilsson, B.~Johansson, Electronic
+  structure and effective chemical and magnetic exchange interactions in bcc
+  fe-cr alloys, Physical Review B 79~(5) (2009) 054202.
+
+\bibitem{razumovskiy2011first}
+V.~I. Razumovskiy, A.~V. Ruban, P.~A. Korzhavyi, First-principles study of
+  elastic properties of cr-and fe-rich fe-cr alloys, Physical Review B 84~(2)
+  (2011) 024106.
+
+\bibitem{hosemann2018materials}
+P.~Hosemann, D.~Frazer, M.~Fratoni, A.~Bolind, M.~Ashby, Materials selection
+  for nuclear applications: Challenges and opportunities, Scripta Materialia
+  143 (2018) 181--187.
+
+\bibitem{du2017facile}
+X.~Du, J.-C. Zhao, Facile measurement of single-crystal elastic constants from
+  polycrystalline samples, npj Comput. Mater. 3~(1) (2017) 17.
+
+\bibitem{sdajani2019cassspinodal}
+S.~A. {Al Dajani}, et~al., Non-destructively detecting lwr structural material
+  embrittlement using transient grating spectroscopy, in: Proc. 19th Intl.
+  Conf. Env. Deg. Mater. Nucl. Power Systems, 2019.
+
+\bibitem{hofmann2019transient}
+F.~Hofmann, M.~P. Short, C.~A. Dennett, Transient grating spectroscopy: An
+  ultrarapid, nondestructive materials evaluation technique, MRS Bulletin
+  44~(5) (2019) 392--402.
+
+\bibitem{byun2016thermal}
+T.~S. Byun, Y.~Yang, N.~Overman, J.~T. Busby, Thermal aging phenomena in cast
+  duplex stainless steels, Jom 68~(2) (2016) 507--516.
+
+\bibitem{lach2020precipitation}
+T.~G. Lach, W.~E. Frazier, J.~Wang, A.~Devaraj, T.~S. Byun, Precipitation-site
+  competition in duplex stainless steels: Cu clusters vs spinodal decomposition
+  interfaces as nucleation sites during thermal aging, Acta Materialia 196
+  (2020) 456--469.
+
+\bibitem{VandeWalleLiu2013}
+A.~Van~de Walle, P.~Tiwary, M.~De~Jong, D.~Olmsted, M.~Asta, A.~Dick, D.~Shin,
+  Y.~Wang, L.-Q. Chen, Z.-K. Liu, \href
+  {https://www.sciencedirect.com/science/article/abs/pii/S0364591613000540}
+  {Efficient stochastic generation of special quasirandom structures}, Calphad
+  42 (2013) 13--18.
+
+\bibitem{kresse1996vasp}
+G.~Kresse, J.~Furthm{\"u}ller, Efficiency of ab-initio total energy
+  calculations for metals and semiconductors using a plane-wave basis set,
+  Computational Materials Science 6~(1) (1996) 15--50.
+\newblock \href {https://doi.org/10.1016/0927-0256(96)00008-0}
+  {\path{doi:10.1016/0927-0256(96)00008-0}}.
+
+\bibitem{kresse1999paw}
+G.~Kresse, D.~Joubert, From ultrasoft pseudopotentials to the projector
+  augmented-wave method, Physical Review B 59~(3) (1999) 1758--1775.
+\newblock \href {https://doi.org/10.1103/PhysRevB.59.1758}
+  {\path{doi:10.1103/PhysRevB.59.1758}}.
+
+\bibitem{pbe1996}
+J.~P. Perdew, K.~Burke, M.~Ernzerhof, Generalized gradient approximation made
+  simple, Physical Review Letters 77~(18) (1996) 3865--3868.
+\newblock \href {https://doi.org/10.1103/PhysRevLett.77.3865}
+  {\path{doi:10.1103/PhysRevLett.77.3865}}.
+
+\bibitem{plimpton1995}
+S.~Plimpton,
+  \href{https://www.sciencedirect.com/science/article/pii/S002199918571039X}{Fast
+  parallel algorithms for short-range molecular dynamics}, Journal of
+  Computational Physics 117~(1) (1995) 1--19.
+\newblock \href {https://doi.org/https://doi.org/10.1006/jcph.1995.1039}
+  {\path{doi:https://doi.org/10.1006/jcph.1995.1039}}.
+\newline\urlprefix\url{https://www.sciencedirect.com/science/article/pii/S002199918571039X}
+
+\bibitem{bonny2011iron}
+G.~Bonny, R.~C. Pasianot, D.~Terentyev, L.~Malerba, Iron chromium potential to
+  model high-chromium ferritic alloys, Philosophical Magazine 91~(12) (2011)
+  1724--1746.
+\newblock \href {https://doi.org/10.1080/14786435.2010.545780}
+  {\path{doi:10.1080/14786435.2010.545780}}.
+
+\bibitem{levesque2011simple}
+M.~Levesque, E.~Mart{\'\i}nez, C.-C. Fu, M.~Nastar, F.~Soisson, Simple
+  concentration-dependent pair interaction model for large-scale simulations of
+  fe-cr alloys, Physical Review B 84~(18) (2011) 184205.
+
+\bibitem{dench1963adiabatic}
+W.~A. Dench, Adiabatic high-temperature calorimeter for the measurement of
+  heats of alloying, Transactions of the Faraday Society 59 (1963) 1279--1292.
+\newblock \href {https://doi.org/10.1039/TF9635901279}
+  {\path{doi:10.1039/TF9635901279}}.
+
+\bibitem{andersson1987thermodynamic}
+J.-O. Andersson, B.~Sundman, Thermodynamic properties of the {Cr--Fe} system,
+  Calphad 11~(1) (1987) 83--92.
+\newblock \href {https://doi.org/10.1016/0364-5916(87)90021-6}
+  {\path{doi:10.1016/0364-5916(87)90021-6}}.
+
+\bibitem{fultz1995phonon}
+B.~Fultz, L.~Anthony, J.~L. Robertson, R.~M. Nicklow, S.~Spooner, M.~Mostoller,
+  Phonon modes and vibrational entropy of mixing in {Fe-Cr}, Physical Review B
+  52~(5) (1995) 3280--3285.
+\newblock \href {https://doi.org/10.1103/PhysRevB.52.3280}
+  {\path{doi:10.1103/PhysRevB.52.3280}}.
+
+\bibitem{rae2026tgs}
+M.~Rae, M.~Chiang, M.~Islam, A.~P.~C. Wylie, A.~Nguyen, M.~Stapelberg, S.~A.
+  Al~Dajani, K.~Rep{\v{c}}ek, T.~Grabec, A.~Kaplan, R.~Freitas, M.~P. Short,
+  Detecting the onset and progression of spinodal decomposition using transient
+  grating spectroscopy, arXiv:2601.06659 (2026).
+\newblock \href {http://arxiv.org/abs/2601.06659} {\path{arXiv:2601.06659}},
+  \href {https://doi.org/10.48550/arXiv.2601.06659}
+  {\path{doi:10.48550/arXiv.2601.06659}}.
+
+\bibitem{xiong2011improved}
+W.~Xiong, P.~Hedstr{\"o}m, M.~Selleby, J.~Odqvist, M.~Thuvander, Q.~Chen, An
+  improved thermodynamic modeling of the {Fe--Cr} system down to zero kelvin
+  coupled with key experiments, Calphad 35~(3) (2011) 355--366.
+\newblock \href {https://doi.org/10.1016/j.calphad.2011.05.002}
+  {\path{doi:10.1016/j.calphad.2011.05.002}}.
+
+\bibitem{soderlind1993theory}
+P.~S{\"o}derlind, O.~Eriksson, J.~M. Wills, A.~M. Boring, Theory of elastic
+  constants of cubic transition metals and alloys, Physical Review B 48 (1993)
+  5844.
+\newblock \href {https://doi.org/10.1103/PhysRevB.48.5844}
+  {\path{doi:10.1103/PhysRevB.48.5844}}.
+
+\bibitem{clarke2003materialsselection}
+D.~R. Clarke, Materials selection guidelines for low thermal conductivity
+  thermal barrier coatings, Surface and Coatings Technology 163 (2003) 67--74.
+
+\bibitem{clarke2003materialsdesign}
+D.~Clarke, C.~Levi, Materials design for the next generation thermal barrier
+  coatings, Annual review of materials research 33~(1) (2003) 383--417.
+
+\bibitem{kittel2005introduction}
+C.~Kittel, Introduction to Solid State Physics, 8th Edition, Wiley, Hoboken,
+  NJ, 2005.
+
+\bibitem{cahill1992lower}
+D.~G. Cahill, S.~K. Watson, R.~O. Pohl, Lower limit to the thermal conductivity
+  of disordered crystals, Physical Review B 46~(10) (1992) 6131.
+
+\bibitem{giustino2014materials}
+F.~Giustino, {Materials Modelling using Density Functional Theory: Properties
+  \& Predictions}, Oxford University Press, 2014.
+
+\bibitem{giannozzi2009quantum}
+P.~Giannozzi, S.~Baroni, N.~Bonini, M.~Calandra, R.~Car, C.~Cavazzoni,
+  D.~Ceresoli, G.~L. Chiarotti, M.~Cococcioni, I.~Dabo, et~al., {QUANTUM
+  ESPRESSO}: a modular and open-source software project for quantum simulations
+  of materials, Journal of Physics: Condensed Matter 21~(39) (2009) 395502.
+\newblock \href {https://doi.org/10.1088/0953-8984/21/39/395502}
+  {\path{doi:10.1088/0953-8984/21/39/395502}}.
+
+\bibitem{giannozzi2017advanced}
+P.~Giannozzi, O.~Andreussi, T.~Brumme, O.~Bunau, M.~B. Nardelli, M.~Calandra,
+  R.~Car, C.~Cavazzoni, D.~Ceresoli, M.~Cococcioni, et~al., Advanced
+  capabilities for materials modelling with {Quantum ESPRESSO}, Journal of
+  Physics: Condensed Matter 29~(46) (2017) 465901.
+\newblock \href {https://doi.org/10.1088/1361-648X/aa8f79}
+  {\path{doi:10.1088/1361-648X/aa8f79}}.
+
+\bibitem{klaver2006magnetism}
+T.~P.~C. Klaver, R.~Drautz, M.~W. Finnis, Magnetism and thermodynamics of
+  defect-free {Fe-Cr} alloys, Physical Review B 74~(9) (2006) 094435.
+\newblock \href {https://doi.org/10.1103/PhysRevB.74.094435}
+  {\path{doi:10.1103/PhysRevB.74.094435}}.
+
+\bibitem{lifshitz1960anomalies}
+I.~M. Lifshitz, Anomalies of electron characteristics of a metal in the high
+  pressure region, Soviet Physics JETP 11 (1960) 1130--1135.
+
+\bibitem{varlamov1989kinetic}
+A.~A. Varlamov, V.~S. Egorov, A.~V. Pantsulaya, Kinetic properties of metals
+  near electronic topological transitions (2$\frac{1}{2}$-order transitions),
+  Advances in Physics 38~(5) (1989) 469--564.
+\newblock \href {https://doi.org/10.1080/00018738900101132}
+  {\path{doi:10.1080/00018738900101132}}.
+
+\bibitem{minkiewicz1967phonon}
+V.~J. Minkiewicz, G.~Shirane, R.~Nathans, Phonon dispersion relation for iron,
+  Physical Review 162~(3) (1967) 528--531.
+\newblock \href {https://doi.org/10.1103/PhysRev.162.528}
+  {\path{doi:10.1103/PhysRev.162.528}}.
+
+\bibitem{shaw1971investigation}
+W.~M. Shaw, L.~D. Muhlestein, Investigation of the phonon dispersion relations
+  of chromium by inelastic neutron scattering, Physical Review B 4~(3) (1971)
+  969--973.
+\newblock \href {https://doi.org/10.1103/PhysRevB.4.969}
+  {\path{doi:10.1103/PhysRevB.4.969}}.
+
+\bibitem{mauger2014nonharmonic}
+L.~Mauger, M.~S. Lucas, J.~A. Mu{\~n}oz, S.~J. Tracy, M.~Kresch, Y.~Xiao,
+  P.~Chow, B.~Fultz, Nonharmonic phonons in $\alpha$-iron at high temperatures,
+  Physical Review B 90 (2014) 064303.
+\newblock \href {https://doi.org/10.1103/PhysRevB.90.064303}
+  {\path{doi:10.1103/PhysRevB.90.064303}}.
+
+\bibitem{fawcett1988spin}
+E.~Fawcett, Spin-density-wave antiferromagnetism in chromium, Reviews of Modern
+  Physics 60~(1) (1988) 209--283.
+\newblock \href {https://doi.org/10.1103/RevModPhys.60.209}
+  {\path{doi:10.1103/RevModPhys.60.209}}.
+
+\bibitem{olsson2003abinitio}
+P.~Olsson, I.~A. Abrikosov, L.~Vitos, J.~Wallenius, Ab initio formation
+  energies of {Fe--Cr} alloys, Journal of Nuclear Materials 321~(1) (2003)
+  84--90.
+\newblock \href {https://doi.org/10.1016/S0022-3115(03)00207-1}
+  {\path{doi:10.1016/S0022-3115(03)00207-1}}.
+
+\bibitem{hill1952elastic}
+R.~Hill, The elastic behaviour of a crystalline aggregate, Proceedings of the
+  Physical Society. Section A 65 (1952) 349--354.
+
+\bibitem{backus1962long}
+G.~E. Backus, Long-wave elastic anisotropy produced by horizontal layering,
+  Journal of Geophysical Research 67 (1962) 4427--4440.
+
+\bibitem{moulinec1998numerical}
+H.~Moulinec, P.~Suquet, A numerical method for computing the overall response
+  of nonlinear composites with complex microstructure, Computer Methods in
+  Applied Mechanics and Engineering 157 (1998) 69--94.
+
+\bibitem{hafner2001does}
+R.~Hafner, D.~Spi{\v{s}}{\'a}k, R.~Lorenz, J.~Hafner, Does density-functional
+  theory predict a spin-density-wave ground state for {Cr}?, Journal of
+  Physics: Condensed Matter 13 (2001) L239--L247.
+
+\bibitem{cottenier2002what}
+S.~Cottenier, B.~De~Vries, J.~Meersschaut, M.~Rots, What density-functional
+  theory can tell us about the spin-density wave in {Cr}, Journal of Physics:
+  Condensed Matter 14 (2002) 3275--3283.
+
+\bibitem{pettifor1992theoretical}
+D.~G. Pettifor, Theoretical predictions of structure and related properties of
+  intermetallics, Materials Science and Technology 8~(4) (1992) 345--349.
+\newblock \href {https://doi.org/10.1179/mst.1992.8.4.345}
+  {\path{doi:10.1179/mst.1992.8.4.345}}.
+
+\bibitem{timoshenko1951theory}
+S.~Timoshenko, J.~N. Goodier, {Theory of Elasticity}, 2nd Edition, McGraw-Hill,
+  New York, 1951.
+
+\bibitem{mit1620}
+MIT, {Constitutive Equations, 16.20 Structural Mechanics, Lecture Notes, Module
+  3.}
+
+\bibitem{Schwingenschloegl2004}
+U.~Schwingenschl{\"o}gl, The interplay of structural and electronic properties
+  in transition metal oxides, doctoralthesis, Universit{\"a}t Augsburg (2004).
+
+\bibitem{hung2022quantum}
+N.~T. Hung, A.~R.~T. Nugraha, R.~Saito, {Quantum ESPRESSO Course for
+  Solid-State Physics}, CRC Press, 2022.
+
+\bibitem{kato1981hardening}
+M.~Kato, Hardening by spinodally modulated structure in bcc alloys, Acta
+  Metallurgica 29~(1) (1981) 79--87.
+
+\end{thebibliography}
