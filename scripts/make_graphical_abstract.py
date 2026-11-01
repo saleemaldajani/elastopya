@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Graphical abstract for the Scripta Materialia submission (v7, 2026-11-01: v6 with "spinodal decomposition" in the
-MD title and banner, and alpha / alpha' labels on the cells and the DFT plot as in v5).
+"""Graphical abstract for the Scripta Materialia submission (v8, 2026-11-01: v7 with the bottom mechanism line as a
+chain of steps that includes K/G falling, i.e. embrittlement; user request).
 
 Elsevier: one panel, at least 1328 x 531 px (w x h), readable at 13 x 5 cm. Drawn at exactly 13 x 5 cm, so the lettering
 sizes are the printed sizes; exported as PDF (vector), PNG and TIFF (600 dpi, 3071 x 1181 px).
@@ -15,7 +15,7 @@ and MD with the key points in figures above"):
        tensor does (Fig. 2b); spinodal window of Fig. 1b shaded
 MD card (v6): stiffening on decomposition at all twelve MD compositions for phi = 0.7-1 (Fig. 3b), fully decomposed
 cells at six compositions under their x_Cr (Fig. 1c). DFT card (v6): five QE cells with C' (exp. a) under the top-mode plot.
-Earlier versions: make_graphical_abstract_v1.py ... _v6.py (outputs in figures/graphical_abstract_v1 ... _v6).
+Earlier versions: make_graphical_abstract_v1.py ... _v7.py (outputs in figures/graphical_abstract_v1 ... _v7).
 
 Output: manuscript/figures/graphical_abstract/graphical_abstract.{pdf,png,tiff}, graphical_abstract_screen.png (96 dpi)
 """
@@ -197,9 +197,39 @@ def main():
              ha="right", va="center")
 
     # ---------------- banner
-    fig.text(0.5, 0.16 / H, r"Spinodal decomposition $\rightarrow$ stiffer $\delta$-ferrite ($C'$ $\uparrow$) $\rightarrow$ "
-             r"higher SAW frequency $\rightarrow$ non-destructive sign of embrittlement",
-             fontsize=FS - 0.5, ha="center", va="center", color="0.12")
+    # mechanism line (Sec. 3.2): the same shear stiffening raises f_SAW and lowers Pugh's K/G
+    steps = [("Spinodal decomposition", "0.92", "0.15"),
+             (r"$C'$ $\uparrow$ (stiff $\alpha'$)", "#D6E6F3", BLUE),
+             (r"$f_{\rm SAW}$ $\uparrow$ (signal)", "#D5EEE3", "#0B6B4F"),
+             (r"$K/G$ $\downarrow$ (embrittlement)", "#FBE0D2", "#9A3A10"),
+             ("non-destructive detection", "0.92", "0.15")]
+    seps = [r"$\rightarrow$", r"$\rightarrow$", "+", r"$\rightarrow$"]
+    ren = fig.canvas.get_renderer()
+    arts, widths = [], []
+    for k, (txt, fc, tc) in enumerate(steps):
+        t = fig.text(0, 0.165 / H, txt, fontsize=FS - 1, ha="left", va="center", color=tc,
+                     fontweight="bold" if k in (1, 2, 3) else "normal",
+                     bbox=dict(boxstyle="round,pad=0.30,rounding_size=0.6", fc=fc, ec="none"))
+        arts.append(t)
+    dpi0 = fig.dpi
+    fig.set_dpi(600)                             # measure at the export resolution (text hinting differs at 100 dpi)
+    fig.canvas.draw()
+    ren = fig.canvas.get_renderer()
+    chips = [t.get_bbox_patch().get_window_extent(ren) for t in arts]    # drawn chips, padding included
+    widths = [c.width / fig.dpi for c in chips]
+    offs = [(t.get_window_extent(ren).x0 - c.x0) / fig.dpi for t, c in zip(arts, chips)]
+    fig.set_dpi(dpi0)
+    gap = 0.20                                   # space for each connector (in)
+    total = sum(widths) + gap * len(seps)
+    x = (W - total) / 2
+    for k, t in enumerate(arts):
+        t.set_x((x + offs[k]) / W)
+        x += widths[k]
+        if k < len(seps):
+            fig.text((x + gap / 2) / W, 0.165 / H, seps[k], fontsize=FS + 0.5, ha="center", va="center",
+                     color="0.3", fontweight="bold")
+            x += gap
+    print("mechanism line width (in):", round(total, 2), "of", round(W, 2))
 
     OUT.mkdir(parents=True, exist_ok=True)
     meta = {"Title": "Graphical abstract", "Creator": "S. A. Al Dajani"}
