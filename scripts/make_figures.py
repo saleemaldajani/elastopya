@@ -685,7 +685,7 @@ def fig2_orientation_bulk(lit, dft, mdd, mdr, kind="violin", with_decomp=False, 
 
 
 def fig3(lit, dft, mdd, mdr, lam=6.4, stem="fig3_fsaw", rel_b=False, crcolor=False, md_decomp_a=False,
-         alpha_marks=False, qe=None):
+         alpha_marks=False, qe=None, allx_b=False):
     k = 6.4 / lam  # f scales as 1/lambda; layout scales with it
     fig, (a, b) = plt.subplots(1, 2, figsize=(7.2, 3.0))
     a.plot(lit["x"], lit["f"] * k, "-", color="0.6", lw=0.8, zorder=1)
@@ -764,7 +764,20 @@ def fig3(lit, dft, mdd, mdr, lam=6.4, stem="fig3_fsaw", rel_b=False, crcolor=Fal
 
     def yb(phi, f):  # absolute frequency, or % change relative to the random alloy (phi = 0.5)
         return 100 * (f / f[np.argmin(phi)] - 1) if rel_b else f * k
-    if crcolor:
+    if allx_b:   # all twelve MD compositions, coloured by x_Cr (Mike's choice, view (b) of Fig. R5; 2026-11-01)
+        from matplotlib.colors import LinearSegmentedColormap
+        cx = LinearSegmentedColormap.from_list("viridis_0_82", plt.get_cmap("viridis")(np.linspace(0, 0.82, 256)))
+        nx = plt.Normalize(0, 1)
+        for x, ser in dec.items():
+            o = np.argsort(ser["phi"])
+            b.errorbar(ser["phi"][o], yb(ser["phi"], ser["f"])[o], yerr=None if ysd(ser) is None else ysd(ser)[o],
+                       fmt="-s", color=cx(nx(x)), ms=2.6, lw=0.8, elinewidth=0.5, capsize=1, zorder=2)
+        b.plot(mdd["phi"], yb(mdd["phi"], mdd["f"]), "-o", color="black", ms=3.2, lw=0.8, zorder=5,
+               label=r"Fe$_{50}$Cr$_{50}$, Acta 50$^3$")
+        b.plot([], [], "-s", color="0.45", ms=2.6, label=r"present, 25$^3$ (5 alloys)")
+        fig.colorbar(plt.cm.ScalarMappable(cmap=cx, norm=nx), ax=b, pad=0.03, fraction=0.06,
+                     aspect=22).set_label(r"$x_{\rm Cr}$")
+    elif crcolor:
         cmap = plt.get_cmap("viridis")
         cx = lambda x: cmap(0.0 + 0.78 * x)          # colour by Cr fraction (dark = Fe-rich, yellow = Cr-rich)
         ends = []                                     # (y at phi=1, x) for direct labels
@@ -818,7 +831,10 @@ def fig3(lit, dft, mdd, mdr, lam=6.4, stem="fig3_fsaw", rel_b=False, crcolor=Fal
         allf = np.concatenate([yb(mdd["phi"], mdd["f"])] + [yb(v["phi"], v["f"]) for v in dec.values()])
         rng = allf.max() - allf.min()
         b.set_ylim(allf.min() - 0.08 * rng, allf.max() + ((0.30 if rel_b else 0.45) if crcolor else (0.50 if rel_b else 0.90)) * rng)
-        if crcolor:
+        if allx_b:
+            b.set_ylim(0.440 * k, 0.545 * k)
+            b.legend(frameon=False, fontsize=6.25, loc="upper left")
+        elif crcolor:
             b.plot([], [], "s", color="0.5", mec="black", mew=0.4, ms=4.5, ls="none", label=r"25$^3$ cell")
             b.legend(frameon=False, fontsize=6.2, loc="upper left")
         else:
@@ -910,6 +926,8 @@ def main():
         fig3(lit, dft, mdd, mdr, lam=6.4, stem="fig3_fsaw_mddecomp_6p4um_qe", md_decomp_a=True, qe=qe)
         fig3(lit, dft, mdd, mdr, lam=6.4, stem="fig3_fsaw_mddecomp_6p4um_qe_relative", md_decomp_a=True, qe=qe,
              rel_b=True)   # decision for Mike: Fig. 3 as in the paper, but (b) as % change from the random alloy
+        fig3(lit, dft, mdd, mdr, lam=6.4, stem="fig3_fsaw_mddecomp_6p4um_qe_allx", md_decomp_a=True, qe=qe,
+             allx_b=True)  # paper Fig. 3 from v41: (b) shows all twelve MD compositions (Mike, 2026-11-01)
         QE2, LEGEND_A, VIOLIN_QE2 = None, None, False
         print("QE x, C11, f(6.4 um):", qe["x"], np.round(qe["c11"], 1), np.round(qe["f"], 4))
     if mdr is not None:
