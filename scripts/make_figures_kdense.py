@@ -475,7 +475,7 @@ def main():
     trends()
     dft_strips()
     variants = {"fig1_free_energy": ("_qe", "_entropyfix", "_qe_entropyfix"),
-                "fig2_elastic_mapping_orientation_violin_bulk_mddecomp": ("_qe",), "fig3_fsaw_mddecomp_6p4um": ("_qe", "_qe_relative")}
+                "fig2_elastic_mapping_orientation_violin_bulk_mddecomp": ("_qe",), "fig3_fsaw_mddecomp_6p4um": ("_qe", "_qe_relative", "_qe_allx")}
     for base, sufs in variants.items():
         for table in (STRIPS, TRENDS, CUBES, DFTS):   # review versions: same lower panels as their base figure
             if base in table:
