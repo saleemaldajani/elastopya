@@ -16,3 +16,4 @@ version's script over `scripts/make_graphical_abstract.py` and run it. The curre
 | v7 | 2026-11-01 | "Spinodal decomposition" in title and banner; alpha / alpha' labels back |
 | v8 | 2026-11-01 | Mechanism line as coloured chips including K/G down (embrittlement) |
 | v9 | 2026-11-01 | Decluttered v8: phi = 1 curve only, QE cells without moment arrows, no window shading or extra alpha label in the DFT plot, mechanism line as plain coloured text |
+| v10 | 2026-11-01 | One spinodal band: the 748 K CALPHAD spinodal (30-71% Cr, Sec. 3.1) instead of the two 298 K PWSCF-PAW windows of Fig. 1b, whose narrow second window near 95% Cr was confusing; +5.7% under the peak |
