@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Graphical abstract for the Scripta Materialia submission (v14, 2026-11-01: v13 with Fe(1-x)Cr(x) made explicit
-and Fe-36Cr marked as the TGS-measured alloy (Rae et al.), not a CASS composition).
+"""Graphical abstract for the Scripta Materialia submission (v15, 2026-11-01: v14 with the centre legend ordered
+MD, DFT Fe-36Cr, DFT alpha'; no Fe-36Cr in panel 1; cube clear of the key; Fe/Cr atom key under the DFT cells).
 
 Modelled on the graphical abstract of Al Dajani et al., Acta Mater. 2023 (three panels, one strong image each, a bold
 claim underneath), as its theoretical counterpart (user request; no spinodal shading, which the user found confusing):
@@ -98,9 +98,9 @@ def main():
     xm = x0 + 0.68                                 # cube axis; the two DFT cells sit symmetrically about it
     from matplotlib.patches import Ellipse
     for r, a_ in ((1.0, 0.10), (0.7, 0.10), (0.45, 0.10)):
-        fig.patches.append(Ellipse((xm / W, (yb + 0.57) / H), 0.62 * r / W, 0.10 * r / H,
+        fig.patches.append(Ellipse((xm / W, (yb + 0.55) / H), 0.62 * r / W, 0.10 * r / H,
                                    transform=fig.transFigure, fc="0.3", ec="none", alpha=a_, zorder=-1))
-    c = box(fig, xm - 0.30, yb + 0.56, 0.60, 0.70)
+    c = box(fig, xm - 0.27, yb + 0.54, 0.54, 0.63)
     _cube_ax(c, md_grid3d(series()[0.36][-1]))
     for k, (name, col, lab) in enumerate((("Fe", FE, r"Fe-rich $\alpha$"), ("Cr", CR, r"Cr-rich $\alpha'$"))):
         y = yb + ht - 0.02
@@ -110,7 +110,7 @@ def main():
         fig.text((xk + 0.10) / W, y / H, lab, fontsize=FS - 1.5, va="center", color="0.15")
     fig.text((x0 + 0.02) / W, (yb + 0.90) / H, "MD", fontsize=FS - 1, fontweight="bold", color=GREEN,
              ha="left", va="center")
-    bw = 0.37; bh = bw * VS.ASPECT; yc = yb + 0.04
+    bw = 0.37; bh = bw * VS.ASPECT; yc = yb + 0.08
     cxs = (xm - 0.27, xm + 0.27)
     for xc, cx, lab in ((0.05, cxs[0], r"$\alpha$ (5% Cr)"), (0.95, cxs[1], r"$\alpha'$ (95% Cr)")):
         VS.draw(box(fig, cx - bw / 2, yc, bw, bh), xc, moments=False)
@@ -123,7 +123,13 @@ def main():
                                            color=VERM))
     fig.text((x0 + 0.02) / W, (yc + bh / 2) / H, "DFT", fontsize=FS - 1, fontweight="bold", color=BLUE,
              ha="left", va="center")
-    caption(fig, x0, w0, "Simulated spinodal\ndecomposition of Fe$_{1-x}$Cr$_x$\n(shown: $x$ = 0.36)")
+    from matplotlib.lines import Line2D
+    for k_, (el, col) in enumerate((("Fe", FE), ("Cr", CR))):     # atom key for the DFT cells
+        xa = xm - 0.17 + k_ * 0.30
+        fig.add_artist(Line2D([xa / W], [(yb + 0.005) / H], marker="o", ms=3.6, mfc=col, mec="0.15", mew=0.4,
+                              transform=fig.transFigure))
+        fig.text((xa + 0.05) / W, (yb + 0.005) / H, el, fontsize=FS - 1.5, va="center", color="0.15")
+    caption(fig, x0, w0, "Simulated spinodal\ndecomposition of Fe$_{1-x}$Cr$_x$")
 
     # ---------------- 2: surface-mode spectrum and the unallowed range
     x1, w1 = 1.30, 2.10
@@ -132,8 +138,8 @@ def main():
     s.axvspan(LO, HI, color="#FBE0D2", lw=0, zorder=0)
     s.axvline(LO, color=VERM, lw=0.6, ls=(0, (2, 2)), zorder=1)
     bins = np.arange(0.35, 0.80, 0.0025)
-    series_ = ((modes("qeaexp_x0.35"), BLUE, "Fe–36Cr (DFT)", "-"),
-               (modes("mddec_x0.36"), GREEN, "Fe–36Cr decomposed (MD)", "-"),
+    series_ = ((modes("mddec_x0.36"), GREEN, "Fe–36Cr decomposed (MD)", "-"),
+               (modes("qeaexp_x0.35"), BLUE, "Fe–36Cr (DFT)", "-"),
                (modes("qeaexp_x0.95"), VERM, r"$\alpha'$, 95% Cr (DFT)", "-"))
     hists = []
     for m, col, lab, ls in series_:
