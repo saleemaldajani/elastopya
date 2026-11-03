@@ -2,13 +2,15 @@
 # Keep the shared `ssh engaging` connection alive and the Mac awake while Engaging work is in progress.
 #  - every 120 s: a no-op command over the shared connection (never prompts: BatchMode), state logged to $LOG
 #  - caffeinate -i for as long as this script runs: no idle system sleep (the display may still sleep)
-#  - on the first OK -> LOST transition: one macOS notification asking for `ssh engaging` + Duo (it cannot log in itself)
+#  - on the first OK -> LOST transition: one macOS notification asking for `ssh engaging` + Duo (it cannot log in itself), then exit
 # Stop it with:  pkill -f watch_connection.sh   (caffeinate exits with it)
 LOG=${1:-/tmp/engaging_keepalive.log}
 caffeinate -i -w $$ &
 state=OK
 while true; do
-  if ssh -o BatchMode=yes -o ConnectTimeout=20 engaging true 2>/dev/null; then
+  # Only use an existing shared connection: never open a new one. Failed logins every few minutes get the laptop's IP
+  # blocked by ORCD (10-min block, reset by every further failure; happened 2026-11-02).
+  if ssh -O check engaging 2>/dev/null && ssh -o BatchMode=yes -o ConnectTimeout=20 engaging true 2>/dev/null; then
     new=OK
   else
     new=LOST
@@ -18,5 +20,6 @@ while true; do
     osascript -e 'display notification "Run ssh engaging in Terminal and approve Duo (or ask Claude to open the login window)." with title "Engaging connection lost"' 2>/dev/null
   fi
   state=$new
+  [ "$new" = LOST ] && exit 0      # stop after the first loss; restart after logging in again
   sleep 120
 done
