@@ -24,8 +24,7 @@ import numpy as np
 
 _ENG = "/orcd/pool/004/sdajani/fecr_qe/pseudo"          # on Engaging, default to the cluster copy
 PSEUDO = os.environ.get("QE_PSEUDO", _ENG if os.path.isdir(_ENG) else
-                        "/tmp/-Users-saleem-MIT-research-Scripta/"
-                        "37f8fe43-8e5f-4d11-883b-ebb44fa03560/scratchpad/pseudo")
+                        "/tmp/qe_scratch/pseudo")
 HA_EV = 27.211386
 N_GRID = 121
 CASES = {

@@ -20,8 +20,7 @@ from pathlib import Path
 
 import numpy as np
 
-PSEUDO = os.environ.get("QE_PSEUDO", "/tmp/-Users-saleem-MIT-research-Scripta/"
-                        "37f8fe43-8e5f-4d11-883b-ebb44fa03560/scratchpad/pseudo")
+PSEUDO = os.environ.get("QE_PSEUDO", "/tmp/qe_scratch/pseudo")
 HA_EV = 27.211386
 N_GRID = 121
 CASES = {
